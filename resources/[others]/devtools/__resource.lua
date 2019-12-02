@@ -1,0 +1,1 @@
+client_script 'Devtools.Client.net.dll'

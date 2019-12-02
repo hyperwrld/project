@@ -1,0 +1,307 @@
+html, body {
+	overflow: hidden;
+	user-select: none;
+
+    max-width: 100%;
+}
+
+::-webkit-scrollbar {
+    width: 4px;
+}
+ 
+::-webkit-scrollbar-thumb {
+    background: rgba(160, 163, 161, 0.7); 
+    border-radius: 1px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(160, 163, 161, 0.7); 
+}
+
+input[type='number']::-webkit-inner-spin-button, 
+input[type='number']::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    margin: 0%;
+}
+
+.ui {
+	display: none;
+	position: absolute;
+
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	margin: auto;
+
+	width: 90%;
+	height: 90%;
+	padding: 30px;
+}
+
+.inventory {
+	position: absolute;
+
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	margin: auto;
+
+	width: 90%;
+	max-width: 90%;
+	height: 70%;  
+}
+
+.player-inventory {
+	width: 34.5%;
+	height: 67%;
+
+	max-width: 34.5%;
+
+	overflow-x: hidden;
+
+	float: left;
+
+	display: flex;
+	flex-wrap: wrap;
+	overflow-y: scroll;
+}
+
+.player-inventory > h3 {
+	position: absolute;
+
+	top: 55px;
+
+	font-family: Calibri, sans-serif;
+	font-weight: bold;
+
+	color: white;
+}
+
+.player-inventory > h5 {
+	position: absolute;
+
+	top: 75px;
+
+	margin-bottom: 5%;
+
+	font-family: Calibri, sans-serif;
+	font-weight: bold;
+
+	color: white;
+}
+
+.controls {
+	display: flex;
+	flex-direction: column;
+	
+	width: 15%;
+	height: 60%;
+
+	margin: 0% 5%;
+	
+	align-items: center;
+	justify-content: center;
+}
+
+.controls > *:first-child {
+	user-select: auto;
+}
+
+.secondary-inventory {
+	width: 34.5%;
+	height: 67%;
+
+	max-width: 34.5%;
+
+	overflow-x: hidden;
+
+	float: left;
+
+	display: flex;
+	flex-wrap: wrap;
+	overflow-y: scroll;
+}
+
+.secondary-inventory > h3 {
+	position: absolute;
+
+	top: 55px;
+
+	font-family: Calibri, sans-serif;
+	font-weight: bold;
+
+	color: white;
+}
+
+.secondary-inventory > h5 {
+	position: absolute;
+
+	top: 75px;
+
+	font-family: Calibri, sans-serif;
+	font-weight: bold;
+
+	color: white;
+}
+
+.number {
+	position: absolute;
+	width: 12px;
+	height: 13px;
+
+	font-size: 14px;
+	font-family: Calibri, sans-serif;
+	font-weight: bold;
+
+	text-align: center;
+	background-color: white;
+    border: 1px solid rgba(160, 163, 161, 0.4);
+}
+
+.number span {
+	position: absolute;
+	width: 0;
+	top: -1.5px;
+	left: 3px;
+
+	font-size: 13px;
+	font-family: Calibri, sans-serif;
+	color: black;
+
+	text-align: center;
+}
+
+.inventory-cell {
+	position: relative;
+
+	user-select: none;
+
+	width: 105px;
+    height: 130px;
+
+    margin: 1px;
+
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(160, 163, 161, 0.5);
+}
+
+.drop-cell {
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
+.inventory-cell:hover {
+	opacity: 0.8;
+}
+
+.inventory-bottom {
+	position: absolute; 
+
+	width: 100%;
+	height: 20px;
+	bottom: 0;
+
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.item-placeholder {
+	display: none;
+}
+
+.item p {
+	position: absolute;
+	top: -10px;
+	right: 1px;
+
+	font-size: 11px;
+	font-family: Calibri, sans-serif;
+
+	text-align: center;	
+	color: white;
+}
+
+.item-name {
+	position: absolute; 
+
+	z-index: 1;
+
+	width: 100%;
+	height: 20px;
+	bottom: 0;
+	
+	font-size: 10px;
+	font-family: Calibri, sans-serif;
+	font-weight: bold;
+
+	text-align: center;
+	line-height: 20px;
+	color: white;
+}
+
+.control {
+    width: 55%;
+    height: 40px;
+
+	margin: 13.5% auto -2%;
+
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(160, 163, 161, 0.5);
+
+	font-family: Calibri, sans-serif;
+	font-weight: bold;
+	font-size: 12px;
+
+	text-align: center;
+	line-height: 40px;
+	color: white;
+}
+
+.control-close {
+    width: 55%;
+	height: 40px;
+	
+	margin: 20% auto 5%;
+
+    background-color: rgba(255, 0, 0, 0.3);
+    border: 1px solid rgba(160, 163, 161, 0.5);
+
+	font-family: Calibri, sans-serif;
+	font-weight: bold;
+	font-size: 12px;
+
+	text-align: center;
+	line-height: 40px;
+	color: white;
+}
+
+.item-info {
+	display: none;
+	
+	width: 100%;
+	padding: 0% 2.5%;
+
+	height: 15%;
+	margin: auto;
+
+    background-color: rgba(0, 0, 0, 0.5);
+	border: 1px solid rgba(160, 163, 161, 0.5);
+	
+	font-family: Calibri, sans-serif;
+	font-weight: bold;
+	font-size: 12px;
+
+	text-align: justify;
+
+	line-height: 20px;
+	color: white;
+
+	opacity: 0.8;
+}
