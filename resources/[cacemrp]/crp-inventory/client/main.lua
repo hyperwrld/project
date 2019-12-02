@@ -82,26 +82,22 @@ local function nuiCallBack(data, cb)
 
 	if data.moveitem then
 		events:Trigger('crp-inventory:moveItem', data.itemdata, function(data)
-			if data then
-				PlaySoundFrontend(-1, 'ERROR', 'HUD_LIQUOR_STORE_SOUNDSET', false)
-			else
-				PlaySoundFrontend(-1, 'ERROR', 'HUD_FRONTEND_DEFAULT_SOUNDSET', false)
-			end
-			
 			cb(data)
 		end)
 	end
 
 	if data.swapitem then
 		events:Trigger('crp-inventory:swapItems', data.itemsdata, function(data)
-			if data then
-				PlaySoundFrontend(-1, 'ERROR', 'HUD_LIQUOR_STORE_SOUNDSET', false)
-			else
-				PlaySoundFrontend(-1, 'ERROR', 'HUD_FRONTEND_DEFAULT_SOUNDSET', false)
-			end
-
 			cb(data)
 		end)
+	end
+
+	if data.sucess then
+		PlaySoundFrontend(-1, 'ERROR', 'HUD_LIQUOR_STORE_SOUNDSET', false)
+	end
+
+	if data.error then
+		PlaySoundFrontend(-1, 'ERROR', 'HUD_FRONTEND_DEFAULT_SOUNDSET', false)
 	end
 end
 
