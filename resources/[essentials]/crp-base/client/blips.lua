@@ -50,7 +50,8 @@ function CRP.BlipManager.GetBlip(self, id)
 end
 
 local blips = {
-	{ id = 'hospital', name = 'Hospital', scale = 0.75, color = 2, sprite = 61, x = 1839.6, y = 3672.93, z = 34.28 },
+    { id = 'hospital', name = 'Hospital', scale = 0.75, color = 2, sprite = 61, x = 1839.6, y = 3672.93, z = 34.28 },
+    { id = 'shop', name = 'Loja', scale = 0.75, color = 2, sprite = 52, x = 373.875, y = 325.896, z = 102.566 },
 }
 
 AddEventHandler('crp-base:playerSessionStarted', function()

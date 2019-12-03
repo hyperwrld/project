@@ -117,8 +117,7 @@ Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 
-		local playerPed = PlayerPedId()
-		local coords, letSleep = GetEntityCoords(playerPed), true
+		local coords, letSleep = GetEntityCoords(PlayerPedId()), true
 
 		for k, v in pairs(Inventories) do
 			local distance = GetDistanceBetweenCoords(coords, v.coords.x, v.coords.y, v.coords.z, true)
