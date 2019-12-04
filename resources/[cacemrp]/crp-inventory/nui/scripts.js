@@ -1,178 +1,50 @@
 'use strict';
 
-var isInventoryOpen = false,
-	inventoryType = 1,
-	inventoryCoords = undefined,
-	scrollingSensitivity = 60,
-	scrollingSpeed = 30;
+var isInventoryOpen = false, inventoryType = 1, inventoryCoords = undefined, scrollingSensitivity = 60, scrollingSpeed = 30;
 var defaultHTML, personalWeight, secondaryWeight;
-var playerItems = {},
-	personalMaxWeight = 325,
-	otherItems = {},
-	secondaryMaxWeight = 1000;
+var playerItems = {}, personalMaxWeight = 325, otherItems = {}, secondaryMaxWeight = 1000;
 
 let itemList = {};
 
 // * INVENTORY WEAPONS
 
-itemList['1737195953'] = {
-	displayname : 'Cacetete',
-	weight      : 10,
-	nonStack    : true,
-	image       : 'crp-cacetete.png',
-	weapon      : true
-};
+itemList['1737195953'] = { displayname: 'Cacetete', weight: 10, nonStack: true, image: 'crp-cacetete.png', weapon: true };
+itemList['911657153'] = { displayname: 'Taser', weight: 10, nonStack: true, image: 'crp-stungun.png', weapon: true };
 
-itemList['911657153'] = {
-	displayname : 'Taser',
-	weight      : 10,
-	nonStack    : true,
-	image       : 'crp-stungun.png',
-	weapon      : true
-};
+itemList['453432689'] = { displayname: 'Pistola', weight: 15, nonStack: true, image: 'crp-pistol.png', weapon: true };
+itemList['-1076751822'] = { displayname: 'Pistola SNS', weight: 15, nonStack: true, image: 'crp-snspistol.png', weapon: true };
+itemList['137902532'] = { displayname: 'Pistola Vintage', weight: 15, nonStack: true, image: 'crp-vintagepistol.png', weapon: true };
+itemList['-771403250'] = { displayname: 'Pistola Pesada', weight: 20, nonStack: true, image: 'crp-heavypistol.png', weapon: true };
+itemList['1593441988'] = { displayname: 'Pistola de combate', weight: 15, nonStack: true, image: 'crp-combatpistol.png', weapon: true };
 
-itemList['453432689'] = {
-	displayname : 'Pistola',
-	weight      : 15,
-	nonStack    : true,
-	image       : 'crp-pistol.png',
-	weapon      : true
-};
+itemList['-619010992'] = { displayname: 'Pistola-Metralhadora', weight: 30, nonStack: true, image: 'crp-machinepistol.png', weapon: true };
+itemList['-1121678507'] = { displayname: 'Mini Submetralhadora', weight: 30, nonStack: true, image: 'crp-minismg.png', weapon: true };
+itemList['324215364'] = { displayname: 'Micro Submetralhadora', weight: 30, nonStack: true, image: 'crp-microsmg.png', weapon: true };
+itemList['736523883'] = { displayname: 'Submetralhadora', weight: 35, nonStack: true, image: 'crp-smg.png', weapon: true };
 
-itemList['-1076751822'] = {
-	displayname : 'Pistola SNS',
-	weight      : 15,
-	nonStack    : true,
-	image       : 'crp-snspistol.png',
-	weapon      : true
-};
-
-itemList['137902532'] = {
-	displayname : 'Pistola Vintage',
-	weight      : 15,
-	nonStack    : true,
-	image       : 'crp-vintagepistol.png',
-	weapon      : true
-};
-
-itemList['-771403250'] = {
-	displayname : 'Pistola Pesada',
-	weight      : 20,
-	nonStack    : true,
-	image       : 'crp-heavypistol.png',
-	weapon      : true
-};
-
-itemList['1593441988'] = {
-	displayname : 'Pistola de combate',
-	weight      : 15,
-	nonStack    : true,
-	image       : 'crp-combatpistol.png',
-	weapon      : true
-};
-
-itemList['-619010992'] = {
-	displayname : 'Pistola-Metralhadora',
-	weight      : 30,
-	nonStack    : true,
-	image       : 'crp-machinepistol.png',
-	weapon      : true
-};
-
-itemList['-1121678507'] = {
-	displayname : 'Mini Submetralhadora',
-	weight      : 30,
-	nonStack    : true,
-	image       : 'crp-minismg.png',
-	weapon      : true
-};
-
-itemList['324215364'] = {
-	displayname : 'Micro Submetralhadora',
-	weight      : 30,
-	nonStack    : true,
-	image       : 'crp-microsmg.png',
-	weapon      : true
-};
-
-itemList['736523883'] = {
-	displayname : 'Submetralhadora',
-	weight      : 35,
-	nonStack    : true,
-	image       : 'crp-smg.png',
-	weapon      : true
-};
-
-itemList['1649403952'] = {
-	displayname : 'Rifle Compacto',
-	weight      : 45,
-	nonStack    : true,
-	image       : 'crp-compactrifle.png',
-	weapon      : true
-};
-
-itemList['-1074790547'] = {
-	displayname : 'Rifle de Assalto',
-	weight      : 55,
-	nonStack    : true,
-	image       : 'crp-assaultrifle.png',
-	weapon      : true
-};
-
-itemList['-2084633992'] = {
-	displayname : 'Carabina',
-	weight      : 55,
-	nonStack    : true,
-	image       : 'crp-carbinerifle.png',
-	weapon      : true
-};
+itemList['1649403952'] = { displayname: 'Rifle Compacto', weight: 45, nonStack: true, image: 'crp-compactrifle.png', weapon: true };
+itemList['-1074790547'] = { displayname: 'Rifle de Assalto', weight: 55, nonStack: true, image: 'crp-assaultrifle.png', weapon: true };
+itemList['-2084633992'] = { displayname: 'Carabina', weight: 55, nonStack: true, image: 'crp-carbinerifle.png', weapon: true };
 
 // * NORMAL ITEMS
 
-itemList['156805094'] = {
-	displayname : 'Colete',
-	weight      : 25,
-	nonStack    : false,
-	image       : 'crp-colete.png',
-	weapon      : false
-};
+itemList['156805094'] = { displayname: 'Colete', weight: 25, nonStack: false, image: 'crp-colete.png', weapon: false };
+itemList['130895348'] = { displayname: 'Ligadura', weight: 2.5, nonStack: false, image: 'crp-ligadura.png', weapon: false };
 
-itemList['130895348'] = {
-	displayname : 'Ligadura',
-	weight      : 2.5,
-	nonStack    : false,
-	image       : 'crp-ligadura.png',
-	weapon      : false
-};
+itemList['196068078'] = { displayname: 'Coca-Cola', weight: 1, nonStack: false, image: 'crp-coca.png', weapon: false };
+itemList['129942349'] = { displayname: 'Batatas', weight: 1, nonStack: false, image: 'crp-batatas.png', weapon: false };
 
-itemList['196068078'] = {
-	displayname : 'Coca-Cola',
-	weight      : 1,
-	nonStack    : false,
-	image       : 'crp-coca.png',
-	weapon      : false
-};
-
-itemList['129942349'] = {
-	displayname : 'Batatas',
-	weight      : 1,
-	nonStack    : false,
-	image       : 'crp-batatas.png',
-	weapon      : false
-};
-
-$(function() {
+$(function () {
 	defaultHTML = $('.ui').clone();
 
-	window.addEventListener('message', function(event) {
+	window.addEventListener('message', function (event) {
 		switch (event.data.event) {
 			case 'open':
-				var data = event.data.playerData,
-					_data = event.data.secondaryData;
+				var data = event.data.playerData, _data = event.data.secondaryData;
 
 				(isInventoryOpen = true), (inventoryType = _data.type), (inventoryCoords = _data.coords);
 
-				// inventoryType: 1 (drop) | 2 (undefined) | 3 (undefined) | 4 (undefined) //
+				// * inventoryType: 1 (drop) | 2 (store) | 3 (undefined) | 4 (undefined) * //
 
 				SetupInventories(data.id, data.items, _data.id, _data.items);
 
@@ -182,7 +54,7 @@ $(function() {
 			case 'close':
 				var inventory = $('.ui');
 
-				inventory.fadeOut(400, function() {
+				inventory.fadeOut(400, function () {
 					inventory.replaceWith(defaultHTML.clone());
 				});
 
@@ -198,11 +70,11 @@ $(function() {
 		}
 	});
 
-	$(document).keyup(function(event) {
+	$(document).keyup(function (event) {
 		if ((event.key == 'Escape' || event.key == 'F2') && isInventoryOpen) {
 			var inventory = $('.ui');
 
-			inventory.fadeOut(400, function() {
+			inventory.fadeOut(400, function () {
 				inventory.replaceWith(defaultHTML.clone());
 			});
 
@@ -218,7 +90,7 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
 	$('.secondary-inventory h3').html(otherid);
 
 	if (playerData != undefined) {
-		for (const [ key, value ] of Object.entries(playerData)) {
+		for (const [key, value] of Object.entries(playerData)) {
 			playerItems[value.slot] = { id: value.item, quantity: value.count };
 		}
 	}
@@ -235,15 +107,8 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
 			var itemWeight = item.weight * playerItems[i].quantity;
 
 			$('.player-inventory > #p' + i).append(
-				'<div class="item"><p>' +
-					playerItems[i].quantity +
-					' (' +
-					itemWeight.toFixed(2) +
-					')</p><img class="picture" src="items/' +
-					item.image +
-					'" ><div class="item-name">' +
-					item.displayname +
-					'</div></div>'
+				'<div class="item"><p>' + playerItems[i].quantity + ' (' + itemWeight.toFixed(2) + ')</p><img class="picture" src="items/' +
+				item.image + '" ><div class="item-name">' + item.displayname + '</div></div>'
 			);
 
 			$('.player-inventory > #p' + i + ' > .item').data('item', playerItems[i]);
@@ -251,8 +116,8 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
 	}
 
 	if (otherData != undefined) {
-		for (const [ key, value ] of Object.entries(otherData)) {
-			otherItems[value.slot] = { id: value.item, quantity: value.count };
+		for (const [key, value] of Object.entries(otherData)) {
+			otherItems[value.slot] = { id: value.item, quantity: value.count, price: value.price };
 		}
 	}
 
@@ -266,29 +131,26 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
 		if (otherItems[i] != undefined) {
 			var item = itemList[otherItems[i].id];
 			var itemWeight = item.weight * otherItems[i].quantity;
+			var div = '<div class="item"><p>' + otherItems[i].quantity + ' (' + itemWeight.toFixed(2) + ')</p><img class="picture" src="items/' +
+				item.image + '" ><div class="item-name">' + item.displayname + '</div></div>';
 
-			$('.secondary-inventory > #s' + i).append(
-				'<div class="item"><p>' +
-					otherItems[i].quantity +
-					' (' +
-					itemWeight.toFixed(2) +
-					')</p><img class="picture" src="items/' +
-					item.image +
-					'" ><div class="item-name">' +
-					item.displayname +
-					'</div></div>'
-			);
+			if (inventoryType == 2) {
+				div = '<div class="item"><p>' + otherItems[i].quantity + ' (' + itemWeight.toFixed(2) + ')</p><img class="picture" src="items/' +
+					item.image + '" ><div class="item-name">' + item.displayname + ' - <font color="#60B643">' + otherItems[i].price +
+					'€</font></div></div>';
+			}
 
+			$('.secondary-inventory > #s' + i).append(div);
 			$('.secondary-inventory > #s' + i + ' > .item').data('item', otherItems[i]);
 		}
 	}
 
 	CalculateInventoriesWeight();
 
-	$('.control-close').on('click', function() {
+	$('.control-close').on('click', function () {
 		var inventory = $('.ui');
 
-		inventory.fadeOut(400, function() {
+		inventory.fadeOut(400, function () {
 			inventory.replaceWith(defaultHTML.clone());
 		});
 
@@ -298,9 +160,8 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
 	});
 
 	$('.item').hover(
-		function() {
-			var item = $(this).data('item'),
-				itemInfo = $('.item-info');
+		function () {
+			var item = $(this).data('item'), itemInfo = $('.item-info');
 			var itemData = itemList[item.id];
 
 			itemInfo.fadeIn();
@@ -309,18 +170,12 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
 				console.log(item.information.serial);
 			} else {
 				itemInfo.html(
-					itemData.displayname +
-						'<br> ' +
-						itemData.description +
-						'<br> <b>Peso:</b> ' +
-						item.quantity * itemData.weight +
-						'&nbsp;&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp;&nbsp;<b>Quantidade:</b> ' +
-						item.quantity +
-						''
+					itemData.displayname + '<br> ' + itemData.description + '<br> <b>Peso:</b> ' + item.quantity * itemData.weight +
+					'&nbsp;&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp;&nbsp;<b>Quantidade:</b> ' + item.quantity
 				);
 			}
 		},
-		function() {
+		function () {
 			$('.item-info').fadeOut();
 		}
 	);
@@ -331,19 +186,16 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
 function SetupDraggingFunction() {
 	$('.inventory-cell')
 		.sortable({
-			appendTo    : document.body,
-			helper      : 'clone',
-			connectWith : '.inventory-cell',
-			cancel      : '.disable',
-			placeholder : 'inventory-item-sortable-placeholder',
-			tolerance   : 'pointer',
-			scroll      : false,
-			start       : function(event, ui) {
-				var item = $(ui.item),
-					helper = $(ui.helper);
-
-				var itemData = item.data('item'),
-					inputCount = $('#count').val();
+			appendTo: document.body,
+			helper: 'clone',
+			connectWith: '.inventory-cell',
+			cancel: '.disable',
+			placeholder: 'inventory-item-sortable-placeholder',
+			tolerance: 'pointer',
+			scroll: false,
+			start: function (event, ui) {
+				var item = $(ui.item), helper = $(ui.helper);
+				var itemData = item.data('item'), inputCount = $('#count').val();
 
 				var quantity = itemData.quantity;
 
@@ -359,10 +211,10 @@ function SetupDraggingFunction() {
 
 				item.show();
 			},
-			stop        : function(event, ui) {
+			stop: function (event, ui) {
 				$(ui.item).fadeOut(0).delay(175).fadeIn(0);
 			},
-			receive     : function(event, ui) {
+			receive: function (event, ui) {
 				var item = $(ui.item);
 
 				var currentInventory = $(ui.sender).parent().attr('class');
@@ -380,51 +232,79 @@ function SetupDraggingFunction() {
 					return;
 				}
 
-				if (returnItem.attr('class') === undefined) {
-					var canMoveItem = AttemptDropInEmptySlot(item, currentInventory, inventoryDropName, currentSlot, lastSlot);
+				if (inventoryType == 2) {
+					if (inventoryDropName == 'secondary-inventory') {
+						$(this).children('.item').appendTo($(ui.sender));
 
-					canMoveItem.then((status) => {
+						TriggerSound(false);
+
+						return;
+					}
+
+					var canBuyItem = AttemptBuyFromStore(item, currentInventory, returnItem, inventoryDropName, currentSlot, lastSlot);
+
+					canBuyItem.then((status) => {
 						if (status == true) {
 							if (currentInventory != inventoryDropName) {
 								CalculateInventoriesWeight();
 							}
 
-							TriggerSound(true);
+							$(this).children('.item').not(ui.item).remove();
 
-							console.log('Item moved successfully.');
+							TriggerSound(true);
 						} else {
 							$(this).children('.item').appendTo($(ui.sender));
 
 							TriggerSound(false);
-
-							console.log("Couldn't move the item.");
 						}
 					});
 				} else {
-					var canMoveItem = AttemptDropInFilledSlot(item, currentInventory, returnItem, inventoryDropName, currentSlot, lastSlot);
+					if (returnItem.attr('class') === undefined) {
+						var canMoveItem = AttemptDropInEmptySlot(item, currentInventory, inventoryDropName, currentSlot, lastSlot);
 
-					canMoveItem.then((status) => {
-						if (status == true) {
-							$(this).children('.item').not(ui.item).remove();
+						canMoveItem.then((status) => {
+							if (status == true) {
+								if (currentInventory != inventoryDropName) {
+									CalculateInventoriesWeight();
+								}
 
-							if (currentInventory != inventoryDropName) {
-								CalculateInventoriesWeight();
+								TriggerSound(true);
+
+								console.log('Item moved successfully.');
+							} else {
+								$(this).children('.item').appendTo($(ui.sender));
+
+								TriggerSound(false);
+
+								console.log("Couldn't move the item.");
 							}
+						});
+					} else {
+						var canMoveItem = AttemptDropInFilledSlot(item, currentInventory, returnItem, inventoryDropName, currentSlot, lastSlot);
 
-							TriggerSound(true);
+						canMoveItem.then((status) => {
+							if (status == true) {
+								if (currentInventory != inventoryDropName) {
+									CalculateInventoriesWeight();
+								}
 
-							console.log('Item moved successfully.');
-						} else {
-							$(this).children('.item').appendTo($(ui.sender));
+								$(this).children('.item').not(ui.item).remove();
 
-							TriggerSound(false);
+								TriggerSound(true);
 
-							console.log("Couldn't move the item.");
-						}
-					});
+								console.log('Item moved successfully.');
+							} else {
+								$(this).children('.item').appendTo($(ui.sender));
+
+								TriggerSound(false);
+
+								console.log("Couldn't move the item.");
+							}
+						});
+					}
 				}
 			},
-			sort        : function(event, ui) {
+			sort: function (event, ui) {
 				var scrollContainer = ui.placeholder[0].parentNode.parentNode;
 				var overflowOffset = $(scrollContainer).offset();
 
@@ -438,69 +318,100 @@ function SetupDraggingFunction() {
 		.disableSelection();
 }
 
-async function AttemptDropInFilledSlot(currentItem, currentInventory, returnItem, returnInventory, currentSlot, lastSlot) {
-	var item = currentItem.data('item'),
-		_item = returnItem.data('item'),
-		inputCount = $('#count').val();
-	var weight = itemList[item.id].weight,
-		_weight = itemList[_item.id].weight;
+async function AttemptBuyFromStore(currentItem, currentInventory, returnItem, returnInventory, currentSlot, lastSlot) {
+	var item = currentItem.data('item'), inputCount = $('#count').val();
+	var quantity = item.quantity, weight = itemList[item.id].weight;
 
-	var quantity = item.quantity,
-		_quantity = _item.quantity;
+	if (quantity <= 0) return false;
 
 	if (inputCount > 0 && quantity - parseInt(inputCount) > 0) {
 		quantity = parseInt(inputCount);
 	}
 
-	var CanStackItems = false;
+	var result = ErrorCheck(currentInventory, returnInventory, (weight * quantity));
 
-	if (item.id == _item.id && !itemList[item.id].nonStack) {
-		CanStackItems = true;
-	} else if (quantity != item.quantity) {
-		return false;
+	if (result == 'Success') {
+		var _currentSlot = currentSlot.replace(/\D/g, ''), boolean = false, canStack = false, _item = undefined;
+
+		_item = returnItem.data('item');
+
+		if (returnItem.attr('class') != undefined && item.id == _item.id) {
+			if (itemList[item.id].nonStack) {
+				return false;
+			}
+			canStack = true
+		} else if (returnItem.attr('class') != undefined) return false;
+
+		var promise = new Promise(function (resolve, reject) {
+			var data = {
+				inventory: $('.player-inventory h3').text(),
+				item: item.id,
+				quantity: quantity,
+				slot: _currentSlot,
+				canStack: canStack,
+			};
+
+			$.post('http://crp-inventory/nuiMessage', JSON.stringify({ buyitem: true, itemdata: data }), function (_data) {
+				if (_data.status) {
+					if ((item.quantity - quantity) > 0) {
+						AddItem(lastSlot, item.id, (item.quantity - quantity), true, true);
+					} else DeleteItem(lastSlot);
+
+					if (_data.stack) {
+						AddItem(currentSlot, item.id, (_item.quantity + quantity), true, false, true);
+					} else AddItem(currentSlot, item.id, (quantity), true, false, true);
+
+					boolean = true;
+				}
+				resolve(boolean);
+			});
+		});
+
+		boolean = await promise;
+
+		return boolean;
+	} else {
+		return false
+	}
+}
+
+async function AttemptDropInEmptySlot(currentItem, currentInventory, returnInventory, currentSlot, lastSlot) {
+	var item = currentItem.data('item'), inputCount = $('#count').val();
+	var weight = itemList[item.id].weight, quantity = item.quantity;
+
+	if (inputCount > 0 && quantity - parseInt(inputCount) > 0) {
+		quantity = parseInt(inputCount);
 	}
 
-	var movementWeight = weight * quantity,
-		_movementWeight = _weight * _quantity;
+	var result = ErrorCheck(currentInventory, returnInventory, (weight * quantity));
 
-	var result = ErrorCheck(currentInventory, returnInventory, movementWeight);
-	var _result = ErrorCheck(returnInventory, currentInventory, _movementWeight);
-
-	if (result == 'Success' && _result == 'Success') {
-		var _lastSlot = lastSlot.replace(/\D/g, ''),
-			_currentSlot = currentSlot.replace(/\D/g, '');
+	if (result == 'Success') {
+		var _lastSlot = lastSlot.replace(/\D/g, ''), _currentSlot = currentSlot.replace(/\D/g, '');
 
 		var boolean = false;
 
-		var promise = new Promise(function(resolve, reject) {
+		var promise = new Promise(function (resolve, reject) {
 			var data = {
-				lastInventory    : $('.' + currentInventory + ' h3').text(),
-				item             : item.id,
-				lastSlot         : _lastSlot,
-				quantity         : quantity,
-				currentInventory : $('.' + returnInventory + ' h3').text(),
-				_item            : _item.id,
-				currentSlot      : _currentSlot,
-				_quantity        : _quantity,
-				canStack         : CanStackItems
+				lastInventory: $('.' + currentInventory + ' h3').text(),
+				lastSlot: _lastSlot,
+				currentInventory: $('.' + returnInventory + ' h3').text(),
+				currentSlot: _currentSlot,
+				id: item.id,
+				quantity: quantity
 			};
 
-			$.post('http://crp-inventory/nuiMessage', JSON.stringify({ swapitem: true, itemsdata: data }), function(_data) {
+			if (inventoryType == 1) data['coords'] = inventoryCoords;
+
+			$.post('http://crp-inventory/nuiMessage', JSON.stringify({ moveitem: true, itemdata: data }), function (_data) {
 				if (_data.status) {
-					if (_data.swapItems) {
-						AddItem(lastSlot, _item.id, _quantity, true, true);
+					if (_data.splitItem) {
+						AddItem(lastSlot, item.id, item.quantity - quantity, true, true);
 
-						AddItem(currentSlot, item.id, quantity, false, false);
+						AddItem(currentSlot, item.id, quantity, true, false);
 					} else {
-						if (_data.delete) {
-							AddItem(currentSlot, item.id, quantity + _quantity, true, false);
+						AddItem(currentSlot, item.id, quantity, true, false);
 
-							DeleteItem(lastSlot);
-						} else {
-							AddItem(lastSlot, item.id, item.quantity - quantity, true, true);
-
-							AddItem(currentSlot, _item.id, _quantity + quantity, true, false);
-						}
+						DeleteItem(lastSlot);
 					}
 					boolean = true;
 				}
@@ -516,50 +427,61 @@ async function AttemptDropInFilledSlot(currentItem, currentInventory, returnItem
 	}
 }
 
-async function AttemptDropInEmptySlot(currentItem, currentInventory, returnInventory, currentSlot, lastSlot) {
-	var item = currentItem.data('item'),
-		inputCount = $('#count').val();
-	var weight = itemList[item.id].weight,
-		quantity = item.quantity;
+async function AttemptDropInFilledSlot(currentItem, currentInventory, returnItem, returnInventory, currentSlot, lastSlot) {
+	var item = currentItem.data('item'), _item = returnItem.data('item'), inputCount = $('#count').val();
+	var weight = itemList[item.id].weight, _weight = itemList[_item.id].weight;
+
+	var quantity = item.quantity, _quantity = _item.quantity;
 
 	if (inputCount > 0 && quantity - parseInt(inputCount) > 0) {
 		quantity = parseInt(inputCount);
 	}
 
-	var movementWeight = weight * quantity;
+	var CanStackItems = false;
 
-	var result = ErrorCheck(currentInventory, returnInventory, movementWeight);
+	if (item.id == _item.id && !itemList[item.id].nonStack) {
+		CanStackItems = true;
+	} else if (quantity != item.quantity) {
+		return false;
+	}
 
-	console.log('result: ' + result);
+	var result = ErrorCheck(currentInventory, returnInventory, (weight * quantity));
+	var _result = ErrorCheck(returnInventory, currentInventory, (_weight * _quantity));
 
-	if (result == 'Success') {
-		var _lastSlot = lastSlot.replace(/\D/g, ''),
-			_currentSlot = currentSlot.replace(/\D/g, '');
+	if (result == 'Success' && _result == 'Success') {
+		var _lastSlot = lastSlot.replace(/\D/g, ''), _currentSlot = currentSlot.replace(/\D/g, '');
 
 		var boolean = false;
 
-		var promise = new Promise(function(resolve, reject) {
+		var promise = new Promise(function (resolve, reject) {
 			var data = {
-				lastInventory    : $('.' + currentInventory + ' h3').text(),
-				lastSlot         : _lastSlot,
-				currentInventory : $('.' + returnInventory + ' h3').text(),
-				currentSlot      : _currentSlot,
-				id               : item.id,
-				quantity         : quantity
+				lastInventory: $('.' + currentInventory + ' h3').text(),
+				item: item.id,
+				lastSlot: _lastSlot,
+				quantity: quantity,
+				currentInventory: $('.' + returnInventory + ' h3').text(),
+				_item: _item.id,
+				currentSlot: _currentSlot,
+				_quantity: _quantity,
+				canStack: CanStackItems
 			};
 
-			if (inventoryType == 1) data['coords'] = inventoryCoords;
-
-			$.post('http://crp-inventory/nuiMessage', JSON.stringify({ moveitem: true, itemdata: data }), function(_data) {
+			$.post('http://crp-inventory/nuiMessage', JSON.stringify({ swapitem: true, itemsdata: data }), function (_data) {
 				if (_data.status) {
-					if (_data.splitItem) {
-						AddItem(lastSlot, item.id, item.quantity - quantity, true, true);
+					if (_data.swapItems) {
+						AddItem(lastSlot, _item.id, _quantity, true, true);
 
-						AddItem(currentSlot, item.id, quantity, true, false);
+						AddItem(currentSlot, item.id, quantity, false, false);
 					} else {
-						AddItem(currentSlot, item.id, quantity, true, false);
+						if (_data.delete) {
+							AddItem(currentSlot, item.id, quantity + _quantity, true, false);
 
-						DeleteItem(lastSlot);
+							DeleteItem(lastSlot);
+						} else {
+							AddItem(lastSlot, item.id, item.quantity - quantity, true, true);
+
+							AddItem(currentSlot, _item.id, _quantity + quantity, true, false);
+						}
 					}
 					boolean = true;
 				}
@@ -611,14 +533,9 @@ function CalculateInventoriesWeight() {
 	(personalWeight = 0), (secondaryWeight = 0);
 
 	if (Object.keys(playerItems).length > 0) {
-		for (
-			var i = 0;
-			i <=
-			Object.keys(playerItems).reduce(function(a, b) {
-				return playerItems[a] > playerItems[b] ? a : b;
-			});
-			i++
-		) {
+		for (var i = 0; i <= Object.keys(playerItems).reduce(function (a, b) {
+			return playerItems[a] > playerItems[b] ? a : b
+		}); i++) {
 			if (playerItems[i] != undefined) {
 				personalWeight = personalWeight + itemList[playerItems[i].id].weight * playerItems[i].quantity;
 			}
@@ -626,14 +543,9 @@ function CalculateInventoriesWeight() {
 	}
 
 	if (Object.keys(otherItems).length > 0) {
-		for (
-			var i = 0;
-			i <=
-			Object.keys(otherItems).reduce(function(a, b) {
-				return otherItems[a] > otherItems[b] ? a : b;
-			});
-			i++
-		) {
+		for (var i = 0; i <= Object.keys(otherItems).reduce(function (a, b) {
+			return otherItems[a] > otherItems[b] ? a : b
+		}); i++) {
 			if (otherItems[i] != undefined) {
 				secondaryWeight = secondaryWeight + itemList[otherItems[i].id].weight * otherItems[i].quantity;
 			}
@@ -644,9 +556,8 @@ function CalculateInventoriesWeight() {
 	$('.secondary-inventory h5').html('Peso: ' + secondaryWeight.toFixed(2) + ' / ' + secondaryMaxWeight.toFixed(2));
 }
 
-function AddItem(slot, itemid, count, needUpdate, canCreate) {
-	var _slot = slot.replace(/\D/g, ''),
-		GetObject = undefined;
+function AddItem(slot, itemid, count, needUpdate, canCreate, isShopItem) {
+	var _slot = slot.replace(/\D/g, ''), GetObject = undefined;
 
 	if (slot.includes('p')) {
 		playerItems[_slot] = { id: itemid, quantity: count };
@@ -659,24 +570,20 @@ function AddItem(slot, itemid, count, needUpdate, canCreate) {
 	}
 
 	if (needUpdate) {
-		var inventory = $('#' + slot),
-			item = itemList[itemid];
+		var inventory = $('#' + slot), item = itemList[itemid];
 
 		var itemWeight = item.weight * GetObject.quantity;
 
 		if (canCreate) {
 			inventory.append(
-				'<div class="item"><p>' +
-					GetObject.quantity +
-					' (' +
-					itemWeight.toFixed(2) +
-					')</p><img class="picture" src="items/' +
-					item.image +
-					'" ><div class="item-name">' +
-					item.displayname +
-					'</div></div>'
+				'<div class="item"><p>' + GetObject.quantity + ' (' + itemWeight.toFixed(2) + ')</p><img class="picture" src="items/' +
+				item.image + '" ><div class="item-name">' + item.displayname + '</div></div>'
 			);
 		} else {
+			if (isShopItem) {
+				inventory.children('.item').children('.item-name').text(itemList[itemid].displayname);
+			}
+
 			inventory.children('.item').children('p').text(GetObject.quantity + ' (' + itemWeight.toFixed(2));
 		}
 
@@ -705,23 +612,15 @@ function SwapItem(slot, itemid, count) {
 	inventory.remove('.item');
 
 	inventory.append(
-		'<div class="item"><p>' +
-			GetObject.quantity +
-			' (' +
-			itemWeight.toFixed(2) +
-			')</p><img class="picture" src="items/' +
-			item.image +
-			'" ><div class="item-name">' +
-			item.displayname +
-			'</div></div>'
+		'<div class="item"><p>' + GetObject.quantity + ' (' + itemWeight.toFixed(2) + ')</p><img class="picture" src="items/' +
+		item.image + '" ><div class="item-name">' + item.displayname + '</div></div>'
 	);
 
 	inventory.children('.item').data('item', GetObject);
 }
 
 function DeleteItem(slot) {
-	var inventory = $('#' + slot),
-		_slot = slot.replace(/\D/g, '');
+	var inventory = $('#' + slot), _slot = slot.replace(/\D/g, '');
 
 	if (slot.includes('p')) {
 		playerItems[_slot] = undefined;

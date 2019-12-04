@@ -15,7 +15,9 @@ files {
 	'nui/styles.css',
 	'nui/scripts.js',
 
+	'nui/items/crp-cacetete.png.png',
 	'nui/items/crp-stungun.png',
+
 	'nui/items/crp-pistol.png',
 	'nui/items/crp-snspistol.png',
 	'nui/items/crp-vintagepistol.png',
@@ -30,4 +32,9 @@ files {
 	'nui/items/crp-compactrifle.png',
 	'nui/items/crp-assaultrifle.png',
 	'nui/items/crp-carbinerifle.png',
+
+	'nui/items/crp-colete.png',
+	'nui/items/crp-ligadura.png',
+	'nui/items/crp-coca.png',
+	'nui/items/crp-batatas.png',
 }

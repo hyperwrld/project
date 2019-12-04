@@ -11,58 +11,48 @@ local function closeInventory()
 	SetNuiFocus(false, false)
 end
 
-local function showInventory()
+local function showInventory(type, shopID, shopData)
 	if isInventoryOpen then 
 		closeInventory()
 		return
 	end
 
-	local playerPed = PlayerPedId()
-	local coords, closestInventory, closestInventoryDistance, closestInventoryCoords = GetEntityCoords(playerPed), nil, nil, nil
-
-	for i = 1, #Inventories, 1 do
-		local distance = GetDistanceBetweenCoords(coords, Inventories[i].coords.x, Inventories[i].coords.y, Inventories[i].coords.z, true)
-
-		if distance <= 2.0 then
-			if closestInventory ~= nil and closestInventoryDistance ~= nil then
-				if closestInventoryDistance < distance then
-					closestInventory = Inventories[i].name
-					closestInventoryDistance = distance
-					closestInventoryCoords = { x = coords.x, y = coords.y, z = coords.z }
-				end
-			else
-				closestInventory = Inventories[i].name
-				closestInventoryDistance = distance
-				closestInventoryCoords = { x = coords.x, y = coords.y, z = coords.z }
-			end
-		end
-	end
-
-	isInventoryOpen = true
+	-- * type: 1 (drop), 2 (store), 3 (...)
 
 	local player = exports['crp-base']:getModule('LocalPlayer')
 	local events, id = exports['crp-base']:getModule('Events'), player:getCurrentCharacter()
 
-	if closestInventory == nil then
-		closestInventoryCoords = { x = coords.x, y = coords.y, z = coords.z }
-		closestInventory = 'drop-' .. math.random(0, 100000)
+	if type == 1 then
+		local inventory, inventoryCoords, alreadyExists = GetClosestInventory()
 
+		if alreadyExists then
+			events:Trigger('crp-inventory:getInventory', id, function(data)
+				sendMessage({ 
+					event = 'open', 
+					playerData = { id = id, items = data }, 
+					secondaryData = { id = inventory, coords = inventoryCoords, type = type, items = nil },
+				})
+			end)
+		else
+			events:Trigger('crp-inventory:getInventories', { id = id, inventory = inventory }, function(data)
+				sendMessage({ 
+					event = 'open', 
+					playerData = { id = id, items = data.player }, 
+					secondaryData = { id = inventory, coords = inventoryCoords, type = type, items = data.secondary },
+				})
+			end)
+		end
+	elseif type == 2 then
 		events:Trigger('crp-inventory:getInventory', id, function(data)
 			sendMessage({ 
 				event = 'open', 
 				playerData = { id = id, items = data }, 
-				secondaryData = { id = closestInventory, coords = closestInventoryCoords, type = 1, items = nil },
-			})
-		end)
-	else
-		events:Trigger('crp-inventory:getInventories', { id = id, inventory = closestInventory }, function(data)
-			sendMessage({ 
-				event = 'open', 
-				playerData = { id = id, items = data.player }, 
-				secondaryData = { id = closestInventory, coords = closestInventoryCoords, type = 1, items = data.secondary },
+				secondaryData = { id = shopID, type = type, items = shopData },
 			})
 		end)
 	end
+
+	isInventoryOpen = true
 
 	SetNuiFocus(true, true)
 
@@ -92,6 +82,12 @@ local function nuiCallBack(data, cb)
 		end)
 	end
 
+	if data.buyitem then
+		events:Trigger('crp-shops:buyItem', data.itemdata, function(data)
+			cb(data)
+		end)
+	end
+
 	if data.sucess then
 		PlaySoundFrontend(-1, 'ERROR', 'HUD_LIQUOR_STORE_SOUNDSET', false)
 	end
@@ -108,7 +104,7 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 
 		if IsControlJustReleased(0, 289) and IsInputDisabled(0) then
-			showInventory()
+			showInventory(1)
 		end
 	end
 end)
@@ -132,6 +128,58 @@ Citizen.CreateThread(function()
 			Citizen.Wait(500)
 		end
 	end
+end)
+
+function GetClosestInventory() 
+	local coords = GetEntityCoords(PlayerPedId())
+	local inventory, inventoryDistance, inventoryCoords
+
+	for k, v in pairs(Inventories) do
+		local distance = GetDistanceBetweenCoords(coords, v.coords.x, v.coords.y, v.coords.z, true)
+
+		if distance <= 2.0 then
+			if inventory == nil then
+				inventory = v.name
+				inventoryDistance = distance
+				inventoryCoords = { x = coords.x, y = coords.y, z = coords.z }
+			end
+
+			if inventoryDistance < distance then
+				inventory = v.name
+				inventoryDistance = distance
+				inventoryCoords = { x = coords.x, y = coords.y, z = coords.z }
+			end
+		end
+	end
+
+	if inventory == nil then
+		inventory = 'drop-' .. math.random(0, 100000)
+
+		while CheckIfInventoryExists(Inventories, inventory) == true do
+			inventory = 'drop-' .. math.random(0, 100000)
+		end
+
+		inventoryCoords = { x = coords.x, y = coords.y, z = coords.z }
+
+		return inventory, inventoryCoords, true
+	end
+
+	return inventory, inventoryCoords, false
+end
+
+function CheckIfInventoryExists(table, value)
+    for k, v in pairs(table) do
+        if v.name == value then
+            return true
+        end
+    end
+
+    return false
+end
+
+RegisterNetEvent('crp-inventory:openStore')
+AddEventHandler('crp-inventory:openStore', function(id, data)
+	showInventory(2, id, data)
 end)
 
 RegisterNetEvent('crp-inventory:updateInventories')
