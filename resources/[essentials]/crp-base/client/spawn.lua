@@ -1,17 +1,5 @@
 CRP.SpawnManager = {}
 
-Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait(0)
-
-		if NetworkIsSessionStarted() then
-			TriggerServerEvent('crp-base:playerSessionStarted')
-			TriggerEvent('crp-base:playerSessionStarted')
-			return
-		end
-	end
-end)
-
 function CRP.SpawnManager.Initialize(self)
 	Citizen.CreateThread(function()
 		local playerPed = GetPlayerPed(-1)

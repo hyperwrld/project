@@ -5,6 +5,9 @@ local storeItems = {
 
 AddEventHandler('crp-shops:buyItem', function(source, data, callback)
     local character = exports['crp-base']:GetCharacter(source)
+
+    if (storeItems[data.item] == nil) then return callback({ status = false }) end
+
     local characterMoney, itemPrice = character.getMoney(), (data.quantity * storeItems[data.item].price)
 
     if characterMoney >= itemPrice then
@@ -18,18 +21,16 @@ AddEventHandler('crp-shops:buyItem', function(source, data, callback)
                     exports.ghmattimysql:execute('UPDATE inventory SET count = count + @quantity WHERE name = @name AND item = @item AND slot = @slot;', 
                     { ['@quantity'] = data.quantity, ['@name'] = data.inventory, ['@item'] = data.item, ['@slot'] = data.slot })
 
-                    print(' teste')
-                    callback({ status = true, stack = true})
+                    callback({ status = true, stack = true, price = itemPrice })
                 end
             end)
         else
             exports.ghmattimysql:execute('INSERT INTO inventory (count, item, slot, name) VALUES (@quantity, @item, @slot, @name);', 
             { ['@quantity'] = data.quantity, ['@name'] = data.inventory, ['@item'] = data.item, ['@slot'] = data.slot })
 
-            callback({ status = true, stack = false })
+            callback({ status = true, stack = false, price = itemPrice })
         end
     else
-        print(' não tens guito caralho')
-        callback({ status = false })
+        callback({ status = false, text = 'Não tens dinheiro suficiente.' })
     end
 end)

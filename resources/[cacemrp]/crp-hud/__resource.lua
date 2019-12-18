@@ -15,3 +15,5 @@ files {
 	'html/css/main.css',
 	'html/js/main.js'
 }
+
+dependency 'crp-base'

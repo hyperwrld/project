@@ -1,29 +1,29 @@
-$(function() {
+$(function () {
     let moneyIcon = '€';
 
-    window.addEventListener('message', function(event) {
+    window.addEventListener('message', function (event) {
         if (event.data.state == 'add') {
-        	$('.tiny').remove();
+            $('.tiny').remove();
 
-			var element = $("<div class='tiny'>+<font style='color: rgb(0, 125, 0); font-weight: 700; margin-right: 6px;'>" + moneyIcon + '</font>' + addCommas(event.data.money) + '</div>');
+            var element = $("<div class='tiny'>+<font style='color: rgb(0, 125, 0); font-weight: 700; margin-right: 6px;'>" + moneyIcon + '</font>' + addCommas(event.data.money) + '</div>');
 
-			$('#money').append(element);
+            $('#money').append(element);
 
-			setTimeout(function () {
-				$(element).fadeOut(600, function () { $(this).remove(); });
-			}, 1000);
+            setTimeout(function () {
+                $(element).fadeOut(600, function () { $(this).remove(); });
+            }, 1000);
         } else if (event.data.state == 'remove') {
-        	$('.tiny').remove();
+            $('.tiny').remove();
 
-			var element = $("<div class='tiny'>-<font style='color: rgb(250, 0, 0); font-weight: 700; margin-right: 6px;'>" + moneyIcon + '</font>' + addCommas(event.data.money) + '</div>');
+            var element = $("<div class='tiny'>-<font style='color: rgb(250, 0, 0); font-weight: 700; margin-right: 6px;'>" + moneyIcon + '</font>' + addCommas(event.data.money) + '</div>');
 
-			$('#money').append(element);
+            $('#money').append(element);
 
-			setTimeout(function () {
-				$(element).fadeOut(600, function () { $(this).remove(); });
-			}, 1000)
+            setTimeout(function () {
+                $(element).fadeOut(600, function () { $(this).remove(); });
+            }, 1000)
         } else if (event.data.state == 'activate') {
-			document.getElementById('cash').innerHTML = "<div><font style='color: rgb(0, 125, 0); font-weight: 700; margin-right: 6px;'>" + moneyIcon + '</font>' + addCommas(event.data.money);
+            document.getElementById('cash').innerHTML = "<div><font style='color: rgb(0, 125, 0); font-weight: 700; margin-right: 6px;'>" + moneyIcon + '</font>' + addCommas(event.data.money);
         }
     });
 });

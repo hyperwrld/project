@@ -11,7 +11,7 @@ local function closeInventory()
 	SetNuiFocus(false, false)
 end
 
-local function showInventory(type, shopID, shopData)
+local function showInventory(type, shopID, shopData, shopType)
 	if isInventoryOpen then 
 		closeInventory()
 		return
@@ -47,7 +47,7 @@ local function showInventory(type, shopID, shopData)
 			sendMessage({ 
 				event = 'open', 
 				playerData = { id = id, items = data }, 
-				secondaryData = { id = shopID, type = type, items = shopData },
+				secondaryData = { id = shopID, type = type, items = shopData, shopType = shopType },
 			})
 		end)
 	end
@@ -88,11 +88,16 @@ local function nuiCallBack(data, cb)
 		end)
 	end
 
-	if data.sucess then
+	if data.success then
+		if data.text then exports['crp-notifications']:SendAlert('success', data.text) end
+
 		PlaySoundFrontend(-1, 'ERROR', 'HUD_LIQUOR_STORE_SOUNDSET', false)
 	end
 
 	if data.error then
+		print(data.text)
+		if data.text then exports['crp-notifications']:SendAlert('error', data.text) end
+
 		PlaySoundFrontend(-1, 'ERROR', 'HUD_FRONTEND_DEFAULT_SOUNDSET', false)
 	end
 end
@@ -119,7 +124,8 @@ Citizen.CreateThread(function()
 			local distance = GetDistanceBetweenCoords(coords, v.coords.x, v.coords.y, v.coords.z, true)
 
 			if distance <= 20.0 then
-				DrawMarker(20, v.coords.x, v.coords.y, v.coords.z, 0.0, 0.0, 0.0, 0, 0.0, 0.0, 1.0, 1.0, 0.5, 255, 255, 255, 100, false, true, 2, false, false, false, false)
+				DrawMarker(20, v.coords.x, v.coords.y, v.coords.z, 0.0, 0.0, 0.0, 0, 0.0, 0.0, 1.0, 1.0, 0.4, 255, 255, 255, 100, false, true, 2, false, false, false, false)
+				
 				letSleep = false
 			end
 		end
@@ -178,8 +184,8 @@ function CheckIfInventoryExists(table, value)
 end
 
 RegisterNetEvent('crp-inventory:openStore')
-AddEventHandler('crp-inventory:openStore', function(id, data)
-	showInventory(2, id, data)
+AddEventHandler('crp-inventory:openStore', function(id, data, storeType)
+	showInventory(2, id, data, storeType)
 end)
 
 RegisterNetEvent('crp-inventory:updateInventories')

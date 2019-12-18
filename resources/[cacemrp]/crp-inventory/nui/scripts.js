@@ -197,6 +197,8 @@ function SetupDraggingFunction() {
 				var item = $(ui.item), helper = $(ui.helper);
 				var itemData = item.data('item'), inputCount = $('#count').val();
 
+				if (item.parent().attr('id') == 'use') return;
+
 				var quantity = itemData.quantity;
 
 				if (inputCount > 0 && quantity - inputCount > 0) {
@@ -212,6 +214,8 @@ function SetupDraggingFunction() {
 				item.show();
 			},
 			stop: function (event, ui) {
+				if ($(ui.item).parent().attr('id') == 'use') return;
+
 				$(ui.item).fadeOut(0).delay(175).fadeIn(0);
 			},
 			receive: function (event, ui) {
@@ -226,37 +230,35 @@ function SetupDraggingFunction() {
 				var returnItem = $(this).children('.item').not(ui.item);
 
 				if (inventoryDropName == 'controls') {
-					$(this).children('.item').appendTo($(ui.sender));
+					$(ui.sender).sortable('cancel');
 
 					$('#use').stop().css('background-color', 'rgba(255, 0, 0, 0.3)').animate({ backgroundColor: 'rgba(0, 0, 0, 0.5)' }, 1500);
 					return;
 				}
 
-				if (inventoryType == 2) {
-					if (inventoryDropName == 'secondary-inventory') {
-						$(this).children('.item').appendTo($(ui.sender));
+				if (inventoryType == 2 && inventoryDropName == 'secondary-inventory') {
+					$(ui.sender).sortable('cancel');
 
-						TriggerSound(false);
+					TriggerNotification(false);
+					return;
+				}
 
-						return;
-					}
-
+				if (inventoryType == 2 && currentInventory == 'secondary-inventory' && inventoryDropName == 'player-inventory') {
 					var canBuyItem = AttemptBuyFromStore(item, currentInventory, returnItem, inventoryDropName, currentSlot, lastSlot);
 
-					canBuyItem.then((status) => {
-						if (status == true) {
+					canBuyItem.then((data) => {
+						if (data.status == true) {
 							if (currentInventory != inventoryDropName) {
 								CalculateInventoriesWeight();
 							}
 
 							$(this).children('.item').not(ui.item).remove();
-
-							TriggerSound(true);
 						} else {
 							$(this).children('.item').appendTo($(ui.sender));
-
-							TriggerSound(false);
 						}
+
+						console.log(data.text)
+						TriggerNotification(data.status, data.text);
 					});
 				} else {
 					if (returnItem.attr('class') === undefined) {
@@ -268,13 +270,13 @@ function SetupDraggingFunction() {
 									CalculateInventoriesWeight();
 								}
 
-								TriggerSound(true);
+								TriggerNotification(true);
 
 								console.log('Item moved successfully.');
 							} else {
 								$(this).children('.item').appendTo($(ui.sender));
 
-								TriggerSound(false);
+								TriggerNotification(false);
 
 								console.log("Couldn't move the item.");
 							}
@@ -290,13 +292,13 @@ function SetupDraggingFunction() {
 
 								$(this).children('.item').not(ui.item).remove();
 
-								TriggerSound(true);
+								TriggerNotification(true);
 
 								console.log('Item moved successfully.');
 							} else {
 								$(this).children('.item').appendTo($(ui.sender));
 
-								TriggerSound(false);
+								TriggerNotification(false);
 
 								console.log("Couldn't move the item.");
 							}
@@ -331,7 +333,7 @@ async function AttemptBuyFromStore(currentItem, currentInventory, returnItem, re
 	var result = ErrorCheck(currentInventory, returnInventory, (weight * quantity));
 
 	if (result == 'Success') {
-		var _currentSlot = currentSlot.replace(/\D/g, ''), boolean = false, canStack = false, _item = undefined;
+		var _currentSlot = currentSlot.replace(/\D/g, ''), boolean = { status: false }, canStack = false, _item = undefined;
 
 		_item = returnItem.data('item');
 
@@ -348,7 +350,7 @@ async function AttemptBuyFromStore(currentItem, currentInventory, returnItem, re
 				item: item.id,
 				quantity: quantity,
 				slot: _currentSlot,
-				canStack: canStack,
+				canStack: canStack
 			};
 
 			$.post('http://crp-inventory/nuiMessage', JSON.stringify({ buyitem: true, itemdata: data }), function (_data) {
@@ -361,8 +363,13 @@ async function AttemptBuyFromStore(currentItem, currentInventory, returnItem, re
 						AddItem(currentSlot, item.id, (_item.quantity + quantity), true, false, true);
 					} else AddItem(currentSlot, item.id, (quantity), true, false, true);
 
-					boolean = true;
+					boolean = {
+						status: true, text: 'Acabaste de comprar o item: ' + itemList[item.id].displayname + ' (' + quantity + '), por: ' + _data.price + ' euros.'
+					};
+				} else {
+					boolean = { status: false, text: _data.text };
 				}
+
 				resolve(boolean);
 			});
 		});
@@ -371,7 +378,8 @@ async function AttemptBuyFromStore(currentItem, currentInventory, returnItem, re
 
 		return boolean;
 	} else {
-		return false
+		console.log('teste')
+		return { status: false, text: 'Não consegues carregar esse item.' };
 	}
 }
 
@@ -638,10 +646,10 @@ function CheckInput(event) {
 	return true;
 }
 
-function TriggerSound(type) {
+function TriggerNotification(type, text) {
 	if (type) {
-		$.post('http://crp-inventory/nuiMessage', JSON.stringify({ sucess: true }));
+		$.post('http://crp-inventory/nuiMessage', JSON.stringify({ success: true, text: text }));
 	} else {
-		$.post('http://crp-inventory/nuiMessage', JSON.stringify({ error: true }));
+		$.post('http://crp-inventory/nuiMessage', JSON.stringify({ error: true, text: text }));
 	}
 }
