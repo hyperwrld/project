@@ -1,3 +1,5 @@
+local isRadarEnabled = nil
+
 local function SetGamePlayVars()
     Citizen.CreateThread(function()
         -- Disable Dispatch Services
@@ -28,15 +30,22 @@ local function SetGamePlayVars()
             -- Disable Vehicle Rewards
             DisablePlayerVehicleRewards(playerID)
 
-            -- Disable Radar
-            DisplayRadar(false)
-
             if IsPedInAnyVehicle(playerPed, false) then
                 if GetPedInVehicleSeat(GetVehiclePedIsIn(playerPed, false), 0) == playerPed then
                     if GetIsTaskActive(playerPed, 165) then
                     	SetPedIntoVehicle(playerPed, GetVehiclePedIsIn(playerPed, false), 0)
                     end
                 end
+
+                if (not isRadarEnabled) then 
+                    DisplayRadar(true)
+                    
+                    isRadarEnabled = true
+                end
+            elseif (isRadarEnabled or isRadarEnabled == nil) then
+                DisplayRadar(false)
+
+                isRadarEnabled = false
             end
 
             if IsPedWearingHelmet(playerPed) and not IsPedInAnyVehicle(playerPed, true) then

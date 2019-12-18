@@ -44,13 +44,11 @@ local weaponStoreItems = {
 	{ item = -1076751822, count = 50, slot = 3, price = 10000 },
 }
 
-local hasAlreadyEnteredMarker, shopType
-
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
 		local coords = GetEntityCoords(PlayerPedId())
-        local isInMarker, letSleep = false, false
+        local isInMarker, letSleep = false, true
     
         for k, v in pairs(shopLocations) do
             local distance = GetDistanceBetweenCoords(coords, v.x, v.y, v.z, true)
@@ -60,50 +58,29 @@ Citizen.CreateThread(function()
                
                 letSleep = false
 
-                if distance < 1.0 then
-					isInMarker = true
-					shopType   = v.type
+				if distance < 1.0 then
+					local currentName, currentItems = 'loja de conveniência', {}
+
+					if (v.type == 'weaponshop') then
+						currentName, currentItems = 'loja de armas', weaponStoreItems
+
+						DisplayHelpText('Pressiona ~INPUT_CONTEXT~ para abrir a ~g~loja de armas~s~.')
+					else
+						currentItems = storeItems
+
+						DisplayHelpText('Pressiona ~INPUT_CONTEXT~ para abrir a ~g~loja~s~.')
+					end
+
+					if IsControlJustReleased(0, 38) then
+						TriggerEvent('crp-inventory:openStore', currentName, currentItems)
+					end
                 end
             end
 		end
 
-		if isInMarker and not hasAlreadyEnteredMarker then
-            hasAlreadyEnteredMarker = true
-		end
-
-		if not isInMarker and hasAlreadyEnteredMarker then
-			hasAlreadyEnteredMarker = false
-		end
-
 		if letSleep then
-			Citizen.Wait(500)
+			Citizen.Wait(1500)
         end
-	end
-end)
-
-Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait(0)
-
-		if hasAlreadyEnteredMarker then
-			local currentName, currentItems = 'loja de conveniência', {}
-
-			if (shopType == 'weaponshop') then
-				currentName, currentItems = 'loja de armas', weaponStoreItems
-
-				DisplayHelpText('Pressiona ~INPUT_CONTEXT~ para abrir a ~g~loja de armas~s~.')
-			else
-				currentItems = storeItems
-
-				DisplayHelpText('Pressiona ~INPUT_CONTEXT~ para abrir a ~g~loja~s~.')
-			end
-
-			if IsControlJustReleased(0, 38) then
-                TriggerEvent('crp-inventory:openStore', currentName, currentItems)
-			end
-		else
-			Citizen.Wait(500)
-		end
 	end
 end)
 

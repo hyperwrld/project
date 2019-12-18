@@ -8,31 +8,28 @@ let itemList = {};
 
 // * INVENTORY WEAPONS
 
-itemList['1737195953'] = { displayname: 'Cacetete', weight: 10, nonStack: true, image: 'crp-cacetete.png', weapon: true };
-itemList['911657153'] = { displayname: 'Taser', weight: 10, nonStack: true, image: 'crp-stungun.png', weapon: true };
-
-itemList['453432689'] = { displayname: 'Pistola', weight: 15, nonStack: true, image: 'crp-pistol.png', weapon: true };
-itemList['-1076751822'] = { displayname: 'Pistola SNS', weight: 15, nonStack: true, image: 'crp-snspistol.png', weapon: true };
+itemList['1737195953'] = { displayname: 'Cacetete', weight: 10, nonStack: true, image: 'crp-cacetete.png', weapon: true, price: 5 };
+itemList['911657153'] = { displayname: 'Taser', weight: 10, nonStack: true, image: 'crp-stungun.png', weapon: true, price: 1000 };
+itemList['453432689'] = { displayname: 'Pistola', weight: 15, nonStack: true, image: 'crp-pistol.png', weapon: true, price: 5000 };
+itemList['-1076751822'] = { displayname: 'Pistola SNS', weight: 15, nonStack: true, image: 'crp-snspistol.png', weapon: true, price: 10000 };
 itemList['137902532'] = { displayname: 'Pistola Vintage', weight: 15, nonStack: true, image: 'crp-vintagepistol.png', weapon: true };
 itemList['-771403250'] = { displayname: 'Pistola Pesada', weight: 20, nonStack: true, image: 'crp-heavypistol.png', weapon: true };
 itemList['1593441988'] = { displayname: 'Pistola de combate', weight: 15, nonStack: true, image: 'crp-combatpistol.png', weapon: true };
-
 itemList['-619010992'] = { displayname: 'Pistola-Metralhadora', weight: 30, nonStack: true, image: 'crp-machinepistol.png', weapon: true };
 itemList['-1121678507'] = { displayname: 'Mini Submetralhadora', weight: 30, nonStack: true, image: 'crp-minismg.png', weapon: true };
 itemList['324215364'] = { displayname: 'Micro Submetralhadora', weight: 30, nonStack: true, image: 'crp-microsmg.png', weapon: true };
 itemList['736523883'] = { displayname: 'Submetralhadora', weight: 35, nonStack: true, image: 'crp-smg.png', weapon: true };
-
-itemList['1649403952'] = { displayname: 'Rifle Compacto', weight: 45, nonStack: true, image: 'crp-compactrifle.png', weapon: true };
-itemList['-1074790547'] = { displayname: 'Rifle de Assalto', weight: 55, nonStack: true, image: 'crp-assaultrifle.png', weapon: true };
-itemList['-2084633992'] = { displayname: 'Carabina', weight: 55, nonStack: true, image: 'crp-carbinerifle.png', weapon: true };
+itemList['1649403952'] = { displayname: 'Rifle Compacto', weight: 45, nonStack: true, image: 'crp-compactrifle.png', weapon: true, price: 300 };
+itemList['-1074790547'] = { displayname: 'Rifle de Assalto', weight: 55, nonStack: true, image: 'crp-assaultrifle.png', weapon: true, price: 10 };
+itemList['-2084633992'] = { displayname: 'Carabina', weight: 55, nonStack: true, image: 'crp-carbinerifle.png', weapon: true, price: 5000 };
 
 // * NORMAL ITEMS
 
-itemList['156805094'] = { displayname: 'Colete', weight: 25, nonStack: false, image: 'crp-colete.png', weapon: false };
-itemList['130895348'] = { displayname: 'Ligadura', weight: 2.5, nonStack: false, image: 'crp-ligadura.png', weapon: false };
+itemList['156805094'] = { displayname: 'Colete', weight: 25, nonStack: false, image: 'crp-colete.png', weapon: false, price: 20 };
+itemList['130895348'] = { displayname: 'Ligadura', weight: 2.5, nonStack: false, image: 'crp-ligadura.png', weapon: false, price: 150 };
 
-itemList['196068078'] = { displayname: 'Coca-Cola', weight: 1, nonStack: false, image: 'crp-coca.png', weapon: false };
-itemList['129942349'] = { displayname: 'Batatas', weight: 1, nonStack: false, image: 'crp-batatas.png', weapon: false };
+itemList['196068078'] = { displayname: 'Coca-Cola', weight: 1, nonStack: false, image: 'crp-coca.png', weapon: false, price: 500 };
+itemList['129942349'] = { displayname: 'Batatas', weight: 1, nonStack: false, image: 'crp-batatas.png', weapon: false, price: 3 };
 
 $(function () {
 	defaultHTML = $('.ui').clone();
@@ -117,7 +114,7 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
 
 	if (otherData != undefined) {
 		for (const [key, value] of Object.entries(otherData)) {
-			otherItems[value.slot] = { id: value.item, quantity: value.count, price: value.price };
+			otherItems[value.slot] = { id: value.item, quantity: value.count };
 		}
 	}
 
@@ -136,7 +133,7 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
 
 			if (inventoryType == 2) {
 				div = '<div class="item"><p>' + otherItems[i].quantity + ' (' + itemWeight.toFixed(2) + ')</p><img class="picture" src="items/' +
-					item.image + '" ><div class="item-name">' + item.displayname + ' - <font color="#60B643">' + otherItems[i].price +
+					item.image + '" ><div class="item-name">' + item.displayname + ' - <font color="#60B643">' + item.price +
 					'€</font></div></div>';
 			}
 
@@ -253,11 +250,8 @@ function SetupDraggingFunction() {
 							}
 
 							$(this).children('.item').not(ui.item).remove();
-						} else {
-							$(this).children('.item').appendTo($(ui.sender));
-						}
+						} else $(ui.sender).sortable('cancel');
 
-						console.log(data.text)
 						TriggerNotification(data.status, data.text);
 					});
 				} else {
@@ -269,17 +263,9 @@ function SetupDraggingFunction() {
 								if (currentInventory != inventoryDropName) {
 									CalculateInventoriesWeight();
 								}
+							} else $(ui.sender).sortable('cancel');
 
-								TriggerNotification(true);
-
-								console.log('Item moved successfully.');
-							} else {
-								$(this).children('.item').appendTo($(ui.sender));
-
-								TriggerNotification(false);
-
-								console.log("Couldn't move the item.");
-							}
+							TriggerNotification(status);
 						});
 					} else {
 						var canMoveItem = AttemptDropInFilledSlot(item, currentInventory, returnItem, inventoryDropName, currentSlot, lastSlot);
@@ -291,17 +277,9 @@ function SetupDraggingFunction() {
 								}
 
 								$(this).children('.item').not(ui.item).remove();
+							} else $(ui.sender).sortable('cancel');
 
-								TriggerNotification(true);
-
-								console.log('Item moved successfully.');
-							} else {
-								$(this).children('.item').appendTo($(ui.sender));
-
-								TriggerNotification(false);
-
-								console.log("Couldn't move the item.");
-							}
+							TriggerNotification(status);
 						});
 					}
 				}
@@ -339,10 +317,10 @@ async function AttemptBuyFromStore(currentItem, currentInventory, returnItem, re
 
 		if (returnItem.attr('class') != undefined && item.id == _item.id) {
 			if (itemList[item.id].nonStack) {
-				return false;
+				return { status: false, text: 'Não é possível dar stack nesses items.' };
 			}
 			canStack = true
-		} else if (returnItem.attr('class') != undefined) return false;
+		} else if (returnItem.attr('class') != undefined) return { status: false, text: 'Não é possível dar stack nesses items.' };
 
 		var promise = new Promise(function (resolve, reject) {
 			var data = {
@@ -356,7 +334,7 @@ async function AttemptBuyFromStore(currentItem, currentInventory, returnItem, re
 			$.post('http://crp-inventory/nuiMessage', JSON.stringify({ buyitem: true, itemdata: data }), function (_data) {
 				if (_data.status) {
 					if ((item.quantity - quantity) > 0) {
-						AddItem(lastSlot, item.id, (item.quantity - quantity), true, true);
+						AddItem(lastSlot, item.id, (item.quantity - quantity), true, true, true);
 					} else DeleteItem(lastSlot);
 
 					if (_data.stack) {
@@ -378,7 +356,6 @@ async function AttemptBuyFromStore(currentItem, currentInventory, returnItem, re
 
 		return boolean;
 	} else {
-		console.log('teste')
 		return { status: false, text: 'Não consegues carregar esse item.' };
 	}
 }
@@ -583,10 +560,17 @@ function AddItem(slot, itemid, count, needUpdate, canCreate, isShopItem) {
 		var itemWeight = item.weight * GetObject.quantity;
 
 		if (canCreate) {
-			inventory.append(
-				'<div class="item"><p>' + GetObject.quantity + ' (' + itemWeight.toFixed(2) + ')</p><img class="picture" src="items/' +
-				item.image + '" ><div class="item-name">' + item.displayname + '</div></div>'
-			);
+			if (isShopItem) {
+				inventory.append(
+					'<div class="item"><p>' + GetObject.quantity + ' (' + itemWeight.toFixed(2) + ')</p><img class="picture" src="items/' +
+					item.image + '" ><div class="item-name">' + item.displayname + ' - <font color="#60B643">' + item.price + '€</font></div></div>'
+				);
+			} else {
+				inventory.append(
+					'<div class="item"><p>' + GetObject.quantity + ' (' + itemWeight.toFixed(2) + ')</p><img class="picture" src="items/' +
+					item.image + '" ><div class="item-name">' + item.displayname + '</div></div>'
+				);
+			}
 		} else {
 			if (isShopItem) {
 				inventory.children('.item').children('.item-name').text(itemList[itemid].displayname);
