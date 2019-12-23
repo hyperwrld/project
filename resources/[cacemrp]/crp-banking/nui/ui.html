@@ -1,0 +1,199 @@
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width'>
+
+    <link href='styles.css' rel='stylesheet' type='text/css' />
+
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.0.10/css/all.css'
+        integrity='sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg' crossorigin='anonymous'>
+
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+    <script src='nui://game/ui/jquery.js' type='text/javascript'></script>
+</head>
+
+<body>
+    <div class='container'>
+        <div class='topbar' id='topbar'>
+            <div class='cont-p-1'>
+                <div class='parale-1 '></div>
+            </div>
+            <div class='cont-p-2'>
+                <div class='parale-2'></div>
+            </div>
+            <div class='cont-p-3'>
+                <div class='parale-3'></div>
+            </div>
+            <nav>
+                <div class='logo-topbar'></div>
+                <button class='btn-sign-out'>Terminar sessão<i class='fas fa-sign-out-alt'></i></button>
+            </nav>
+        </div>
+        <div class='cont-content' id='general'>
+            <div class='flex'>
+                <div class='balance box-shadow'>
+                    <p>Bem-vindo<br>
+                        <span class='name'><span class='username'></span></span><br>
+                        Saldo disponível<br>
+                        <span class='money'><span class='curbalance'></span><span class='dollars'> €</span></span>
+                    </p>
+                </div>
+                <div class='list-btn'>
+                    <button class='btn btn-blue' id='deposit'>
+                        <i class='far fa-money-bill-alt'></i>
+                        <span class='far fa-money-bill-alt icon'></span>
+                        <p>Depositar<br>
+                    </button>
+                    <button class='btn btn-grey' id='deposit2'>
+                        <i class='far fa-money-bill-alt'></i>
+                        <span class='far fa-money-bill-alt icon'></span>
+                        <p>[Desativado]<br>
+                    </button>
+                    <button class='btn btn-violet' id='withdraw'>
+                        <i class='far fa-credit-card'></i>
+                        <span class='far fa-credit-card icon'></span>
+                        <p>Retirar<br>
+                    </button>
+                    <button class='btn btn-orange' id='transfer'>
+                        <i class='fas fa-exchange-alt'></i>
+                        <span class='fas fa-exchange-alt icon'></span>
+                        <p>Transferir<br>
+                    </button>
+                </div>
+            </div>
+            <div class='flex'>
+                <div class='pub box-shadow confiance'>
+                    <p>
+                        <span>Deposite o seu dinheiro</span><br>
+                        Você tem 7% de chance de ser roubado no cacém, por isso seja rápido a depositar o seu dinheiro.
+                    </p>
+                    <div class='circle-confiance'></div>
+                </div>
+                <div class='pub box-shadow social'>
+                    <ul class='graph'>
+                        <li class='facebook'><i class='fab fa-facebook-f'></i></li>
+                        <li class='google'><i class='fab fa-google-plus-g'></i></li>
+                        <li class='rss'><i class='fas fa-rss'></i></li>
+                        <li class='twitter'><i class='fab fa-twitter'></i></li>
+                        <li class='insta'><i class='fab fa-instagram'></i></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class='cont-content' id='depositUI'>
+            <div class='flex'>
+                <div class='btn btn-blue banniere'>
+                    <p>Deposite o seu dinheiro<br>
+                        <span>no banco mais seguro do cacém, antes que fique sem ele.</span></p>
+                </div>
+                <button class='btn btn-grey back'>
+                    <i class='fas fa-bars'></i>
+                    <span class='fas fa-arrow-left icon'></span>
+                    <p>Retroceder<br>
+                        <span>Voltar ao menu principal</span></p>
+                </button>
+            </div>
+            <form id='deposit1'>
+                <div class='input-cont box-shadow'>
+                    <label>Qual é o valor que deseja depositar?</label>
+                    <input id='amount' type='number' placeholder='0 €'>
+                </div>
+                <button class='btn btn-green' type='submit'>
+                    <i class='fas fa-check'></i>
+                    <span class='fas fa-check icon'></span>
+                    <p>Confirmar<br>
+                        <span>Confirme o seu depósito</span></p>
+                </button>
+            </form>
+        </div>
+        <div class='cont-content' id='withdrawUI'>
+            <div class='flex'>
+                <div class='btn btn-violet banniere'>
+                    <p>Levante o seu dinheiro<br>
+                        <span>mas tenha cuidado visto que está no cacém e pode ser roubado.</span></p>
+                </div>
+                <button class='btn btn-grey back'>
+                    <i class='fas fa-bars'></i>
+                    <span class='fas fa-arrow-left icon'></span>
+                    <p>Retroceder<br>
+                        <span>Voltar ao menu principal</span></p>
+                </button>
+            </div>
+            <form id='withdraw1'>
+                <div class='input-cont box-shadow'>
+                    <label>Qual é o valor que deseja levantar?</label>
+                    <input id='amountw' type='number' placeholder='0 €'>
+                </div>
+                <button class='btn btn-green' type='submit'>
+                    <i class='fas fa-check'></i>
+                    <span class='fas fa-check icon'></span>
+                    <p>Confirmar<br>
+                        <span>Valide o seu levantamento</span></p>
+                </button>
+            </form>
+        </div>
+        <div class='cont-content' id='transferUI'>
+            <div class='flex'>
+                <div class='btn btn-orange banniere'>
+                    <p>Faça a sua transferência<br>
+                        <span>mas tenha cuidado para quem envia o seu dinheiro devido a estar no cacém.</span></p>
+                </div>
+                <button class='btn btn-grey back'>
+                    <i class='fas fa-bars'></i>
+                    <span class='fas fa-arrow-left icon'></span>
+                    <p>Retroceder<br>
+                        <span>Voltar ao menu principal</span></p>
+                </button>
+            </div>
+            <form id='transfer1'>
+                <div class='double-input'>
+                    <div class='input-cont box-shadow'>
+                        <label>Qual é o valor que deseja transferir?</label>
+                        <input id='amountt' type='number' placeholder='0 €'>
+                    </div>
+                    <div class='input-cont box-shadow'>
+                        <label>Para quem deseja transferir o dinheiro?</label>
+                        <input id='to' type='text' placeholder='id do jogador'>
+                    </div>
+                </div>
+                <button class='btn btn-green' type='submit'>
+                    <i class='fas fa-check'></i>
+                    <span class='fas fa-check icon'></span>
+                    <p>Confirmar<br>
+                        <span>Valide a sua transferência</span></p>
+                </button>
+            </form>
+        </div>
+        <div class='cont-waiting' id='waiting'>
+            <div class='content-waiting'>
+                <div class='mainlogo'></div>
+                <p><span>Por favor</span>, faça <span>login</span><br>
+                    usando a sua <span>impressão digital</span>.</p>
+                <div id='fingerprint-content'>
+                    <div class='fingerprint-default'></div>
+                    <div class='fingerprint-active'></div>
+                    <div class='fingerprint-bar'></div>
+                </div>
+            </div>
+            <div class='bg-waiting'>
+                <div class='cont-p-4'>
+                    <div class='parale-4'></div>
+                </div>
+                <div class='cont-p-5'>
+                    <div class='parale-5'></div>
+                </div>
+                <div class='cont-p-6'>
+                    <div class='parale-6'></div>
+                </div>
+                <div class='cont-p-7'>
+                    <div class='parale-7'></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type='text/javascript' src='scripts.js'></script>
+</body>
+
+</html>
