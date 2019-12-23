@@ -86,6 +86,12 @@ function CreateCharacter(source, data)
 		return self.lastname
 	end
 
+	-- Returns the player fullname
+
+	rTable.getFullName = function()
+		return self.firstname .. ' ' .. self.lastname
+	end
+
 	-- Returns the player dateofbirth
 
 	rTable.getDateOfBirth = function()

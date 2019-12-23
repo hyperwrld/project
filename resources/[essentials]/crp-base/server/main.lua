@@ -137,3 +137,26 @@ RegisterServerEvent('crp-base:disconnect')
 AddEventHandler('crp-base:disconnect', function()
 	DropPlayer(source, 'Foste desconectado da cidade, até um dia!')
 end)
+
+function addCommand(command, callback, suggestion, arguments)
+	commands[command] = {}
+	commands[command].cmd = callback
+	commands[command].arguments = arguments or -1
+
+	if suggestion then
+		if not suggestion.params or not type(suggestion.params) == 'table' then suggestion.params = {} end
+		if not suggestion.help or not type(suggestion.help) == 'string' then suggestion.help = '' end
+
+		commandSuggestions[command] = suggestion
+	end
+
+	RegisterCommand(command, function(source, args)
+		if ((#args <= commands[command].arguments and #args == commands[command].arguments) or commands[command].arguments == -1) then
+			callback(source, args, users[source])
+		end
+	end, false)
+end
+
+AddEventHandler('crp-base:addCommand', function(command, callback, suggestion, arguments)
+	addCommand(command, callback, suggestion, arguments)
+end)
