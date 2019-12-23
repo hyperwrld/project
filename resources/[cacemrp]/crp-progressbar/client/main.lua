@@ -10,6 +10,10 @@ local isDoingAction, wasCancelled = false, false
 
 function StartProgressBar(action, callback)
     if not isDoingAction then
+        if action.cancel == nil then action.cancel = false end
+        if action.move == nil then action.move = false end
+        if action.combat == nil then action.combat = false end
+
         isDoingAction, wasCancelled = true, false
 
         SendNUIMessage({ action = 'start', duration = action.duration, label = action.label })
@@ -18,8 +22,31 @@ function StartProgressBar(action, callback)
             while isDoingAction do
                 Citizen.Wait(1)
 
-                if IsControlJustPressed(0, 200) then
+                if IsControlJustPressed(0, 200) and action.cancel then
                     CancelAction()
+                end
+
+                if not action.move then         
+                    DisableControlAction(0, 30, true)
+                    DisableControlAction(0, 31, true)
+                    DisableControlAction(0, 36, true)
+                    DisableControlAction(0, 21, true)
+                end
+
+                if not action.combat then
+                    DisablePlayerFiring(PlayerId(), true)
+                    DisableControlAction(0, 24, true)
+                    DisableControlAction(0, 25, true)
+                    DisableControlAction(1, 37, true)
+                    DisableControlAction(0, 47, true)
+                    DisableControlAction(0, 58, true)
+                    DisableControlAction(0, 140, true)
+                    DisableControlAction(0, 141, true)
+                    DisableControlAction(0, 142, true)
+                    DisableControlAction(0, 143, true)
+                    DisableControlAction(0, 263, true)
+                    DisableControlAction(0, 264, true)
+                    DisableControlAction(0, 257, true)
                 end
             end
 
