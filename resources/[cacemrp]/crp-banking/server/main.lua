@@ -69,6 +69,43 @@ AddEventHandler('crp-banking:updateInfo', function()
 	TriggerClientEvent('crp-banking:updateInfo', _source, user.getBank(), user.getFullName())
 end)
 
+AddEventHandler('crp-banking:giveMoney', function(source, target, money, callback)
+    local _source, target, money = source, tonumber(target), tonumber(money)
+
+    if target and money then
+        if source == target then
+            callback(false)
+        else
+            local user, target = exports['crp-base']:getCharacter(_source), exports['crp-base']:getCharacter(target)
+
+            if target then
+                balance = user.getMoney()
+
+                if balance <= 0 or balance < money or money <= 0 then
+                    TriggerClientEvent('crp-notifications:SendAlert', _source, { type = 'error', text = 'Você não possui dinheiro suficiente.' })
+
+                    callback(false)
+                else
+                    user.removeMoney(money)
+                    target.addMoney(money)
+
+                    TriggerClientEvent('crp-notifications:SendAlert', target, { type = 'success', text = 'Acabaste de receber ' .. money .. '€.' })
+
+                    callback(true)
+                end
+            else
+                TriggerClientEvent('crp-notifications:SendAlert', _source, { type = 'error', text = 'O jogador que inseriu não foi encontrado.' })
+
+                callback(false)
+            end
+        end
+    end
+end)
+
+TriggerEvent('crp-base:addCommand', 'dardinheiro', function(source, args, user)
+    TriggerClientEvent('crp-banking:checkTarget', source, tonumber(target), tonumber(money))
+end, { help = 'Envie dinheiro a uma pessoa.', params = {{ name = 'id do jogador' }, { name = 'quantia de dinheiro' }}})
+
 TriggerEvent('crp-base:addCommand', 'atm', function(source, args, user)
     TriggerClientEvent('crp-banking:checkATM', source)
 end, { help = 'Ter acesso ao ATM.'} )
