@@ -1,9 +1,6 @@
 users, commands, commandSuggestions = {}, {}, {}
 
-settings = {
-	['startingCash'] = '5000',
-	['startingBank'] = '55000'
-}
+settings = { ['startingCash'] = '5000', ['startingBank'] = '55000' }
 
 function SplitString(inputString, seperator)
 	if seperator == nil then

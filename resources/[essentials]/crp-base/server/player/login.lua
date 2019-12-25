@@ -50,6 +50,28 @@ function LoadCharacter(source, identifier, charid)
 	end
 end
 
+AddEventHandler('crp-base:setPlayerData', function(user, k, v, cb)
+	if (users[user]) then
+		if (users[user].get(k)) then
+			if (k ~= 'money') then
+				users[user].set(k, v)
+
+				TriggerEvent('crp-db:updatecharacter', users[user].get('identifier'), { [k] = v }, function(status)
+					if status then
+						cb('Player data was successfully edited', true)
+					else
+						cb(status, false)
+					end
+				end)
+			end
+		else
+			cb('Column does not exist!', false)
+		end
+	else
+		cb('User could not be found!', false)
+	end
+end)
+
 function GetCharacter(source)
 	return users[source]
 end

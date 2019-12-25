@@ -9,6 +9,7 @@ function CreateCharacter(source, data)
 	self.license        = data.license
 	self.money          = data.money
 	self.bank           = data.bank
+	self.job            = data.job
 	self.firstname      = data.firstname
 	self.lastname       = data.lastname
 	self.dateofbirth    = data.dateofbirth
@@ -23,16 +24,22 @@ function CreateCharacter(source, data)
 		self.status = json.decode(data.status)
 	end
 
+	if data.job == nil then
+		self.job = data.job
+	else
+		self.job = json.decode(data.job)
+	end
+
 	local rTable = {}
 
 	-- Sets money for the user
 
-	rTable.setMoney = function(m)
-		if type(m) == "number" then
+	rTable.setMoney = function(money)
+		if type(money) == 'number' then
 			local prevMoney = self.money
-			local newMoney = m
+			local newMoney = money
 
-			self.money = m
+			self.money = money
 
 			-- Performs some math to see if money was added or removed, mainly for the UI component
 
@@ -56,12 +63,12 @@ function CreateCharacter(source, data)
 
 	-- Sets a players bank balance
 
-	rTable.setBankBalance = function(m)
-		if type(m) == "number" then
+	rTable.setBankBalance = function(money)
+		if type(money) == 'number' then
 			-- Triggers an event to save it to the database
 
-			TriggerEvent('crp:setPlayerData', self.source, 'bank', currentMoney, function(response, success)
-				self.bank = currentMoney
+			TriggerEvent('crp-base:setPlayerData', self.source, 'bank', money, function(response, success)
+				self.bank = money
 			end)
 		else
 			print('ERROR: There seems to be an issue while setting bank, something else then a number was entered.')
@@ -72,6 +79,32 @@ function CreateCharacter(source, data)
 
 	rTable.getBank = function()
 		return self.bank
+	end
+
+	-- Returns the player job
+
+	rTable.getJob = function()
+		return self.job
+	end
+
+	-- Sets the player job
+
+	rTable.setJob = function(job, grade)
+		local lastJob = json.decode(json.encode(self.job))
+
+		grade = tonumber(grade)
+
+		if DoesJobExist(job, grade) then
+			local jobObject = jobs[job]
+
+			self.job.name, self.job.label, self.job.grade = job, jobObject.label, grade
+
+			TriggerEvent('crp-jobmanager:updateJob') -- ! To be made.
+
+			TriggerClientEvent('crp-jobmanager:updateJob', self.source, job, jobObject.label, true)
+		else
+			print('ERROR: There seems to be an issue while setting a job, due to not founding the job.')
+		end
 	end
 
 	-- Returns the player firstname
@@ -131,21 +164,21 @@ function CreateCharacter(source, data)
 
 	-- Kicks the player with the specified reason
 
-	rTable.kick = function(r)
-		DropPlayer(self.source, r)
+	rTable.kick = function(reason)
+		DropPlayer(self.source, reason)
 	end
 
 	-- Adds money to the user
 
-	rTable.addMoney = function(m)
-		if type(m) == "number" then
-			local newMoney = self.money + m
+	rTable.addMoney = function(money)
+		if type(money) == 'number' then
+			local newMoney = self.money + money
 
 			self.money = newMoney
 
 			-- This is used for every UI component to tell them money was just added
 
-			TriggerClientEvent('crp-base:money', self.source, 'add', m)
+			TriggerClientEvent('crp-base:money', self.source, 'add', money)
 
 			TriggerClientEvent('crp-base:money', self.source, 'activate', self.money)
 		else
@@ -155,15 +188,15 @@ function CreateCharacter(source, data)
 
 	-- Removes money from the user
 
-	rTable.removeMoney = function(m)
-		if type(m) == "number" then
-			local newMoney = self.money - m
+	rTable.removeMoney = function(money)
+		if type(money) == 'number' then
+			local newMoney = self.money - money
 
 			self.money = newMoney
 
 			-- This is used for every UI component to tell them money was just removed
 
-			TriggerClientEvent('crp-base:money', self.source, 'remove', m)
+			TriggerClientEvent('crp-base:money', self.source, 'remove', money)
 
 			TriggerClientEvent('crp-base:money', self.source, 'activate', self.money)
 		else
@@ -173,9 +206,9 @@ function CreateCharacter(source, data)
 
 	-- Adds money to a users bank
 
-	rTable.addBank = function(m)
-		if type(m) == "number" then
-			local newBank = self.bank + m
+	rTable.addBank = function(money)
+		if type(money) == 'number' then
+			local newBank = self.bank + money
 
 			self.bank = newBank
 		else
@@ -185,9 +218,9 @@ function CreateCharacter(source, data)
 
 	-- Removes money from a users bank
 
-	rTable.removeBank = function(m)
-		if type(m) == "number" then
-			local newBank = self.bank - m
+	rTable.removeBank = function(money)
+		if type(money) == 'number' then
+			local newBank = self.bank - money
 
 			self.bank = newBank
 		else
@@ -197,10 +230,9 @@ function CreateCharacter(source, data)
 
 	-- This is used to initially start displaying money to the user
 
-	rTable.displayMoney = function(m)
-		if type(m) == "number" then
+	rTable.displayMoney = function(money)
+		if type(money) == 'number' then
 			if not self.moneyDisplayed then
-				print('mae estive aqui')
 
 				TriggerClientEvent('crp-base:money', self.source, 'activate', self.money)
 				
@@ -250,13 +282,13 @@ function CreateCharacter(source, data)
 	-- Creates globals, pretty nifty function take a look at https://docs.essentialmode.com for more info
 
 	rTable.setGlobal = function(g, default)
-		self[g] = default or ""
+		self[g] = default or ''
 
-		rTable["get" .. g:gsub("^%l", string.upper)] = function()
+		rTable['get' .. g:gsub('^%l', string.upper)] = function()
 			return self[g]
 		end
 
-		rTable["set" .. g:gsub("^%l", string.upper)] = function(e)
+		rTable['set' .. g:gsub('^%l', string.upper)] = function(e)
 			self[g] = e
 		end
 

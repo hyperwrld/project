@@ -27,8 +27,10 @@ server_scripts {
 	'core/shared-util.lua',
 	'server/classes/player.lua',
 	'server/player/login.lua',
-	'server/main.lua',
+	'server/functions.lua',
+	'server/common.lua',
 	'server/util.lua',
+	'server/main.lua',
 }
 
 server_exports {

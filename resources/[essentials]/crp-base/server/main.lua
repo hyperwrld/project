@@ -120,19 +120,6 @@ AddEventHandler('crp-base:updateposition', function(x, y, z)
 	end
 end)
 
-RegisterServerEvent('crp-events:listenEvent')
-AddEventHandler('crp-events:listenEvent', function(id, event, args)
-	local _source = source
-
-	if args == nil then
-		args = _source
-	end
-
-	TriggerEvent(event, _source, args, function(data)
-		TriggerClientEvent('crp-events:listenEvent', _source, id, data)
-	end)
-end)
-
 RegisterServerEvent('crp-base:disconnect')
 AddEventHandler('crp-base:disconnect', function()
 	DropPlayer(source, 'Foste desconectado da cidade, até um dia!')
@@ -160,3 +147,5 @@ end
 AddEventHandler('crp-base:addCommand', function(command, callback, suggestion, arguments)
 	addCommand(command, callback, suggestion, arguments)
 end)
+
+StartSavingPlayers()
