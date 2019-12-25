@@ -1,6 +1,6 @@
 local currentWeather = 'EXTRASUNNY'
 local lastWeather, isDayTime, isPrimeTime, isAllowedToSpawn, weatherDesync = currentWeather, false, false, true, false
-local baseTime, timeOffset, timer, densityMultiplier = 0, 0, 0, 1.0
+local baseTime, timeOffset, timer, densityMultiplier, hour, minute = 0, 0, 0, 0.4, 0, 0
 
 Citizen.CreateThread(function()
     while true do
@@ -32,8 +32,6 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
-    local hour, minute = 0, 0
-
     while true do
         Citizen.Wait(0)
 
@@ -51,12 +49,18 @@ Citizen.CreateThread(function()
         minute = math.floor((baseTime + timeOffset) % 60)
 
         NetworkOverrideClockTime(hour, minute, 0)
+    end
+end)
+
+Citizen.CreateThread(function()
+    while true do 
+        Citizen.Wait(60000)
 
         if (hour > 19 or hour < 7) and not isNightTime then
             isNightTime = true
             
             TriggerEvent('crp-weather:setCurrentTime', isNightTime)
-        elseif (hour >= 19 or hour >= 7) and isNightTime then
+        elseif (hour <= 19 or hour >= 7) and isNightTime then
             isNightTime = false
 
             TriggerEvent('crp-weather:setCurrentTime', isNightTime)
@@ -67,9 +71,8 @@ Citizen.CreateThread(function()
         if (hour > 16 or hour < 20) and not isPrimeTime then
             isPrimeTime = true
 
-
             TriggerEvent('crp-weather:setPrimeTime', isPrimeTime)
-        elseif (hour > 16 or hour < 20) and isPrimeTime then
+        elseif (hour <= 16 or hour >= 20) and isPrimeTime then
             isPrimeTime = false
             
             TriggerEvent('crp-weather:setPrimeTime', isPrimeTime)
@@ -116,6 +119,7 @@ Citizen.CreateThread(function()
         Citizen.Wait(0)
 
         SetPedDensityMultiplierThisFrame(densityMultiplier)
+
         SetParkedVehicleDensityMultiplierThisFrame(1.0)
         SetVehicleDensityMultiplierThisFrame(densityMultiplier)
         SetRandomVehicleDensityMultiplierThisFrame(densityMultiplier)

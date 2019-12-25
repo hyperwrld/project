@@ -69,14 +69,14 @@ AddEventHandler('crp-banking:updateInfo', function()
 	TriggerClientEvent('crp-banking:updateInfo', _source, user.getBank(), user.getFullName())
 end)
 
-AddEventHandler('crp-banking:giveMoney', function(source, target, money, callback)
-    local _source, target, money = source, tonumber(target), tonumber(money)
+AddEventHandler('crp-banking:giveMoney', function(source, data, callback)
+    local _source, _target, money = source, tonumber(data.target), tonumber(data.money)
 
-    if target and money then
-        if source == target then
+    if data.target and data.money then
+        if source == data.target then
             callback(false)
         else
-            local user, target = exports['crp-base']:getCharacter(_source), exports['crp-base']:getCharacter(target)
+            local user, target = exports['crp-base']:getCharacter(_source), exports['crp-base']:getCharacter(_target)
 
             if target then
                 balance = user.getMoney()
@@ -89,7 +89,7 @@ AddEventHandler('crp-banking:giveMoney', function(source, target, money, callbac
                     user.removeMoney(money)
                     target.addMoney(money)
 
-                    TriggerClientEvent('crp-notifications:SendAlert', target, { type = 'success', text = 'Acabaste de receber ' .. money .. '€.' })
+                    TriggerClientEvent('crp-notifications:SendAlert', _target, { type = 'success', text = 'Acabaste de receber ' .. money .. '€.' })
 
                     callback(true)
                 end
@@ -103,7 +103,7 @@ AddEventHandler('crp-banking:giveMoney', function(source, target, money, callbac
 end)
 
 TriggerEvent('crp-base:addCommand', 'dardinheiro', function(source, args, user)
-    TriggerClientEvent('crp-banking:checkTarget', source, tonumber(target), tonumber(money))
+    TriggerClientEvent('crp-banking:checkTarget', source, tonumber(args[1]), tonumber(args[2]))
 end, { help = 'Envie dinheiro a uma pessoa.', params = {{ name = 'id do jogador' }, { name = 'quantia de dinheiro' }}})
 
 TriggerEvent('crp-base:addCommand', 'atm', function(source, args, user)

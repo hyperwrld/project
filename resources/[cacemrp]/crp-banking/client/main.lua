@@ -47,7 +47,7 @@ end
 
 RegisterNetEvent('crp-banking:checkTarget')
 AddEventHandler('crp-banking:checkTarget', function(target, money)
-    local _target = GetPlayerFromServerId(tonumber(target))
+    local _target = GetPlayerFromServerId(target)
 
     if not IsPlayerPlaying(_target) then
         exports['crp-notifications']:SendAlert('error', 'O jogador que inseriu não foi encontrado.')
@@ -59,13 +59,11 @@ AddEventHandler('crp-banking:checkTarget', function(target, money)
     local distance = Vdist2(coords, targetCoords)
 
     if distance <= 5 then
-	    local events = exports['crp-base']:getModule('Events')
+        local events = exports['crp-base']:getModule('Events')
 
-        events:Trigger('crp-banking:giveMoney', _target, money, function(finished)
+        events:Trigger('crp-banking:giveMoney', { target = target, money = money }, function(finished)
             if finished then
                 LoadAnimation('friends@laf@ig_5')
-
-                TaskTurnPedToFaceEntity(playerPed, targetPed, 3.0)
 
                 TaskPlayAnim(playerPed,'friends@laf@ig_5', 'nephew', 5.0, 1.0, 5.0, 48, 0.0, 0, 0, 0)
 
