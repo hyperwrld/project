@@ -4,13 +4,13 @@ function SavePlayers()
     for i = 1, #players, 1 do
         local player = GetCharacter(players[i])
 
-        exports.ghmattimysql:execute('UPDATE users SET money = @money, job = @job, status = @status, position = @position WHERE identifier = @identifier AND id = @id ;', {
-            ['@money'] = player.getMoney(), ['@position'] = json.encode(player.getPosition()), ['@job'] = json.encode(player.getJob()),
+        exports.ghmattimysql:execute('UPDATE users SET money = @money, bank = @bank, job = @job, status = @status, position = @position WHERE identifier = @identifier AND id = @id ;', {
+            ['@money'] = player.getMoney(), ['@bank'] = player.getBank(), ['@position'] = json.encode(player.getPosition()), ['@job'] = json.encode(player.getJob()),
             ['@status'] = json.encode(player.getStatus()), ['@id'] = player.getCharacterID(), ['@identifier'] = player.getIdentifier() 
         })
     end
 
-    print('^3CRP-BASE:^0 All players on the server saved. ^7')
+    print('^3CRP-BASE:^0 All the players on the server were saved sucessefully. ^7')
 end
 
 function GetPlayers()
