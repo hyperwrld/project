@@ -61,7 +61,7 @@ function ChooseNextWeatherStage()
             else
                 local random = math.random(1, 10)
 
-                if random <= 7 then
+                if random <= 8 then
                     currentWeather = 'CLEARING'
                 else
                     currentWeather = 'RAIN' 
