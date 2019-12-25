@@ -27,10 +27,27 @@ function StartSavingPlayers()
     function saveData()
         SavePlayers()
         
-		SetTimeout(10 * 60 * 1000, saveData)
+		SetTimeout(15 * 60000, saveData)
 	end
 
-	SetTimeout(10 * 60 * 1000, saveData)
+	SetTimeout(15 * 60000, saveData)
+end
+
+function StartPayChecks()
+    local players = GetPlayers()
+
+    for i = 1, #players, 1 do
+        local player = GetCharacter(players[i])
+        local playerJob = player.getJob()
+
+        local salary = (jobs[playerJob.name].salary) + (jobs[playerJob.name].salary * (tonumber(playerJob.grade) / 10))
+
+        player.addBank(math.floor(salary))
+
+        TriggerClientEvent('crp-notifications:SendAlert', players[i], { type = 'inform', text = 'Acabaste de receber o teu salario de ' .. math.floor(salary) .. '€.' })
+    end
+
+    SetTimeout(5 * 60000, StartPayChecks)
 end
 
 function DoesJobExist(job, grade)

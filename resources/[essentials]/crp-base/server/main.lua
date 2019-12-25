@@ -148,4 +148,5 @@ AddEventHandler('crp-base:addCommand', function(command, callback, suggestion, a
 	addCommand(command, callback, suggestion, arguments)
 end)
 
+StartPayChecks()
 StartSavingPlayers()
