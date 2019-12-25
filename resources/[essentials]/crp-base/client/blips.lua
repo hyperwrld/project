@@ -52,8 +52,6 @@ function CRP.BlipManager.GetBlip(self, id)
 end
 
 local blips = {
-    --{ id = 'hospital', name = 'Hospital', scale = 0.75, color = 2, sprite = 61, x = 1839.6, y = 3672.93, z = 34.28 },
-
     { id = nil, name = 'Loja', scale = 0.75, color = 2, sprite = 52, x = 374.016,   y = 325.752,   z = 102.600 },
     { id = nil, name = 'Loja', scale = 0.75, color = 2, sprite = 52, x = 1961.656,  y = 3740.457,  z = 31.373  },
     { id = nil, name = 'Loja', scale = 0.75, color = 2, sprite = 52, x = 1392.031,  y = 3604.588,  z = 34.050  },
@@ -82,6 +80,14 @@ local blips = {
     { id = nil, name = 'Loja de armas', scale = 0.75, color = 35, sprite = 110, x = 1693.51,   y = 3760.129,  z = 33.755 },
     { id = nil, name = 'Loja de armas', scale = 0.75, color = 35, sprite = 110, x = -330.373,  y = 6084.121,  z = 30.505 },
 
+    { id = nil, name = 'Banco', scale = 0.75, color = 52, sprite = 108, x = 149.825,   y = -1040.409, z = 29.374  },
+    { id = nil, name = 'Banco', scale = 0.75, color = 52, sprite = 108, x = -1212.895, y = -330.483,  z = 37.787  },
+    { id = nil, name = 'Banco', scale = 0.75, color = 52, sprite = 108, x = -2962.861, y = 482.823,   z = 15.703  },
+    { id = nil, name = 'Banco', scale = 0.75, color = 52, sprite = 108, x = -112.285,  y = 6468.836,  z = 31.627  },
+    { id = nil, name = 'Banco', scale = 0.75, color = 52, sprite = 108, x = 314.133,   y = -278.859,  z = 54.171  },
+    { id = nil, name = 'Banco', scale = 0.75, color = 52, sprite = 108, x = -351.054,  y = -49.573,   z = 49.043  },
+    { id = nil, name = 'Banco', scale = 0.75, color = 52, sprite = 108, x = 247.347,   y = 222.737,   z = 106.287 },
+    { id = nil, name = 'Banco', scale = 0.75, color = 52, sprite = 108, x = 1175.234,  y = 2706.608,  z = 38.094  },
 }
 
 AddEventHandler('crp-base:playerSessionStarted', function()

@@ -7,6 +7,10 @@ local function SetGamePlayVars()
         for i = 1, 25 do
             EnableDispatchService(i, false)
         end
+
+        -- Enable PVP
+        NetworkSetFriendlyFireOption(true)
+        SetCanAttackFriendly(PlayerId(), true, true)
         
         while true do
             Citizen.Wait(0)
@@ -19,10 +23,6 @@ local function SetGamePlayVars()
             SetPlayerWantedLevel(playerID, 0, false)
             SetPlayerWantedLevelNow(playerID, false)
             ClearAreaOfCops(position, 400.0)
-
-            -- Enable PVP
-            NetworkSetFriendlyFireOption(true)
-            SetCanAttackFriendly(playerID, true, true)
 
             -- Disable Health Regenerate 
             SetPlayerHealthRechargeMultiplier(playerID, 0.0)
@@ -58,10 +58,8 @@ local function SetGamePlayVars()
             end
         end
     end)
-end
 
-local function ActivatePlayerPosition()
-	Citizen.CreateThread(function()
+    Citizen.CreateThread(function()
 		while true do
 			Citizen.Wait(1000)
 			local position = GetEntityCoords(PlayerPedId())
