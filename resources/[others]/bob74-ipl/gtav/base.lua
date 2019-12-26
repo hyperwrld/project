@@ -82,10 +82,6 @@ Citizen.CreateThread(function()
         
     -- Bahama Mamas: -1388.0013, -618.41967, 30.819599
     RequestIpl("hei_sm_16_interior_v_bahama_milo_")
-
-    -- Motel Interior
-
-    RequestIpl("hei_hw1_blimp_interior_v_motel_mp_milo_")
         
     -- Zancudo River (need streamed content): 86.815, 3191.649, 30.463
     RequestIpl("cs3_05_water_grp1")
