@@ -81,13 +81,8 @@ RegisterNUICallback('chatResult', function(data, cb)
     if not data.canceled then
         local id = PlayerId()
 
-        --deprecated
-        local r, g, b = 0, 0x99, 255
-
         if data.message:sub(1, 1) == '/' then
             ExecuteCommand(data.message:sub(2))
-        else
-            TriggerServerEvent('_chat:messageEntered', GetPlayerName(id), { r, g, b }, data.message)
         end
     end
 

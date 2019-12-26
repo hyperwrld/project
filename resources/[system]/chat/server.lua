@@ -4,35 +4,15 @@ RegisterServerEvent('chat:addSuggestion')
 RegisterServerEvent('chat:removeSuggestion')
 RegisterServerEvent('chat:clear')
 
-RegisterServerEvent('_chat:messageEntered')
-AddEventHandler('_chat:messageEntered', function(author, color, message)
-    if not message or not author then
-        return
-    end
-
-    TriggerEvent('chatMessage', source, author, message)
-
-    if not WasEventCanceled() then
-        TriggerClientEvent('chatMessage', -1, author,  { 255, 255, 255 }, message)
-    end
-
-    print(author .. '^7: ' .. message .. '^7')
-end)
-
 RegisterServerEvent('__cfx_internal:commandFallback')
 AddEventHandler('__cfx_internal:commandFallback', function(command)
-    local name = GetPlayerName(source)
+    local commandArgs = splitString(command, ' ')
 
-    TriggerEvent('chatMessage', source, name, '/' .. command)
-
-    if not WasEventCanceled() then
-        TriggerClientEvent('chatMessage', -1, name, { 255, 255, 255 }, '/' .. command) 
-    end
+    TriggerClientEvent('chat:addMessage', source, { templateId = 'orange', args = { '^*Comando inválido^r' , ' /' .. commandArgs[1]:lower() }, color = { 255, 255, 255 } })
 
     CancelEvent()
 end)
 
--- command suggestions for clients
 local function refreshCommands(player)
     if GetRegisteredCommands then
         local registeredCommands = GetRegisteredCommands()
@@ -50,6 +30,20 @@ local function refreshCommands(player)
 
         TriggerClientEvent('chat:addSuggestions', player, suggestions)
     end
+end
+
+function splitString(inputString, seperator)
+    local t = {} ; i = 1
+
+    if seperator == nil then seperator = '%s' end
+    
+	for string in string.gmatch(inputString, '([^' .. seperator .. ']+)') do
+        t[i] = string
+        
+		i = i + 1
+    end
+    
+	return t
 end
 
 RegisterServerEvent('chat:init')
