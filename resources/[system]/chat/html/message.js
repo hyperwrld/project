@@ -8,22 +8,21 @@ Vue.component('message', {
             let s = this.template ? this.template : this.templates[this.templateId];
 
             if (this.template) {
-                //We disable templateId since we are using a direct raw template
                 this.templateId = -1;
             }
 
-            //This hack is required to preserve backwards compatability
             if (this.templateId == CONFIG.defaultTemplateId &&
                 this.args.length == 1) {
-                s = this.templates[CONFIG.defaultAltTemplateId] //Swap out default template :/
+                s = this.templates[CONFIG.defaultAltTemplateId]
             }
 
             s = s.replace(/{(\d+)}/g, (match, number) => {
                 const argEscaped = this.args[number] != undefined ? this.escape(this.args[number]) : match
+
                 if (number == 0 && this.color) {
-                    //color is deprecated, use templates or ^1 etc.
                     return this.colorizeOld(argEscaped);
                 }
+
                 return argEscaped;
             });
             return this.colorize(s);
@@ -45,9 +44,11 @@ Vue.component('message', {
             };
 
             const styleRegex = /\^(\_|\*|\=|\~|\/|r)(.*?)(?=$|\^r|<\/em>)/;
-            while (s.match(styleRegex)) { //Any better solution would be appreciated :P
+
+            while (s.match(styleRegex)) {
                 s = s.replace(styleRegex, (str, style, inner) => `<em style="${styleDict[style]}">${inner}</em>`)
             }
+
             return s.replace(/<span[^>]*><\/span[^>]*>/g, '');
         },
         escape(unsafe) {
@@ -78,7 +79,7 @@ Vue.component('message', {
             type: Boolean,
             default: false,
         },
-        color: { //deprecated
+        color: {
             type: Array,
             default: false,
         },

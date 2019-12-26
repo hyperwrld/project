@@ -24,8 +24,10 @@ window.APP = {
     },
     mounted() {
         post('http://chat/loaded', JSON.stringify({}));
+
         this.listener = window.addEventListener('message', (event) => {
-            const item = event.data || event.detail; //'detail' is for debuging via browsers
+            const item = event.data || event.detail;
+
             if (this[item.type]) {
                 this[item.type](item);
             }
@@ -36,10 +38,12 @@ window.APP = {
             if (this.showWindowTimer) {
                 clearTimeout(this.showWindowTimer);
             }
+
             this.showWindow = true;
             this.resetShowWindowTimer();
 
             const messagesObj = this.$refs.messages;
+
             this.$nextTick(() => {
                 messagesObj.scrollTop = messagesObj.scrollHeight;
             });
@@ -57,9 +61,11 @@ window.APP = {
         ON_OPEN() {
             this.showInput = true;
             this.showWindow = true;
+
             if (this.showWindowTimer) {
                 clearTimeout(this.showWindowTimer);
             }
+
             this.focusTimer = setInterval(() => {
                 if (this.$refs.input) {
                     this.$refs.input.focus();
@@ -78,6 +84,7 @@ window.APP = {
         },
         ON_SUGGESTION_ADD({ suggestion }) {
             const duplicateSuggestion = this.backingSuggestions.find(a => a.name == suggestion.name);
+
             if (duplicateSuggestion) {
                 if (suggestion.help || suggestion.params) {
                     duplicateSuggestion.help = suggestion.help || "";
@@ -85,9 +92,11 @@ window.APP = {
                 }
                 return;
             }
+
             if (!suggestion.params) {
-                suggestion.params = []; //TODO Move somewhere else
+                suggestion.params = [];
             }
+
             this.backingSuggestions.push(suggestion);
         },
         ON_SUGGESTION_REMOVE({ name }) {
@@ -146,6 +155,7 @@ window.APP = {
 
                 if (data.styleSheet) {
                     const link = document.createElement('link');
+
                     link.rel = 'stylesheet';
                     link.type = 'text/css';
                     link.href = data.baseUrl + data.styleSheet;
@@ -167,6 +177,7 @@ window.APP = {
 
                 if (data.script) {
                     const script = document.createElement('script');
+
                     script.type = 'text/javascript';
                     script.src = data.baseUrl + data.script;
 
@@ -192,6 +203,7 @@ window.APP = {
         },
         resetShowWindowTimer() {
             this.clearShowWindowTimer();
+
             this.showWindowTimer = setTimeout(() => {
                 if (!this.showInput) {
                     this.showWindow = false;
@@ -204,6 +216,7 @@ window.APP = {
         keyDown(e) {
             if (e.which === 38 || e.which === 40) {
                 e.preventDefault();
+
                 this.moveOldMessageIndex(e.which === 38);
             } else if (e.which == 33) {
                 var buf = document.getElementsByClassName('chat-messages')[0];
@@ -227,6 +240,7 @@ window.APP = {
         },
         resize() {
             const input = this.$refs.input;
+
             input.style.height = '5px';
             input.style.height = `${input.scrollHeight + 2}px`;
         },
@@ -235,6 +249,7 @@ window.APP = {
                 post('http://chat/chatResult', JSON.stringify({
                     message: this.message,
                 }));
+
                 this.oldMessages.unshift(this.message);
                 this.oldMessagesIndex = -1;
                 this.hideInput();
@@ -246,9 +261,12 @@ window.APP = {
             if (canceled) {
                 post('http://chat/chatResult', JSON.stringify({ canceled }));
             }
+
             this.message = '';
             this.showInput = false;
+
             clearInterval(this.focusTimer);
+
             this.resetShowWindowTimer();
         },
     },
