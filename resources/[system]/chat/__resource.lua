@@ -1,14 +1,11 @@
-description 'chat management stuff'
-
 ui_page 'html/index.html'
 
-client_script 'cl_chat.lua'
-server_script 'sv_chat.lua'
+client_script 'client.lua'
+server_script 'server.lua'
 
 files {
     'html/index.html',
     'html/index.css',
-    'html/config.default.js',
     'html/config.js',
     'html/App.js',
     'html/Message.js',
@@ -23,4 +20,4 @@ files {
     'html/vendor/fonts/LatoLight.woff2',
     'html/vendor/fonts/LatoBold.woff2',
     'html/vendor/fonts/LatoBold2.woff2',
-  }
+}

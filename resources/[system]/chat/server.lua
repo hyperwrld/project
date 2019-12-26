@@ -1,12 +1,10 @@
-RegisterServerEvent('chat:init')
 RegisterServerEvent('chat:addTemplate')
 RegisterServerEvent('chat:addMessage')
 RegisterServerEvent('chat:addSuggestion')
 RegisterServerEvent('chat:removeSuggestion')
-RegisterServerEvent('_chat:messageEntered')
 RegisterServerEvent('chat:clear')
-RegisterServerEvent('__cfx_internal:commandFallback')
 
+RegisterServerEvent('_chat:messageEntered')
 AddEventHandler('_chat:messageEntered', function(author, color, message)
     if not message or not author then
         return
@@ -21,6 +19,7 @@ AddEventHandler('_chat:messageEntered', function(author, color, message)
     print(author .. '^7: ' .. message .. '^7')
 end)
 
+RegisterServerEvent('__cfx_internal:commandFallback')
 AddEventHandler('__cfx_internal:commandFallback', function(command)
     local name = GetPlayerName(source)
 
@@ -31,19 +30,6 @@ AddEventHandler('__cfx_internal:commandFallback', function(command)
     end
 
     CancelEvent()
-end)
-
--- player join messages
-AddEventHandler('chat:init', function()
-    TriggerClientEvent('chatMessage', -1, '', { 255, 255, 255 }, '^2* ' .. GetPlayerName(source) .. ' joined.')
-end)
-
-AddEventHandler('playerDropped', function(reason)
-    TriggerClientEvent('chatMessage', -1, '', { 255, 255, 255 }, '^2* ' .. GetPlayerName(source) ..' left (' .. reason .. ')')
-end)
-
-RegisterCommand('say', function(source, args, rawCommand)
-    TriggerClientEvent('chatMessage', -1, (source == 0) and 'console' or GetPlayerName(source), { 255, 255, 255 }, rawCommand:sub(5))
 end)
 
 -- command suggestions for clients
@@ -66,6 +52,7 @@ local function refreshCommands(player)
     end
 end
 
+RegisterServerEvent('chat:init')
 AddEventHandler('chat:init', function()
     refreshCommands(source)
 end)
