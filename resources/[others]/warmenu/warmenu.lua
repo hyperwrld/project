@@ -1,6 +1,6 @@
 local menus, keys = {}, { up = 172, down = 173, left = 174, right = 175, select = 176, back = 177 }
 local optionCount, currentKey, currentMenu, currentButton = 0, nil, nil, nil
-local menuWidth, titleHeight, titleYOffset, titleScale = 0.225, 0.06, 0.005, 1.0
+local menuWidth, titleHeight, titleYOffset, titleScale = 0.18, 0.06, 0.005, 1.0
 local buttonHeight, buttonFont, buttonScale, buttonTextXOffset, buttonTextYOffset = 0.0285, 0, 0.30, 0.005, 0.0025
 
 WarMenu = {}
@@ -250,8 +250,10 @@ function WarMenu.Button(text, subText, color)
 
         if isCurrent then
             currentButton = {text = text, subText = subText, currentOption = optionCount}
+
             if currentKey == keys.select then
                 PlaySoundFrontend(-1, menus[currentMenu].buttonPressedSound.name, menus[currentMenu].buttonPressedSound.set, true)
+
                 return true
             elseif currentKey == keys.left or currentKey == keys.right then
                 PlaySoundFrontend(-1, "NAV_UP_DOWN", "HUD_FRONTEND_DEFAULT_SOUNDSET", true)
