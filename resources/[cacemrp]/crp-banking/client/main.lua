@@ -184,7 +184,7 @@ function TriggerBankAnimation(type)
 
                 TaskPlayAnim(playerPed, 'amb@prop_human_atm@male@exit', 'exit', 1.0, 1.0, -1, 49, 0, 0, 0, 0)
 
-                exports['crp-progressbar']:StartProgressBar({ duration = 3000, label = 'A retirar o cartão' }, function(finished)
+                exports['crp-progressbar']:StartProgressBar({ duration = 3000, label = 'Retirar o cartão', combat = true, move = true }, function(finished)
                     ClearPedTasks(playerPed)
                 end)
             else
@@ -200,7 +200,7 @@ function TriggerBankAnimation(type)
 
                 TaskPlayAnim(playerPed, 'mp_common', 'givetake1_a', 1.0, 1.0, -1, 49, 0, 0, 0, 0)
 
-                exports['crp-progressbar']:StartProgressBar({ duration = 1500, label = 'A retirar o cartão' }, function(finished)
+                exports['crp-progressbar']:StartProgressBar({ duration = 1500, label = 'Retirar o cartão', combat = true, move = true }, function(finished)
                     ClearPedTasks(playerPed)
                 end)
             else
