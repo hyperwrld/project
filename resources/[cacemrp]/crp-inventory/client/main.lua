@@ -11,13 +11,13 @@ local function closeInventory()
 	SetNuiFocus(false, false)
 end
 
-local function showInventory(type, shopID, shopData, shopType)
+local function showInventory(type, data)
 	if isInventoryOpen then 
 		closeInventory()
 		return
 	end
 
-	-- * type: 1 (drop), 2 (store), 3 (...)
+	-- * type: 1 (drop), 2 (store), 3 (customInventory)
 
 	local player = exports['crp-base']:getModule('LocalPlayer')
 	local events, id = exports['crp-base']:getModule('Events'), player:getCurrentCharacter()
@@ -25,7 +25,7 @@ local function showInventory(type, shopID, shopData, shopType)
 	if type == 1 then
 		local inventory, inventoryCoords, alreadyExists = GetClosestInventory()
 
-		if alreadyExists then
+		if not alreadyExists then
 			events:Trigger('crp-inventory:getInventory', id, function(data)
 				sendMessage({ 
 					event = 'open', 
@@ -42,12 +42,20 @@ local function showInventory(type, shopID, shopData, shopType)
 				})
 			end)
 		end
-	elseif type == 2 then
-		events:Trigger('crp-inventory:getInventory', id, function(data)
+    elseif type == 2 then
+		events:Trigger('crp-shops:getStoreItems', { id = id, type = data.shopType }, function(_data)
 			sendMessage({ 
 				event = 'open', 
-				playerData = { id = id, items = data }, 
-				secondaryData = { id = shopID, type = type, items = shopData, shopType = shopType },
+				playerData = { id = id, items = _data.player }, 
+				secondaryData = { id = data.name, type = type, items = _data.secondary, shopType = data.shopType },
+			})
+        end)
+    elseif type == 3 then
+        events:Trigger('crp-inventory:getInventories', { id = id, inventory = data.name }, function(_data)
+			sendMessage({ 
+				event = 'open', 
+				playerData = { id = id, items = _data.player }, 
+				secondaryData = { id = data.name, slots = data.slots, weight = data.weight, type = type, items = _data.secondary },
 			})
 		end)
 	end
@@ -83,7 +91,7 @@ local function nuiCallBack(data, cb)
 	end
 
 	if data.buyitem then
-		events:Trigger('crp-shops:buyItem', data.itemdata, function(data)
+		events:Trigger('crp-shops:buyItem', { itemdata = data.itemdata, shoptype = data.shoptype }, function(data)
 			cb(data)
 		end)
 	end
@@ -95,7 +103,6 @@ local function nuiCallBack(data, cb)
 	end
 
 	if data.error then
-		print(data.text)
 		if data.text then exports['crp-notifications']:SendAlert('error', data.text) end
 
 		PlaySoundFrontend(-1, 'ERROR', 'HUD_FRONTEND_DEFAULT_SOUNDSET', false)
@@ -123,7 +130,7 @@ Citizen.CreateThread(function()
 		for k, v in pairs(Inventories) do
 			local distance = GetDistanceBetweenCoords(coords, v.coords.x, v.coords.y, v.coords.z, true)
 
-			if distance <= 20.0 then
+			if distance < 20.0 then
 				DrawMarker(20, v.coords.x, v.coords.y, v.coords.z, 0.0, 0.0, 0.0, 0, 0.0, 0.0, 1.0, 1.0, 0.4, 255, 255, 255, 100, false, true, 2, false, false, false, false)
 				
 				letSleep = false
@@ -167,10 +174,10 @@ function GetClosestInventory()
 
 		inventoryCoords = { x = coords.x, y = coords.y, z = coords.z }
 
-		return inventory, inventoryCoords, true
+		return inventory, inventoryCoords, false
 	end
 
-	return inventory, inventoryCoords, false
+	return inventory, inventoryCoords, true
 end
 
 function CheckIfInventoryExists(table, value)
@@ -183,9 +190,9 @@ function CheckIfInventoryExists(table, value)
     return false
 end
 
-RegisterNetEvent('crp-inventory:openStore')
-AddEventHandler('crp-inventory:openStore', function(id, data, storeType)
-	showInventory(2, id, data, storeType)
+RegisterNetEvent('crp-inventory:openCustom')
+AddEventHandler('crp-inventory:openCustom', function(data)
+	showInventory(data.type, data)
 end)
 
 RegisterNetEvent('crp-inventory:updateInventories')

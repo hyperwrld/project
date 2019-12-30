@@ -1,27 +1,28 @@
 'use strict';
 
-var isInventoryOpen = false, inventoryType = 1, inventoryCoords = undefined, scrollingSensitivity = 60, scrollingSpeed = 30;
-var defaultHTML, personalWeight, secondaryWeight;
+var inventoryType = 1, inventorySlots = 40, inventoryCoords = undefined;
+var isInventoryOpen = false, shopType = 1, scrollingSensitivity = 60, scrollingSpeed = 30;
 var playerItems = {}, personalMaxWeight = 325, otherItems = {}, secondaryMaxWeight = 1000;
+var defaultHTML, personalWeight, secondaryWeight;
 
 let itemList = {};
 
 // * INVENTORY WEAPONS
 
-itemList['1737195953'] = { displayname: 'Cacetete', weight: 10, nonStack: true, image: 'crp-cacetete.png', weapon: true, price: 5 };
-itemList['911657153'] = { displayname: 'Taser', weight: 10, nonStack: true, image: 'crp-stungun.png', weapon: true, price: 1000 };
-itemList['453432689'] = { displayname: 'Pistola', weight: 15, nonStack: true, image: 'crp-pistol.png', weapon: true, price: 5000 };
-itemList['-1076751822'] = { displayname: 'Pistola SNS', weight: 15, nonStack: true, image: 'crp-snspistol.png', weapon: true, price: 10000 };
+itemList['1737195953'] = { displayname: 'Cacetete', weight: 10, nonStack: true, image: 'crp-cacetete.png', weapon: true };
+itemList['911657153'] = { displayname: 'Taser', weight: 10, nonStack: true, image: 'crp-stungun.png', weapon: true };
+itemList['453432689'] = { displayname: 'Pistola', weight: 15, nonStack: true, image: 'crp-pistol.png', weapon: true };
+itemList['-1076751822'] = { displayname: 'Pistola SNS', weight: 15, nonStack: true, image: 'crp-snspistol.png', weapon: true };
 itemList['137902532'] = { displayname: 'Pistola Vintage', weight: 15, nonStack: true, image: 'crp-vintagepistol.png', weapon: true };
 itemList['-771403250'] = { displayname: 'Pistola Pesada', weight: 20, nonStack: true, image: 'crp-heavypistol.png', weapon: true };
-itemList['1593441988'] = { displayname: 'Pistola de combate', weight: 15, nonStack: true, image: 'crp-combatpistol.png', weapon: true };
+itemList['1593441988'] = { displayname: 'Pistola de Combate', weight: 15, nonStack: true, image: 'crp-combatpistol.png', weapon: true };
 itemList['-619010992'] = { displayname: 'Pistola-Metralhadora', weight: 30, nonStack: true, image: 'crp-machinepistol.png', weapon: true };
 itemList['-1121678507'] = { displayname: 'Mini Submetralhadora', weight: 30, nonStack: true, image: 'crp-minismg.png', weapon: true };
 itemList['324215364'] = { displayname: 'Micro Submetralhadora', weight: 30, nonStack: true, image: 'crp-microsmg.png', weapon: true };
 itemList['736523883'] = { displayname: 'Submetralhadora', weight: 35, nonStack: true, image: 'crp-smg.png', weapon: true };
-itemList['1649403952'] = { displayname: 'Rifle Compacto', weight: 45, nonStack: true, image: 'crp-compactrifle.png', weapon: true, price: 300 };
-itemList['-1074790547'] = { displayname: 'Rifle de Assalto', weight: 55, nonStack: true, image: 'crp-assaultrifle.png', weapon: true, price: 10 };
-itemList['-2084633992'] = { displayname: 'Carabina', weight: 55, nonStack: true, image: 'crp-carbinerifle.png', weapon: true, price: 5000 };
+itemList['1649403952'] = { displayname: 'Rifle Compacto', weight: 45, nonStack: true, image: 'crp-compactrifle.png', weapon: true };
+itemList['-1074790547'] = { displayname: 'Rifle de Assalto', weight: 55, nonStack: true, image: 'crp-assaultrifle.png', weapon: true,  };
+itemList['-2084633992'] = { displayname: 'Carabina', weight: 55, nonStack: true, image: 'crp-carbinerifle.png', weapon: true };
 
 // * NORMAL ITEMS
 
@@ -39,9 +40,11 @@ $(function () {
 			case 'open':
 				var data = event.data.playerData, _data = event.data.secondaryData;
 
-				(isInventoryOpen = true), (inventoryType = _data.type), (inventoryCoords = _data.coords);
+                (isInventoryOpen = true), (inventoryType = _data.type), (inventoryCoords = _data.coords), (shopType = _data.shopType);
 
-				// * inventoryType: 1 (drop) | 2 (store) | 3 (undefined) | 4 (undefined) * //
+                // * inventoryType: 1 (drop) | 2 (store) | 3 (custom) | 4 (undefined) * //
+
+                if (inventoryType == 3) { secondaryMaxWeight = _data.weight,  inventorySlots = _data.slots }
 
 				SetupInventories(data.id, data.items, _data.id, _data.items);
 
@@ -55,7 +58,7 @@ $(function () {
 					inventory.replaceWith(defaultHTML.clone());
 				});
 
-				(isInventoryOpen = false), (playerItems = {}), (otherItems = {});
+                (isInventoryOpen = false), (playerItems = {}), (otherItems = {}), (inventorySlots = 40), (secondaryMaxWeight = 1000);
 
 				$.post('http://crp-inventory/nuiMessage', JSON.stringify({ close: true }));
 
@@ -75,7 +78,7 @@ $(function () {
 				inventory.replaceWith(defaultHTML.clone());
 			});
 
-			(isInventoryOpen = false), (playerItems = {}), (otherItems = {});
+            (isInventoryOpen = false), (playerItems = {}), (otherItems = {}), (inventorySlots = 40), (secondaryMaxWeight = 1000);
 
 			$.post('http://crp-inventory/nuiMessage', JSON.stringify({ close: true }));
 		}
@@ -114,11 +117,11 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
 
 	if (otherData != undefined) {
 		for (const [key, value] of Object.entries(otherData)) {
-			otherItems[value.slot] = { id: value.item, quantity: value.count };
+			otherItems[value.slot] = { id: value.item, quantity: value.count, price: value.price };
 		}
 	}
 
-	for (var i = 1; i <= 40; i++) {
+	for (var i = 1; i <= inventorySlots; i++) {
 		$('.secondary-inventory').append('<div class="inventory-cell" id="s' + i + '"><div class="inventory-bottom disable"></div></div>');
 
 		if (inventoryType == 1) {
@@ -133,7 +136,7 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
 
 			if (inventoryType == 2) {
 				div = '<div class="item"><p>' + otherItems[i].quantity + ' (' + itemWeight.toFixed(2) + ')</p><img class="picture" src="items/' +
-					item.image + '" ><div class="item-name">' + item.displayname + ' - <font color="#60B643">' + item.price +
+                    item.image + '" ><div class="item-name">' + item.displayname + ' - <font color="#60B643">' + otherItems[i].price +
 					'€</font></div></div>';
 			}
 
@@ -331,7 +334,7 @@ async function AttemptBuyFromStore(currentItem, currentInventory, returnItem, re
 				canStack: canStack
 			};
 
-			$.post('http://crp-inventory/nuiMessage', JSON.stringify({ buyitem: true, itemdata: data }), function (_data) {
+			$.post('http://crp-inventory/nuiMessage', JSON.stringify({ buyitem: true, itemdata: data, shoptype: shopType }), function (_data) {
 				if (_data.status) {
 					if ((item.quantity - quantity) > 0) {
 						AddItem(lastSlot, item.id, (item.quantity - quantity), true, true, true);
@@ -383,7 +386,7 @@ async function AttemptDropInEmptySlot(currentItem, currentInventory, returnInven
 				currentSlot: _currentSlot,
 				id: item.id,
 				quantity: quantity
-			};
+            };
 
 			if (inventoryType == 1) data['coords'] = inventoryCoords;
 
@@ -549,7 +552,7 @@ function AddItem(slot, itemid, count, needUpdate, canCreate, isShopItem) {
 
 		GetObject = playerItems[_slot];
 	} else {
-		otherItems[_slot] = { id: itemid, quantity: count };
+        otherItems[_slot] = { id: itemid, quantity: count, price: (otherItems[_slot] != null ? otherItems[_slot].price : undefined) };
 
 		GetObject = otherItems[_slot];
 	}
@@ -563,7 +566,7 @@ function AddItem(slot, itemid, count, needUpdate, canCreate, isShopItem) {
 			if (isShopItem) {
 				inventory.append(
 					'<div class="item"><p>' + GetObject.quantity + ' (' + itemWeight.toFixed(2) + ')</p><img class="picture" src="items/' +
-					item.image + '" ><div class="item-name">' + item.displayname + ' - <font color="#60B643">' + item.price + '€</font></div></div>'
+                    item.image + '" ><div class="item-name">' + item.displayname + ' - <font color="#60B643">' + GetObject.price + '€</font></div></div>'
 				);
 			} else {
 				inventory.append(

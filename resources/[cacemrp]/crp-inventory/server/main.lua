@@ -1,4 +1,4 @@
-local Inventories = {}
+local inventories = {}
 
 AddEventHandler('crp-inventory:moveItem', function(source, data, callback)
     if string.find(data.currentInventory, 'drop') then
@@ -36,7 +36,6 @@ AddEventHandler('crp-inventory:moveItem', function(source, data, callback)
                 end)
             end
         else
-            print('item not found')
             callback({ status = false })
         end
 	end)
@@ -84,11 +83,9 @@ AddEventHandler('crp-inventory:swapItems', function(source, data, callback)
                     end
                 else
                     callback({ status = false })
-                    print('not found crl')
                 end
             end)
         else
-            print('item not found')
             callback({ status = false })
         end
 	end)
@@ -123,35 +120,35 @@ AddEventHandler('crp-inventory:getInventories', function(source, data, callback)
 end)
 
 function CheckIfInventoryExists(inventory, coords)
-    if next(Inventories) == nil then
-        table.insert(Inventories, { name = inventory, coords = coords })
+    if next(inventories) == nil then
+        table.insert(inventories, { name = inventory, coords = coords })
 
-        TriggerClientEvent('crp-inventory:updateInventories', -1, Inventories)
+        TriggerClientEvent('crp-inventory:updateInventories', -1, inventories)
         return
     end
 
     local found = false
 
-    for i = 1, #Inventories, 1 do
-        if CompareCoords(Inventories[i].coords, coords) or Inventories[i].name == inventory then
+    for i = 1, #inventories, 1 do
+        if CompareCoords(inventories[i].coords, coords) or inventories[i].name == inventory then
             found = true
             return
         end
     end
 
     if not found then
-        table.insert(Inventories, { name = inventory, coords = coords })
+        table.insert(inventories, { name = inventory, coords = coords })
 
-        TriggerClientEvent('crp-inventory:updateInventories', -1, Inventories)
+        TriggerClientEvent('crp-inventory:updateInventories', -1, inventories)
     end
 end
 
 function DeleteEmptyInventory(name)
-    for i = 1, #Inventories, 1 do
-        if Inventories[i].name == name then
-            table.remove(Inventories, i)
+    for i = 1, #inventories, 1 do
+        if inventories[i].name == name then
+            table.remove(inventories, i)
 
-            TriggerClientEvent('crp-inventory:updateInventories', -1, Inventories)
+            TriggerClientEvent('crp-inventory:updateInventories', -1, inventories)
         end
     end
 end

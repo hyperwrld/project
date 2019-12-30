@@ -15,7 +15,7 @@ files {
 	'nui/styles.css',
 	'nui/scripts.js',
 
-	'nui/items/crp-cacetete.png.png',
+	'nui/items/crp-cacetete.png',
 	'nui/items/crp-stungun.png',
 
 	'nui/items/crp-pistol.png',
