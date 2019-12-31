@@ -48,11 +48,11 @@ $(function () {
 
 				SetupInventories(data.id, data.items, _data.id, _data.items);
 
-				$('.ui').fadeIn(400);
+                $('.ui').fadeIn(400);
 
 				break;
 			case 'close':
-				var inventory = $('.ui');
+                var inventory = $('.ui');
 
 				inventory.fadeOut(400, function () {
 					inventory.replaceWith(defaultHTML.clone());
@@ -62,7 +62,28 @@ $(function () {
 
 				$.post('http://crp-inventory/nuiMessage', JSON.stringify({ close: true }));
 
-				break;
+                break;
+            case 'show':
+                var items = {};
+
+                if (event.data.items != undefined) {
+                    for (const [key, value] of Object.entries(event.data.items)) {
+                        items[value.slot] = { item: value.item };
+                    }
+                }
+
+                SetupActionBar(items)
+
+                break;
+            case 'hide':
+                var actionbar = $('.actionbar');
+
+                actionbar.fadeOut(400, function () {
+                    actionbar.empty();
+                });
+
+                $.post('http://crp-inventory/nuiMessage', JSON.stringify({ actionbar: true }));
+                break;
 			default:
 				console.log('Received unhandled event ' + event.data.event);
 
@@ -72,7 +93,7 @@ $(function () {
 
 	$(document).keyup(function (event) {
 		if ((event.key == 'Escape' || event.key == 'F2') && isInventoryOpen) {
-			var inventory = $('.ui');
+            var inventory = $('.ui');
 
 			inventory.fadeOut(400, function () {
 				inventory.replaceWith(defaultHTML.clone());
@@ -84,6 +105,25 @@ $(function () {
 		}
 	});
 });
+
+function SetupActionBar(items) {
+    for (var i = 1; i <= 4; i++) {
+        $('.actionbar').append('<div class="inventory-cell" id="'+ i + '" style="height: 100%; width: 20%;"><div class="inventory-bottom disable"></div></div>');
+
+        $('.actionbar > #' + i).prepend('<div class="number disable"><span style="top: -35%;"> ' + i + ' </span></div>');
+
+        if (items[i] != undefined) {
+            var item = itemList[items[i].item];
+
+            $('.actionbar > #' + i).append(
+                '<div class="item"><img class="picture" style="max-height: 110px" src="items/' +
+                item.image + '" ><div class="item-name">' + item.displayname + '</div></div>'
+            );
+        }
+    }
+
+    $('.actionbar').fadeIn(400);
+}
 
 function SetupInventories(playerid, playerData, otherid, otherData) {
 	$('.player-inventory h3').html('character-' + playerid);
@@ -331,7 +371,8 @@ async function AttemptBuyFromStore(currentItem, currentInventory, returnItem, re
 				item: item.id,
 				quantity: quantity,
 				slot: _currentSlot,
-				canStack: canStack
+                canStack: canStack,
+                isWeapon: itemList[item.id].weapon
 			};
 
 			$.post('http://crp-inventory/nuiMessage', JSON.stringify({ buyitem: true, itemdata: data, shoptype: shopType }), function (_data) {

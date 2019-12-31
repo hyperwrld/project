@@ -24,8 +24,28 @@ input[type='number']::-webkit-outer-spin-button {
     margin: 0%;
 }
 
+.actionbar {
+	position: absolute;
+
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+
+	bottom: 0;
+	left: 0;
+    right: 0;
+
+    margin: auto;
+    margin-bottom: 5%;
+
+	width: 25%;
+	max-width: 25%;
+    height: 10%;
+}
+
 .ui {
-	display: none;
+    display: none;
 	position: absolute;
 
 	top: 0;
@@ -41,6 +61,7 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 .inventory {
+	display: none;
 	position: absolute;
 
 	display: flex;
@@ -307,8 +328,12 @@ input[type='number']::-webkit-outer-spin-button {
 }
 
 .item-picture {
-	height: 85px;
-	width: 75px;
+    height: auto; 
+    width: auto; 
+
+    max-width: 105px; 
+    max-height: 130px;
+
 	background-color: rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(160, 163, 161, 0.5);
 }

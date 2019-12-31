@@ -27,23 +27,6 @@ local shopLocations = {
 	[25] = { ['x'] = -330.373,  ['y'] = 6084.121,  ['z'] = 30.505,  ['type'] = 'weaponshop' }
 }
 
-local storeItems = {
-	{ item = 129942349,   count = 50, slot = 1, price = 3    },
-	{ item = 196068078,   count = 50, slot = 2, price = 50   },
-	{ item = 130895348,   count = 50, slot = 3, price = 50   },
-	{ item = 156805094,   count = 50, slot = 4, price = 50   },
-
-	{ item = -2084633992, count = 50, slot = 5, price = 5000 },
-	{ item = -1074790547, count = 50, slot = 6, price = 10   },
-	{ item = 1649403952,  count = 50, slot = 7, price = 300  },
-}
-
-local weaponStoreItems = {
-	{ item = 911657153,   count = 50, slot = 1, price = 1000  },
-	{ item = 453432689,   count = 50, slot = 2, price = 5000  },
-	{ item = -1076751822, count = 50, slot = 3, price = 10000 },
-}
-
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
@@ -59,20 +42,18 @@ Citizen.CreateThread(function()
                 letSleep = false
 
 				if distance < 1.0 then
-					local currentName, currentItems = 'loja de conveniência', {}
+					local currentName, shopType = 'loja de conveniência', 1
 
 					if (v.type == 'weaponshop') then
-						currentName, currentItems = 'loja de armas', weaponStoreItems
+						currentName, shopType = 'loja de armas', 2
 
 						DisplayHelpText('Pressiona ~INPUT_CONTEXT~ para abrir a ~g~loja de armas~s~.')
 					else
-						currentItems = storeItems
-
 						DisplayHelpText('Pressiona ~INPUT_CONTEXT~ para abrir a ~g~loja~s~.')
 					end
 
 					if IsControlJustReleased(0, 38) then
-						TriggerEvent('crp-inventory:openStore', currentName, currentItems)
+						TriggerEvent('crp-inventory:openCustom', { type = 2, name = currentName, shopType = shopType })
 					end
                 end
             end

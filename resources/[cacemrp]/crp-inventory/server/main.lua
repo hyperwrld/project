@@ -119,6 +119,26 @@ AddEventHandler('crp-inventory:getInventories', function(source, data, callback)
     end
 end)
 
+AddEventHandler('crp-inventory:showActionBar', function(source, data, callback)
+    local character = exports['crp-base']:GetCharacter(source)
+
+    exports.ghmattimysql:execute('SELECT item, slot FROM inventory WHERE name = @name AND slot IN (1, 2, 3, 4);', {
+        ['@name'] = 'character-' .. character.getCharacterID()
+    }, function(result)
+        callback(result)
+    end)
+end)
+
+AddEventHandler('crp-inventory:getItem', function(source, slot, callback)
+    local character = exports['crp-base']:GetCharacter(source)
+
+    exports.ghmattimysql:execute('SELECT item, count, information FROM inventory WHERE name = @name AND slot = @slot;', {
+        ['@name'] = 'character-' .. character.getCharacterID(), ['@slot'] = slot
+    }, function(result)
+        callback(result)
+    end)
+end)
+
 function CheckIfInventoryExists(inventory, coords)
     if next(inventories) == nil then
         table.insert(inventories, { name = inventory, coords = coords })
