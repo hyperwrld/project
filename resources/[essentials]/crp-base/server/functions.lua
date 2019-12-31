@@ -50,6 +50,14 @@ function StartPayChecks()
     SetTimeout(5 * 60000, StartPayChecks)
 end
 
+function CheckIfHigherRank(name, grade)
+    if jobs[name] and grade == jobs[name].maxgrade then
+        return true
+    end
+
+    return false
+end
+
 function DoesJobExist(job, grade)
     grade = tonumber(grade)
 

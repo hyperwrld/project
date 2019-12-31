@@ -27,7 +27,9 @@ function CreateCharacter(source, data)
 	if data.job == nil then
 		self.job = data.job
 	else
-		self.job = json.decode(data.job)
+        self.job = json.decode(data.job)
+        
+        TriggerClientEvent('crp-jobmanager:updateJob', source, self.job.name, self.job.label, true)
 	end
 
 	local rTable = {}
@@ -97,10 +99,8 @@ function CreateCharacter(source, data)
 		if DoesJobExist(job, grade) then
 			local jobObject = jobs[job]
 
-			self.job.name, self.job.label, self.job.grade = job, jobObject.label, grade
-
-			TriggerEvent('crp-jobmanager:updateJob') -- ! To be made.
-
+            self.job.name, self.job.label, self.job.grade = job, jobObject.label, grade
+            
 			TriggerClientEvent('crp-jobmanager:updateJob', self.source, job, jobObject.label, true)
 		else
 			print('ERROR: There seems to be an issue while setting a job, due to not founding the job.')
