@@ -1,25 +1,31 @@
 local standardVolumeOutput = 1.0;
 
-RegisterNetEvent('interact-sound:PlayOnOne')
-AddEventHandler('interact-sound:PlayOnOne', function(soundFile, soundVolume)
+-- ! play on one client.
+
+RegisterNetEvent('interact-sound:playOne')
+AddEventHandler('interact-sound:playOne', function(fileName, volume)
     SendNUIMessage({
         transactionType     = 'playSound',
-        transactionFile     = soundFile,
-        transactionVolume   = soundVolume
+        transactionFile     = fileName,
+        transactionVolume   = volume
     })
 end)
 
-RegisterNetEvent('interact-sound:PlayOnAll')
-AddEventHandler('interact-sound:PlayOnAll', function(soundFile, soundVolume)
+-- ! play on all the players.
+
+RegisterNetEvent('interact-sound:playAll')
+AddEventHandler('interact-sound:playAll', function(fileName, volume)
     SendNUIMessage({
         transactionType     = 'playSound',
-        transactionFile     = soundFile,
-        transactionVolume   = soundVolume
+        transactionFile     = fileName,
+        transactionVolume   = volume
     })
 end)
 
-RegisterNetEvent('interact-sound:PlayWithinDistance')
-AddEventHandler('interact-sound:PlayWithinDistance', function(playerNetId, maxDistance, soundFile, soundVolume)
+-- ! play to close players.
+
+RegisterNetEvent('interact-sound:playWithinDistance')
+AddEventHandler('interact-sound:playWithinDistance', function(playerNetId, maxDistance, fileName, volume)
     local lCoords = GetEntityCoords(GetPlayerPed(-1))
     local eCoords = GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(playerNetId)))
     local distIs  = Vdist(lCoords.x, lCoords.y, lCoords.z, eCoords.x, eCoords.y, eCoords.z)
@@ -27,8 +33,8 @@ AddEventHandler('interact-sound:PlayWithinDistance', function(playerNetId, maxDi
     if (distIs <= maxDistance) then
         SendNUIMessage({
             transactionType     = 'playSound',
-            transactionFile     = soundFile,
-            transactionVolume   = soundVolume
+            transactionFile     = fileName,
+            transactionVolume   = volume
         })
     end
 end)
