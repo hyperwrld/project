@@ -88,6 +88,12 @@ local blips = {
     { id = nil, name = 'Banco', scale = 0.75, color = 52, sprite = 108, x = -351.054,  y = -49.573,   z = 49.043  },
     { id = nil, name = 'Banco', scale = 0.75, color = 52, sprite = 108, x = 247.347,   y = 222.737,   z = 106.287 },
     { id = nil, name = 'Banco', scale = 0.75, color = 52, sprite = 108, x = 1175.234,  y = 2706.608,  z = 38.094  },
+
+    { id = nil, name = 'Loja de veículos', scale = 0.75, color = 4, sprite = 225, x = -32.715, y = -1102.192, z = 25.472 },
+
+    { id = nil, name = 'Departamento da polícia', scale = 0.75, color = 29, sprite = 60, x = 433.398, y = -981.87,   z = 30.71  },
+    { id = nil, name = 'Departamento da polícia', scale = 0.75, color = 29, sprite = 60, x = -442.202, y = 6017.446, z = 31.688 },
+    { id = nil, name = 'Departamento da polícia', scale = 0.75, color = 29, sprite = 60, x = 1855.819, y = 3682.377, z = 34.268 },
 }
 
 AddEventHandler('crp-base:playerSessionStarted', function()
