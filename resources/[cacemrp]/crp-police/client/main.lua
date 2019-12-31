@@ -4,7 +4,7 @@ local armoriesLocations = {{ x = 452.245, y = -980.076, z = 29.74 }, { x = -437.
 
 local warehouseLocations = {{ x = 459.04, y = -983.05, z = 30.78 }, { x = -442.171, y = 5987.419, z = 31.716 }}
 
-local repairPoints = {{ x = 422.469, y = -1011.87, z = 29.072 }, { x = 1855.819, y = 3682.377, z = 34.268 }, { x = -453.184, y = 6029.408, z = 31.341 }}
+local policePoints = {{ x = 422.469, y = -1011.87, z = 29.072 }, { x = 1855.819, y = 3682.377, z = 34.268 }, { x = -453.184, y = 6029.408, z = 31.341 }}
 
 local currentActionData = {}
 local hasAlreadyEnteredMarker, isCop, playerInService = false, false, false
@@ -25,8 +25,8 @@ AddEventHandler('crp-police:repairvehicle', function()
         if DoesEntityExist(vehicle) then
             local boolean, coords = false, GetEntityCoords(playerPed, 0)
             
-		    for i, v in ipairs(repairPoints) do
-                if GetDistanceBetweenCoords(coords, repairPoints[i].x, repairPoints[i].y, repairPoints[i].z) < 50 then
+		    for i, v in ipairs(policePoints) do
+                if GetDistanceBetweenCoords(coords, policePoints[i].x, policePoints[i].y, policePoints[i].z) < 50 then
                     boolean = true
                     break
 			    end
@@ -77,56 +77,69 @@ AddEventHandler('crp-police:spawnvehicle', function(vehicleModel, data)
         return
     end
 
-    Citizen.CreateThread(function()
-        local vehicleHash = GetHashKey(vehicleModel)
+    local boolean, coords = false, GetEntityCoords(PlayerPedId(), 0)
 
-        if not IsModelAVehicle(vehicleHash) or not IsModelInCdimage(vehicleHash) or not IsModelValid(vehicleHash) then 
-            exports['crp-notifications']:SendAlert('error', 'Oops! Ocorreu um erro ao spawnar o veículo.')
-            return 
-        end
-        
-        RequestModel(vehicleHash)
+    for i, v in ipairs(policePoints) do
+        if GetDistanceBetweenCoords(coords, policePoints[i].x, policePoints[i].y, policePoints[i].z) < 50 then
+            boolean = true
+            break
+		end
+    end
 
-        while not HasModelLoaded(vehicleHash) do
-            Citizen.Wait(0)
-        end
+    if boolean then
+        Citizen.CreateThread(function()
+            local vehicleHash = GetHashKey(vehicleModel)
 
-        local playerPed = GetPlayerPed(-1)
-        local coords, heading = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 1.5, 5.0, 0.0), GetEntityHeading(playerPed)
+            if not IsModelAVehicle(vehicleHash) or not IsModelInCdimage(vehicleHash) or not IsModelValid(vehicleHash) then 
+                exports['crp-notifications']:SendAlert('error', 'Oops! Ocorreu um erro ao spawnar o veículo.')
+                return 
+            end
+            
+            RequestModel(vehicleHash)
 
-        local vehicle = CreateVehicle(vehicleHash, coords, heading, true, false)
+            while not HasModelLoaded(vehicleHash) do
+                Citizen.Wait(0)
+            end
 
-        SetModelAsNoLongerNeeded(vehicleHash)
+            local playerPed = GetPlayerPed(-1)
+            local coords, heading = GetOffsetFromEntityInWorldCoords(GetPlayerPed(-1), 1.5, 5.0, 0.0), GetEntityHeading(playerPed)
 
-        SetVehicleModKit(vehicle, 0)
+            local vehicle = CreateVehicle(vehicleHash, coords, heading, true, false)
 
-        SetVehicleMod(vehicle, 11, 3, false)
-        SetVehicleMod(vehicle, 12, 2, false)
-        SetVehicleMod(vehicle, 13, 2, false)
-        SetVehicleMod(vehicle, 15, data.suspension, false)
-        SetVehicleMod(vehicle, 16, 1, false)
-        SetVehicleMod(vehicle, 14, 1, false)
+            SetModelAsNoLongerNeeded(vehicleHash)
 
-        SetVehicleWheelType(vehicle, 1)
-        SetVehicleWindowTint(vehicle, 3)
-        SetVehicleMod(vehicle, 23, 15, false)
-        SetVehicleLivery(vehicle, 0)
+            SetVehicleModKit(vehicle, 0)
 
-        SetVehicleColours(vehicle, data.color, data.color)
-        SetVehicleExtraColours(vehicle, 0, 0)
+            SetVehicleMod(vehicle, 11, 3, false)
+            SetVehicleMod(vehicle, 12, 2, false)
+            SetVehicleMod(vehicle, 13, 2, false)
+            SetVehicleMod(vehicle, 15, data.suspension, false)
+            SetVehicleMod(vehicle, 16, 1, false)
+            SetVehicleMod(vehicle, 14, 1, false)
 
-        ToggleVehicleMod(vehicle, 22, true)
+            SetVehicleWheelType(vehicle, 1)
+            SetVehicleWindowTint(vehicle, 3)
+            SetVehicleMod(vehicle, 23, 15, false)
+            SetVehicleLivery(vehicle, 0)
 
-        SetVehicleDirtLevel(vehicle, 0)
+            SetVehicleColours(vehicle, data.color, data.color)
+            SetVehicleExtraColours(vehicle, 0, 0)
 
-        local vehiclePlate = GetVehicleNumberPlateText(vehicle)
+            ToggleVehicleMod(vehicle, 22, true)
 
-        -- ! Adicionar as chaves ao jogador
-        
-        SetVehicleDirtLevel(vehicle, 0)
+            SetVehicleDirtLevel(vehicle, 0)
 
-        exports['crp-notifications']:SendAlert('success', 'Veículo spawnado com sucesso.')
-    end)
+            local vehiclePlate = GetVehicleNumberPlateText(vehicle)
+
+            -- ! Adicionar as chaves ao jogador
+            
+            SetVehicleDirtLevel(vehicle, 0)
+
+            exports['crp-notifications']:SendAlert('success', 'Veículo spawnado com sucesso.')
+        end)
+    else
+        exports['crp-notifications']:SendAlert('error', 'Não estás perto de nenhum ponto de spawn.')
+    end
 end)
 
 AddEventHandler('crp-police:hasEnteredMarker', function(station, type)
