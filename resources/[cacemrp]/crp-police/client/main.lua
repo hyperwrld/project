@@ -142,6 +142,55 @@ AddEventHandler('crp-police:spawnvehicle', function(vehicleModel, data)
     end
 end)
 
+RegisterNetEvent('crp-police:impoundvehicle')
+AddEventHandler('crp-police:impoundvehicle', function()
+    if not playerInService then
+        exports['crp-notifications']:SendAlert('error', 'Precisas de estar de serviço para poder usar este comando.')
+        return
+    end
+
+    local playerPed = GetPlayerPed(-1)
+    local coordsA, coordsB = GetEntityCoords(playerPed, 1), GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 100.0, 0.0)
+    local vehicle = GetVehicleInDirection(coordsA, coordsB)
+
+    if vehicle == 0 then
+        exports['crp-notifications']:SendAlert('error', 'Oops! Ocorreu um erro ao tentar encontrar o veículo.')
+        return
+    end
+
+    exports['crp-progressbar']:StartProgressBar({ duration = 5000, label = 'Apreender o veículo', cancel = true }, function(finished)
+        if finished then
+            Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(vehicle))
+
+            if DoesEntityExist(vehicle) then
+                SetEntityCoords(vehicle, 0.0, 0.0, -30.0)
+                SetEntityAsNoLongerNeeded(vehicle)
+                DeleteVehicle(vehicle)
+
+                Citizen.Wait(250)
+
+                if DoesEntityExist(vehicle) then
+                    exports['crp-notifications']:SendAlert('error', 'Oops! Ocorreu um erro ao tentar apreender o veículo.')
+                else
+                    local vehiclePlate = GetVehicleNumberPlateText(vehicle)
+
+                    -- ! Impound vehicle on the database
+
+                    exports['crp-notifications']:SendAlert('success', 'Veículo apreendido com sucesso.')
+                end
+            else
+                local vehiclePlate = GetVehicleNumberPlateText(vehicle)
+
+                -- ! Impound vehicle on the database
+                
+                exports['crp-notifications']:SendAlert('success', 'Veículo apreendido com sucesso.')
+            end
+        else
+            exports['crp-notifications']:SendAlert('error', 'Oops! Ocorreu um erro ao tentar apreender o veículo.')
+        end
+    end)
+end)
+
 AddEventHandler('crp-police:hasEnteredMarker', function(station, type)
     if type == 'service' then
         currentAction     = type

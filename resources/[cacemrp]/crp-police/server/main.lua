@@ -108,27 +108,12 @@ TriggerEvent('crp-base:addCommand', 'multar', function(source, args, user)
 end, { help = 'Utilize este comando para passar uma multa a um jogador.', params = {{ name = 'id do jogador' }, { name = 'quantia' }}})
 
 TriggerEvent('crp-base:addCommand', 'apreender', function(source, args, user)
-    if tonumber(args[1]) and tonumber(args[2]) then
-        local user = exports['crp-base']:GetCharacter(source)
-        local userJob = user.getJob().name
+    local user = exports['crp-base']:GetCharacter(source)
+    local userJob = user.getJob().name
 
-        if userJob == 'police' then
-            args[1] = tonumber(args[1])
-            args[2] = tonumber(args[2])
-
-            local target = exports['crp-base']:GetCharacter(args[1])
-
-            if target then
-                target.removeBank(args[2])
-
-                TriggerClientEvent('crp-notifications:SendAlert', source, { type = 'inform', text = 'Passaste uma multa ao jogador (' .. args[1] .. ') de ' .. args[2] .. '€', length = 5000 })
-                
-                TriggerClientEvent('crp-notifications:SendAlert', args[1], { type = 'inform', text = 'Recebeste uma multa de ' .. args[2] .. '€', length = 5000 })
-            else
-                TriggerClientEvent('chat:addMessage', source, { color = {255, 255, 255}, templateId = 'orange', args = { 'SYSTEM', 'O jogador que colocou não está online.' }})
-            end
-        else
-            TriggerClientEvent('chat:addMessage', source, { color = {255, 255, 255}, templateId = 'orange', args = { 'SYSTEM', 'Permissões insuficientes.' }})
-        end
+    if userJob == 'police' then
+        TriggerClientEvent('crp-police:impoundvehicle', source)
+    else
+        TriggerClientEvent('chat:addMessage', source, { color = {255, 255, 255}, templateId = 'orange', args = { 'SYSTEM', 'Permissões insuficientes.' }})
     end
-end, { help = 'Utilize este comando para passar uma multa a um jogador.', params = {{ name = 'id do jogador' }, { name = 'quantia' }}})
+end, { help = 'Utilize este comando para apreender um veículo.'})

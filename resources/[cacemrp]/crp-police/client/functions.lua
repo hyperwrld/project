@@ -1,3 +1,22 @@
+function GetVehicleInDirection(coordsA, coordsB)
+    local offset, rayHandle, vehicle = 0
+
+	for i = 0, 100 do
+		rayHandle = CastRayPointToPoint(coordsA.x, coordsA.y, coordsA.z, coordsB.x, coordsB.y, coordsB.z + offset, 10, GetPlayerPed(-1), 0)	
+		a, b, c, d, vehicle = GetRaycastResult(rayHandle)
+		
+		offset = offset - 1
+
+		if vehicle ~= 0 then break end
+	end
+	
+	local distance = Vdist2(coordsA, GetEntityCoords(vehicle))
+	
+	if distance > 25 then vehicle = nil end
+
+    return vehicle ~= nil and vehicle or 0
+end
+
 function GetClosestPlayer()
     local players, closestDistance, closestPlayer, playerPed = GetPlayers(), -1, -1, GetPlayerPed(-1)
     local coords = GetEntityCoords(playerPed)
