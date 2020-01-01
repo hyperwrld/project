@@ -216,6 +216,10 @@ function UseItem(slot)
     local events = exports['crp-base']:getModule('Events')
 
     events:Trigger('crp-inventory:getItem', slot, function(data)
+        if data[1] == nil then 
+            return 
+        end
+
         if IsWeaponValid(tonumber(data[1].item)) then
             if isWeaponEquiped then
                 local isBackItem = false
