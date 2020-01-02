@@ -1,0 +1,279 @@
+@font-face {
+    font-family: 'digital-7';
+    src: url('font/digital-7.regular.ttf');
+}
+
+#policeradar {
+    width: 28%;
+    height: 16%;
+
+    position: absolute;
+    margin: auto;
+    bottom: 1%;
+
+    right: 1%;
+
+    background-color: #0a0a0a;
+    border: 3px solid #000;
+    border-radius: 5px;
+    color: white;
+ 
+    display: flex;
+    flex-direction: column; 
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+#policeradar .main {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%; 
+}
+
+#policeradar .patrolcontainer {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: flex-start; 
+    border: 2px solid black;
+    margin-left: 1%;
+}
+
+#policeradar .typecontainer {
+    background-color: black;
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: flex-start; 
+    width: 0;
+}
+
+#policeradar .typecontainer .text {
+    font-family: Verdana;
+    font-size: 10px;
+    line-height: 27px;
+    color: #525151; 
+}
+
+#policeradar .typecontainer .active {
+    color: white; 
+}
+
+#policeradar .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%; 
+    justify-content: space-around; 
+}
+
+#policeradar .container .speedsourcecontainer {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%;
+    background-color: #3d1c00;
+}
+
+#policeradar .container .speedsourcecontainer .speednumber {
+    width: 100%;
+    color: #f79e00;
+}
+
+#policeradar .container .speedsourcecontainer .text {
+    font-family: 'digital-7';
+    font-size: 3vw;
+    line-height: 100%;
+    width: 100%;
+    text-align: center;
+}
+
+#policeradar .container .speedfastcontainer {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%;
+    background-color: #230303;
+}
+
+#policeradar .container .speedfastcontainer .speednumber {
+    width: 100%;
+    color: #ff0000;
+}
+
+#policeradar .container .speedfastcontainer .text {
+    font-family: 'digital-7';
+    font-size: 3vw;
+    line-height: 100%;
+    width: 100%;
+    text-align: center;
+}
+
+#policeradar .container .label {
+    font-family: Verdana;
+    font-weight: bold; 
+    font-size: 10px;
+    text-align: center;
+}
+
+#policeradar .arrowbox {
+    justify-content: center; 
+    align-items: center;
+}
+
+#policeradar .arrowbox i {
+    font-size: 20px; 
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: #525151;
+}
+
+#policeradar .arrowbox .active {
+    color: white; 
+}
+
+#policeradar .arrowbox .inactive {
+    color: #525151;
+}
+
+#policeradar .platecontainer {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: flex-start; 
+    border: 2px solid black;
+    margin-left: 1%;
+}
+
+#policeradar .container .platevehcontainer {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    height: 100%;
+    background-color: #072600;
+}
+
+#policeradar .container .platevehcontainer .speednumber {
+    width: 100%;
+    color: #18f400;
+}
+
+#policeradar .container .platevehcontainer .text {
+    font-family: 'digital-7';
+    font-size: 1.5vw;
+    line-height: 95%;
+    width: 100%;
+    text-align: center;
+}
+
+/*
+#policeradar .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%; 
+    justify-content: space-around; 
+}
+
+#policeradar .arrowbox {
+    justify-content: center; 
+    align-items: center;
+}
+
+#policeradar .arrowbox i {
+    font-size: 20px; 
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: black;
+}
+
+#policeradar .arrowbox .active {
+    color: white; 
+}
+
+#policeradar .arrowbox .inactive {
+    color: black;
+}
+
+#policeradar .container .label {
+    font-family: Verdana;
+    font-weight: bold; 
+    font-size: 10px;
+    text-align: center;
+}
+
+#policeradar .container .speedsourcecontainer {
+    width: 100%;
+    height: 58px;
+    display: flex;
+    justify-content: space-around;
+}
+
+#policeradar .container .speedsourcecontainer .speednumber {
+    width: 100%;
+    color: #f79e00;
+}
+
+#policeradar .container .speedsourcecontainer .text {
+    font-family: 'digital-7';
+    font-size: 58px;
+    line-height: 58px;
+    width: 100%;
+    text-align: center;
+}
+
+#policeradar .speedsourcecontainer {
+    border: 2px solid black;
+    background-color: #3d1c00;
+}
+
+#policeradar .container .patrol {
+    background: rgb(0, 125, 0);
+    background: linear-gradient(to bottom, rgb(0, 150, 0), rgb(0, 75, 0));
+}
+
+#policeradar .container .locked {
+    color: rgb(50, 0, 0);
+}
+
+#policeradar .container .speedfastcontainer {
+    width: 135px;
+    height: 58px;
+    display: flex;
+    justify-content: space-around;
+}
+
+#policeradar .container .speedfastcontainer .speednumber {
+    width: 100%;
+    color: #ff0000;
+}
+
+#policeradar .container .speedfastcontainer .text {
+    font-family: 'digital-7';
+    font-size: 58px;
+    line-height: 58px;
+    width: 100%;
+    text-align: center;
+}
+
+#policeradar .speedfastcontainer {
+    border: 2px solid black;
+    background-color: #230303;
+}
+
+#policeradar .container .platecontainer {
+    width: 95px;
+    height: 38px;
+    display: flex;
+    justify-content: space-around;
+} */

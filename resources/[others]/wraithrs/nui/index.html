@@ -1,0 +1,103 @@
+<html>
+    <head>
+        <script src='nui://game/ui/jquery.js' type='text/javascript'></script>
+        <script src='scripts.js' type='text/javascript'></script>
+        <link href='styles.css' rel='stylesheet' type='text/css'/>
+        <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'>
+    </head>
+
+    <body onselectstart='return false;' ondragstart='return false;'>
+		<div id='policeradar' style='display: none;'>
+
+			<div class='main'>
+				<div class='container' style='margin-left: 1%; margin-right: 1%;'>
+					<div class='typecontainer'>
+						<div class='text'><span class='fwdsame'>SAME</span></div>
+						<div class='text'><span class='fwdopp'>OPP</span></div>
+						<div class='text'><span class='fwdxmit'>XMIT</span></div>
+					</div>
+
+					<div class='typecontainer'>
+						<div class='text'><span class='bwdsame'>SAME</span></div>
+						<div class='text'><span class='bwdopp'>OPP</span></div>
+						<div class='text'><span class='bwdxmit'>XMIT</span></div>
+					</div>
+				</div>
+
+				<div class='container' style='width: 25%; height: 90%;'>
+					<div class='patrolcontainer' style='margin-bottom: 5%;'>
+						<div class='speedsourcecontainer target' data-target='fwdspeed'>
+							<div class='speednumber text'></div>
+							<div class='speednumber text'></div>
+							<div class='speednumber text'></div>
+						</div>
+
+						<div class='label'>FRENTE</div>
+					</div>
+
+					<div class='patrolcontainer'>
+						<div class='speedsourcecontainer target' data-target='bwdspeed'>
+							<div class='speednumber text'></div>
+							<div class='speednumber text'></div>
+							<div class='speednumber text'></div>
+						</div>
+
+						<div class='label'>TRASEIRO</div>
+					</div>
+                </div>
+               
+                <div class='container' style='width: 25%; height: 90%;'>
+                    <div class='patrolcontainer' style='margin-bottom: 5%;'>
+                        <div class='speedfastcontainer target' data-target='fwdfast'>
+                            <div class='speednumber text'></div>
+                            <div class='speednumber text'></div>
+                            <div class='speednumber text'></div>
+                        </div>
+                
+                        <div class='label'>VEL. FRENTE</div>
+                    </div>
+                
+                    <div class='patrolcontainer'>
+                        <div class='speedfastcontainer target' data-target='bwdfast'>
+                            <div class='speednumber text'></div>
+                            <div class='speednumber text'></div>
+                            <div class='speednumber text'></div>
+                        </div>
+                
+                        <div class='label'>VEL. TRASEIRO</div>
+                    </div>
+                </div>
+
+				<div class='container' style='width: 1%; margin-left: 1%;'>
+					<div class='arrowbox'>
+						<i class='fa fa-arrow-up fwdarrowfront'></i>
+						<i class='fa fa-arrow-down fwdarrowback'></i>
+					</div>
+
+					<div class='arrowbox'>
+						<i class='fa fa-arrow-up bwdarrowfront'></i>
+						<i class='fa fa-arrow-down bwdarrowback'></i>
+					</div>
+				</div>
+
+                <div class='container' style='width: 25%; height: 55%;'>
+                    <div class='platecontainer' style='margin-bottom: 5%;'>
+                        <div class='platevehcontainer target' data-target='fwdplate'>
+                            <div id='fwdplate' class='speednumber text'></div>
+                        </div>
+                
+                        <div class='label'>MATRICULA [F]</div>
+                    </div>
+                
+                    <div class='platecontainer'>
+                        <div class='platevehcontainer target' data-target='bwdplate'>
+                            <div id='bwdplate' class='speednumber text'></div>
+                        </div>
+                
+                        <div class='label'>MATRICULA [T]</div>
+                    </div>
+                </div>
+			</div>
+		</div>
+    </body>
+</html>
