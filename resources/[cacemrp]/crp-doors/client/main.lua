@@ -76,7 +76,7 @@ Citizen.CreateThread(function()
                 if distance < maxDistance then
                     closestDoor, closestDistance = door, distance
 
-                    local isAuthorized = true --IsAuthorized(door)
+                    local isAuthorized = IsAuthorized(door)
 
                     if door.locked then
                         displayText = 'Trancada'

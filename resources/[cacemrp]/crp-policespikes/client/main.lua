@@ -1,4 +1,4 @@
-local spikeCoords = {}
+local spikeCoords, isRemovingSpikes = {}, false
 local spikesBlip, spikeObject
 
 RegisterNetEvent('crp-policespikes:addSpikes')
@@ -8,6 +8,16 @@ end)
 
 RegisterNetEvent('crp-policespikes:removeSpikes')
 AddEventHandler('crp-policespikes:removeSpikes', function(id)
+    local source = GetPlayerServerId(PlayerId())
+
+    if spikeCoords[id].id == source then
+        if DoesBlipExist(spikesBlip) then
+            RemoveBlip(spikesBlip)
+
+            exports['crp-notifications']:SendAlert('inform', 'O teu tapete de pregos foi apanhado.')
+        end
+    end
+
     table.remove(spikeCoords, id)
 end)
 
@@ -35,7 +45,7 @@ AddEventHandler('crp-policespikes:watchSpikes', function(watchedSpike)
 			return
         end
         
-        if GetDistanceBetweenCoords(spikeCoords[_watchedSpike]['x'], spikeCoords[_watchedSpike]['y'], spikeCoords[_watchedSpike]['z'], GetEntityCoords(playerPed)) > 40.0 then
+        if #(vector3(spikeCoords[_watchedSpike]['x'], spikeCoords[_watchedSpike]['y'], spikeCoords[_watchedSpike]['z']) - GetEntityCoords(playerPed)) > 40.0 then
 			spikeCoords[_watchedSpike]['watching'] = false
 			return
         end
@@ -55,7 +65,7 @@ AddEventHandler('crp-policespikes:watchSpikes', function(watchedSpike)
 
         local frontLeftClose, frontRightClose, backLeftClose, backRightClose = false, false, false, false
         
-        if GetDistanceBetweenCoords(spike['x'], spike['y'], spike['z'], leftFront) < 1.5 then
+        if #(vector3(spike['x'], spike['y'], spike['z']) - leftFront) < 1.5 then
             if not IsVehicleTyreBurst(vehicle, 0, true) or not IsVehicleTyreBurst(vehicle, 1, true) or not IsVehicleTyreBurst(vehicle, 2, true) then
                 frontLeftClose = true
 
@@ -65,7 +75,7 @@ AddEventHandler('crp-policespikes:watchSpikes', function(watchedSpike)
             end
     	end
 
-        if GetDistanceBetweenCoords(spike['x'], spike['y'], spike['z'], rightFront) < 1.5 then
+        if #(vector3(spike['x'], spike['y'], spike['z']) - rightFront) < 1.5 then
             if not IsVehicleTyreBurst(vehicle, 0, true) or not IsVehicleTyreBurst(vehicle, 1, true) or not IsVehicleTyreBurst(vehicle, 2, true) or not IsVehicleTyreBurst(vehicle, 3, true) then
                 frontRightClose = true
                 
@@ -76,7 +86,7 @@ AddEventHandler('crp-policespikes:watchSpikes', function(watchedSpike)
             end
     	end
 
-        if GetDistanceBetweenCoords(spike['x'], spike['y'], spike['z'], leftBack) < 1.5 then
+        if #(vector3(spike['x'], spike['y'], spike['z']) - leftBack) < 1.5 then
             if not IsVehicleTyreBurst(vehicle, 0, true) or not IsVehicleTyreBurst(vehicle, 1, true) or not IsVehicleTyreBurst(vehicle, 2, true) or not IsVehicleTyreBurst(vehicle, 3, true) then
                 backLeftClose = true
                 
@@ -87,7 +97,7 @@ AddEventHandler('crp-policespikes:watchSpikes', function(watchedSpike)
             end	      		
     	end
 
-        if GetDistanceBetweenCoords(spike['x'], spike['y'], spike['z'], rightBack) < 1.5 then
+        if #(vector3(spike['x'], spike['y'], spike['z']) - rightBack) < 1.5 then
             if not IsVehicleTyreBurst(vehicle, 3, true) or not IsVehicleTyreBurst(vehicle, 4, true) or not IsVehicleTyreBurst(vehicle, 5, true) or not IsVehicleTyreBurst(vehicle, 6, true)  or not IsVehicleTyreBurst(vehicle, 7, true) then
                 backRightClose = true
                
@@ -128,36 +138,35 @@ end)
 
 RegisterNetEvent('crp-policespikes:pickup')
 AddEventHandler('crp-policespikes:pickup', function()
+    if isRemovingSpikes then
+        exports['crp-notifications']:SendAlert('error', 'Já estás a remover um tapete de pregos, aguarde!')
+        return
+    end
+
+    if #spikeCoords == 0 then
+        exports['crp-notifications']:SendAlert('error', 'Não existe nenhum tapete de pregos no chão de momento.')
+        return
+    end
+
     local playerPed, removing, attempt = GetPlayerPed(-1), true, 0
 
-	while removing do
-        removing = RemoveSpike()
-        
-        TriggerAnimation(playerPed)
+    isRemovingSpikes = true
 
-        Citizen.Wait(1000)
+	while removing do
+        RemoveSpikes()
+
+        TriggerAnimation()
+
+        Citizen.Wait(500)
         
         attempt = attempt + 1
         
 		if attempt > 4 then removing = false end
     end
-    
-    local found, source = false, GetPlayerServerId(PlayerId())
 
-    for k, v in pairs(spikeCoords) do
-        if v.id == source then
-            found = true
-            break
-        end
-    end
+    Wait(1000)
 
-    exports['crp-notifications']:SendAlert('success', 'Apanhaste um tapete de pregos.')
-
-    if not found then
-        exports['crp-notifications']:SendAlert('success', 'Já não existe nenhum tapete de pregos no chão.')
-
-        RemoveBlip(spikesBlip)
-    end
+    isRemovingSpikes = false
 end)
 
 function DropSpikesOnGround() 
@@ -173,10 +182,6 @@ function DropSpikesOnGround()
         local position = GetOffsetFromEntityInWorldCoords(GetPlayerPed(PlayerId()), 0.0, -1.5 + (3.5 * i), 0.15)
 
         TriggerServerEvent('crp-policespikes:setPikeLocation', { x = position['x'],  y = position['y'], z = position['z'], h = heading })
-    end
-
-    if spikesBlip ~= nil then
-        RemoveBlip(spikesBlip)
     end
 
     local position = GetOffsetFromEntityInWorldCoords(GetPlayerPed(PlayerId()), 0.0, 2.5, 0.15)
@@ -232,26 +237,23 @@ function DeleteSpike(k)
     end
 end
 
-function RemoveSpike()
-    local hasBeenRemoved = true
-
+function RemoveSpikes()
     for k, v in pairs(spikeCoords) do
-        local distance = GetDistanceBetweenCoords(v['x'], v['y'], v['z'], GetEntityCoords(GetPlayerPed(-1)))
+        local distance = #(vector3(v['x'], v['y'], v['z']) - GetEntityCoords(GetPlayerPed(-1)))
 
-        if distance < 5.0 then
+        if distance < 15.0 then
             local spike = v.object
-            
+
             DeleteObject(spike)
-            
-		  	if DoesEntityExist(spike) then
-                SetEntityAsNoLongerNeeded(spike)
-                  
-		      	DeleteObject(spike)
+
+            if DoesEntityExist(spike) then
+                SetEntityAsNoLongerNeeded(spike)  
+                DeleteObject(spike)
             else
-                hasBeenRemoved = false
-                  
-			  	TriggerServerEvent('crp-policespikes:removeSpikes', k)
-            end	
+                TriggerServerEvent('crp-policespikes:removeSpikes', k)
+            end
+
+            break
 		end
     end
 end
@@ -296,12 +298,12 @@ Citizen.CreateThread(function()
                 end
             else
                 for i = 1, #spikeCoords do
-                    local distance = GetDistanceBetweenCoords(spikeCoords[i]['x'], spikeCoords[i]['y'], spikeCoords[i]['z'], GetEntityCoords(playerPed))
+                    local distance = #(vector3(spikeCoords[i]['x'], spikeCoords[i]['y'], spikeCoords[i]['z']) - GetEntityCoords(playerPed))
 
                     if distance < 15.0 and not spikeCoords[i]['watching'] then
                         spikeCoords[i]['watching'] = true
 
-                        TriggerEvent('crp-police:watchSpikes', i)
+                        TriggerEvent('crp-policespikes:watchSpikes', i)
                     end
                 end
             end
@@ -316,7 +318,7 @@ Citizen.CreateThread(function()
         Citizen.Wait(1000)
            
         for k, v in pairs(spikeCoords) do
-            local distance = GetDistanceBetweenCoords(v['x'], v['y'], v['z'], GetEntityCoords(GetPlayerPed(-1)))
+            local distance = #(vector3(v['x'], v['y'], v['z']) - GetEntityCoords(GetPlayerPed(-1)))
             
 	    	if distance < 85.0 then
 		    	if v['palced'] == false or v['object'] == nil then
