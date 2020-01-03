@@ -11,6 +11,7 @@ AddEventHandler('crp-policespikes:removeSpikes', function(id)
     local source = GetPlayerServerId(PlayerId())
 
     if spikeCoords[id].id == source then
+        DeleteSpike(id)
         if DoesBlipExist(spikesBlip) then
             RemoveBlip(spikesBlip)
 
@@ -155,8 +156,6 @@ AddEventHandler('crp-policespikes:pickup', function()
 	while removing do
         RemoveSpikes()
 
-        TriggerAnimation()
-
         Citizen.Wait(500)
         
         attempt = attempt + 1
@@ -246,6 +245,8 @@ function RemoveSpikes()
 
             DeleteObject(spike)
 
+            TriggerAnimation(GetPlayerPed(-1))
+
             if DoesEntityExist(spike) then
                 SetEntityAsNoLongerNeeded(spike)  
                 DeleteObject(spike)
@@ -321,7 +322,7 @@ Citizen.CreateThread(function()
             local distance = #(vector3(v['x'], v['y'], v['z']) - GetEntityCoords(GetPlayerPed(-1)))
             
 	    	if distance < 85.0 then
-		    	if v['palced'] == false or v['object'] == nil then
+                if v['palced'] == false or v['object'] == nil then
 					RenderSpike(k)
 				end
 			else
