@@ -139,6 +139,23 @@ AddEventHandler('crp-inventory:getItem', function(source, slot, callback)
     end)
 end)
 
+RegisterServerEvent('crp-inventory:setWeaponAmmo')
+AddEventHandler('crp-inventory:setWeaponAmmo', function(weapon, weaponSlot, weaponAmmo)
+    local character = exports['crp-base']:GetCharacter(source)
+
+    exports.ghmattimysql:scalar('SELECT information FROM inventory WHERE item = @weapon AND slot = @slot AND name = @name;', {
+        ['@name'] = 'character-' .. character.getCharacterID(), ['@slot'] = weaponSlot, ['@weapon'] = weapon,
+    }, function(result)
+        if result then
+            result = json.decode(result)
+            result.ammo = weaponAmmo
+
+            exports.ghmattimysql:execute('UPDATE inventory SET information = @info WHERE name = @name AND slot = @slot AND item = @weapon;', 
+            { ['@name'] = 'character-' .. character.getCharacterID(), ['@slot'] = weaponSlot, ['@weapon'] = weapon, ['@info'] = json.encode(result) })
+        end
+    end)
+end)
+
 function CheckIfInventoryExists(inventory, coords)
     if next(inventories) == nil then
         table.insert(inventories, { name = inventory, coords = coords })

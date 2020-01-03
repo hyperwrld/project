@@ -1,17 +1,5 @@
 local isInventoryOpen, inventories, isShowing, currentWeapon, isDoingAnimation, isWeaponEquiped, weaponSlot = false, {}, false, nil, false, false, nil
 
-local weaponsFromBack = {
-    [1] = 'weapon_microsmg',      [10] = 'weapon_compactrifle',
-    [2] = 'weapon_smg',           [11] = 'weapon_petrolcan',
-    [3] = 'weapon_gusenberg',     [12] = 'weapon_hatchet',  
-    [4] = 'weapon_machinepistol', [13] = 'weapon_wrench',
-    [5] = 'weapon_minismg',       [14] = 'weapon_bat',
-    [6] = 'weapon_pumpshotgun',   [14] = 'weapon_crowbar',
-    [7] = 'weapon_assaultrifle',   
-    [8] = 'weapon_carbinerifle',
-    [9] = 'weapon_assaultshotgun',
-}
-
 local function sendMessage(data)
 	SendNUIMessage(data)
 end
@@ -149,8 +137,7 @@ Citizen.CreateThread(function()
             end)
         end
 
-
-        if isShowing and (IsDisabledControlJustReleased(0, 37)) then
+        if isShowing and (IsDisabledControlReleased(0, 37)) then
             sendMessage({ event = 'hide' })
 
             Citizen.Wait(2000)
@@ -162,7 +149,7 @@ Citizen.CreateThread(function()
             if not isWeaponEquiped or (isWeaponEquiped and weaponSlot ~= 1) then
                 UseItem(1)
             elseif isWeaponEquiped then
-                RemoveWeapon()
+                Holster()
             end
         end
 
@@ -170,7 +157,7 @@ Citizen.CreateThread(function()
             if not isWeaponEquiped or (isWeaponEquiped and weaponSlot ~= 2) then
                 UseItem(2)
             elseif isWeaponEquiped then
-                RemoveWeapon()
+                Holster()
             end
         end
 
@@ -178,7 +165,7 @@ Citizen.CreateThread(function()
             if not isWeaponEquiped or (isWeaponEquiped and weaponSlot ~= 3) then
                 UseItem(3)
             elseif isWeaponEquiped then
-                RemoveWeapon()
+                Holster()
             end
         end
 
@@ -186,7 +173,7 @@ Citizen.CreateThread(function()
             if not isWeaponEquiped or (isWeaponEquiped and weaponSlot ~= 4) then
                 UseItem(4)
             elseif isWeaponEquiped then
-                RemoveWeapon()
+                Holster()
             end
         end
 
@@ -216,58 +203,21 @@ function UseItem(slot)
     local events = exports['crp-base']:getModule('Events')
 
     events:Trigger('crp-inventory:getItem', slot, function(data)
-        if data[1] == nil then 
-            return 
+        if data[1] == nil then
+            return
         end
 
         if IsWeaponValid(tonumber(data[1].item)) then
             if isWeaponEquiped then
-                local isBackItem = false
-
-                for i = 1, #weaponsFromBack do
-                    if GetHashKey(weaponsFromBack[i]) == tonumber(currentWeapon) then
-                        isBackItem = true
-                        break
-                    end
-                end
-
-                if isBackItem then
-                    holster2h()
-                else
-                    holster1h()
-                end
+                Holster()
 
                 isWeaponEquiped, weaponSlot, isBackItem = true, slot, false
 
-                for i = 1, #weaponsFromBack do
-                    if GetHashKey(weaponsFromBack[i]) == tonumber(data[1].item) then
-                        isBackItem = true
-                        break
-                    end
-                end
-                
-                if isBackItem then
-                    unholster2h(data[1])
-                else
-                    unholster1h(data[1])
-                end
+                unHolster(data[1])
             else            
                 isWeaponEquiped, weaponSlot = true, slot
 
-                local isBackItem = false
-
-                for i = 1, #weaponsFromBack do
-                    if GetHashKey(weaponsFromBack[i]) == tonumber(data[1].item) then
-                        isBackItem = true
-                        break
-                    end
-                end
-                
-                if isBackItem then
-                    unholster2h(data[1])
-                else
-                    unholster1h(data[1])
-                end
+                unHolster(data[1])
             end
         else
             print('oie')
@@ -275,107 +225,18 @@ function UseItem(slot)
     end)
 end
 
-function RemoveWeapon()
-    local isBackItem = false
-
-    for i = 1, #weaponsFromBack do
-        if GetHashKey(weaponsFromBack[i]) == tonumber(currentWeapon) then
-            isBackItem = true
-            break
-        end
-    end
-
-    if isBackItem then
-        holster2h()
-    else
-        holster1h()
-    end
-end
-
-function holster2h()
-    isDoingAnimation = true
-
-    local playerPed, dictionary, animation = GetPlayerPed(-1), 'amb@world_human_golf_player@male@idle_a', 'idle_a'
-
-    LoadAnimation(dictionary)
-
-    WaitAnimation()
-
-    TaskPlayAnim(playerPed, dictionary, animation, 1.5, 1.5, -1, 49, 10, 0, 0, 0)
-
-    local weaponAmmo = GetAmmoInPedWeapon(playerPed, tonumber(currentWeapon))
-
-    SetCurrentPedWeapon(playerPed, GetHashKey('weapon_unarmed'), 1)
-
-    -- ! Update weaponAmmo on server side.
-
-    print(weaponAmmo)
-    
-    Citizen.Wait(1200)
-
-    RemoveAllPedWeapons(playerPed)
-    ClearPedTasks(playerPed)
-
-    Citizen.Wait(500)
-
-    isDoingAnimation, isWeaponEquiped = false, false
-end
-
-function unholster2h(weaponInfo)
-    isDoingAnimation = true
-
-    local playerPed, dictionary, animation = GetPlayerPed(-1), 'amb@world_human_golf_player@male@idle_a', 'idle_a'
-
-    RemoveAllPedWeapons(playerPed)
-
-    LoadAnimation(dictionary)
-
-    WaitAnimation()
-
-    TaskPlayAnim(playerPed, dictionary, animation, 1.5, 1.5, -1, 49, 10, 0, 0, 0)  
-    
-    Citizen.Wait(1100)
-
-    ClearPedTasks(playerPed)
-
-    Citizen.Wait(650)
-
-    GiveWeaponToPed(playerPed, tonumber(weaponInfo.item), tonumber(json.decode(weaponInfo.information).ammo), 0, 1)
-
-    SetCurrentPedWeapon(playerPed, tonumber(weaponInfo.item), 1)
-
-    currentWeapon = tonumber(weaponInfo.item)
-    
-    ClearPedTasks(playerPed)
-
-    local job = exports['crp-userinfo']:isPed('job')
-
-    if job == 'police' then
-        if currentWeapon == GetHashKey('weapon_carbinerifle') then
-            GiveWeaponComponentToPed(playerPed, GetHashKey('weapon_carbinerifle'), GetHashKey('COMPONENT_AT_AR_FLSH'))
-	        GiveWeaponComponentToPed(playerPed, GetHashKey('weapon_carbinerifle'), GetHashKey('COMPONENT_AT_AR_AFGRIP_02'))
-	        GiveWeaponComponentToPed(playerPed, GetHashKey('weapon_carbinerifle'), GetHashKey('COMPONENT_AT_SCOPE_MEDIUM'))
-	        GiveWeaponComponentToPed(playerPed, GetHashKey('weapon_carbinerifle'), GetHashKey('COMPONENT_AT_AR_SUPP_02')) 
-        end
-    end
-    
-    Citizen.Wait(600)
-
-    isDoingAnimation = false
-end
-
-function holster1h()
+function Holster()
     isDoingAnimation = true
 
     local dictionary, animation = 'reaction@intimidation@1h', 'outro'
     local job = exports['crp-userinfo']:isPed('job')
 
     if job == 'police' then
-        copholster()
+        copHolster()
 
         Citizen.Wait(600)
 
-        isDoingAnimation, isWeaponEquiped = false, false
+        isDoingAnimation, isWeaponEquiped, currentWeapon, weaponSlot = false, false, nil, nil
         return
     end
 
@@ -387,11 +248,7 @@ function holster1h()
 
     TaskPlayAnim(playerPed, dictionary, animation, 1.0, 1.0, -1, 50, 0, 0, 0, 0)
 
-    local weaponAmmo = GetAmmoInPedWeapon(playerPed, tonumber(currentWeapon))
-
-    -- ! Update weaponAmmo on server side.
-
-    print(weaponAmmo)
+    UpdateWeaponAmmo()
 
     Citizen.Wait(animationLength - 2200)
 
@@ -404,10 +261,10 @@ function holster1h()
 
     Citizen.Wait(800)
 
-    isDoingAnimation, isWeaponEquiped = false, false
+    isDoingAnimation, isWeaponEquiped, currentWeapon, weaponSlot = false, false, nil, nil
 end
 
-function copholster()
+function copHolster()
     local dictionary, animation = 'reaction@intimidation@cop@unarmed', 'intro'
     local playerPed = GetPlayerPed(-1)
 
@@ -417,9 +274,7 @@ function copholster()
 
     TaskPlayAnim(playerPed, dictionary, animation, 10.0, 2.3, -1, 49, 1, 0, 0, 0)
     
-    local weaponAmmo = GetAmmoInPedWeapon(playerPed, tonumber(currentWeapon))
-
-    -- ! Update weaponAmmo on server side.
+    UpdateWeaponAmmo()
 
     Citizen.Wait(600)
     
@@ -430,17 +285,22 @@ function copholster()
 	ClearPedTasks(playerPed)
 end
 
-function unholster1h(weaponInfo)
+function unHolster(weaponInfo)
     isDoingAnimation = true
 
     local dictionary, animation = 'reaction@intimidation@1h', 'intro'
     local job = exports['crp-userinfo']:isPed('job')
 
     if job == 'police' then
-        copunholster(weaponInfo)
+        copUnHolster(weaponInfo)
 
         if tonumber(weaponInfo.item) == GetHashKey('weapon_pistol') then
             GiveWeaponComponentToPed(GetPlayerPed(-1), GetHashKey('weapon_pistol'), GetHashKey('COMPONENT_AT_PI_FLSH'))
+        elseif tonumber(weaponInfo.item) == GetHashKey('weapon_carbinerifle') then
+            GiveWeaponComponentToPed(playerPed, GetHashKey('weapon_carbinerifle'), GetHashKey('COMPONENT_AT_AR_FLSH'))
+	        GiveWeaponComponentToPed(playerPed, GetHashKey('weapon_carbinerifle'), GetHashKey('COMPONENT_AT_AR_AFGRIP_02'))
+	        GiveWeaponComponentToPed(playerPed, GetHashKey('weapon_carbinerifle'), GetHashKey('COMPONENT_AT_SCOPE_MEDIUM'))
+	        GiveWeaponComponentToPed(playerPed, GetHashKey('weapon_carbinerifle'), GetHashKey('COMPONENT_AT_AR_SUPP_02')) 
         end
 
         Citizen.Wait(450)
@@ -476,7 +336,7 @@ function unholster1h(weaponInfo)
     isDoingAnimation = false
 end
 
-function copunholster(weaponInfo)
+function copUnHolster(weaponInfo)
     local dictionary, animation = 'reaction@intimidation@cop@unarmed', 'intro'
     local playerPed = GetPlayerPed(-1)
 
@@ -501,13 +361,32 @@ function WaitAnimation()
     Citizen.CreateThread(function()
         repeat
             Citizen.Wait(0)
-            DisablePlayerFiring(GetPlayerPed(-1), true)
 
+            DisablePlayerFiring(GetPlayerPed(-1), true)
 			DisableControlAction(0, 24, true)
 			DisableControlAction(0, 142, true)
         until isDoingAnimation == false
     end)
 end
+
+function UpdateWeaponAmmo()
+    local weaponAmmo = GetAmmoInPedWeapon(GetPlayerPed(-1), currentWeapon)
+
+    TriggerServerEvent('crp-inventory:setWeaponAmmo', currentWeapon, weaponSlot, weaponAmmo)
+end
+
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(150)
+
+        local playerPed = GetPlayerPed(-1)
+
+        if IsPedShooting(playerPed) then
+            TaskSwapWeapon(true)
+            UpdateWeaponAmmo()
+        end
+    end
+end)
 
 Citizen.CreateThread(function()
 	while true do
