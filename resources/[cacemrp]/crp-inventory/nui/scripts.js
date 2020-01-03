@@ -10,19 +10,19 @@ let itemList = {};
 // * INVENTORY WEAPONS
 
 itemList['1737195953'] = { displayname: 'Cacetete', weight: 10, nonStack: true, image: 'crp-cacetete.png', weapon: true };
-itemList['911657153'] = { displayname: 'Taser', weight: 10, nonStack: true, image: 'crp-stungun.png', weapon: true };
-itemList['453432689'] = { displayname: 'Pistola', weight: 15, nonStack: true, image: 'crp-pistol.png', weapon: true };
-itemList['-1076751822'] = { displayname: 'Pistola SNS', weight: 15, nonStack: true, image: 'crp-snspistol.png', weapon: true };
-itemList['137902532'] = { displayname: 'Pistola Vintage', weight: 15, nonStack: true, image: 'crp-vintagepistol.png', weapon: true };
-itemList['-771403250'] = { displayname: 'Pistola Pesada', weight: 20, nonStack: true, image: 'crp-heavypistol.png', weapon: true };
-itemList['1593441988'] = { displayname: 'Pistola de Combate', weight: 15, nonStack: true, image: 'crp-combatpistol.png', weapon: true };
-itemList['-619010992'] = { displayname: 'Pistola-Metralhadora', weight: 30, nonStack: true, image: 'crp-machinepistol.png', weapon: true };
-itemList['-1121678507'] = { displayname: 'Mini Submetralhadora', weight: 30, nonStack: true, image: 'crp-minismg.png', weapon: true };
-itemList['324215364'] = { displayname: 'Micro Submetralhadora', weight: 30, nonStack: true, image: 'crp-microsmg.png', weapon: true };
-itemList['736523883'] = { displayname: 'Submetralhadora', weight: 35, nonStack: true, image: 'crp-smg.png', weapon: true };
-itemList['1649403952'] = { displayname: 'Rifle Compacto', weight: 45, nonStack: true, image: 'crp-compactrifle.png', weapon: true };
-itemList['-1074790547'] = { displayname: 'Rifle de Assalto', weight: 55, nonStack: true, image: 'crp-assaultrifle.png', weapon: true,  };
-itemList['-2084633992'] = { displayname: 'Carabina', weight: 55, nonStack: true, image: 'crp-carbinerifle.png', weapon: true };
+itemList['911657153'] = { displayname: 'Taser', weight: 10, nonStack: true, image: 'crp-stungun.png', weapon: true, meta: { serial: true, ammo: 60 } };
+itemList['453432689'] = { displayname: 'Pistola', weight: 15, nonStack: true, image: 'crp-pistol.png', weapon: true, ammoType: '9mm', meta: { serial: true, ammo: 60 }, description: 'É uma arma de 9mm, que é muito boa aprovada pelo melhor shooter of all time orakah the great.' };
+itemList['-1076751822'] = { displayname: 'Pistola SNS', weight: 15, nonStack: true, image: 'crp-snspistol.png', weapon: true, meta: { serial: true, ammo: 60 } };
+itemList['137902532'] = { displayname: 'Pistola Vintage', weight: 15, nonStack: true, image: 'crp-vintagepistol.png', weapon: true, meta: { serial: true, ammo: 60 } };
+itemList['-771403250'] = { displayname: 'Pistola Pesada', weight: 20, nonStack: true, image: 'crp-heavypistol.png', weapon: true, meta: { serial: true, ammo: 60 } };
+itemList['1593441988'] = { displayname: 'Pistola de Combate', weight: 15, nonStack: true, image: 'crp-combatpistol.png', weapon: true, meta: { serial: true, ammo: 60 } };
+itemList['-619010992'] = { displayname: 'Pistola-Metralhadora', weight: 30, nonStack: true, image: 'crp-machinepistol.png', weapon: true, meta: { serial: true, ammo: 60 } };
+itemList['-1121678507'] = { displayname: 'Mini Submetralhadora', weight: 30, nonStack: true, image: 'crp-minismg.png', weapon: true, meta: { serial: true, ammo: 60 } };
+itemList['324215364'] = { displayname: 'Micro Submetralhadora', weight: 30, nonStack: true, image: 'crp-microsmg.png', weapon: true, meta: { serial: true, ammo: 60 } };
+itemList['736523883'] = { displayname: 'Submetralhadora', weight: 35, nonStack: true, image: 'crp-smg.png', weapon: true, meta: { serial: true, ammo: 60 } };
+itemList['1649403952'] = { displayname: 'Rifle Compacto', weight: 45, nonStack: true, image: 'crp-compactrifle.png', weapon: true, meta: { serial: true, ammo: 60 } };
+itemList['-1074790547'] = { displayname: 'Rifle de Assalto', weight: 55, nonStack: true, image: 'crp-assaultrifle.png', weapon: true, meta: { serial: true, ammo: 60 }  };
+itemList['-2084633992'] = { displayname: 'Carabina', weight: 55, nonStack: true, image: 'crp-carbinerifle.png', weapon: true, meta: { serial: true, ammo: 60 } };
 
 // * NORMAL ITEMS
 
@@ -33,7 +33,9 @@ itemList['196068078'] = { displayname: 'Coca-Cola', weight: 1, nonStack: false, 
 itemList['129942349'] = { displayname: 'Batatas', weight: 1, nonStack: false, image: 'crp-batatas.png', weapon: false, price: 3 };
 
 $(function () {
-	defaultHTML = $('.ui').clone();
+    defaultHTML = $('.ui').clone();
+
+    $('.item-info').hide();
 
 	window.addEventListener('message', function (event) {
 		switch (event.data.event) {
@@ -59,6 +61,8 @@ $(function () {
 				});
 
                 (isInventoryOpen = false), (playerItems = {}), (otherItems = {}), (inventorySlots = 40), (secondaryMaxWeight = 1000);
+
+                $('.item-info').hide();
 
 				$.post('http://crp-inventory/nuiMessage', JSON.stringify({ close: true }));
 
@@ -101,6 +105,8 @@ $(function () {
 
             (isInventoryOpen = false), (playerItems = {}), (otherItems = {}), (inventorySlots = 40), (secondaryMaxWeight = 1000);
 
+            $('.item-info').hide();
+
 			$.post('http://crp-inventory/nuiMessage', JSON.stringify({ close: true }));
 		}
 	});
@@ -131,7 +137,7 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
 
 	if (playerData != undefined) {
 		for (const [key, value] of Object.entries(playerData)) {
-			playerItems[value.slot] = { id: value.item, quantity: value.count };
+            playerItems[value.slot] = { id: value.item, quantity: value.count, information: JSON.parse(value.information) };
 		}
 	}
 
@@ -157,7 +163,7 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
 
 	if (otherData != undefined) {
 		for (const [key, value] of Object.entries(otherData)) {
-			otherItems[value.slot] = { id: value.item, quantity: value.count, price: value.price };
+            otherItems[value.slot] = { id: value.item, quantity: value.count, price: value.price, information: value.information ? JSON.parse(value.information) : null  };
 		}
 	}
 
@@ -204,19 +210,19 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
 			var item = $(this).data('item'), itemInfo = $('.item-info');
 			var itemData = itemList[item.id];
 
-			itemInfo.fadeIn();
+            itemInfo.show();
+            
+            itemInfo.find('.item-name').text(itemData.displayname)
+            itemInfo.find('.picture').attr('src', 'items/' + itemData.image);
 
-			if (item.information) {
-				console.log(item.information.serial);
-			} else {
-				itemInfo.html(
-					itemData.displayname + '<br> ' + itemData.description + '<br> <b>Peso:</b> ' + item.quantity * itemData.weight +
-					'&nbsp;&nbsp;&nbsp;&nbsp; / &nbsp;&nbsp;&nbsp;&nbsp;<b>Quantidade:</b> ' + item.quantity
-				);
-			}
+            if (itemData.weapon) {
+                itemInfo.find('#description').html('<b>Descrição:</b> ' + itemData.description + '<br><br><b>Número de série:<b> ' + item.information.serial + ' &nbsp;-&nbsp; <b>Munição:</b> ' + item.information.ammo + ' (' + itemData.ammoType + ') <br><br><b>Peso:</b> ' + (item.quantity * itemData.weight).toFixed(2) + ' &nbsp;-&nbsp; <b>Quantidade:</b> ' + item.quantity)
+            } else {
+                itemInfo.find('#description').html('<b>Descrição:</b> ' + itemData.description + '<br><br><br><br><br><b>Peso:</b> ' + (item.quantity * itemData.weight).toFixed(2) + ' / <b>Quantidade:</b> ' + item.quantity)
+            }
 		},
 		function () {
-			$('.item-info').fadeOut();
+			$('.item-info').hide();
 		}
 	);
 
@@ -372,8 +378,9 @@ async function AttemptBuyFromStore(currentItem, currentInventory, returnItem, re
 				quantity: quantity,
 				slot: _currentSlot,
                 canStack: canStack,
-                isWeapon: itemList[item.id].weapon
-			};
+                isWeapon: itemList[item.id].weapon,
+                meta: itemList[item.id].meta
+            };
 
 			$.post('http://crp-inventory/nuiMessage', JSON.stringify({ buyitem: true, itemdata: data, shoptype: shopType }), function (_data) {
 				if (_data.status) {

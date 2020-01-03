@@ -13,7 +13,7 @@ server_scripts {
 files {
 	'nui/ui.html',
 	'nui/styles.css',
-	'nui/scripts.js',
+    'nui/scripts.js',
 
 	'nui/items/crp-cacetete.png',
 	'nui/items/crp-stungun.png',
