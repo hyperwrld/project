@@ -36,7 +36,13 @@ function GetClosestPlayer()
             end
         end
 
-        return GetPlayerServerId(closestPlayer), closestDistance
+        closestPlayer = GetPlayerServerId(closestPlayer)
+
+        if closestPlayer == 0 then
+            exports['crp-notifications']:SendAlert('error', 'Não foi encontrado nenhum jogador próximo.')
+        else
+            return closestPlayer, closestDistance
+        end
     else
         exports['crp-notifications']:SendAlert('error', 'Não é possível fazer essa ação, porque estás num veículo.')
     end

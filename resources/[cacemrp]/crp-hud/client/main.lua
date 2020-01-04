@@ -36,7 +36,10 @@ AddEventHandler('crp-hud:changemeta', function(data)
 
 		if thirst < 0 then thirst = 0 end
 		if thirst > 100 then thirst = 100 end
-	end
+    end
+
+    SendNUIMessage({ eventName = 'updateStatus', hunger = hunger, thirst = thirst })
+	TriggerServerEvent('crp-hud:update', GetEntityHealth(GetPlayerPed(-1)), GetPedArmour(GetPlayerPed(-1)), hunger, thirst, stress)
 end)
 
 RegisterNetEvent('crp-hud:changestress')

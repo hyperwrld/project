@@ -7,7 +7,7 @@ local warehouseLocations = {{ x = 459.04, y = -983.05, z = 30.78 }, { x = -442.1
 local policePoints = {{ x = 422.469, y = -1011.87, z = 29.072 }, { x = 1855.819, y = 3682.377, z = 34.268 }, { x = -453.184, y = 6029.408, z = 31.341 }}
 
 local currentActionData = {}
-local hasAlreadyEnteredMarker, isCop, playerInService = false, false, false
+local hasAlreadyEnteredMarker, isPolice, playerInService, isBeingDragged, isEscorting, draggerId, isCuffing = false, false, false, false, false, 0, false
 local lastStation, lastPart, currentAction
 
 RegisterNetEvent('crp-police:repairvehicle')
@@ -191,6 +191,123 @@ AddEventHandler('crp-police:impoundvehicle', function()
     end)
 end)
 
+RegisterNetEvent('crp-police:cuffplayer')
+AddEventHandler('crp-police:cuffplayer', function(state)
+    -- if not playerInService then
+    --     exports['crp-notifications']:SendAlert('error', 'Precisas de estar de serviço para poder usar este comando.')
+    --     return
+    -- end
+
+    local isHandcuffed = exports['crp-userinfo']:isPed('handcuffed')
+
+    if isHandcuffed then
+        exports['crp-notifications']:SendAlert('error', 'Não podes fazer isso porque estás algemado.')
+        return
+    end
+
+    if isCuffing then
+        exports['crp-notifications']:SendAlert('error', 'Já estás a algemar alguém.')
+        return
+    end
+
+    isCuffing = true
+
+    local user, distance = GetClosestPlayer()
+
+    print(GetEntitySpeed(GetPlayerFromServerId(user)))
+
+    if distance ~= nil and distance ~= -1 and distance < 1.0 and GetEntitySpeed(GetPlayerFromServerId(user)) < 1.0 then 
+        if state then
+            exports['crp-notifications']:SendAlert('inform', 'Colocaste as algemas apertadas no jogador.')
+        else
+            exports['crp-notifications']:SendAlert('inform', 'Colocaste as algemas largas no jogador.')
+        end
+
+        TriggerServerEvent('crp-police:cuffplayer', user, state)
+    end
+
+    isCuffing = false
+end)
+
+RegisterNetEvent('crp-police:dragplayer')
+AddEventHandler('crp-police:dragplayer', function()
+    -- if not playerInService then
+    --     exports['crp-notifications']:SendAlert('error', 'Precisas de estar de serviço para poder usar este comando.')
+    --     return
+    -- end
+
+    local isHandcuffed = exports['crp-userinfo']:isPed('handcuffed')
+
+    if isHandcuffed then
+        exports['crp-notifications']:SendAlert('error', 'Não podes fazer isso porque estás algemado.')
+        return
+    end
+
+    local user, distance = GetClosestPlayer()
+
+    if distance ~= nil and distance ~= -1 and distance < 1.0 then 
+        if not isBeingDragged then
+            TriggerServerEvent('crp-police:dragplayer', user)
+        end
+    end
+end)
+
+RegisterNetEvent('crp-police:drag')
+AddEventHandler('crp-police:drag', function(player)
+    draggerId = tonumber(player)
+
+    isBeingDragged = not isBeingDragged
+
+    if isBeingDragged then
+        SetEntityCoords(GetPlayerPed(-1), GetEntityCoords(GetPlayerPed(dragger)))
+
+        Citizen.CreateThread(function()
+            repeat
+                local playerPed = GetPlayerPed(-1)
+
+                if GetEntitySpeed(playerPed) > 0.2 then
+                    local coords = GetEntityCoords(playerPed,  true)
+
+                    SetEntityCoords(playerPed, coords.x, coords.y, coords.z)	
+                end
+
+                Citizen.Wait(10000)
+            until isBeingDragged == false
+        end)
+
+        TriggerServerEvent('crp-police:updatedragger', draggerId, true)
+    else
+        local playerPed = GetPlayerPed(-1)
+
+        ClearPedTasks(playerPed)
+
+        DetachEntity(playerPed, true, false)
+        
+        TriggerServerEvent('crp-police:updatedragger', draggerId, false)
+    end
+end)
+
+RegisterNetEvent('crp-police:updatedragger')
+AddEventHandler('crp-police:updatedragger', function(status)
+    isEscorting = status
+
+    if isEscorting then
+        Citizen.CreateThread(function()
+            repeat
+                Citizen.Wait(0)
+
+                local playerPed = GetPlayerPed(-1)
+
+                if IsPedRunning(playerPed) or IsPedSprinting(playerPed) then
+				    SetPlayerControl(PlayerId(), 0, 0)
+				    Citizen.Wait(1000)
+				    SetPlayerControl(PlayerId(), 1, 1)
+			    end
+            until isEscorting == false
+        end)
+    end
+end)
+
 AddEventHandler('crp-police:hasEnteredMarker', function(station, type)
     if type == 'service' then
         currentAction     = type
@@ -208,74 +325,139 @@ AddEventHandler('crp-police:hasExitedMarker', function()
 	currentAction = nil
 end)
 
+AddEventHandler('crp-userinfo:updateJob', function(_job)
+    if _job == 'police' then isPolice = true else isPolice = false end
+end)
+
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
 
-        local playerPed = PlayerPedId()
-        local isInMarker, hasExited, letSleep, coords = false, false, true, GetEntityCoords(playerPed)
-        local currentStation, currentPart
+        if isPolice then
+            local isInVehicle = IsPedInAnyVehicle(GetPlayerPed(-1), false)
+
+            if isInVehicle then
+                
+            else
+
+            end
+        end
+    end
+end)
+
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(0)
         
-        for i = 1, #serviceLocations, 1 do
-            local distance = GetDistanceBetweenCoords(coords, serviceLocations[i].x, serviceLocations[i].y, serviceLocations[i].z, true)
+        if isBeingDragged then
+            local userPed, playerPed = GetPlayerPed(GetPlayerFromServerId(draggerId)), GetPlayerPed(-1)
 
-            if distance < 3.0 then
-                DrawText3D(serviceLocations[i].x, serviceLocations[i].y, serviceLocations[i].z, '[E] Entrar de Serviço | [G] Sair de Serviço')
-
-                letSleep = false
+            if isBeingDragged then
+                AttachEntityToEntity(playerPed, userPed, 11816, 0.54, 0.44, 0.0, 0.0, 0.0, 0.0, false, false, false, false, 2, true)
             end
 
-            if distance < 2.0 then
-                isInMarker, currentStation, currentPart = true, i, 'service'
+            if IsEntityDead(userPed) then
+                DetachEntity(playerPed, position)
+
+                isBeingDragged = false
+
+                local position = GetOffsetFromEntityInWorldCoords(userPed, 0.0, 0.8, 2.8)
+
+                SetEntityCoords(playerPed, position)
             end
+
+            DisableControlAction(1, 23, true)
+            DisableControlAction(1, 106, true)
+            DisableControlAction(1, 140, true)
+            DisableControlAction(1, 141, true)
+            DisableControlAction(1, 142, true)
+            DisableControlAction(1, 37, true)
+            DisablePlayerFiring(playerPed, true)
+            DisableControlAction(2, 32, true)
+            DisableControlAction(1, 33, true)
+            DisableControlAction(1, 34, true)
+            DisableControlAction(1, 35, true)
+            DisableControlAction(1, 37, true)
+            DisableControlAction(0, 59, true)
+            DisableControlAction(0, 60, true)
+            DisableControlAction(2, 31, true) 
+            SetCurrentPedWeapon(playerPed, GetHashKey('weapon_unarmed'), true)
         end
+    end
+end)
 
-        for i = 1, #armoriesLocations, 1 do
-            local distance = GetDistanceBetweenCoords(coords, armoriesLocations[i].x, armoriesLocations[i].y, armoriesLocations[i].z, true)
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(0)
 
-            if distance < 10.0 then
-                DrawMarker(27, armoriesLocations[i].x, armoriesLocations[i].y, armoriesLocations[i].z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 44, 130, 201, 100, false, false, 2, false, nil, nil, false)
-            
-                letSleep = false
+        local letSleep = true
+        
+        if isPolice then
+            local playerPed = PlayerPedId()
+            local isInMarker, hasExited, coords = false, false, GetEntityCoords(playerPed)
+            local currentStation, currentPart
+
+            for i = 1, #serviceLocations, 1 do
+                local distance = GetDistanceBetweenCoords(coords, serviceLocations[i].x, serviceLocations[i].y, serviceLocations[i].z, true)
+
+                if distance < 3.0 then
+                    DrawText3D(serviceLocations[i].x, serviceLocations[i].y, serviceLocations[i].z, '[E] Entrar de Serviço | [G] Sair de Serviço')
+
+                    letSleep = false
+                end
+
+                if distance < 2.0 then
+                    isInMarker, currentStation, currentPart = true, i, 'service'
+                end
             end
 
-            if distance < 1.0 then
-                isInMarker, currentStation, currentPart = true, i, 'armory'
+            for i = 1, #armoriesLocations, 1 do
+                local distance = GetDistanceBetweenCoords(coords, armoriesLocations[i].x, armoriesLocations[i].y, armoriesLocations[i].z, true)
+
+                if distance < 10.0 then
+                    DrawMarker(27, armoriesLocations[i].x, armoriesLocations[i].y, armoriesLocations[i].z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 44, 130, 201, 100, false, false, 2, false, nil, nil, false)
+                
+                    letSleep = false
+                end
+
+                if distance < 1.0 then
+                    isInMarker, currentStation, currentPart = true, i, 'armory'
+                end
             end
-        end
 
-        for i = 1, #warehouseLocations, 1 do
-            local distance = GetDistanceBetweenCoords(coords, warehouseLocations[i].x, warehouseLocations[i].y, warehouseLocations[i].z, true)
+            for i = 1, #warehouseLocations, 1 do
+                local distance = GetDistanceBetweenCoords(coords, warehouseLocations[i].x, warehouseLocations[i].y, warehouseLocations[i].z, true)
 
-            if distance < 3.0 then
-                DrawText3D(warehouseLocations[i].x, warehouseLocations[i].y, warehouseLocations[i].z, '[E] para abrir o armazém')
+                if distance < 3.0 then
+                    DrawText3D(warehouseLocations[i].x, warehouseLocations[i].y, warehouseLocations[i].z, '[E] para abrir o armazém')
 
-                letSleep = false
+                    letSleep = false
+                end
+
+                if distance < 2.0 then
+                    isInMarker, currentStation, currentPart = true, i, 'warehouse'
+                end
             end
 
-            if distance < 2.0 then
-                isInMarker, currentStation, currentPart = true, i, 'warehouse'
-            end
-        end
+            if isInMarker and not hasAlreadyEnteredMarker or (isInMarker and (lastStation ~= currentStation or lastPart ~= currentPart)) then
+                if (lastStation and lastPart) and (lastStation ~= currentStation or lastPart ~= currentPart) then
+                    hasExited = true
 
-        if isInMarker and not hasAlreadyEnteredMarker or (isInMarker and (lastStation ~= currentStation or lastPart ~= currentPart)) then
-            if (lastStation and lastPart) and (lastStation ~= currentStation or lastPart ~= currentPart) then
-				hasExited = true
+                    TriggerEvent('crp-police:hasExitedMarker')
+                end
+
+                hasAlreadyEnteredMarker = true
+                lastStation             = currentStation
+                lastPart                = currentPart
+
+                TriggerEvent('crp-police:hasEnteredMarker', currentStation, currentPart)
+            end
+
+            if not hasExited and not isInMarker and hasAlreadyEnteredMarker then
+                hasAlreadyEnteredMarker = false
 
                 TriggerEvent('crp-police:hasExitedMarker')
-			end
-
-            hasAlreadyEnteredMarker = true
-            lastStation             = currentStation
-            lastPart                = currentPart
-
-            TriggerEvent('crp-police:hasEnteredMarker', currentStation, currentPart)
-		end
-
-        if not hasExited and not isInMarker and hasAlreadyEnteredMarker then
-            hasAlreadyEnteredMarker = false
-
-            TriggerEvent('crp-police:hasExitedMarker')
+            end
         end
 
         if letSleep then

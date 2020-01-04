@@ -61,7 +61,7 @@ AddEventHandler('crp-apartments:showui', function(roomnumber, roomtype)
 
 	SetEntityCoords(playerPed, 152.09986877441, -1004.7946166992, -98.999984741211)
 	FreezeEntityPosition(playerPed, true)
-	SetEntityInvincible(playerPed, true)
+	--SetEntityInvincible(playerPed, true)
 
 	print('hi guys')
 
@@ -145,9 +145,9 @@ local function nuiCallBack(data)
 			print('error spawning?!')
 		end
 
-		SetEntityInvincible(playerPed, false)
+		--SetEntityInvincible(playerPed, false)
 		FreezeEntityPosition(playerPed, false)
-		SetEntityVisible(playerPed, true)
+		--SetEntityVisible(playerPed, true)
 
 		if IsEntityVisible(playerPed) then
 			print('estou aqui')
@@ -225,7 +225,7 @@ function ProcessBuildType(roomnumber, roomtype)
 
 	TriggerEvent('crp-weather:insidehotel') -- WEATHER RAIN ETC
 
-	SetEntityInvincible(playerPed, true)
+	--SetEntityInvincible(playerPed, true)
 
 	TriggerEvent('crp-doors:dooranim')
 
@@ -243,7 +243,7 @@ function ProcessBuildType(roomnumber, roomtype)
 
 	CleanUpPeds()
 
-	SetEntityInvincible(playerPed, false)
+	--SetEntityInvincible(playerPed, false)
 	FreezeEntityPosition(playerPed, false)
 
 	Citizen.Wait(1000)
@@ -355,7 +355,7 @@ end
 function FloatTilSafe(roomtype, buildingsent)
 	local playerPed = GetPlayerPed(-1)
 
-	SetEntityInvincible(playerPed, true)
+	--SetEntityInvincible(playerPed, true)
 	FreezeEntityPosition(playerPed, true)
 
 	local coords = GetEntityCoords(playerPed)

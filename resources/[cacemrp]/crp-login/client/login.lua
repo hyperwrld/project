@@ -81,7 +81,7 @@ local function nuiCallBack(data)
 
 			sendMessage({ close = true })
 
-			SetPlayerInvincible(playerPed, true)
+			--SetPlayerInvincible(playerPed, true)
 
 			TriggerEvent('crp-base:firstSpawn')
 
@@ -93,7 +93,7 @@ local function nuiCallBack(data)
 
 			Citizen.Wait(1000)
 
-			SetPlayerInvincible(playerPed, false)
+			--SetPlayerInvincible(playerPed, false)
 		end)
 	end
 end

@@ -199,6 +199,8 @@ Citizen.CreateThread(function()
             end
         elseif found and not isMenuOpen then
             isMenuOpen = true
+        else
+            Citizen.Wait(1000)
         end
     end
 end)

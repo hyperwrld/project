@@ -20,7 +20,7 @@ function CRP.SpawnManager.Initialize(self)
 
         SetEntityCoordsNoOffset(playerPed, 180.789, -1035.451, 296.092, false, false, false, true)
 
-        SetEntityVisible(playerPed, false)
+        --SetEntityVisible(playerPed, false)
 
         TriggerEvent('crp-base:spawnInitialized')
 
@@ -46,7 +46,7 @@ function CRP.SpawnManager.InitialSpawn(self)
         local spawn = CRP.Enums.SpawnLocations.Initial[1]
 
         spawn = {
-            model = "mp_m_freemode_01",
+            model = 'mp_m_freemode_01',
             x = spawn[1],
             y = spawn[2],
             z = spawn[3],
@@ -65,7 +65,7 @@ function CRP.SpawnManager.InitialSpawn(self)
 
             SetPlayerModel(PlayerId(), spawn.model)
             SetModelAsNoLongerNeeded(spawn.model)
-            SetPedDefaultComponentVariation(playerPed)
+            SetPedDefaultComponentVariation(GetPlayerPed(-1))
         end
 
         RequestCollisionAtCoord(spawn.x, spawn.y, spawn.z)

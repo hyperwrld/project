@@ -1,0 +1,60 @@
+<html>
+
+<head>
+    <script src='nui://game/ui/jquery.js' type='text/javascript'></script>
+
+    <link href='styles.css' rel='stylesheet' type='text/css' />
+    <script type='text/javascript' src='scripts.js' charset='utf-8'></script>
+</head>
+
+<body>
+    <div class='menu'>
+        <div class='tab'>
+            <a href='#' class='appearance active' data-link='appearance'>Aparência</a>
+            <a href='#' class='pilosity' data-link='pilosity'>Pilosidade</a>
+            <a href='#' class='clothes' data-link='clothes'>Vestuário</a>
+        </div>
+
+        <form id='form'>
+            <div class='block appearance active'>
+                <div class='group'>
+                    <h2>Morfologia</h2>
+
+                    <div class='input'>
+                        <div class='label'>Aparência do Pai</div>
+                        <div class='label-value' data-legend='' style='display:none;'></div>
+                        <div class='type-range'>
+                            <a href='#' class='arrow arrow-left'>&nbsp;</a>
+                            <input value='0' type='range' class='father' min='0' max='45'>
+                            <a href='#' class='arrow arrow-right'>&nbsp;</a>
+                        </div>
+                    </div>
+
+                    <div class='input'>
+                        <div class='label'>Aparência do Mãe</div>
+                        <div class='label-value' data-legend='' style='display:none;'></div>
+                        <div class='type-range'>
+                            <a href='#' class='arrow arrow-left'>&nbsp;</a>
+                            <input value='0' type='range' class='mother' min='0' max='45'>
+                            <a href='#' class='arrow arrow-right'>&nbsp;</a>
+                        </div>
+                    </div>
+
+                    <div class='input'>
+                        <div class='label'>Genética Pai / Mãe</div>
+                        <div class='label-value' data-legend='' style='display:none;'></div>
+                        <div class='type-range'>
+                            <a href='#' class='arrow arrow-left'>&nbsp;</a>
+                            <input value='5' type='range' class='morphologie' min='0' max='10'>
+                            <a href='#' class='arrow arrow-right'>&nbsp;</a>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

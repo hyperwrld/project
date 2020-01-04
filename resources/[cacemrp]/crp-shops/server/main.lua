@@ -1,8 +1,3 @@
--- local storeItems = { 
---     [129942349] = { price = 3 }, [196068078] = { price = 200 }, [130895348] = { price = 150 }, [156805094] = { price = 20 }, 
---     [-2084633992] = { price = 5000 }, [-1074790547] = { price = 10 }, [1649403952] = { price = 300 }
--- }
-
 local storeItems = {
 	{ item = 129942349, count = 50, slot = 1, price = 3      }, { item = 196068078,   count = 50, slot = 2, price = 50   },
 	{ item = 130895348, count = 50, slot = 3, price = 50     }, { item = 156805094,   count = 50, slot = 4, price = 50   },
@@ -19,7 +14,7 @@ local weaponStoreItems = {
 local armoryItems = {
     { item = 156805094,  count = 50, slot = 1, price = 3    }, { item = -2084633992, count = 50, slot = 2, price = 50 }, 
     { item = 1737195953, count = 50, slot = 3, price = 50   }, { item = 911657153,   count = 50, slot = 4, price = 50 }, 
-    { item = 1593441988, count = 50, slot = 5, price = 5000 }, 
+    { item = 1593441988, count = 50, slot = 5, price = 50 }, 
 }
 
 AddEventHandler('crp-shops:getStoreItems', function(source, data, callback)
@@ -56,10 +51,12 @@ AddEventHandler('crp-shops:buyItem', function(source, data, callback)
     elseif data.shoptype == 3 then
         inventory = armoryItems
    
-        if character.getJob().name == 'police' then 
+        if character.getJob().name ~= 'police' then 
             return callback({ status = false, text = 'Só membros da polícia é que conseguem comprar este item.' }) 
         end
     end
+
+    print(json.encode(data.itemdata.meta))
 
     local found, item = GetItem(inventory, data.itemdata.item)
 
@@ -69,6 +66,10 @@ AddEventHandler('crp-shops:buyItem', function(source, data, callback)
 
     if characterMoney >= itemPrice then
         character.removeMoney(itemPrice)
+
+        if data.itemdata.meta ~= nil and data.itemdata.meta.serial == true then
+            data.itemdata.meta.serial = character.getCharacterID()
+        end
 
         if data.itemdata.canStack then
             exports.ghmattimysql:scalar('SELECT count FROM inventory WHERE name = @name AND item = @item AND slot = @slot;', {
@@ -82,13 +83,8 @@ AddEventHandler('crp-shops:buyItem', function(source, data, callback)
                 end
             end)
         else
-            if data.itemdata.isWeapon then
-                exports.ghmattimysql:execute('INSERT INTO inventory (count, item, slot, name, information) VALUES (@quantity, @item, @slot, @name, @info);', 
-                { ['@quantity'] = data.itemdata.quantity, ['@name'] = data.itemdata.inventory, ['@item'] = data.itemdata.item, ['@slot'] = data.itemdata.slot, ['@info'] = json.encode({ serial = character.getCharacterID(), ammo = 60 }) })
-            else
-                exports.ghmattimysql:execute('INSERT INTO inventory (count, item, slot, name) VALUES (@quantity, @item, @slot, @name);', 
-                { ['@quantity'] = data.itemdata.quantity, ['@name'] = data.itemdata.inventory, ['@item'] = data.itemdata.item, ['@slot'] = data.itemdata.slot })
-            end
+            exports.ghmattimysql:execute('INSERT INTO inventory (count, item, slot, name, information) VALUES (@quantity, @item, @slot, @name, @info);', 
+            { ['@quantity'] = data.itemdata.quantity, ['@name'] = data.itemdata.inventory, ['@item'] = data.itemdata.item, ['@slot'] = data.itemdata.slot, ['@info'] = json.encode(data.itemdata.meta) })
 
             callback({ status = true, stack = false, price = itemPrice })
         end

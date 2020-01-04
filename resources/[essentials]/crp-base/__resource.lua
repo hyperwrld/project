@@ -30,11 +30,13 @@ server_scripts {
 	'server/functions.lua',
 	'server/common.lua',
 	'server/util.lua',
-	'server/main.lua',
+    'server/main.lua',
+    'server/commands.lua'
 }
 
 server_exports {
 	'GetCharacter',
+	'CheckIfHigherRank'
 }
 
 files {
