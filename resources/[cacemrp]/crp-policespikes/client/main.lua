@@ -10,8 +10,9 @@ RegisterNetEvent('crp-policespikes:removeSpikes')
 AddEventHandler('crp-policespikes:removeSpikes', function(id)
     local source = GetPlayerServerId(PlayerId())
 
+    DeleteSpike(id)
+    
     if spikeCoords[id].id == source then
-        DeleteSpike(id)
         if DoesBlipExist(spikesBlip) then
             RemoveBlip(spikesBlip)
 
