@@ -6,36 +6,24 @@ end)
 
 RegisterServerEvent('crp-jobmanager:disableService')
 AddEventHandler('crp-jobmanager:disableService', function(name)
-    inService[name][source] = false
+    local _source = source
+
+    inService[name][_source] = false
     
     Citizen.Wait(1000)
 
-    if name == 'medic' then
-    	for k, v in pairs(inService['police']) do
-			TriggerClientEvent('esx-policejob:updateMedicBlip', k)
-		end
-    end
-
-    for k, v in pairs(inService[name]) do
-        TriggerClientEvent('esx-' .. name .. 'job:updateBlip', k)
-    end
+    TriggerClientEvent('crp-userinfo:updateService', _source, name, false)
 end)
 
 RegisterServerEvent('crp-jobmanager:enableService')
 AddEventHandler('crp-jobmanager:enableService', function(name)
-    inService[name][source] = true
+    local _source = source
+
+    inService[name][_source] = true
     
     Citizen.Wait(1000)
 
-    if name == 'medic' then
-    	for k, v in pairs(inService['police']) do
-			TriggerClientEvent('esx-policejob:updateMedicBlip', k)
-		end
-    end
-
-    for k, v in pairs(inService[name]) do
-        TriggerClientEvent('esx-' .. name .. 'job:updateBlip', k)
-    end
+    TriggerClientEvent('crp-userinfo:updateService', _source, name, true)
 end)
 
 TriggerEvent('crp-base:addCommand', 'recrutar', function(source, args, user)

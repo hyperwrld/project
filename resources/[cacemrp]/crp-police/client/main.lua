@@ -711,8 +711,12 @@ Citizen.CreateThread(function()
             if currentAction == 'service' then
                 if IsControlJustReleased(0, 38) then
                     playerInService, currentAction = true, nil
+
+                    TriggerServerEvent('crp-jobmanager:enableService', 'police')
                 elseif IsControlJustReleased(0, 47) then
                     playerInService, currentAction = false, nil
+
+                    TriggerServerEvent('crp-jobmanager:disableService', 'police')
                 end
             elseif IsControlJustReleased(0, 38) then
                 if currentAction == 'armory' then

@@ -1,3 +1,5 @@
+TriggerEvent('crp-jobmanager:activateService', 'police')
+
 RegisterServerEvent('crp-police:cuffplayer')
 AddEventHandler('crp-police:cuffplayer', function(target, state)
     local user = exports['crp-base']:GetCharacter(source)
