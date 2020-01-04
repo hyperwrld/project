@@ -290,6 +290,24 @@ Citizen.CreateThread(function()
     end 
 end)
 
+RegisterNetEvent('wraithrs:resetRadar')
+AddEventHandler('wraithrs:resetRadar', function() 
+    ResetFrontFast()
+    ResetRearFast()
+
+    exports['crp-notifications']:SendAlert('inform', 'Radar resetado.')
+end)
+
+RegisterNetEvent('wraithrs:checkFrontRadar')
+AddEventHandler('wraithrs:checkFrontRadar', function() 
+    TriggerServerEvent('wraithrs:checkPlate', radarInfo.fwdPlate)
+end)
+
+RegisterNetEvent('wraithrs:checkRearRadar')
+AddEventHandler('wraithrs:checkRearRadar', function() 
+    TriggerServerEvent('wraithrs:checkPlate', radarInfo.bwdPlate)
+end)
+
 RegisterNetEvent('wraithrs:addVehicle')
 AddEventHandler('wraithrs:addVehicle', function(newHotVehicles) 
     hotVehicles = newHotVehicles
@@ -301,9 +319,7 @@ AddEventHandler('wraithrs:updateradarlimit', function(speed)
         radarInfo.fastLimit = 60
 
         ResetFrontFast()
-
         ResetRearFast()
-        print('teste123')
     else
         radarInfo.fastLimit = tonumber(speed)
     end

@@ -543,8 +543,30 @@ Citizen.CreateThread(function()
         if not isPolice and not IsPauseMenuActive() then
             local isInVehicle = IsPedInAnyVehicle(GetPlayerPed(-1), false)
 
-            if isInVehicle then
+            if isInVehicle then             
+                if IsControlJustReleased(2, 172) then
+                    TriggerEvent('wraithrs:checkFrontRadar')
+                    
+					Citizen.Wait(500)
+                end
+
+                if IsControlJustReleased(2, 173) then
+                    TriggerEvent('wraithrs:checkRearRadar')
+                    
+					Citizen.Wait(500)
+                end
+
+                if IsControlJustReleased(2, 174) then
+                    TriggerEvent('wraithrs:resetRadar')
+                    
+					Citizen.Wait(500)
+                end
                 
+                if IsControlJustReleased(2, 175) then
+                    TriggerEvent('wraithrs:toggleradar')
+                    
+					Citizen.Wait(500)
+                end
             else
 				if IsControlJustReleased(2, 172) and not IsControlPressed(0, 19) then
                     TriggerEvent('crp-police:cuffplayer', false)
