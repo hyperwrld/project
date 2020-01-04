@@ -137,7 +137,7 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
 
 	if (playerData != undefined) {
 		for (const [key, value] of Object.entries(playerData)) {
-            playerItems[value.slot] = { id: value.item, quantity: value.count, information: JSON.parse(value.information) };
+            playerItems[value.slot] = { id: value.item, quantity: value.count, information: value.information ? JSON.parse(value.information) : null };
 		}
 	}
 
