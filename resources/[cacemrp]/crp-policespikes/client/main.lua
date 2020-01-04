@@ -11,7 +11,7 @@ AddEventHandler('crp-policespikes:removeSpikes', function(id)
     local source = GetPlayerServerId(PlayerId())
 
     DeleteSpike(id)
-    
+
     if spikeCoords[id].id == source then
         if DoesBlipExist(spikesBlip) then
             RemoveBlip(spikesBlip)
@@ -29,27 +29,18 @@ AddEventHandler('crp-policespikes:watchSpikes', function(watchedSpike)
 
 	while true do
         Citizen.Wait(0)
-        
-        local playerPed = GetPlayerPed(-1)
-
-        if not IsPedInAnyVehicle(playerPed, false) then
-	    	return
-        end
-        
-        local vehicle = GetVehiclePedIsIn(playerPed, false)
-        local vehicleDriver = GetPedInVehicleSeat(vehicle, -1)
-
-        if vehicleDriver ~= playerPed then
-            return
-        end
 
         if spikeCoords[_watchedSpike] == nil then
 			return
         end
-        
-        if #(vector3(spikeCoords[_watchedSpike]['x'], spikeCoords[_watchedSpike]['y'], spikeCoords[_watchedSpike]['z']) - GetEntityCoords(playerPed)) > 40.0 then
-			spikeCoords[_watchedSpike]['watching'] = false
-			return
+
+        local playerPed = GetPlayerPed(-1)
+        local vehicle = GetVehiclePedIsIn(playerPed, false)
+        local vehicleDriver = GetPedInVehicleSeat(vehicle, -1)
+
+        if (not IsPedInAnyVehicle(playerPed, false)) or (vehicleDriver ~= playerPed) or (#(vector3(spikeCoords[_watchedSpike]['x'], spikeCoords[_watchedSpike]['y'], spikeCoords[_watchedSpike]['z']) - GetEntityCoords(playerPed)) > 40.0) then
+            spikeCoords[_watchedSpike]['watching'] = false
+            return
         end
         
 		if not spikeCoords[_watchedSpike]['watching'] then
@@ -68,17 +59,17 @@ AddEventHandler('crp-policespikes:watchSpikes', function(watchedSpike)
         local frontLeftClose, frontRightClose, backLeftClose, backRightClose = false, false, false, false
         
         if #(vector3(spike['x'], spike['y'], spike['z']) - leftFront) < 1.5 then
-            if not IsVehicleTyreBurst(vehicle, 0, true) or not IsVehicleTyreBurst(vehicle, 1, true) or not IsVehicleTyreBurst(vehicle, 2, true) then
+            if not IsVehicleTyreBurst(vehicle, 0, true) then
                 frontLeftClose = true
 
   			    SetVehicleTyreBurst(vehicle, 0, true,  1000.0)
   			    SetVehicleTyreBurst(vehicle, 1, false, 1000.0)
                 SetVehicleTyreBurst(vehicle, 2, false, 1000.0)
             end
-    	end
+        end
 
         if #(vector3(spike['x'], spike['y'], spike['z']) - rightFront) < 1.5 then
-            if not IsVehicleTyreBurst(vehicle, 0, true) or not IsVehicleTyreBurst(vehicle, 1, true) or not IsVehicleTyreBurst(vehicle, 2, true) or not IsVehicleTyreBurst(vehicle, 3, true) then
+            if not IsVehicleTyreBurst(vehicle, 1, true) then
                 frontRightClose = true
                 
                 SetVehicleTyreBurst(vehicle, 0, false, 1000.0)
@@ -86,10 +77,10 @@ AddEventHandler('crp-policespikes:watchSpikes', function(watchedSpike)
                 SetVehicleTyreBurst(vehicle, 2, false, 1000.0)
                 SetVehicleTyreBurst(vehicle, 3, false, 1000.0)
             end
-    	end
+        end
 
         if #(vector3(spike['x'], spike['y'], spike['z']) - leftBack) < 1.5 then
-            if not IsVehicleTyreBurst(vehicle, 0, true) or not IsVehicleTyreBurst(vehicle, 1, true) or not IsVehicleTyreBurst(vehicle, 2, true) or not IsVehicleTyreBurst(vehicle, 3, true) then
+            if not IsVehicleTyreBurst(vehicle, 2, true) then
                 backLeftClose = true
                 
                 SetVehicleTyreBurst(vehicle, 2, true,  1000.0)
@@ -97,10 +88,10 @@ AddEventHandler('crp-policespikes:watchSpikes', function(watchedSpike)
                 SetVehicleTyreBurst(vehicle, 0, false, 1000.0)
                 SetVehicleTyreBurst(vehicle, 3, false, 1000.0)	
             end	      		
-    	end
+        end
 
         if #(vector3(spike['x'], spike['y'], spike['z']) - rightBack) < 1.5 then
-            if not IsVehicleTyreBurst(vehicle, 3, true) or not IsVehicleTyreBurst(vehicle, 4, true) or not IsVehicleTyreBurst(vehicle, 5, true) or not IsVehicleTyreBurst(vehicle, 6, true)  or not IsVehicleTyreBurst(vehicle, 7, true) then
+            if not IsVehicleTyreBurst(vehicle, 3, true) then
                 backRightClose = true
                
                 SetVehicleTyreBurst(vehicle, 3, true,  1000.0)
