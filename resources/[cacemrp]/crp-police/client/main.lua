@@ -295,6 +295,44 @@ AddEventHandler('crp-police:getcuffed', function(cuffer, state)
     TriggerServerEvent('interact-sound:playWithinDistance', 2.5, 'cuff', 0.1)
 end)
 
+RegisterNetEvent('crp-police:cuffed')
+AddEventHandler('crp-police:cuffed', function(state)
+    ClearPedTasksImmediately(GetPlayerPed(-1))
+
+    isHandcuffed, handcuffType = true, state
+
+    Citizen.Wait(100)
+
+    Citizen.CreateThread(function()
+        repeat
+            Citizen.Wait(0)
+
+            local playerPed, number = GetPlayerPed(-1), 49
+
+            if handcuffType then
+                number = 16
+            end
+
+            if (not IsEntityPlayingAnim(playerPed, 'mp_arresting', 'idle', 3)) or (IsPedRagdoll(playerPed)) then
+                LoadAnimation('mp_arresting')
+
+                TaskPlayAnim(playerPed, 'mp_arresting', 'idle', 8.0, -8, -1, number, 0, 0, 0, 0)
+            end
+
+            DisableControlAction(1, 23, true)
+            DisableControlAction(1, 106, true)
+            DisableControlAction(1, 140, true)
+            DisableControlAction(1, 141, true)
+            DisableControlAction(1, 142, true)
+            DisablePlayerFiring(playerPed, true)
+        until isHandcuffed == false
+    end)
+
+    TriggerEvent('crp-userinfo:updateCuffs', true)
+
+    TriggerServerEvent('interact-sound:playWithinDistance', 2.5, 'cuff', 0.1)
+end)
+
 RegisterNetEvent('crp-police:cuff')
 AddEventHandler('crp-police:cuff', function(cuffer, state)
     local playerPed = GetPlayerPed(-1)

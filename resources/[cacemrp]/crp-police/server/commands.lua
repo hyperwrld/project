@@ -121,15 +121,42 @@ TriggerEvent('crp-base:addCommand', 'escoltar', function(source, args, user)
 end, { help = 'Utilize este comando para escoltar um jogador.' })
 
 TriggerEvent('crp-base:addCommand', 'algemar', function(source, args, user)
-    local user = exports['crp-base']:GetCharacter(source)
-    local userJob = user.getJob().name
+    if tonumber(args[1]) then
+        if GetPlayerName(tonumber(args[1])) then
+            local user = exports['crp-base']:GetCharacter(source)
+            local userJob = user.getJob().name
 
-    if userJob == 'police' then
-        TriggerClientEvent('crp-police:cuffplayer', source)
+            if userJob == 'police' then
+                TriggerClientEvent('crp-police:cuffed', tonumber(args[1]), false)
+            else
+                TriggerClientEvent('chat:addMessage', source, { color = {255, 255, 255}, templateId = 'orange', args = { 'SYSTEM', 'Permissões insuficientes.' }})
+            end
+        else
+            TriggerClientEvent('chat:addMessage', source, { color = {255, 255, 255}, templateId = 'orange', args = { 'SYSTEM', 'O jogador não está online.' }})
+        end
     else
-        TriggerClientEvent('chat:addMessage', source, { color = {255, 255, 255}, templateId = 'orange', args = { 'SYSTEM', 'Permissões insuficientes.' }})
+        TriggerClientEvent('chat:addMessage', source, { color = {255, 255, 255}, templateId = 'orange', args = { 'SYSTEM', 'Uso inválido do comando.' }})
     end
-end, { help = 'Utilize este comando para algemar um jogador.' })
+end, { help = 'Utilize este comando para algemar um jogador.', params = {{ name = 'id do jogador' }} })
+
+TriggerEvent('crp-base:addCommand', 'desalgemar', function(source, args, user)
+    if tonumber(args[1]) then
+        if GetPlayerName(tonumber(args[1])) then
+            local user = exports['crp-base']:GetCharacter(source)
+            local userJob = user.getJob().name
+
+            if userJob == 'police' then
+                TriggerClientEvent('crp-police:uncuff', tonumber(args[1]))
+            else
+                TriggerClientEvent('chat:addMessage', source, { color = {255, 255, 255}, templateId = 'orange', args = { 'SYSTEM', 'Permissões insuficientes.' }})
+            end
+        else
+            TriggerClientEvent('chat:addMessage', source, { color = {255, 255, 255}, templateId = 'orange', args = { 'SYSTEM', 'O jogador não está online.' }})
+        end
+    else
+        TriggerClientEvent('chat:addMessage', source, { color = {255, 255, 255}, templateId = 'orange', args = { 'SYSTEM', 'Uso inválido do comando.' }})
+    end
+end, { help = 'Utilize este comando para algemar um jogador.', params = {{ name = 'id do jogador' }} })
 
 TriggerEvent('crp-base:addCommand', 'radar', function(source, args, user)
     local user = exports['crp-base']:GetCharacter(source)
