@@ -1,8 +1,8 @@
-function GetVehicleInDirection(coordsA, coordsB)
+function GetVehicleInDirection(coordFrom, coordTo)
     local offset, rayHandle, vehicle = 0
 
 	for i = 0, 100 do
-		rayHandle = CastRayPointToPoint(coordsA.x, coordsA.y, coordsA.z, coordsB.x, coordsB.y, coordsB.z + offset, 10, GetPlayerPed(-1), 0)	
+		rayHandle = CastRayPointToPoint(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z + offset, 10, GetPlayerPed(-1), 0)	
 		a, b, c, d, vehicle = GetRaycastResult(rayHandle)
 		
 		offset = offset - 1
@@ -10,9 +10,9 @@ function GetVehicleInDirection(coordsA, coordsB)
 		if vehicle ~= 0 then break end
 	end
 	
-	local distance = Vdist2(coordsA, GetEntityCoords(vehicle))
+	local distance = Vdist2(coordFrom, GetEntityCoords(vehicle))
 	
-	if distance > 25 then vehicle = nil end
+    if distance > 25 then vehicle = nil end
 
     return vehicle ~= nil and vehicle or 0
 end
@@ -46,6 +46,46 @@ function GetClosestPlayer()
     else
         exports['crp-notifications']:SendAlert('error', 'Não é possível fazer essa ação, porque estás num veículo.')
     end
+end
+
+function GetClosestPedIgnoreCar()
+    local players, closestDistance, closestPlayer, closestPlayerId, playerPed = GetPlayers(), -1, -1, -1, GetPlayerPed(-1)
+    local coords = GetEntityCoords(playerPed, 0)
+
+    for k, v in ipairs(players) do
+        local target = GetPlayerPed(v)
+
+        if target ~= playerPed then
+            local _coords = GetEntityCoords(GetPlayerPed(v), 0)
+            local distance = #(coords - _coords)
+
+            if closestDistance == -1 or closestDistance > distance then
+                closestPlayer, closestPlayerId, closestDistance = target, v, distance
+            end
+        end
+    end
+    
+	return closestPlayer, closestDistance, closestPlayerId
+end
+
+function GetClosestPlayerIgnoreCar()
+	local players, closestDistance, closestPlayer, playerPed = GetPlayers(), -1, -1, GetPlayerPed(-1)
+    local coords = GetEntityCoords(playerPed, 0)
+
+	for k, v in ipairs(players) do
+        local target = GetPlayerPed(v)
+        
+		if target ~= playerPed then
+			local _coords = GetEntityCoords(GetPlayerPed(v), 0)
+            local distance = #(coords - _coords)
+            
+            if closestDistance == -1 or closestDistance > distance then
+                closestPlayer, closestDistance = v, distance
+            end
+		end
+	end
+	
+	return closestPlayer, closestDistance
 end
 
 function GetPlayers()
@@ -85,4 +125,12 @@ function DisplayHelpText(string)
     SetTextComponentFormat('STRING')
     AddTextComponentString(string)
     DisplayHelpTextFromStringLabel(0, 0, 1, -1)
+end
+
+function LoadAnimation(dictionary)
+    while (not HasAnimDictLoaded(dictionary)) do
+        RequestAnimDict(dictionary)
+
+        Citizen.Wait(5)
+    end
 end

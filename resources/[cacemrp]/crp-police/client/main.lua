@@ -72,10 +72,10 @@ end)
 
 RegisterNetEvent('crp-police:spawnvehicle')
 AddEventHandler('crp-police:spawnvehicle', function(vehicleModel, data)
-    if not playerInService then
-        exports['crp-notifications']:SendAlert('error', 'Precisas de estar de serviço para poder usar este comando.')
-        return
-    end
+    -- if not playerInService then
+    --     exports['crp-notifications']:SendAlert('error', 'Precisas de estar de serviço para poder usar este comando.')
+    --     return
+    -- end
 
     local boolean, coords = false, GetEntityCoords(PlayerPedId(), 0)
 
@@ -198,25 +198,17 @@ AddEventHandler('crp-police:cuffplayer', function(state)
     --     return
     -- end
 
-    local isHandcuffed = exports['crp-userinfo']:isPed('handcuffed')
+    --local isHandcuffed = exports['crp-userinfo']:isPed('handcuffed')
 
-    if isHandcuffed then
-        exports['crp-notifications']:SendAlert('error', 'Não podes fazer isso porque estás algemado.')
-        return
-    end
-
-    if isCuffing then
-        exports['crp-notifications']:SendAlert('error', 'Já estás a algemar alguém.')
-        return
-    end
+    -- if isCuffing or isHandcuffed or not IsPedRagdoll(GetPlayerPed(-1)) and not IsPlayerFreeAiming(PlayerId()) and not IsPedInAnyVehicle(GetPlayerPed(-1), false) then
+    --     return
+    -- end
 
     isCuffing = true
 
     local user, distance = GetClosestPlayer()
 
-    print(GetEntitySpeed(GetPlayerFromServerId(user)))
-
-    if distance ~= nil and distance ~= -1 and distance < 1.0 and GetEntitySpeed(GetPlayerFromServerId(user)) < 1.0 then 
+    if distance ~= nil and distance ~= -1 and distance < 1.0 and GetEntitySpeed(GetPlayerPed(GetPlayerFromServerId(user))) < 1.0 then 
         if state then
             exports['crp-notifications']:SendAlert('inform', 'Colocaste as algemas apertadas no jogador.')
         else
@@ -225,7 +217,98 @@ AddEventHandler('crp-police:cuffplayer', function(state)
 
         TriggerServerEvent('crp-police:cuffplayer', user, state)
     end
+end)
 
+RegisterNetEvent('crp-police:uncuffplayer')
+AddEventHandler('crp-police:uncuffplayer', function(state)
+    local user, distance = GetClosestPlayer()
+
+    if distance ~= nil and distance ~= -1 and distance < 2.0 then 
+        exports['crp-notifications']:SendAlert('inform', 'Desalgemaste um jogador.')
+
+        TriggerServerEvent('crp-police:uncuffplayer', user)
+        TriggerServerEvent('interact-sound:playWithinDistance', 2.5, 'uncuff', 0.1)
+    end
+end)
+
+RegisterNetEvent('crp-police:uncuff')
+AddEventHandler('crp-police:uncuff', function()
+    isHandcuffed, handcuffType = false, false
+
+    Citizen.Wait(100)
+
+    ClearPedTasksImmediately(GetPlayerPed(-1))
+
+    TriggerEvent('crp-userinfo:updateCuffs', false)
+end)
+
+RegisterNetEvent('crp-police:getcuffed')
+AddEventHandler('crp-police:getcuffed', function(cuffer, state)
+    local playerPed = GetPlayerPed(-1)
+
+    ClearPedTasksImmediately(playerPed)
+
+    isHandcuffed, handcuffType = true, state
+
+    LoadAnimation('mp_arrest_paired')
+
+    local cuffer = GetPlayerPed(GetPlayerFromServerId(tonumber(cuffer)))
+    local direction = GetEntityHeading(cuffer)
+
+    SetEntityCoords(playerPed, GetOffsetFromEntityInWorldCoords(cuffer, 0.0, 0.45, 0.0))
+    
+    Citizen.Wait(100)
+
+    SetEntityHeading(playerPed, direction)
+    
+    TaskPlayAnim(playerPed, 'mp_arrest_paired', 'crook_p2_back_right', 8.0, -8, -1, 32, 0, 0, 0, 0)
+    
+    Citizen.Wait(2500)
+
+    Citizen.CreateThread(function()
+        repeat
+            Citizen.Wait(0)
+
+            local playerPed, number = GetPlayerPed(-1), 49
+
+            if handcuffType then
+                number = 16
+            end
+
+            if (not IsEntityPlayingAnim(playerPed, 'mp_arresting', 'idle', 3)) or (IsPedRagdoll(playerPed)) then
+                LoadAnimation('mp_arresting')
+
+                TaskPlayAnim(playerPed, 'mp_arresting', 'idle', 8.0, -8, -1, number, 0, 0, 0, 0)
+            end
+
+            DisableControlAction(1, 23, true)
+            DisableControlAction(1, 106, true)
+            DisableControlAction(1, 140, true)
+            DisableControlAction(1, 141, true)
+            DisableControlAction(1, 142, true)
+            DisablePlayerFiring(playerPed, true)
+        until isHandcuffed == false
+    end)
+
+    TriggerEvent('crp-userinfo:updateCuffs', true)
+
+    TriggerServerEvent('interact-sound:playWithinDistance', 2.5, 'cuff', 0.1)
+end)
+
+RegisterNetEvent('crp-police:cuff')
+AddEventHandler('crp-police:cuff', function(cuffer, state)
+    local playerPed = GetPlayerPed(-1)
+
+    LoadAnimation('mp_arrest_paired')
+    
+    Citizen.Wait(100)
+    
+    TaskPlayAnim(playerPed, 'mp_arrest_paired', 'cop_p2_back_right', 8.0, -8, -1, 48, 0, 0, 0, 0)
+    
+    Citizen.Wait(3500)
+    
+    ClearPedTasksImmediately(playerPed)
+    
     isCuffing = false
 end)
 
@@ -275,15 +358,19 @@ AddEventHandler('crp-police:drag', function(player)
             until isBeingDragged == false
         end)
 
-        TriggerServerEvent('crp-police:updatedragger', draggerId, true)
+        if draggerId ~= -1 then
+            TriggerServerEvent('crp-police:updatedragger', draggerId, true)
+        end
     else
         local playerPed = GetPlayerPed(-1)
 
         ClearPedTasks(playerPed)
 
         DetachEntity(playerPed, true, false)
-        
-        TriggerServerEvent('crp-police:updatedragger', draggerId, false)
+
+        if draggerId ~= -1 then
+            TriggerServerEvent('crp-police:updatedragger', draggerId, false)
+        end
     end
 end)
 
@@ -306,6 +393,88 @@ AddEventHandler('crp-police:updatedragger', function(status)
             until isEscorting == false
         end)
     end
+end)
+
+RegisterNetEvent('crp-police:putInVehicle')
+AddEventHandler('crp-police:putInVehicle', function()
+    local user, distance, userId = GetClosestPedIgnoreCar()
+
+    if distance ~= -1 and distance < 3.0 then
+        local isInVehicle = IsPedInAnyVehicle(user)
+
+        if not isInVehicle then
+            local playerPed = GetPlayerPed(-1)
+            local coords, _coords = GetEntityCoords(playerPed, 0), GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 100.0, 0.0)
+            local vehicle = GetVehicleInDirection(coords, _coords)
+
+            if vehicle == 0 or not IsEntityAVehicle(vehicle) then
+                exports['crp-notifications']:SendAlert('error', 'Não foi encontrado nenhum veículo.')
+                return
+            end
+
+            local vehicleNetId = NetworkGetNetworkIdFromEntity(vehicle)
+
+            TriggerServerEvent('crp-police:putInVehicle', GetPlayerServerId(userId), vehicleNetId)
+
+            isEscorting = false
+        else
+            local user, distance = GetClosestPlayerIgnoreCar()
+
+            if distance ~= -1 and distance < 10.0 then
+                local playerPed = GetPlayerPed(-1)
+                local coords = GetEntityCoords(playerPed, 0)
+
+                TriggerServerEvent('crp-police:removeFromVehilce', GetPlayerServerId(user), coords)
+
+                Citizen.Wait(1000)
+
+                TriggerServerEvent('crp-police:dragplayer', GetPlayerServerId(user))
+            else
+                exports['crp-notifications']:SendAlert('error', 'Não foi encontrado nenhum jogador próximo.')
+            end
+        end
+    else
+        exports['crp-notifications']:SendAlert('error', 'Não foi encontrado nenhum jogador próximo.')
+    end
+end)
+
+RegisterNetEvent('crp-police:enterVehicle')
+AddEventHandler('crp-police:enterVehicle', function(vehicle)
+    local vehicleHandle = NetworkGetEntityFromNetworkId(vehicle)
+
+    if vehicleHandle ~= nil then
+        if IsEntityAVehicle(vehicleHandle) then
+            for i = 1, GetVehicleMaxNumberOfPassengers(vehicleHandle) do
+                if IsVehicleSeatFree(vehicleHandle, i) then
+                    TriggerEvent('crp-police:drag', -1)
+                     
+                    Citizen.Wait(100)
+                    
+                    SetPedIntoVehicle(GetPlayerPed(-1), vehicleHandle, i)
+                    return true
+                end
+            end
+
+            if IsVehicleSeatFree(enterVehicle, 0) then
+                TriggerEvent('crp-police:drag', -1)
+                
+                Citizen.Wait(100)
+                
+	            SetPedIntoVehicle(GetPlayerPed(-1), vehicleHandle, 0)
+	        end
+        end
+    end
+end)
+
+RegisterNetEvent('crp-police:removeFromVehilce')
+AddEventHandler('crp-police:removeFromVehilce', function(coords)
+    local playerPed = GetPlayerPed(-1)
+    local vehicle = GetVehiclePedIsIn(playerPed, false)
+
+    ClearPedTasksImmediately(playerPed)
+
+    TaskLeaveVehicle(playerPed, vehicle, 256)
+    SetEntityCoords(playerPed, coords)
 end)
 
 AddEventHandler('crp-police:hasEnteredMarker', function(station, type)
@@ -333,13 +502,41 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
 
-        if isPolice then
+        if not isPolice and not IsPauseMenuActive() then
             local isInVehicle = IsPedInAnyVehicle(GetPlayerPed(-1), false)
 
             if isInVehicle then
                 
             else
+				if IsControlJustReleased(2, 172) and not IsControlPressed(0, 19) then
+                    TriggerEvent('crp-police:cuffplayer', false)
+                    
+					Citizen.Wait(500)
+				end
 
+				if IsControlJustReleased(2, 172) and IsControlPressed(0, 19) then
+                    TriggerEvent('crp-police:cuffplayer', true)
+                    
+					Citizen.Wait(500)
+                end
+                
+				if IsControlJustReleased(2, 173) then
+                    TriggerEvent('crp-police:uncuffplayer')
+                    
+					Citizen.Wait(500)
+                end
+                
+                if IsControlJustReleased(2, 174) then
+                    TriggerEvent('crp-police:putInVehicle')
+                    
+					Citizen.Wait(500)
+                end
+
+                if IsControlJustReleased(2, 175) then
+                    TriggerEvent('crp-police:dragplayer')
+                    
+					Citizen.Wait(500)
+                end
             end
         end
     end
