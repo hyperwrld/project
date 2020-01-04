@@ -84,9 +84,8 @@ TriggerEvent('crp-base:addCommand', 'multar', function(source, args, user)
             if target then
                 target.removeBank(args[2])
 
-                TriggerClientEvent('crp-notifications:SendAlert', source, { type = 'inform', text = 'Passaste uma multa ao jogador (' .. args[1] .. ') de ' .. args[2] .. '€', length = 5000 })
-                
-                TriggerClientEvent('crp-notifications:SendAlert', args[1], { type = 'inform', text = 'Recebeste uma multa de ' .. args[2] .. '€', length = 5000 })
+                TriggerClientEvent('chat:addMessage', source, { color = {255, 255, 255}, templateId = 'orange', args = { 'SYSTEM', 'Passaste uma multa ao jogador (' .. args[1] .. ') de ' .. args[2] .. '€' }})
+                TriggerClientEvent('chat:addMessage', args[1], { color = {255, 255, 255}, templateId = 'orange', args = { 'SYSTEM', 'Recebeste uma multa de ' .. args[2] .. '€' }})
             else
                 TriggerClientEvent('chat:addMessage', source, { color = {255, 255, 255}, templateId = 'orange', args = { 'SYSTEM', 'O jogador que colocou não está online.' }})
             end
@@ -156,7 +155,7 @@ TriggerEvent('crp-base:addCommand', 'desalgemar', function(source, args, user)
     else
         TriggerClientEvent('chat:addMessage', source, { color = {255, 255, 255}, templateId = 'orange', args = { 'SYSTEM', 'Uso inválido do comando.' }})
     end
-end, { help = 'Utilize este comando para algemar um jogador.', params = {{ name = 'id do jogador' }} })
+end, { help = 'Utilize este comando para desalgemar um jogador.', params = {{ name = 'id do jogador' }} })
 
 TriggerEvent('crp-base:addCommand', 'radar', function(source, args, user)
     local user = exports['crp-base']:GetCharacter(source)
@@ -194,7 +193,6 @@ TriggerEvent('crp-base:addCommand', 'alerta', function(source, args, user)
         table.remove(args, 1)
 
         if userJob == 'police' then
-            print('olaa')
             TriggerEvent('wraithrs:addVehicle', vehiclePlate, table.concat(args, ' '))
         else
             TriggerClientEvent('chat:addMessage', source, { color = {255, 255, 255}, templateId = 'orange', args = { 'SYSTEM', 'Permissões insuficientes.' }})
