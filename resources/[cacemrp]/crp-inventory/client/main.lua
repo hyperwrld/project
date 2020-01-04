@@ -1,4 +1,5 @@
-local isInventoryOpen, inventories, isShowing, currentWeapon, isDoingAnimation, isWeaponEquiped, weaponSlot = false, {}, false, nil, false, false, nil
+local isInventoryOpen, isShowing, isDoingAnimation, isWeaponEquiped, isUsingItem = false, false, false, false, false
+local inventories, currentWeapon, weaponSlot = {}, nil, nil
 
 local function sendMessage(data)
 	SendNUIMessage(data)
@@ -145,7 +146,7 @@ Citizen.CreateThread(function()
             isShowing = false
         end
 
-        if IsDisabledControlJustPressed(0, 157) then
+        if IsDisabledControlJustPressed(0, 157) and not isUsingItem then
             if not isWeaponEquiped or (isWeaponEquiped and weaponSlot ~= 1) then
                 UseItem(1)
             elseif isWeaponEquiped then
@@ -153,7 +154,7 @@ Citizen.CreateThread(function()
             end
         end
 
-        if IsDisabledControlJustPressed(0, 158) then
+        if IsDisabledControlJustPressed(0, 158) and not isUsingItem then
             if not isWeaponEquiped or (isWeaponEquiped and weaponSlot ~= 2) then
                 UseItem(2)
             elseif isWeaponEquiped then
@@ -161,7 +162,7 @@ Citizen.CreateThread(function()
             end
         end
 
-        if IsDisabledControlJustPressed(0, 160) then
+        if IsDisabledControlJustPressed(0, 160) and not isUsingItem then
             if not isWeaponEquiped or (isWeaponEquiped and weaponSlot ~= 3) then
                 UseItem(3)
             elseif isWeaponEquiped then
@@ -169,7 +170,7 @@ Citizen.CreateThread(function()
             end
         end
 
-        if IsDisabledControlJustPressed(0, 164) then
+        if IsDisabledControlJustPressed(0, 164) and not isUsingItem then
             if not isWeaponEquiped or (isWeaponEquiped and weaponSlot ~= 4) then
                 UseItem(4)
             elseif isWeaponEquiped then
@@ -177,7 +178,7 @@ Citizen.CreateThread(function()
             end
         end
 
-        if IsControlJustReleased(0, 289) and IsInputDisabled(0) then
+        if IsControlJustReleased(0, 289) and IsInputDisabled(0) and not isUsingItem then
             showInventory(1)
         end
 	end
@@ -232,6 +233,10 @@ function UseRegularItem(item, slot)
         return
     end
 
+    isUsingItem = true
+
+    closeInventory()
+
     if item == '196068078' then
         local playerPed = GetPlayerPed(-1)
 
@@ -247,6 +252,8 @@ function UseRegularItem(item, slot)
 
                 TriggerServerEvent('crp-inventory:useItem', item, slot)
             end
+            isUsingItem = false
+
             ClearPedSecondaryTask(playerPed)
         end)
     end
@@ -266,6 +273,8 @@ function UseRegularItem(item, slot)
 
                 TriggerServerEvent('crp-inventory:useItem', item, slot)
             end
+            isUsingItem = false
+            
             ClearPedSecondaryTask(playerPed)
         end)
     end
@@ -281,10 +290,9 @@ function UseRegularItem(item, slot)
 
                 TriggerServerEvent('crp-inventory:useItem', item, slot)
             end
+            isUsingItem = false
         end)
     end
-
-
 end
 
 function Holster()
