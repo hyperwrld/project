@@ -177,8 +177,8 @@ Citizen.CreateThread(function()
             end
         end
 
-		if IsControlJustReleased(0, 289) and IsInputDisabled(0) then
-			showInventory(1)
+        if IsControlJustReleased(0, 289) and IsInputDisabled(0) then
+            showInventory(1)
         end
 	end
 end)
@@ -220,9 +220,71 @@ function UseItem(slot)
                 unHolster(data[1])
             end
         else
-            print('oie')
+            UseRegularItem(data[1].item, slot)
         end
     end)
+end
+
+function UseRegularItem(item, slot)
+    local isDead = exports['crp-userinfo']:isPed('dead')
+
+    if isDead then
+        return
+    end
+
+    if item == '196068078' then
+        local playerPed = GetPlayerPed(-1)
+
+        ClearPedSecondaryTask(playerPed)
+
+        LoadAnimation('friends@frl@ig_1')
+                
+        TaskPlayAnim(playerPed, 'friends@frl@ig_1', 'drink_lamar', 8.0, 1.0, -1, 49, 0, 0, 0, 0)
+
+        exports['crp-progressbar']:StartProgressBar({ duration = 6000, label = 'Beber', combat = true, cancel = true }, function(finished)
+            if finished then
+                TriggerEvent('crp-hud:changemeta', { thirst = true })
+
+                TriggerServerEvent('crp-inventory:useItem', item, slot)
+            end
+            ClearPedSecondaryTask(playerPed)
+        end)
+    end
+
+    if item == '129942349' then
+        local playerPed = GetPlayerPed(-1)
+
+        ClearPedSecondaryTask(playerPed)
+
+        LoadAnimation('mp_player_inteat@burger')
+                
+        TaskPlayAnim(playerPed, 'mp_player_inteat@burger', 'mp_player_int_eat_burger', 8.0, 1.0, -1, 49, 0, 0, 0, 0)
+
+        exports['crp-progressbar']:StartProgressBar({ duration = 6000, label = 'Comer', combat = true, cancel = true }, function(finished)
+            if finished then
+                TriggerEvent('crp-hud:changemeta', { hunger = true })
+
+                TriggerServerEvent('crp-inventory:useItem', item, slot)
+            end
+            ClearPedSecondaryTask(playerPed)
+        end)
+    end
+
+    if item == '156805094' then
+        local playerPed = GetPlayerPed(-1)
+
+        ClearPedSecondaryTask(playerPed)
+
+        exports['crp-progressbar']:StartProgressBar({ duration = 5000, label = 'Colocar o colete', combat = true, cancel = true }, function(finished)
+            if finished then
+                SetPedArmour(playerPed, 100)
+
+                TriggerServerEvent('crp-inventory:useItem', item, slot)
+            end
+        end)
+    end
+
+
 end
 
 function Holster()

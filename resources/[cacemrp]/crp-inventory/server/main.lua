@@ -142,16 +142,35 @@ end)
 RegisterServerEvent('crp-inventory:setWeaponAmmo')
 AddEventHandler('crp-inventory:setWeaponAmmo', function(weapon, weaponSlot, weaponAmmo)
     local character = exports['crp-base']:GetCharacter(source)
+    local inventoryName = 'character-' .. character.getCharacterID()
 
     exports.ghmattimysql:scalar('SELECT information FROM inventory WHERE item = @weapon AND slot = @slot AND name = @name;', {
-        ['@name'] = 'character-' .. character.getCharacterID(), ['@slot'] = weaponSlot, ['@weapon'] = weapon,
+        ['@name'] = inventoryName, ['@slot'] = weaponSlot, ['@weapon'] = weapon,
     }, function(result)
         if result then
             result = json.decode(result)
             result.ammo = weaponAmmo
 
             exports.ghmattimysql:execute('UPDATE inventory SET information = @info WHERE name = @name AND slot = @slot AND item = @weapon;', 
-            { ['@name'] = 'character-' .. character.getCharacterID(), ['@slot'] = weaponSlot, ['@weapon'] = weapon, ['@info'] = json.encode(result) })
+            { ['@name'] = inventoryName, ['@slot'] = weaponSlot, ['@weapon'] = weapon, ['@info'] = json.encode(result) })
+        end
+    end)
+end)
+
+RegisterServerEvent('crp-inventory:useItem')
+AddEventHandler('crp-inventory:useItem', function(item, itemSlot)
+    local character = exports['crp-base']:GetCharacter(source)
+    local inventoryName = 'character-' .. character.getCharacterID()
+
+    exports.ghmattimysql:scalar('SELECT count FROM inventory WHERE item = @item AND slot = @slot AND name = @name;', {
+        ['@name'] = inventoryName, ['@slot'] = itemSlot, ['@item'] = item,
+    }, function(count)
+        if (count - 1) > 0 then
+            exports.ghmattimysql:execute('UPDATE inventory SET count = @count WHERE name = @name AND slot = @slot AND item = @item;', 
+            { ['@name'] = inventoryName, ['@slot'] = itemSlot, ['@item'] = item, ['@count'] = (count - 1) })
+        else
+            exports.ghmattimysql:execute('DELETE FROM inventory WHERE name = @name AND slot = @slot AND item = @item;', 
+            { ['@name'] = inventoryName, ['@slot'] = itemSlot, ['@item'] = item })
         end
     end)
 end)
