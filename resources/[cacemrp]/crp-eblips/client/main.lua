@@ -24,8 +24,8 @@ local function setDecor()
     
     TriggerEvent('crp-userinfo:isPolice', function(isPolice)
         TriggerEvent('crp-userinfo:isMedic', function(isMedic)
-            type = isPolice and 1 or 0
-            type = (type == 0 and isMedic) and 2 or type
+            type = isPolice and 2 or 0
+            type = (type == 0 and isMedic) and 1 or type
 		    DecorSetInt(GetPlayerPed(-1), 'EmergencyType', type)
         end)
     end)
