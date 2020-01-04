@@ -9,28 +9,28 @@ let itemList = {};
 
 // * INVENTORY WEAPONS
 
-itemList['1737195953'] = { displayname: 'Cacetete', weight: 10, nonStack: true, image: 'crp-cacetete.png', weapon: true };
-itemList['911657153'] = { displayname: 'Taser', weight: 10, nonStack: true, image: 'crp-stungun.png', weapon: true, meta: { serial: true, ammo: 60 } };
-itemList['453432689'] = { displayname: 'Pistola', weight: 15, nonStack: true, image: 'crp-pistol.png', weapon: true, ammoType: '9mm', meta: { serial: true, ammo: 60 }, description: 'É uma arma de 9mm, que é muito boa aprovada pelo melhor shooter of all time orakah the great.' };
-itemList['-1076751822'] = { displayname: 'Pistola SNS', weight: 15, nonStack: true, image: 'crp-snspistol.png', weapon: true, meta: { serial: true, ammo: 60 } };
-itemList['137902532'] = { displayname: 'Pistola Vintage', weight: 15, nonStack: true, image: 'crp-vintagepistol.png', weapon: true, meta: { serial: true, ammo: 60 } };
-itemList['-771403250'] = { displayname: 'Pistola Pesada', weight: 20, nonStack: true, image: 'crp-heavypistol.png', weapon: true, meta: { serial: true, ammo: 60 } };
-itemList['1593441988'] = { displayname: 'Pistola de Combate', weight: 15, nonStack: true, image: 'crp-combatpistol.png', weapon: true, meta: { serial: true, ammo: 60 } };
-itemList['-619010992'] = { displayname: 'Pistola-Metralhadora', weight: 30, nonStack: true, image: 'crp-machinepistol.png', weapon: true, meta: { serial: true, ammo: 60 } };
-itemList['-1121678507'] = { displayname: 'Mini Submetralhadora', weight: 30, nonStack: true, image: 'crp-minismg.png', weapon: true, meta: { serial: true, ammo: 60 } };
-itemList['324215364'] = { displayname: 'Micro Submetralhadora', weight: 30, nonStack: true, image: 'crp-microsmg.png', weapon: true, meta: { serial: true, ammo: 60 } };
-itemList['736523883'] = { displayname: 'Submetralhadora', weight: 35, nonStack: true, image: 'crp-smg.png', weapon: true, meta: { serial: true, ammo: 60 } };
-itemList['1649403952'] = { displayname: 'Rifle Compacto', weight: 45, nonStack: true, image: 'crp-compactrifle.png', weapon: true, meta: { serial: true, ammo: 60 } };
-itemList['-1074790547'] = { displayname: 'Rifle de Assalto', weight: 55, nonStack: true, image: 'crp-assaultrifle.png', weapon: true, meta: { serial: true, ammo: 60 }  };
-itemList['-2084633992'] = { displayname: 'Carabina', weight: 55, nonStack: true, image: 'crp-carbinerifle.png', weapon: true, meta: { serial: true, ammo: 60 } };
+itemList['1737195953'] = { displayname: 'Cacetete', weight: 10, nonStack: true, image: 'crp-cacetete.png', weapon: true, description: 'Cacetete com apróximadamente 50cm, fabricado em aço e super resistente.' };
+itemList['911657153'] = { displayname: 'Taser', weight: 10, nonStack: true, image: 'crp-stungun.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'Uma arma de eletrochoque é um dispositivo não-letal capaz de emitir uma descarga elétrica de alta tensão e baixa corrente com o objetivo de provocar dor e afastar um agressor.' };
+itemList['453432689'] = { displayname: 'Pistola', weight: 15, nonStack: true, image: 'crp-pistol.png', weapon: true, ammoType: '9mm', meta: { serial: true, ammo: 60 }, description: 'Arma de fogo de cano curto usada para uso pessoal em ações de pequeno alcance.' };
+itemList['-1076751822'] = { displayname: 'Pistola SNS', weight: 15, nonStack: true, image: 'crp-snspistol.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'SNS é uma sigla para "Saturday Night Special", uma gíria inglesa para armas de fogo pequenas e baratas.' };
+itemList['137902532'] = { displayname: 'Pistola Vintage', weight: 15, nonStack: true, image: 'crp-vintagepistol.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'Arma de fogo com cano cumprido, tem uma ótima precisão mas tem uma velocidade de fogo lenta devido ao seu recoil.' };
+itemList['-771403250'] = { displayname: 'Pistola Pesada', weight: 20, nonStack: true, image: 'crp-heavypistol.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'Uma arma de fogo .50 apresenta grande semelhança com uma desert eagle e tem um poder imenso.' };
+itemList['1593441988'] = { displayname: 'Pistola de Combate', weight: 15, nonStack: true, image: 'crp-combatpistol.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'É uma arma fogo poderosa, matando alvos com cerca de 2 tiros e se tornando muito eficaz.' };
+itemList['-619010992'] = { displayname: 'Pistola-Metralhadora', weight: 30, nonStack: true, image: 'crp-machinepistol.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'Pistola automática tem uma incrível velocidade de fogo, mas não tem uma boa precisão.' };
+itemList['-1121678507'] = { displayname: 'Mini Submetralhadora', weight: 30, nonStack: true, image: 'crp-minismg.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'Uma pequena sub-metralhadora com uma semelhança da pistola-metraladora mas com uma rapidez de fogo maior.' };
+itemList['324215364'] = { displayname: 'Micro Submetralhadora', weight: 30, nonStack: true, image: 'crp-microsmg.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'Uma das sub-metralhadoras mais poderosas do mundo.' };
+itemList['736523883'] = { displayname: 'Submetralhadora', weight: 35, nonStack: true, image: 'crp-smg.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'É uma sub-metralhadora relativamente maior e com mais poder de fogo do que as outras.' };
+itemList['1649403952'] = { displayname: 'Rifle Compacto', weight: 45, nonStack: true, image: 'crp-compactrifle.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'Um rifle pequeno de cano curto, mas forte, que causa mais dano que o rifle de assalto original em troca de mais recoil.' };
+itemList['-1074790547'] = { displayname: 'Rifle de Assalto', weight: 55, nonStack: true, image: 'crp-assaultrifle.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'Rifle de assalto com grande capacidade de precisão à longa distância.' };
+itemList['-2084633992'] = { displayname: 'Carabina', weight: 55, nonStack: true, image: 'crp-carbinerifle.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'A carabina mais leve que a rifle de assalto e com mais precisa, esta arma normalmente é utilizada pela polícia.' };
 
 // * NORMAL ITEMS
 
-itemList['156805094'] = { displayname: 'Colete', weight: 25, nonStack: false, image: 'crp-colete.png', weapon: false, price: 20 };
-itemList['130895348'] = { displayname: 'Ligadura', weight: 2.5, nonStack: false, image: 'crp-ligadura.png', weapon: false, price: 150 };
+itemList['156805094'] = { displayname: 'Colete', weight: 25, nonStack: false, image: 'crp-colete.png', weapon: false, price: 20, description: 'É um artefato militar ou policial e que tem como objetivo proteger os utilizadores contra projéteis ou destroços.' };
+itemList['130895348'] = { displayname: 'Ligadura', weight: 2.5, nonStack: false, image: 'crp-ligadura.png', weapon: false, price: 150, description: 'Uma faixa de tecido que recobre uma ferida, geralmente para fixar curativos.' };
 
-itemList['196068078'] = { displayname: 'Coca-Cola', weight: 1, nonStack: false, image: 'crp-coca.png', weapon: false, price: 500 };
-itemList['129942349'] = { displayname: 'Batatas', weight: 1, nonStack: false, image: 'crp-batatas.png', weapon: false, price: 3 };
+itemList['196068078'] = { displayname: 'Coca-Cola', weight: 1, nonStack: false, image: 'crp-coca.png', weapon: false, price: 500, description: 'Coca-Cola é um refrigerante que muda o sabor da tua vida.' };
+itemList['129942349'] = { displayname: 'Batatas', weight: 1, nonStack: false, image: 'crp-batatas.png', weapon: false, price: 3, description: 'Batatas fritas são comumente servidas como petisco ou acompanhamento.' };
 
 $(function () {
     defaultHTML = $('.ui').clone();
@@ -62,7 +62,7 @@ $(function () {
 
                 (isInventoryOpen = false), (playerItems = {}), (otherItems = {}), (inventorySlots = 40), (secondaryMaxWeight = 1000);
 
-                $('.item-info').hide();
+                $('.item-info').fadeOut(400);
 
 				$.post('http://crp-inventory/nuiMessage', JSON.stringify({ close: true }));
 
@@ -105,7 +105,7 @@ $(function () {
 
             (isInventoryOpen = false), (playerItems = {}), (otherItems = {}), (inventorySlots = 40), (secondaryMaxWeight = 1000);
 
-            $('.item-info').hide();
+            $('.item-info').fadeOut(400);
 
 			$.post('http://crp-inventory/nuiMessage', JSON.stringify({ close: true }));
 		}
@@ -200,7 +200,9 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
 			inventory.replaceWith(defaultHTML.clone());
 		});
 
-		(isInventoryOpen = false), (playerItems = {}), (otherItems = {});
+        (isInventoryOpen = false), (playerItems = {}), (otherItems = {});
+        
+        $('.item-info').fadeOut(400);
 
 		$.post('http://crp-inventory/nuiMessage', JSON.stringify({ close: true }));
 	});
@@ -215,11 +217,12 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
             itemInfo.find('.item-name').text(itemData.displayname)
             itemInfo.find('.picture').attr('src', 'items/' + itemData.image);
 
-            if (itemData.weapon) {
-                itemInfo.find('#description').html('<b>Descrição:</b> ' + itemData.description + '<br><br><b>Número de série:<b> ' + item.information.serial + ' &nbsp;-&nbsp; <b>Munição:</b> ' + item.information.ammo + ' (' + itemData.ammoType + ') <br><br><b>Peso:</b> ' + (item.quantity * itemData.weight).toFixed(2) + ' &nbsp;-&nbsp; <b>Quantidade:</b> ' + item.quantity)
+            if (itemData.weapon && item.information) {
+                itemInfo.find('#description').html('<b>Descrição:</b> ' + itemData.description + '<br><br><b>Número de série:<b> ' + item.information.serial + ' &nbsp;-&nbsp; <b>Munição:</b> ' + item.information.ammo + ' (' + itemData.ammoType + ')')
             } else {
-                itemInfo.find('#description').html('<b>Descrição:</b> ' + itemData.description + '<br><br><br><br><br><b>Peso:</b> ' + (item.quantity * itemData.weight).toFixed(2) + ' / <b>Quantidade:</b> ' + item.quantity)
+                itemInfo.find('#description').html('<b>Descrição:</b> ' + itemData.description)
             }
+            itemInfo.find('.desc-info').html('<b>Peso:</b> ' + (item.quantity * itemData.weight).toFixed(2) + ' &nbsp; - &nbsp; <b>Quantidade:</b> ' + item.quantity)
 		},
 		function () {
 			$('.item-info').hide();

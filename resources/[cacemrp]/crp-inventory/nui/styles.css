@@ -278,7 +278,7 @@ input[type='number']::-webkit-outer-spin-button {
 	font-weight: bold;
 	font-size: 0.67vw;
 
-	text-align: center;
+    text-align: center;
 	color: white;
 
 	line-height: 200%;
@@ -345,5 +345,15 @@ input[type='number']::-webkit-outer-spin-button {
     white-space: normal;
     width: 100%;
     height: 100%;
+    color: white;
+}
+
+.desc-info {
+    height: 20%;
+    width: 100;
+    font-size: 0.6vw;
+    line-height: 1.2;
+    padding: 3px;
+    white-space: normal;
     color: white;
 }
