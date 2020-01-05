@@ -9,9 +9,9 @@ let itemList = {};
 
 // * INVENTORY WEAPONS
 
-itemList['1737195953'] = { displayname: 'Cacetete', weight: 10, nonStack: true, image: 'crp-cacetete.png', weapon: true, description: 'Cacetete com apróximadamente 50cm, fabricado em aço e super resistente.' };
+itemList['1737195953'] = { displayname: 'Cacetete', weight: 10, nonStack: true, image: 'crp-cacetete.png', weapon: true, meta: { serial: true, ammo: 1 }, description: 'Cacetete com apróximadamente 50cm, fabricado em aço e super resistente.' };
 itemList['911657153'] = { displayname: 'Taser', weight: 10, nonStack: true, image: 'crp-stungun.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'Uma arma de eletrochoque é um dispositivo não-letal capaz de emitir uma descarga elétrica de alta tensão e baixa corrente com o objetivo de provocar dor e afastar um agressor.' };
-itemList['453432689'] = { displayname: 'Pistola', weight: 15, nonStack: true, image: 'crp-pistol.png', weapon: true, ammoType: '9mm', meta: { serial: true, ammo: 60 }, description: 'Arma de fogo de cano curto usada para uso pessoal em ações de pequeno alcance.' };
+itemList['453432689'] = { displayname: 'Pistola', weight: 15, nonStack: true, image: 'crp-pistol.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'Arma de fogo de cano curto usada para uso pessoal em ações de pequeno alcance.' };
 itemList['-1076751822'] = { displayname: 'Pistola SNS', weight: 15, nonStack: true, image: 'crp-snspistol.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'SNS é uma sigla para "Saturday Night Special", uma gíria inglesa para armas de fogo pequenas e baratas.' };
 itemList['137902532'] = { displayname: 'Pistola Vintage', weight: 15, nonStack: true, image: 'crp-vintagepistol.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'Arma de fogo com cano cumprido, tem uma ótima precisão mas tem uma velocidade de fogo lenta devido ao seu recoil.' };
 itemList['-771403250'] = { displayname: 'Pistola Pesada', weight: 20, nonStack: true, image: 'crp-heavypistol.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'Uma arma de fogo .50 apresenta grande semelhança com uma desert eagle e tem um poder imenso.' };
@@ -34,8 +34,6 @@ itemList['129942349'] = { displayname: 'Batatas', weight: 1, nonStack: false, im
 
 $(function () {
     defaultHTML = $('.ui').clone();
-
-    $('.item-info').hide();
 
 	window.addEventListener('message', function (event) {
 		switch (event.data.event) {
@@ -212,17 +210,18 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
 			var item = $(this).data('item'), itemInfo = $('.item-info');
 			var itemData = itemList[item.id];
 
-            itemInfo.show();
+            itemInfo.css('display', 'flex').show();
             
             itemInfo.find('.item-name').text(itemData.displayname)
             itemInfo.find('.picture').attr('src', 'items/' + itemData.image);
 
             if (itemData.weapon && item.information) {
-                itemInfo.find('#description').html('<b>Descrição:</b> ' + itemData.description + '<br><br><b>Número de série:<b> ' + item.information.serial + ' &nbsp;-&nbsp; <b>Munição:</b> ' + item.information.ammo + ' (' + itemData.ammoType + ')')
+                itemInfo.find('#description').html('<b>Descrição:</b> ' + itemData.description);
+                itemInfo.find('.desc-info').html('<b>Número de série:<b> ' + item.information.serial + ' &nbsp;-&nbsp; <b>Munição:</b> ' + item.information.ammo)   
             } else {
                 itemInfo.find('#description').html('<b>Descrição:</b> ' + itemData.description)
+                itemInfo.find('.desc-info').html('')
             }
-            itemInfo.find('.desc-info').html('<b>Peso:</b> ' + (item.quantity * itemData.weight).toFixed(2) + ' &nbsp; - &nbsp; <b>Quantidade:</b> ' + item.quantity)
 		},
 		function () {
 			$('.item-info').hide();
@@ -278,11 +277,19 @@ function SetupDraggingFunction() {
 
 				var returnItem = $(this).children('.item').not(ui.item);
 
-				if (inventoryDropName == 'controls') {
-					$(ui.sender).sortable('cancel');
+				if (inventoryDropName == 'controls' ) {
+                    if (currentInventory == 'player-inventory') {
+                        var itemData = item.data('item');
 
-					$('#use').stop().css('background-color', 'rgba(255, 0, 0, 0.3)').animate({ backgroundColor: 'rgba(0, 0, 0, 0.5)' }, 1500);
-					return;
+                        if (!itemList[itemData.id].weapon) {
+                            $.post('http://crp-inventory/nuiMessage', JSON.stringify({ useitem: true, itemdata: { item: itemData.id, slot: lastSlot.replace(/\D/g, '') } }));
+
+                            $('#use').stop().css('background-color', 'rgba(255, 0, 0, 0.3)').animate({ backgroundColor: 'rgba(0, 0, 0, 0.5)' }, 1500);
+                        } else TriggerNotification(false);
+                    } else TriggerNotification(false);
+
+                    $(ui.sender).sortable('cancel');
+                    return;
 				}
 
 				if (inventoryType == 2 && inventoryDropName == 'secondary-inventory') {

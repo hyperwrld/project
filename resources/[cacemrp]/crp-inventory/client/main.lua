@@ -6,10 +6,10 @@ local function sendMessage(data)
 end
 
 local function closeInventory()
-	isInventoryOpen = false
+    isInventoryOpen = false
 
 	EnableAllControlActions(0)
-	SetNuiFocus(false, false)
+    SetNuiFocus(false, false)
 end
 
 local function showInventory(type, data)
@@ -107,7 +107,19 @@ local function nuiCallBack(data, cb)
 		events:Trigger('crp-shops:buyItem', { itemdata = data.itemdata, shoptype = data.shoptype }, function(data)
 			cb(data)
 		end)
-	end
+    end
+    
+    if data.useitem then
+        local events = exports['crp-base']:getModule('Events')
+
+        events:Trigger('crp-inventory:getItem', data.itemdata.slot, function(_data)
+            if _data[1] == nil then
+                cb(false)
+            end
+
+            UseRegularItem(_data[1].item, data.itemdata.slot)
+        end)
+    end
 
 	if data.success then
 		if data.text then exports['crp-notifications']:SendAlert('success', data.text) end
@@ -235,7 +247,9 @@ function UseRegularItem(item, slot)
 
     isUsingItem = true
 
-    closeInventory()
+    if isInventoryOpen then
+        sendMessage({ event = 'close' })
+    end
 
     if item == '196068078' then
         local playerPed = GetPlayerPed(-1)
@@ -253,7 +267,6 @@ function UseRegularItem(item, slot)
                 TriggerServerEvent('crp-inventory:useItem', item, slot)
             end
             isUsingItem = false
-
             ClearPedSecondaryTask(playerPed)
         end)
     end
@@ -274,7 +287,6 @@ function UseRegularItem(item, slot)
                 TriggerServerEvent('crp-inventory:useItem', item, slot)
             end
             isUsingItem = false
-            
             ClearPedSecondaryTask(playerPed)
         end)
     end
@@ -364,15 +376,6 @@ function unHolster(weaponInfo)
     if job == 'police' then
         copUnHolster(weaponInfo)
 
-        if tonumber(weaponInfo.item) == GetHashKey('weapon_pistol') then
-            GiveWeaponComponentToPed(GetPlayerPed(-1), GetHashKey('weapon_pistol'), GetHashKey('COMPONENT_AT_PI_FLSH'))
-        elseif tonumber(weaponInfo.item) == GetHashKey('weapon_carbinerifle') then
-            GiveWeaponComponentToPed(playerPed, GetHashKey('weapon_carbinerifle'), GetHashKey('COMPONENT_AT_AR_FLSH'))
-	        GiveWeaponComponentToPed(playerPed, GetHashKey('weapon_carbinerifle'), GetHashKey('COMPONENT_AT_AR_AFGRIP_02'))
-	        GiveWeaponComponentToPed(playerPed, GetHashKey('weapon_carbinerifle'), GetHashKey('COMPONENT_AT_SCOPE_MEDIUM'))
-	        GiveWeaponComponentToPed(playerPed, GetHashKey('weapon_carbinerifle'), GetHashKey('COMPONENT_AT_AR_SUPP_02')) 
-        end
-
         Citizen.Wait(450)
 
         isDoingAnimation = false
@@ -423,6 +426,14 @@ function copUnHolster(weaponInfo)
     SetCurrentPedWeapon(playerPed, tonumber(weaponInfo.item), 1)
 
     currentWeapon = tonumber(weaponInfo.item)
+
+    if currentWeapon == GetHashKey('weapon_combatpistol') then
+        GiveWeaponComponentToPed(playerPed, currentWeapon, GetHashKey('COMPONENT_AT_PI_FLSH'))
+    elseif currentWeapon == GetHashKey('weapon_carbinerifle') then
+        GiveWeaponComponentToPed(playerPed, currentWeapon, GetHashKey('COMPONENT_AT_AR_FLSH'))
+	    GiveWeaponComponentToPed(playerPed, currentWeapon, GetHashKey('COMPONENT_AT_AR_AFGRIP'))
+	    GiveWeaponComponentToPed(playerPed, currentWeapon, GetHashKey('COMPONENT_AT_SCOPE_MEDIUM'))
+    end
 
 	ClearPedTasks(playerPed)
 end
