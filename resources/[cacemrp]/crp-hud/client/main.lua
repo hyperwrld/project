@@ -38,13 +38,28 @@ AddEventHandler('crp-hud:changemeta', function(data)
 		if thirst > 100 then thirst = 100 end
     end
 
-    SendNUIMessage({ eventName = 'updateStatus', hunger = hunger, thirst = thirst })
+    SendNUIMessage({ eventName = 'updateStatus', hunger = hunger, thirst = thirst, stress = stress })
 	TriggerServerEvent('crp-hud:update', GetEntityHealth(GetPlayerPed(-1)), GetPedArmour(GetPlayerPed(-1)), hunger, thirst, stress)
 end)
 
 RegisterNetEvent('crp-hud:changestress')
-AddEventHandler('crp-hud:changestress', function(data)
-	stress = data
+AddEventHandler('crp-hud:changestress', function(status, value)
+    if status then
+        stress = stress + value
+
+        if stress > 100 then stress = 100 end
+
+        exports['crp-notifications']:SendAlert('inform', 'Ganhaste stress.')
+    else
+        stress = stress - value
+
+        if stress < 0 then stress = 0 end
+
+        exports['crp-notifications']:SendAlert('inform', 'Perdeste stress.')
+    end
+
+    SendNUIMessage({ eventName = 'updateStatus', hunger = hunger, thirst = thirst, stress = stress })
+	TriggerServerEvent('crp-hud:update', GetEntityHealth(GetPlayerPed(-1)), GetPedArmour(GetPlayerPed(-1)), hunger, thirst, stress)
 end)
 
 function StartFunction()
@@ -104,11 +119,11 @@ function StartFunction()
 		while true do
 			Citizen.Wait(2000)
 
-			if stress >= 7500 then
+			if stress >= 75 then
 				ShakeGameplayCam('SMALL_EXPLOSION_SHAKE', 0.1)
-			elseif stress >= 4500 then
+			elseif stress >= 45 then
 				ShakeGameplayCam('SMALL_EXPLOSION_SHAKE', 0.07)
-			elseif stress >= 2000 then
+			elseif stress >= 20 then
 				ShakeGameplayCam('SMALL_EXPLOSION_SHAKE', 0.02)
 			end
 		end

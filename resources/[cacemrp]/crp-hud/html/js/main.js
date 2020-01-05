@@ -31,14 +31,15 @@ $(function() {
 					breath.parent().removeClass('active');
 				}
 
-				stress.css({'width': (event.data.stress / 100) + '%'});
+				stress.css({'width': (event.data.stress) + '%'});
 
 				break;
 			case 'updateStatus':
-				var hunger = $('.sub-hunger'), thirst = $('.sub-thirst');
+				var hunger = $('.sub-hunger'), thirst = $('.sub-thirst'), stress = $('.sub-stress');
 
 				hunger.css({'width': (event.data.hunger) + '%'});
-				thirst.css({'width': (event.data.thirst) + '%'});
+                thirst.css({'width': (event.data.thirst) + '%'});
+                stress.css({'width': (event.data.stress) + '%'});
 
 				break;
 			default:
