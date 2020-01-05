@@ -12,6 +12,7 @@ files {
 	'nui/scripts.js',
 }
 
-export {
-    'StartProgressBar'
+exports {
+    'StartProgressBar',
+    'CancelAction'
 }
