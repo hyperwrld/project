@@ -68,7 +68,7 @@ AddEventHandler('crp-shops:buyItem', function(source, data, callback)
         character.removeMoney(itemPrice)
 
         if data.itemdata.meta ~= nil and data.itemdata.meta.serial == true then
-            data.itemdata.meta.serial = character.getCharacterID()
+            data.itemdata.meta.serial = RandomString() .. '-'.. character.getCharacterID()
         end
 
         if data.itemdata.canStack then
@@ -103,4 +103,17 @@ function GetItem(inventory, item)
     end
 
     return found, data
+end
+
+function RandomString()
+    local characterSet = 'abcdefghijklmnopqrstuvwxyz0123456789'
+    local keyLength, output = 5, ''
+
+    for i = 1, keyLength do
+        local random = math.random(#characterSet)
+
+        output = output .. string.sub(characterSet, random, random)
+    end
+ 
+    return output
 end
