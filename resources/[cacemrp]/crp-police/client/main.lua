@@ -540,7 +540,7 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
 
-        if not isPolice and not IsPauseMenuActive() then
+        if isPolice and not IsPauseMenuActive() then
             local isInVehicle = IsPedInAnyVehicle(GetPlayerPed(-1), false)
 
             if isInVehicle then             
