@@ -58,7 +58,6 @@ AddEventHandler('crp-base:createcharacter', function(source, data, callback)
 	local _source, firstname, lastname = source, data.firstname, data.lastname
 
 	TriggerEvent('crp-db:doescharacterexist', firstname, lastname, function(exists)
-		print(exists)
 		if exists then
 			local error = { error = true, message = 'O nome que escolheu já está em uso.' }
 

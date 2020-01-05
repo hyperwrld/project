@@ -10,6 +10,7 @@
 }
 
 #money {
+    display: none;
 	font-family: pcdown;
 	font-size: 30px;
 	color: white;

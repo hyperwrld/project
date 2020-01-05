@@ -68,6 +68,10 @@ local blips = {
     { id = nil, name = 'Loja', scale = 0.75, color = 2, sprite = 52, x = 1729.135,  y = 6414.242,  z = 34.087  },
     { id = nil, name = 'Loja', scale = 0.75, color = 2, sprite = 52, x = -2968.207, y = 390.342,   z = 14.093  },
     { id = nil, name = 'Loja', scale = 0.75, color = 2, sprite = 52, x = -1487.078, y = -379.677,  z = 39.213  },
+    { id = nil, name = 'Loja', scale = 0.75, color = 2, sprite = 52, x = 1166.708,  y = 2709.031,  z = 37.218  },
+    { id = nil, name = 'Loja', scale = 0.75, color = 2, sprite = 52, x = -3241.826, y = 1001.522,  z = 11.891  },
+    { id = nil, name = 'Loja', scale = 0.75, color = 2, sprite = 52, x = -3039.185, y = 586.153,   z = 6.969   },
+
 
     { id = nil, name = 'Loja de armas', scale = 0.75, color = 35, sprite = 110, x = 22.269,    y = -1106.985, z = 28.847 },
     { id = nil, name = 'Loja de armas', scale = 0.75, color = 35, sprite = 110, x = -662.017,  y = -935.074,  z = 20.879 },
