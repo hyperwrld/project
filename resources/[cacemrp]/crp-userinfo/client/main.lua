@@ -1,4 +1,4 @@
-local job, inService, isHandcuffed = 'unemployed', false, false
+local job, inService, isHandcuffed, isPrimeTime = 'unemployed', false, false, false
 
 AddEventHandler('crp-userinfo:updateJob', function(_job)
     job = _job
@@ -6,6 +6,10 @@ end)
 
 AddEventHandler('crp-userinfo:updateCuffs', function(state)
     isHandcuffed = state
+end)
+
+AddEventHandler('crp-userinfo:setPrimeTime', function(state)
+    isPrimeTime = state
 end)
 
 RegisterNetEvent('crp-userinfo:updateService')
@@ -26,6 +30,10 @@ function isPed(type)
 
     if type == 'handcuffed' then
         data = isHandcuffed
+    end
+
+    if type == 'primetime' then
+        data = isPrimeTime
     end
 
     return data

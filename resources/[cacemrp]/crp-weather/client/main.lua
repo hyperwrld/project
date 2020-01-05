@@ -71,11 +71,11 @@ Citizen.CreateThread(function()
         if (hour > 16 or hour < 20) and not isPrimeTime then
             isPrimeTime = true
 
-            TriggerEvent('crp-weather:setPrimeTime', isPrimeTime)
+            TriggerEvent('crp-userinfo:setPrimeTime', isPrimeTime)
         elseif (hour <= 16 or hour >= 20) and isPrimeTime then
             isPrimeTime = false
             
-            TriggerEvent('crp-weather:setPrimeTime', isPrimeTime)
+            TriggerEvent('crp-userinfo:setPrimeTime', isPrimeTime)
         end
     end
 end)
