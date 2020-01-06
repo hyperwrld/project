@@ -14,12 +14,12 @@ files {
 	'nui/ui.html',
 	'nui/styles.css',
     'nui/scripts.js',
-    
+
     'nui/files/fonts/bariol-regular.otf',
     'nui/files/fonts/vision-black.otf',
     'nui/files/fonts/vision-bold.otf',
     'nui/files/fonts/vision-heavy.otf',
-    
+
     'nui/files/circle.png',
     'nui/files/curve.png',
     'nui/files/fingerprint.png',

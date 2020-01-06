@@ -98,7 +98,7 @@ RegisterServerEvent('crp-robbery:endedRobbery')
 AddEventHandler('crp-robbery:endedRobbery', function(store)
     if storeLocations[store]['robber'] ~= nil and storeLocations[store]['robber'] == source then
         storeLocations[store]['robber'], storeLocations[store]['lastRobbed'] = nil, os.time()
-        
+
         TriggerEvent('crp-robbery:setRobbed', store, true)
     end
 end)

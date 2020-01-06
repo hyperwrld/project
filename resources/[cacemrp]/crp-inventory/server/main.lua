@@ -10,15 +10,15 @@ AddEventHandler('crp-inventory:moveItem', function(source, data, callback)
     }, function(count)
         if count and count >= data.quantity then
             if (count - data.quantity) > 0 then
-                exports.ghmattimysql:execute('UPDATE inventory SET count = count - @quantity WHERE name = @name AND item = @item AND slot = @slot;', 
+                exports.ghmattimysql:execute('UPDATE inventory SET count = count - @quantity WHERE name = @name AND item = @item AND slot = @slot;',
                 { ['@quantity'] = data.quantity, ['@name'] = data.lastInventory, ['@item'] = data.id, ['@slot'] = data.lastSlot })
 
-                exports.ghmattimysql:execute('INSERT INTO inventory (count, item, slot, name) VALUES (@quantity, @item, @slot, @name);', 
+                exports.ghmattimysql:execute('INSERT INTO inventory (count, item, slot, name) VALUES (@quantity, @item, @slot, @name);',
                 { ['@quantity'] = data.quantity, ['@name'] = data.currentInventory, ['@item'] = data.id, ['@slot'] = data.currentSlot })
 
                 callback({ status = true, splitItem = true })
             else
-                exports.ghmattimysql:execute('UPDATE inventory SET name = @name, slot = @slot WHERE name = @lastname AND item = @item AND slot = @lastslot;', { ['@quantity'] = data.quantity, 
+                exports.ghmattimysql:execute('UPDATE inventory SET name = @name, slot = @slot WHERE name = @lastname AND item = @item AND slot = @lastslot;', { ['@quantity'] = data.quantity,
                 ['@name'] = data.currentInventory, ['@lastname'] = data.lastInventory, ['@item'] = data.id, ['@slot'] = data.currentSlot, ['@lastslot'] = data.lastSlot }, function(done)
                     if done then
                         if string.find(data.lastInventory, 'drop') then
@@ -26,7 +26,7 @@ AddEventHandler('crp-inventory:moveItem', function(source, data, callback)
                                 if not result[1] then
                                     DeleteEmptyInventory(data.lastInventory)
                                 end
-                                
+
                                 callback({ status = true, splitItem = false })
                             end)
                         else
@@ -51,10 +51,10 @@ AddEventHandler('crp-inventory:swapItems', function(source, data, callback)
             }, function(_count)
                 if _count then
                     if data.canStack and (count - data.quantity) > 0 then
-                        exports.ghmattimysql:execute('UPDATE inventory SET count = count - @quantity WHERE name = @name AND item = @item AND slot = @slot;', 
+                        exports.ghmattimysql:execute('UPDATE inventory SET count = count - @quantity WHERE name = @name AND item = @item AND slot = @slot;',
                         { ['@quantity'] = data.quantity, ['@name'] = data.lastInventory, ['@item'] = data.item, ['@slot'] = data.lastSlot })
-            
-                        exports.ghmattimysql:execute('UPDATE inventory SET count = count + @quantity WHERE name = @name AND item = @item AND slot = @slot;', 
+
+                        exports.ghmattimysql:execute('UPDATE inventory SET count = count + @quantity WHERE name = @name AND item = @item AND slot = @slot;',
                         { ['@quantity'] = data.quantity, ['@name'] = data.currentInventory, ['@item'] = data._item, ['@slot'] = data.currentSlot })
 
                         callback({ status = true, stackItems = true, delete = false })
@@ -62,23 +62,23 @@ AddEventHandler('crp-inventory:swapItems', function(source, data, callback)
                         local status = { status = false }
 
                         if data.canStack then
-                            exports.ghmattimysql:execute('DELETE FROM inventory WHERE name = @name AND item = @item AND slot = @slot;', 
+                            exports.ghmattimysql:execute('DELETE FROM inventory WHERE name = @name AND item = @item AND slot = @slot;',
                             { ['@name'] = data.lastInventory, ['@item'] = data.item, ['@slot'] = data.lastSlot })
-            
-                            exports.ghmattimysql:execute('UPDATE inventory SET count = count + @quantity WHERE name = @name AND item = @item AND slot = @slot;', 
+
+                            exports.ghmattimysql:execute('UPDATE inventory SET count = count + @quantity WHERE name = @name AND item = @item AND slot = @slot;',
                             { ['@quantity'] = data.quantity, ['@name'] = data.currentInventory, ['@item'] = data._item, ['@slot'] = data.currentSlot })
 
                             status = { status = true, stackItems = true, delete = true }
                         elseif (count - data.quantity) == 0 then
-                            exports.ghmattimysql:execute('UPDATE inventory SET name = @_name, slot = @_slot  WHERE name = @name AND item = @item AND slot = @slot;', 
+                            exports.ghmattimysql:execute('UPDATE inventory SET name = @_name, slot = @_slot  WHERE name = @name AND item = @item AND slot = @slot;',
                             { ['@_name'] = data.lastInventory, ['@_slot'] = data.lastSlot, ['@name'] = data.currentInventory, ['@item'] = data._item, ['@slot'] = data.currentSlot })
 
-                            exports.ghmattimysql:execute('UPDATE inventory SET name = @_name, slot = @_slot  WHERE name = @name AND item = @item AND slot = @slot;', 
+                            exports.ghmattimysql:execute('UPDATE inventory SET name = @_name, slot = @_slot  WHERE name = @name AND item = @item AND slot = @slot;',
                             { ['@_name'] = data.currentInventory, ['@_slot'] = data.currentSlot, ['@name'] = data.lastInventory, ['@item'] = data.item, ['@slot'] = data.lastSlot })
 
                             status = { status = true, swapItems = true }
                         end
-                        
+
                         callback(status)
                     end
                 else
@@ -94,7 +94,7 @@ end)
 AddEventHandler('crp-inventory:getInventory', function(source, id, callback)
     local character = exports['crp-base']:GetCharacter(source)
 
-    if character.getCharacterID() == id then 
+    if character.getCharacterID() == id then
         exports.ghmattimysql:execute('SELECT * FROM inventory WHERE name = @name;', {
             ['@name'] = 'character-' .. id
         }, function(result)
@@ -108,7 +108,7 @@ end)
 AddEventHandler('crp-inventory:getInventories', function(source, data, callback)
     local character = exports['crp-base']:GetCharacter(source)
 
-    if character.getCharacterID() == data.id then 
+    if character.getCharacterID() == data.id then
         exports.ghmattimysql:execute('SELECT * FROM inventory WHERE name = @name;', { ['@name'] = 'character-' .. data.id }, function(result)
             exports.ghmattimysql:execute('SELECT * FROM inventory WHERE name = @name;', { ['@name'] = data.inventory }, function(_result)
                 callback({ player = result, secondary = _result})
@@ -151,7 +151,7 @@ AddEventHandler('crp-inventory:setWeaponAmmo', function(weapon, weaponSlot, weap
             result = json.decode(result)
             result.ammo = weaponAmmo
 
-            exports.ghmattimysql:execute('UPDATE inventory SET information = @info WHERE name = @name AND slot = @slot AND item = @weapon;', 
+            exports.ghmattimysql:execute('UPDATE inventory SET information = @info WHERE name = @name AND slot = @slot AND item = @weapon;',
             { ['@name'] = inventoryName, ['@slot'] = weaponSlot, ['@weapon'] = weapon, ['@info'] = json.encode(result) })
         end
     end)
@@ -166,10 +166,10 @@ AddEventHandler('crp-inventory:useItem', function(item, itemSlot)
         ['@name'] = inventoryName, ['@slot'] = itemSlot, ['@item'] = item,
     }, function(count)
         if (count - 1) > 0 then
-            exports.ghmattimysql:execute('UPDATE inventory SET count = @count WHERE name = @name AND slot = @slot AND item = @item;', 
+            exports.ghmattimysql:execute('UPDATE inventory SET count = @count WHERE name = @name AND slot = @slot AND item = @item;',
             { ['@name'] = inventoryName, ['@slot'] = itemSlot, ['@item'] = item, ['@count'] = (count - 1) })
         else
-            exports.ghmattimysql:execute('DELETE FROM inventory WHERE name = @name AND slot = @slot AND item = @item;', 
+            exports.ghmattimysql:execute('DELETE FROM inventory WHERE name = @name AND slot = @slot AND item = @item;',
             { ['@name'] = inventoryName, ['@slot'] = itemSlot, ['@item'] = item })
         end
     end)

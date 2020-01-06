@@ -4,7 +4,7 @@ local hunger, thirst, stress = 100, 100, 0
 RegisterNetEvent('crp-hud:setmeta')
 AddEventHandler('crp-hud:setmeta', function(meta)
 	if meta == nil then
-	 	return 
+	 	return
 	end
 
 	local playerPed = GetPlayerPed(-1)
@@ -69,9 +69,9 @@ function StartFunction()
 	    while true do
 	    	if hunger > 0 then
 				hunger = hunger - math.random(3)
-				
-				if hunger < 0 then 
-					hunger = 0 
+
+				if hunger < 0 then
+					hunger = 0
 				end
 	    	end
 

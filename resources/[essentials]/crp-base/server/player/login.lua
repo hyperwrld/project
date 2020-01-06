@@ -7,7 +7,7 @@ function LoadCharacter(source, identifier, charid)
 		if isJson then
 			data = json.decode(data)
 		end
-		
+
 		chardata = data
 	end)
 

@@ -6,7 +6,7 @@ function SavePlayers()
 
         exports.ghmattimysql:execute('UPDATE users SET money = @money, bank = @bank, job = @job, status = @status, position = @position WHERE identifier = @identifier AND id = @id ;', {
             ['@money'] = player.getMoney(), ['@bank'] = player.getBank(), ['@position'] = json.encode(player.getPosition()), ['@job'] = json.encode(player.getJob()),
-            ['@status'] = json.encode(player.getStatus()), ['@id'] = player.getCharacterID(), ['@identifier'] = player.getIdentifier() 
+            ['@status'] = json.encode(player.getStatus()), ['@id'] = player.getCharacterID(), ['@identifier'] = player.getIdentifier()
         })
     end
 
@@ -26,7 +26,7 @@ end
 function StartSavingPlayers()
     function saveData()
         SavePlayers()
-        
+
 		SetTimeout(15 * 60000, saveData)
 	end
 

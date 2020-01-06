@@ -22,7 +22,7 @@ function CRP.BlipManager.CreateBlip(self, id, data)
     AddTextComponentString(data.name)
     EndTextCommandSetBlipName(blip)
 
-    if (id ~= nil) then 
+    if (id ~= nil) then
         CRP.Blips[id] = { blip = blip, data = data }
     end
 end

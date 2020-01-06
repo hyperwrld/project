@@ -1,5 +1,5 @@
-local vehicleTable = { 
-    [1] = { ['model'] = 'flatbed', ['price'] = 200 },  [2] = { ['model'] = 'cruiser',  ['price'] = 600 }, 
+local vehicleTable = {
+    [1] = { ['model'] = 'flatbed', ['price'] = 200 },  [2] = { ['model'] = 'cruiser',  ['price'] = 600 },
     [3] = { ['model'] = 'fixter',   ['price'] = 300 }, [4] = { ['model'] = 'scorcher', ['price'] = 700 },
     [5] = { ['model'] = 'tribike',  ['price'] = 400 }, [6] = { ['model'] = 'tribike2', ['price'] = 800 },
     [7] = { ['model'] = 'tribike3', ['price'] = 500 },

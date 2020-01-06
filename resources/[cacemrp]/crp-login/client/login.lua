@@ -40,7 +40,7 @@ local function nuiCallBack(data)
 	if data.disconnect then disconnect() end
 	if data.showcursor or not data.showcursor then SetNuiFocus(true, data.showcursor) end
 
-	if data.fetchcharacters then 
+	if data.fetchcharacters then
 		events:Trigger('crp-db:fetchplayercharacters', nil, function(data)
 			sendMessage({ playercharacters = data })
 		end)
@@ -70,7 +70,7 @@ local function nuiCallBack(data)
 
 	if data.selectcharacter then
 		events:Trigger('crp-base:selectcharacter', data.character, function(data)
-			if not data.loggedin then 
+			if not data.loggedin then
 				sendMessage({ error = true, message = 'Ocorreu um erro ao entrar na sua personagem, contacte um administrador se isto continuar.' })
 				return
 			end

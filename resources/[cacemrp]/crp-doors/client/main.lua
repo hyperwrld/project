@@ -31,7 +31,7 @@ local isActive, userJob = false, 'unemployed'
 
 Citizen.CreateThread(function()
     local events = exports['crp-base']:getModule('Events')
-    
+
     events:Trigger('crp-doors:getDoorsInfo', nil, function(doorInfo)
         for door, state in pairs(doorInfo) do
 			doorList[door].locked = state
@@ -61,7 +61,7 @@ Citizen.CreateThread(function()
             if distance < closestTimer then
                 closestTimer = math.floor(distance)
             end
-            
+
             if distance < closestDistance and distance < 50 then
                 closestTimer = 0
 
@@ -107,7 +107,7 @@ Citizen.CreateThread(function()
 
                                 count = count + 1
 
-                                if count > 100 then 
+                                if count > 100 then
                                     keepRunning = false
                                 end
                             end
@@ -119,19 +119,19 @@ Citizen.CreateThread(function()
 
                                 local locked, heading = GetStateOfClosestDoorOfType(GetHashKey(door.name), door.coords.x, door.coords.y, door.coords.z)
 
-                                heading = math.ceil(heading * 100) 
+                                heading = math.ceil(heading * 100)
 
                                 local distance = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), door.coords.x, door.coords.y, door.coords.z, true)
-                                
+
                                 door.textcoords = GetOffsetFromEntityInWorldCoords(door.object, door.x, door.y, door.z)
 
                                 DrawText3D(door.textcoords.x, door.textcoords.y, door.textcoords.z, 'Trancando')
-                                
+
                                 count = count + 1
-                                
+
                                 if heading < 1.5 and heading > -1.5 then
                                     swing = swing + 1
-                                end   
+                                end
 
                                 if distance > 150.0 or swing > 100 or count > 500 then
                                     keepRunning = false
@@ -145,7 +145,7 @@ Citizen.CreateThread(function()
                 end
             end
         end
-        
+
         if closestTimer > 50 and closestTimer ~= 500000 then
             Citizen.Wait(math.ceil(closestTimer * 25))
         end
@@ -171,7 +171,7 @@ end
 
 function TriggerAnimation()
     local playerPed, dictionary = GetPlayerPed(-1), 'anim@heists@keycard@'
-        
+
     ClearPedSecondaryTask(playerPed)
 
     while (not HasAnimDictLoaded(dictionary)) do
@@ -190,7 +190,7 @@ end
 function DrawText3D(x, y, z, text)
     local onScreen, _x, _y = World3dToScreen2d(x, y, z)
     local px, py, pz = table.unpack(GetGameplayCamCoords())
-    
+
     SetTextScale(0.35, 0.35)
     SetTextFont(4)
     SetTextProportional(1)

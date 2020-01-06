@@ -92,8 +92,8 @@ function InitiliazeRadar() {
 
 function UpdateSpeed(attr, data) {
     targets[attr].find('.speednumber').each(function(i, obj) {
-        $(obj).html(data[i]); 
-    }); 
+        $(obj).html(data[i]);
+    });
 }
 
 function UpdatePlate(attr, data) {
@@ -103,11 +103,11 @@ function UpdatePlate(attr, data) {
 function LockSpeed(attr, state) {
     targets[attr].find('.speednumber').each(function(i, obj) {
         if (state == true) {
-            $(obj).css('color', '#940000'); 
+            $(obj).css('color', '#940000');
         } else {
             $(obj).css('color', '#ff0000');
         }
-    }); 
+    });
 }
 
 function UpdateStatus(attr, state) {
@@ -121,25 +121,25 @@ function UpdateStatus(attr, state) {
 function ModeSwitch(sameEle, oppEle, state) {
     if (state == 'same') {
         sameEle.addClass('active');
-        oppEle.removeClass('active'); 
+        oppEle.removeClass('active');
     } else if (state == 'opp') {
         oppEle.addClass('active');
-        sameEle.removeClass('active'); 
+        sameEle.removeClass('active');
     } else if (state == 'none') {
-        oppEle.removeClass('active'); 
-        sameEle.removeClass('active'); 
+        oppEle.removeClass('active');
+        sameEle.removeClass('active');
     }
 }
 
 function UpdateArrowDir(fwdEle, bwdEle, state) {
     if (state == true) {
-        fwdEle.addClass('active'); 
-        bwdEle.removeClass('active'); 
+        fwdEle.addClass('active');
+        bwdEle.removeClass('active');
     } else if (state == false) {
-        bwdEle.addClass('active'); 
-        fwdEle.removeClass('active'); 
+        bwdEle.addClass('active');
+        fwdEle.removeClass('active');
     } else if (state == null) {
-        fwdEle.removeClass('active'); 
-        bwdEle.removeClass('active'); 
+        fwdEle.removeClass('active');
+        bwdEle.removeClass('active');
     }
 }

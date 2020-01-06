@@ -8,10 +8,9 @@ body.active {
 	background-color: rgba(0,0,0,0.5);
 }
 
-input[type=number]::-webkit-inner-spin-button, 
-input[type=number]::-webkit-outer-spin-button { 
-  -webkit-appearance: none; 
-  margin: 0; 
+input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 textarea:focus, input:focus {
@@ -435,7 +434,7 @@ label {
 }
 
 .double-input input {
-	font-size: 35px; 
+	font-size: 35px;
 }
 
 .bg-waiting {

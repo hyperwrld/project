@@ -35,13 +35,13 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 		local coords = GetEntityCoords(PlayerPedId())
         local isInMarker, letSleep = false, true
-    
+
         for k, v in pairs(shopLocations) do
             local distance = GetDistanceBetweenCoords(coords, v.x, v.y, v.z, true)
 
             if distance < 10.0 then
                 DrawMarker(27, v.x, v.y, v.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 44, 130, 201, 100, false, false, 2, false, nil, nil, false)
-               
+
                 letSleep = false
 
 				if distance < 1.0 then

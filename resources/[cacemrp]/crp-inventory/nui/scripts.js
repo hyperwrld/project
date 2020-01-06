@@ -199,7 +199,7 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
 		});
 
         (isInventoryOpen = false), (playerItems = {}), (otherItems = {});
-        
+
         $('.item-info').fadeOut(400);
 
 		$.post('http://crp-inventory/nuiMessage', JSON.stringify({ close: true }));
@@ -211,13 +211,13 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
 			var itemData = itemList[item.id];
 
             itemInfo.css('display', 'flex').show();
-            
+
             itemInfo.find('.item-name').text(itemData.displayname)
             itemInfo.find('.picture').attr('src', 'items/' + itemData.image);
 
             if (itemData.weapon && item.information) {
                 itemInfo.find('#description').html('<b>Descrição:</b> ' + itemData.description);
-                itemInfo.find('.desc-info').html('<b>Número de série:<b> ' + item.information.serial + ' &nbsp;-&nbsp; <b>Munição:</b> ' + item.information.ammo)   
+                itemInfo.find('.desc-info').html('<b>Número de série:<b> ' + item.information.serial + ' &nbsp;-&nbsp; <b>Munição:</b> ' + item.information.ammo)
             } else {
                 itemInfo.find('#description').html('<b>Descrição:</b> ' + itemData.description)
                 itemInfo.find('.desc-info').html('')

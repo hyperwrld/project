@@ -2,16 +2,16 @@ function GetVehicleInDirection(coordFrom, coordTo)
     local offset, rayHandle, vehicle = 0
 
 	for i = 0, 100 do
-		rayHandle = CastRayPointToPoint(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z + offset, 10, GetPlayerPed(-1), 0)	
+		rayHandle = CastRayPointToPoint(coordFrom.x, coordFrom.y, coordFrom.z, coordTo.x, coordTo.y, coordTo.z + offset, 10, GetPlayerPed(-1), 0)
 		a, b, c, d, vehicle = GetRaycastResult(rayHandle)
-		
+
 		offset = offset - 1
 
 		if vehicle ~= 0 then break end
 	end
-	
+
 	local distance = Vdist2(coordFrom, GetEntityCoords(vehicle))
-	
+
     if distance > 25 then vehicle = nil end
 
     return vehicle ~= nil and vehicle or 0
@@ -24,7 +24,7 @@ function GetClosestPlayer()
     if not IsPedInAnyVehicle(playerPed, false) then
         for i = 1, #players, 1 do
             local targetPed = GetPlayerPed(players[i])
-            
+
             if targetPed ~= playerPed then
                 local _coords = GetEntityCoords(targetPed)
                 local distance = #(coords - _coords)
@@ -64,7 +64,7 @@ function GetClosestPedIgnoreCar()
             end
         end
     end
-    
+
 	return closestPlayer, closestDistance, closestPlayerId
 end
 
@@ -74,17 +74,17 @@ function GetClosestPlayerIgnoreCar()
 
 	for k, v in ipairs(players) do
         local target = GetPlayerPed(v)
-        
+
 		if target ~= playerPed then
 			local _coords = GetEntityCoords(GetPlayerPed(v), 0)
             local distance = #(coords - _coords)
-            
+
             if closestDistance == -1 or closestDistance > distance then
                 closestPlayer, closestDistance = v, distance
             end
 		end
 	end
-	
+
 	return closestPlayer, closestDistance
 end
 
@@ -105,7 +105,7 @@ end
 function DrawText3D(x, y, z, text)
     local onScreen, _x, _y = World3dToScreen2d(x, y, z)
     local px, py, pz = table.unpack(GetGameplayCamCoords())
-    
+
     SetTextScale(0.35, 0.35)
     SetTextFont(4)
     SetTextProportional(1)

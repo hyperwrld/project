@@ -13,7 +13,7 @@ local function closeInventory()
 end
 
 local function showInventory(type, data)
-	if isInventoryOpen then 
+	if isInventoryOpen then
 		closeInventory()
 		return
 	end
@@ -28,34 +28,34 @@ local function showInventory(type, data)
 
 		if not alreadyExists then
 			events:Trigger('crp-inventory:getInventory', id, function(data)
-				sendMessage({ 
-					event = 'open', 
-					playerData = { id = id, items = data }, 
+				sendMessage({
+					event = 'open',
+					playerData = { id = id, items = data },
 					secondaryData = { id = inventory, coords = inventoryCoords, type = type, items = nil },
 				})
 			end)
 		else
 			events:Trigger('crp-inventory:getInventories', { id = id, inventory = inventory }, function(data)
-				sendMessage({ 
-					event = 'open', 
-					playerData = { id = id, items = data.player }, 
+				sendMessage({
+					event = 'open',
+					playerData = { id = id, items = data.player },
 					secondaryData = { id = inventory, coords = inventoryCoords, type = type, items = data.secondary },
 				})
 			end)
 		end
     elseif type == 2 then
 		events:Trigger('crp-shops:getStoreItems', { id = id, type = data.shopType }, function(_data)
-			sendMessage({ 
-				event = 'open', 
-				playerData = { id = id, items = _data.player }, 
+			sendMessage({
+				event = 'open',
+				playerData = { id = id, items = _data.player },
 				secondaryData = { id = data.name, type = type, items = _data.secondary, shopType = data.shopType },
 			})
         end)
     elseif type == 3 then
         events:Trigger('crp-inventory:getInventories', { id = id, inventory = data.name }, function(_data)
-			sendMessage({ 
-				event = 'open', 
-				playerData = { id = id, items = _data.player }, 
+			sendMessage({
+				event = 'open',
+				playerData = { id = id, items = _data.player },
 				secondaryData = { id = data.name, slots = data.slots, weight = data.weight, type = type, items = _data.secondary },
 			})
 		end)
@@ -108,7 +108,7 @@ local function nuiCallBack(data, cb)
 			cb(data)
 		end)
     end
-    
+
     if data.useitem then
         local events = exports['crp-base']:getModule('Events')
 
@@ -139,7 +139,7 @@ RegisterNUICallback('nuiMessage', nuiCallBack)
 Citizen.CreateThread(function()
 	while true do
         Citizen.Wait(0)
-        
+
         if not isShowing and (IsDisabledControlJustPressed(0, 37)) then
             local events = exports['crp-base']:getModule('Events')
 
@@ -227,7 +227,7 @@ function UseItem(slot)
                 isWeaponEquiped, weaponSlot, isBackItem = true, slot, false
 
                 unHolster(data[1])
-            else            
+            else
                 isWeaponEquiped, weaponSlot = true, slot
 
                 unHolster(data[1])
@@ -257,7 +257,7 @@ function UseRegularItem(item, slot)
         ClearPedSecondaryTask(playerPed)
 
         LoadAnimation('friends@frl@ig_1')
-                
+
         TaskPlayAnim(playerPed, 'friends@frl@ig_1', 'drink_lamar', 8.0, 1.0, -1, 49, 0, 0, 0, 0)
 
         exports['crp-progressbar']:StartProgressBar({ duration = 6000, label = 'Beber', combat = true, cancel = true }, function(finished)
@@ -277,7 +277,7 @@ function UseRegularItem(item, slot)
         ClearPedSecondaryTask(playerPed)
 
         LoadAnimation('mp_player_inteat@burger')
-                
+
         TaskPlayAnim(playerPed, 'mp_player_inteat@burger', 'mp_player_int_eat_burger', 8.0, 1.0, -1, 49, 0, 0, 0, 0)
 
         exports['crp-progressbar']:StartProgressBar({ duration = 6000, label = 'Comer', combat = true, cancel = true }, function(finished)
@@ -355,15 +355,15 @@ function copHolster()
     WaitAnimation()
 
     TaskPlayAnim(playerPed, dictionary, animation, 10.0, 2.3, -1, 49, 1, 0, 0, 0)
-    
+
     UpdateWeaponAmmo()
 
     Citizen.Wait(600)
-    
+
     SetCurrentPedWeapon(playerPed, GetHashKey('weapon_unarmed'), 1)
-    
+
     RemoveAllPedWeapons(playerPed)
-    
+
 	ClearPedTasks(playerPed)
 end
 
@@ -414,7 +414,7 @@ function copUnHolster(weaponInfo)
     local playerPed = GetPlayerPed(-1)
 
     LoadAnimation(dictionary)
-    
+
 	RemoveAllPedWeapons(playerPed)
 
 	TaskPlayAnim(playerPed, dictionary, animation, 10.0, 2.3, -1, 49, 1, 0, 0, 0)
@@ -480,7 +480,7 @@ Citizen.CreateThread(function()
 
 			if distance < 20.0 then
 				DrawMarker(20, v.coords.x, v.coords.y, v.coords.z, 0.0, 0.0, 0.0, 0, 0.0, 0.0, 1.0, 1.0, 0.4, 255, 255, 255, 100, false, true, 2, false, false, false, false)
-				
+
 				letSleep = false
 			end
 		end
@@ -491,7 +491,7 @@ Citizen.CreateThread(function()
 	end
 end)
 
-function GetClosestInventory() 
+function GetClosestInventory()
 	local coords = GetEntityCoords(PlayerPedId())
 	local inventory, inventoryDistance, inventoryCoords
 

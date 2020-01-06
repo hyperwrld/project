@@ -17,13 +17,12 @@
     border: 3px solid #000;
     border-radius: 5px;
     color: white;
- 
+
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     justify-content: space-around;
     align-items: center;
 }
-
 
 #policeradar .main {
     display: flex;
@@ -31,7 +30,7 @@
     align-items: center;
     justify-content: space-around;
     width: 100%;
-    height: 100%; 
+    height: 100%;
 }
 
 #policeradar .patrolcontainer {
@@ -39,9 +38,9 @@
     height: 100%;
     background-color: black;
     display: flex;
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: flex-start; 
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
     border: 2px solid black;
     margin-left: 1%;
 }
@@ -49,9 +48,9 @@
 #policeradar .typecontainer {
     background-color: black;
     display: flex;
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: flex-start; 
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
     width: 0;
 }
 
@@ -59,19 +58,19 @@
     font-family: Verdana;
     font-size: 10px;
     line-height: 27px;
-    color: #525151; 
+    color: #525151;
 }
 
 #policeradar .typecontainer .active {
-    color: white; 
+    color: white;
 }
 
 #policeradar .container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100%; 
-    justify-content: space-around; 
+    height: 100%;
+    justify-content: space-around;
 }
 
 #policeradar .container .speedsourcecontainer {
@@ -118,25 +117,25 @@
 
 #policeradar .container .label {
     font-family: Verdana;
-    font-weight: bold; 
+    font-weight: bold;
     font-size: 10px;
     text-align: center;
 }
 
 #policeradar .arrowbox {
-    justify-content: center; 
+    justify-content: center;
     align-items: center;
 }
 
 #policeradar .arrowbox i {
-    font-size: 20px; 
+    font-size: 20px;
     padding-top: 5px;
     padding-bottom: 5px;
     color: #525151;
 }
 
 #policeradar .arrowbox .active {
-    color: white; 
+    color: white;
 }
 
 #policeradar .arrowbox .inactive {
@@ -148,9 +147,9 @@
     height: 100%;
     background-color: black;
     display: flex;
-    flex-direction: column; 
-    align-items: center; 
-    justify-content: flex-start; 
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
     border: 2px solid black;
     margin-left: 1%;
 }
@@ -175,105 +174,3 @@
     width: 100%;
     text-align: center;
 }
-
-/*
-#policeradar .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100%; 
-    justify-content: space-around; 
-}
-
-#policeradar .arrowbox {
-    justify-content: center; 
-    align-items: center;
-}
-
-#policeradar .arrowbox i {
-    font-size: 20px; 
-    padding-top: 5px;
-    padding-bottom: 5px;
-    color: black;
-}
-
-#policeradar .arrowbox .active {
-    color: white; 
-}
-
-#policeradar .arrowbox .inactive {
-    color: black;
-}
-
-#policeradar .container .label {
-    font-family: Verdana;
-    font-weight: bold; 
-    font-size: 10px;
-    text-align: center;
-}
-
-#policeradar .container .speedsourcecontainer {
-    width: 100%;
-    height: 58px;
-    display: flex;
-    justify-content: space-around;
-}
-
-#policeradar .container .speedsourcecontainer .speednumber {
-    width: 100%;
-    color: #f79e00;
-}
-
-#policeradar .container .speedsourcecontainer .text {
-    font-family: 'digital-7';
-    font-size: 58px;
-    line-height: 58px;
-    width: 100%;
-    text-align: center;
-}
-
-#policeradar .speedsourcecontainer {
-    border: 2px solid black;
-    background-color: #3d1c00;
-}
-
-#policeradar .container .patrol {
-    background: rgb(0, 125, 0);
-    background: linear-gradient(to bottom, rgb(0, 150, 0), rgb(0, 75, 0));
-}
-
-#policeradar .container .locked {
-    color: rgb(50, 0, 0);
-}
-
-#policeradar .container .speedfastcontainer {
-    width: 135px;
-    height: 58px;
-    display: flex;
-    justify-content: space-around;
-}
-
-#policeradar .container .speedfastcontainer .speednumber {
-    width: 100%;
-    color: #ff0000;
-}
-
-#policeradar .container .speedfastcontainer .text {
-    font-family: 'digital-7';
-    font-size: 58px;
-    line-height: 58px;
-    width: 100%;
-    text-align: center;
-}
-
-#policeradar .speedfastcontainer {
-    border: 2px solid black;
-    background-color: #230303;
-}
-
-#policeradar .container .platecontainer {
-    width: 95px;
-    height: 38px;
-    display: flex;
-    justify-content: space-around;
-} */

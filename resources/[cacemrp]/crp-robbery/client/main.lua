@@ -59,10 +59,10 @@ AddEventHandler('crp-robbery:robPed', function(entity, vehicle)
 
         if not IsEntityPlayingAnim(entity, 'missfbi5ig_22', 'hands_up_anxious_scientist', 3) then
             TaskPlayAnim(entity, 'missfbi5ig_22', 'hands_up_anxious_scientist', 5.0, 1.0, -1, 1, 0, 0, 0, 0)
-            
+
 			Citizen.Wait(1000)
         end
-        
+
         local coords, _coords = GetEntityCoords(playerPed), GetEntityCoords(entity)
 
         if #(coords - _coords) > 25.0 then
@@ -106,7 +106,7 @@ AddEventHandler('crp-robbery:robPed', function(entity, vehicle)
 
             while not HasAnimDictLoaded('mp_common') do
 		        Citizen.Wait(0)
-            end		
+            end
 
             TaskPlayAnim(entity, 'mp_common', 'givetake1_a', 1.0, 1.0, -1, 1, 0, 0, 0, 0)
 
@@ -220,7 +220,7 @@ Citizen.CreateThread(function()
                 if IsPedArmed(playerPed, 6) and not IsPedArmed(entity, 7) and not IsEntityPlayingAnim(entity, 'missfbi5ig_22', 'hands_up_anxious_scientist', 3) then
                     if IsPedInAnyVehicle(entity, false) and GetEntitySpeed(GetVehiclePedIsIn(entity, false)) < 2.0 then
                         local vehicle = GetVehiclePedIsIn(entity, false)
-                        
+
                         ClearPedTasks(entity)
 
                         TaskLeaveVehicle(entity, vehicle, 0)
@@ -300,7 +300,7 @@ function SpawnShopkeeper(i)
     if not hasBeenFound then
         if GetPedType(pedType) ~= nil then
             local shopPed = CreatePed(GetPedType(pedType), pedType, coords.x, coords.y, coords.z, heading, 1, 1)
-            
+
 			spawnedPeds[#spawnedPeds + 1] = shopPed
 
 			SetPedKeepTask(shopPed, true)
@@ -342,15 +342,15 @@ end
 
 function CheckIfShopKeeper(entity)
     local minDistance = 1000.0
-    
+
 	for i = 1, #storeLocations do
         local distance = #(GetEntityCoords(GetPlayerPed(-1)) - vector3(storeLocations[i]['x'], storeLocations[i]['y'], storeLocations[i]['z']))
-        
+
 		if distance < minDistance then
 			minDistance, scanId = distance, i
 		end
     end
-    
+
     if minDistance < 8.0 then
         for k, v in ipairs(spawnedPeds) do
             if (entity == v) then
@@ -393,7 +393,7 @@ end
 function DrawText3D(x, y, z, text)
     local onScreen, _x, _y = World3dToScreen2d(x, y, z)
     local px, py, pz = table.unpack(GetGameplayCamCoords())
-    
+
     SetTextScale(0.35, 0.35)
     SetTextFont(4)
     SetTextProportional(1)

@@ -6,7 +6,7 @@ client_script 'client/main.lua'
 
 files {
 	'nui/ui.html',
-	'nui/scripts.js', 
+	'nui/scripts.js',
 	'nui/styles.css'
 }
 

@@ -21,18 +21,18 @@ AddEventHandler('crp-police:repairvehicle', function()
 
     if IsPedInAnyVehicle(playerPed, false) then
         local vehicle = GetVehiclePedIsIn(playerPed, false)
-        
+
         if DoesEntityExist(vehicle) then
             local boolean, coords = false, GetEntityCoords(playerPed, 0)
-            
+
 		    for i, v in ipairs(policePoints) do
                 if GetDistanceBetweenCoords(coords, policePoints[i].x, policePoints[i].y, policePoints[i].z) < 50 then
                     boolean = true
                     break
 			    end
             end
-            
-            if boolean then 
+
+            if boolean then
                 exports['crp-progressbar']:StartProgressBar({ duration = 10000, label = 'Reparar o veículo', cancel = true, vehicle = true }, function(finished)
                     if finished then
                         SetVehicleFixed(vehicle)
@@ -90,11 +90,11 @@ AddEventHandler('crp-police:spawnvehicle', function(vehicleModel, data)
         Citizen.CreateThread(function()
             local vehicleHash = GetHashKey(vehicleModel)
 
-            if not IsModelAVehicle(vehicleHash) or not IsModelInCdimage(vehicleHash) or not IsModelValid(vehicleHash) then 
+            if not IsModelAVehicle(vehicleHash) or not IsModelInCdimage(vehicleHash) or not IsModelValid(vehicleHash) then
                 exports['crp-notifications']:SendAlert('error', 'Oops! Ocorreu um erro ao spawnar o veículo.')
-                return 
+                return
             end
-            
+
             RequestModel(vehicleHash)
 
             while not HasModelLoaded(vehicleHash) do
@@ -132,7 +132,7 @@ AddEventHandler('crp-police:spawnvehicle', function(vehicleModel, data)
             local vehiclePlate = GetVehicleNumberPlateText(vehicle)
 
             -- ! Adicionar as chaves ao jogador
-            
+
             SetVehicleDirtLevel(vehicle, 0)
 
             exports['crp-notifications']:SendAlert('success', 'Veículo spawnado com sucesso.')
@@ -182,7 +182,7 @@ AddEventHandler('crp-police:impoundvehicle', function()
                 local vehiclePlate = GetVehicleNumberPlateText(vehicle)
 
                 -- ! Impound vehicle on the database
-                
+
                 exports['crp-notifications']:SendAlert('success', 'Veículo apreendido com sucesso.')
             end
         else
@@ -208,7 +208,7 @@ AddEventHandler('crp-police:cuffplayer', function(state)
 
     local user, distance = GetClosestPlayer()
 
-    if distance ~= nil and distance ~= -1 and distance < 1.0 and GetEntitySpeed(GetPlayerPed(GetPlayerFromServerId(user))) < 1.0 then 
+    if distance ~= nil and distance ~= -1 and distance < 1.0 and GetEntitySpeed(GetPlayerPed(GetPlayerFromServerId(user))) < 1.0 then
         if state then
             exports['crp-notifications']:SendAlert('inform', 'Colocaste as algemas apertadas no jogador.')
         else
@@ -223,7 +223,7 @@ RegisterNetEvent('crp-police:uncuffplayer')
 AddEventHandler('crp-police:uncuffplayer', function(state)
     local user, distance = GetClosestPlayer()
 
-    if distance ~= nil and distance ~= -1 and distance < 2.0 then 
+    if distance ~= nil and distance ~= -1 and distance < 2.0 then
         exports['crp-notifications']:SendAlert('inform', 'Desalgemaste um jogador.')
 
         TriggerServerEvent('crp-police:uncuffplayer', user)
@@ -256,13 +256,13 @@ AddEventHandler('crp-police:getcuffed', function(cuffer, state)
     local direction = GetEntityHeading(cuffer)
 
     SetEntityCoords(playerPed, GetOffsetFromEntityInWorldCoords(cuffer, 0.0, 0.45, 0.0))
-    
+
     Citizen.Wait(100)
 
     SetEntityHeading(playerPed, direction)
-    
+
     TaskPlayAnim(playerPed, 'mp_arrest_paired', 'crook_p2_back_right', 8.0, -8, -1, 32, 0, 0, 0, 0)
-    
+
     Citizen.Wait(2500)
 
     Citizen.CreateThread(function()
@@ -338,15 +338,15 @@ AddEventHandler('crp-police:cuff', function(cuffer, state)
     local playerPed = GetPlayerPed(-1)
 
     LoadAnimation('mp_arrest_paired')
-    
+
     Citizen.Wait(100)
-    
+
     TaskPlayAnim(playerPed, 'mp_arrest_paired', 'cop_p2_back_right', 8.0, -8, -1, 48, 0, 0, 0, 0)
-    
+
     Citizen.Wait(3500)
-    
+
     ClearPedTasksImmediately(playerPed)
-    
+
     isCuffing = false
 end)
 
@@ -366,7 +366,7 @@ AddEventHandler('crp-police:dragplayer', function()
 
     local user, distance = GetClosestPlayer()
 
-    if distance ~= nil and distance ~= -1 and distance < 1.0 then 
+    if distance ~= nil and distance ~= -1 and distance < 1.0 then
         if not isBeingDragged then
             TriggerServerEvent('crp-police:dragplayer', user)
         end
@@ -389,7 +389,7 @@ AddEventHandler('crp-police:drag', function(player)
                 if GetEntitySpeed(playerPed) > 0.2 then
                     local coords = GetEntityCoords(playerPed,  true)
 
-                    SetEntityCoords(playerPed, coords.x, coords.y, coords.z)	
+                    SetEntityCoords(playerPed, coords.x, coords.y, coords.z)
                 end
 
                 Citizen.Wait(10000)
@@ -485,9 +485,9 @@ AddEventHandler('crp-police:enterVehicle', function(vehicle)
             for i = 1, GetVehicleMaxNumberOfPassengers(vehicleHandle) do
                 if IsVehicleSeatFree(vehicleHandle, i) then
                     TriggerEvent('crp-police:drag', -1)
-                     
+
                     Citizen.Wait(100)
-                    
+
                     SetPedIntoVehicle(GetPlayerPed(-1), vehicleHandle, i)
                     return true
                 end
@@ -495,9 +495,9 @@ AddEventHandler('crp-police:enterVehicle', function(vehicle)
 
             if IsVehicleSeatFree(enterVehicle, 0) then
                 TriggerEvent('crp-police:drag', -1)
-                
+
                 Citizen.Wait(100)
-                
+
 	            SetPedIntoVehicle(GetPlayerPed(-1), vehicleHandle, 0)
 	        end
         end
@@ -543,58 +543,58 @@ Citizen.CreateThread(function()
         if isPolice and not IsPauseMenuActive() then
             local isInVehicle = IsPedInAnyVehicle(GetPlayerPed(-1), false)
 
-            if isInVehicle then             
+            if isInVehicle then
                 if IsControlJustReleased(2, 172) then
                     TriggerEvent('wraithrs:checkFrontRadar')
-                    
+
 					Citizen.Wait(500)
                 end
 
                 if IsControlJustReleased(2, 173) then
                     TriggerEvent('wraithrs:checkRearRadar')
-                    
+
 					Citizen.Wait(500)
                 end
 
                 if IsControlJustReleased(2, 174) then
                     TriggerEvent('wraithrs:resetRadar')
-                    
+
 					Citizen.Wait(500)
                 end
-                
+
                 if IsControlJustReleased(2, 175) then
                     TriggerEvent('wraithrs:toggleradar')
-                    
+
 					Citizen.Wait(500)
                 end
             else
 				if IsControlJustReleased(2, 172) and not IsControlPressed(0, 19) then
                     TriggerEvent('crp-police:cuffplayer', false)
-                    
+
 					Citizen.Wait(500)
 				end
 
 				if IsControlJustReleased(2, 172) and IsControlPressed(0, 19) then
                     TriggerEvent('crp-police:cuffplayer', true)
-                    
+
 					Citizen.Wait(500)
                 end
-                
+
 				if IsControlJustReleased(2, 173) then
                     TriggerEvent('crp-police:uncuffplayer')
-                    
+
 					Citizen.Wait(500)
                 end
-                
+
                 if IsControlJustReleased(2, 174) then
                     TriggerEvent('crp-police:putInVehicle')
-                    
+
 					Citizen.Wait(500)
                 end
 
                 if IsControlJustReleased(2, 175) then
                     TriggerEvent('crp-police:dragplayer')
-                    
+
 					Citizen.Wait(500)
                 end
             end
@@ -605,7 +605,7 @@ end)
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
-        
+
         if isBeingDragged then
             local userPed, playerPed = GetPlayerPed(GetPlayerFromServerId(draggerId)), GetPlayerPed(-1)
 
@@ -637,7 +637,7 @@ Citizen.CreateThread(function()
             DisableControlAction(1, 37, true)
             DisableControlAction(0, 59, true)
             DisableControlAction(0, 60, true)
-            DisableControlAction(2, 31, true) 
+            DisableControlAction(2, 31, true)
             SetCurrentPedWeapon(playerPed, GetHashKey('weapon_unarmed'), true)
         end
     end
@@ -648,7 +648,7 @@ Citizen.CreateThread(function()
         Citizen.Wait(0)
 
         local letSleep = true
-        
+
         if isPolice then
             local playerPed = PlayerPedId()
             local isInMarker, hasExited, coords = false, false, GetEntityCoords(playerPed)
@@ -673,7 +673,7 @@ Citizen.CreateThread(function()
 
                 if distance < 10.0 then
                     DrawMarker(27, armoriesLocations[i].x, armoriesLocations[i].y, armoriesLocations[i].z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 44, 130, 201, 100, false, false, 2, false, nil, nil, false)
-                
+
                     letSleep = false
                 end
 

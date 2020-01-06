@@ -4,14 +4,14 @@ AddEventHandler('crp-jobmanager:updateJob', function(job, name, notify)
 
     user.setVar('job', job)
 
-    if notify then 
+    if notify then
         local text = 'Trabalho: ' .. name .. '.'
 
         if job == 'unemployed' then
             text = 'Estás desempregado.'
         end
 
-        exports['crp-notifications']:SendAlert('inform', text, 3500) 
+        exports['crp-notifications']:SendAlert('inform', text, 3500)
     end
 
     if job == 'unemployed' then
@@ -20,6 +20,6 @@ AddEventHandler('crp-jobmanager:updateJob', function(job, name, notify)
 		SetPedRelationshipGroupDefaultHash(playerPed, GetHashKey('PLAYER'))
         SetPoliceIgnorePlayer(playerPed, false)
     end
-    
+
     TriggerEvent('crp-userinfo:updateJob', job)
 end)

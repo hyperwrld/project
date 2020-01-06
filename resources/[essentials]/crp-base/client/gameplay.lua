@@ -3,7 +3,7 @@ local isRadarEnabled = nil
 local function SetGamePlayVars()
     Citizen.CreateThread(function()
         -- Disable Dispatch Services
-        
+
         for i = 1, 25 do
             EnableDispatchService(i, false)
         end
@@ -11,7 +11,7 @@ local function SetGamePlayVars()
         -- Enable PVP
         NetworkSetFriendlyFireOption(true)
         SetCanAttackFriendly(PlayerId(), true, true)
-        
+
         while true do
             Citizen.Wait(0)
             local playerPed = GetPlayerPed(-1)
@@ -24,7 +24,7 @@ local function SetGamePlayVars()
             SetPlayerWantedLevelNow(playerID, false)
             ClearAreaOfCops(position, 400.0)
 
-            -- Disable Health Regenerate 
+            -- Disable Health Regenerate
             SetPlayerHealthRechargeMultiplier(playerID, 0.0)
 
             -- Disable Vehicle Rewards
@@ -37,9 +37,9 @@ local function SetGamePlayVars()
                     end
                 end
 
-                if (not isRadarEnabled) then 
+                if (not isRadarEnabled) then
                     DisplayRadar(true)
-                    
+
                     isRadarEnabled = true
                 end
             elseif (isRadarEnabled or isRadarEnabled == nil) then
@@ -75,8 +75,8 @@ end
 local hasGamePlayStarted, oldposition = false
 
 AddEventHandler('crp-base:playerSessionStarted', function()
-    if hasGamePlayStarted then 
-        return 
+    if hasGamePlayStarted then
+        return
     end
 
     hasGamePlayStarted = true

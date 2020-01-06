@@ -10,6 +10,6 @@ TriggerEvent('crp-base:addCommand', 'ooc', function(source, args, user)
 	if isEmpty(args) then
 		return
     end
-    
+
     TriggerClientEvent('chat:addMessage', -1, { color = {255, 255, 255}, templateId = 'blue', args = { user.getFullName(), args }})
 end, { help = 'Apenas utilize este comando em casos "extremos".', params = {{ name = 'mensagem' }}})

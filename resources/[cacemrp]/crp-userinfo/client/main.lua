@@ -1,21 +1,4 @@
-local job, inService, isHandcuffed, isPrimeTime = 'unemployed', false, false, false
-
-AddEventHandler('crp-userinfo:updateJob', function(_job)
-    job = _job
-end)
-
-AddEventHandler('crp-userinfo:updateCuffs', function(state)
-    isHandcuffed = state
-end)
-
-AddEventHandler('crp-userinfo:setPrimeTime', function(state)
-    isPrimeTime = state
-end)
-
-RegisterNetEvent('crp-userinfo:updateService')
-AddEventHandler('crp-userinfo:updateService', function(jobName, status)
-    inService = status
-end)
+local job, inService, isHandcuffed, isPrimeTime, isNightTime = 'unemployed', false, false, false, false
 
 function isPed(type)
     local data = false
@@ -36,6 +19,10 @@ function isPed(type)
         data = isPrimeTime
     end
 
+    if type == 'nighttime' then
+        data = isNightTime
+    end
+
     return data
 end
 
@@ -53,4 +40,25 @@ AddEventHandler('crp-userinfo:isMedic', function(callback)
     else
         callback(false)
     end
+end)
+
+AddEventHandler('crp-userinfo:updateJob', function(_job)
+    job = _job
+end)
+
+AddEventHandler('crp-userinfo:updateCuffs', function(state)
+    isHandcuffed = state
+end)
+
+AddEventHandler('crp-userinfo:setPrimeTime', function(state)
+    isPrimeTime = state
+end)
+
+AddEventHandler('crp-userinfo:setCurrentTime', function(state)
+    isNightTime = state
+end)
+
+RegisterNetEvent('crp-userinfo:updateService')
+AddEventHandler('crp-userinfo:updateService', function(jobName, status)
+    inService = status
 end)

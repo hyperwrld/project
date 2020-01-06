@@ -9,7 +9,7 @@ AddEventHandler('crp-jobmanager:disableService', function(name)
     local _source = source
 
     inService[name][_source] = false
-    
+
     Citizen.Wait(1000)
 
     TriggerClientEvent('crp-userinfo:updateService', _source, name, false)
@@ -20,15 +20,15 @@ AddEventHandler('crp-jobmanager:enableService', function(name)
     local _source = source
 
     inService[name][_source] = true
-    
+
     Citizen.Wait(1000)
 
     TriggerClientEvent('crp-userinfo:updateService', _source, name, true)
 end)
 
 TriggerEvent('crp-base:addCommand', 'recrutar', function(source, args, user)
-    if source == tonumber(args[1]) then 
-        return 
+    if source == tonumber(args[1]) then
+        return
     end
 
     local user = exports['crp-base']:GetCharacter(source)
@@ -43,9 +43,9 @@ TriggerEvent('crp-base:addCommand', 'recrutar', function(source, args, user)
     args[2] = tonumber(args[2])
 
     if args[1] and args[2] then
-        if args[2] >= userJob.grade then 
+        if args[2] >= userJob.grade then
             print('trying to set null rank or leader rank')
-            return 
+            return
         end
 
         local target = exports['crp-base']:GetCharacter(args[1])

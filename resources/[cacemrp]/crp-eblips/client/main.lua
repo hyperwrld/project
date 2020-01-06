@@ -10,18 +10,18 @@ end)
 
 RegisterNetEvent('crp-userinfo:updateService')
 AddEventHandler('crp-userinfo:updateService', function(jobName, status)
-    if jobName == 'police' and status then 
+    if jobName == 'police' and status then
         DecorSetInt(GetPlayerPed(-1), 'EmergencyType', 2)
     elseif jobName == 'medic' and status then
         DecorSetInt(GetPlayerPed(-1), 'EmergencyType', 1)
-    else 
-        DecorSetInt(GetPlayerPed(-1), 'EmergencyType', 0) 
+    else
+        DecorSetInt(GetPlayerPed(-1), 'EmergencyType', 0)
     end
 end)
 
 local function setDecor()
     local type = 0
-    
+
     TriggerEvent('crp-userinfo:isPolice', function(isPolice)
         TriggerEvent('crp-userinfo:isMedic', function(isMedic)
             type = isPolice and 2 or 0
@@ -31,9 +31,9 @@ local function setDecor()
     end)
 end
 
-function StandardBlip(playerPed, id) 
+function StandardBlip(playerPed, id)
     local blip = AddBlipForEntity(playerPed)
-    
+
 	SetBlipAsShortRange(blip, true)
 	SetBlipSprite(blip, 1)
 
@@ -47,10 +47,10 @@ function StandardBlip(playerPed, id)
 	if DecorGetInt(playerPed, 'EmergencyType') == 1 then
 		SetBlipColour(blip, 23)
 		ShowHeadingIndicatorOnBlip(blip, true)
-		BeginTextCommandSetBlipName('STRING')		
+		BeginTextCommandSetBlipName('STRING')
 		AddTextComponentString('Paramédico')
 	end
-	
+
 	EndTextCommandSetBlipName(blip)
 end
 
@@ -58,43 +58,43 @@ Citizen.CreateThread(function()
 	local function createBlip(id)
 		local userPed, playerPed = GetPlayerPed(id), GetPlayerPed(-1)
 		local blip = GetBlipFromEntity(userPed)
-		
-        if not DecorExistOn(userPed, 'EmergencyType') then 
-            return 
+
+        if not DecorExistOn(userPed, 'EmergencyType') then
+            return
         end
 
-        if not DecorExistOn(playerPed, 'EmergencyType') then 
-            return 
+        if not DecorExistOn(playerPed, 'EmergencyType') then
+            return
         end
 
 		local blipExist = DoesBlipExist(blip)
 
-        if blipExist and DecorGetInt(userPed, 'EmergencyType') <= 0 then 
-            RemoveBlip(blip) 
-            return 
+        if blipExist and DecorGetInt(userPed, 'EmergencyType') <= 0 then
+            RemoveBlip(blip)
+            return
         end
 
-        if blipExist and DecorGetInt(playerPed, 'EmergencyType') <= 0 then 
-            RemoveBlip(blip) 
-            return 
+        if blipExist and DecorGetInt(playerPed, 'EmergencyType') <= 0 then
+            RemoveBlip(blip)
+            return
         end
 
-        if DecorGetInt(userPed, 'EmergencyType') <= 0 or DecorGetInt(playerPed, 'EmergencyType') <= 0 then 
-            return 
+        if DecorGetInt(userPed, 'EmergencyType') <= 0 or DecorGetInt(playerPed, 'EmergencyType') <= 0 then
+            return
         end
 
-        if blipExist then 
-            return 
+        if blipExist then
+            return
         end
-		
+
 		StandardBlip(userPed, id)
 	end
 
 	while true do
         Citizen.Wait(2000)
 
-        if not DecorExistOn(GetPlayerPed(-1), 'EmergencyType') then 
-            setDecor() 
+        if not DecorExistOn(GetPlayerPed(-1), 'EmergencyType') then
+            setDecor()
         end
 
         for _, player in ipairs(GetActivePlayers()) do

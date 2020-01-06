@@ -125,7 +125,7 @@ CRP.Enums.PedModels = {
 		'g_m_y_famfor_01','g_m_y_korean_01', 'g_m_y_korean_02', 'g_m_y_korlieut_01', 'g_m_y_lost_01', 'g_m_y_lost_02',
 		'g_m_y_lost_03', 'g_m_y_mexgang_01', 'g_m_y_mexgoon_01', 'g_m_y_mexgoon_02', 'g_m_y_mexgoon_03', 'g_m_y_pologoon_01',
 		'g_m_y_pologoon_02', 'g_m_y_salvaboss_01', 'g_m_y_salvagoon_01', 'g_m_y_salvagoon_02', 'g_m_y_salvagoon_03',
-		'g_m_y_strpunk_01', 'g_m_y_strpunk_02', 'mp_m_claude_01', 'mp_m_exarmy_01', 'mp_m_shopkeep_01', 's_m_m_ammucountry', 
+		'g_m_y_strpunk_01', 'g_m_y_strpunk_02', 'mp_m_claude_01', 'mp_m_exarmy_01', 'mp_m_shopkeep_01', 's_m_m_ammucountry',
 		's_m_m_autoshop_01', 's_m_m_autoshop_02', 's_m_m_bouncer_01', 's_m_m_chemsec_01', 's_m_m_cntrybar_01',
 		's_m_m_dockwork_01', 's_m_m_doctor_01', 's_m_m_fiboffice_01', 's_m_m_fiboffice_02', 's_m_m_gaffer_01',
 		's_m_m_gardener_01', 's_m_m_gentransport', 's_m_m_hairdress_01', 's_m_m_highsec_01', 's_m_m_highsec_02',

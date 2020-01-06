@@ -8,7 +8,7 @@ AddEventHandler('crp-banking:deposit', function(source, amount, callback)
         user.removeMoney(amount)
 
         user.addBank(tonumber(amount))
-        
+
         callback({ status = 'success', text = 'Depósito efetuado.' })
 	end
 end)
@@ -51,8 +51,8 @@ AddEventHandler('esx-banking:transfer', function(source, target, amount, callbac
 
                 target.addBank(amount)
 
-                TriggerClientEvent('crp-notifications:SendAlert', target, { 
-                    type = 'success', text = user.getFullName() .. ' acabou de te transferir ' .. amount .. '€.', length = 4000 
+                TriggerClientEvent('crp-notifications:SendAlert', target, {
+                    type = 'success', text = user.getFullName() .. ' acabou de te transferir ' .. amount .. '€.', length = 4000
                 })
 
                 callback({ status = 'success', text = 'Transferência efetuada com sucesso.' })

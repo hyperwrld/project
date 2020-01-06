@@ -27,8 +27,8 @@ local vehicleSpawnLocation = {
 	[7] =  { ['x'] = -45.58, ['y'] = -1101.4,  ['z'] = 26.43, ['h'] = 287.3  },
 }
 
-local vehicleTable = { 
-    [1] = { ['model'] = 'flatbed', ['price'] = 200 }, [2] = { ['model'] = 'cruiser',  ['price'] = 600 }, 
+local vehicleTable = {
+    [1] = { ['model'] = 'flatbed', ['price'] = 200 }, [2] = { ['model'] = 'cruiser',  ['price'] = 600 },
     [3] = { ['model'] = 'fixter',   ['price'] = 300 }, [4] = { ['model'] = 'scorcher', ['price'] = 700 },
     [5] = { ['model'] = 'tribike',  ['price'] = 400 }, [6] = { ['model'] = 'tribike2', ['price'] = 800 },
     [7] = { ['model'] = 'tribike3', ['price'] = 500 },
@@ -65,15 +65,15 @@ Citizen.CreateThread(function()
 
                     if spawnDistance < 2.5 then
                         DrawText3D(vehicleSpawnLocation[i]['x'], vehicleSpawnLocation[i]['y'], vehicleSpawnLocation[i]['z'], '[E] para mudar | [G] para comprar o veículo por: ' .. vehicleTable[i]['price'] .. '€')
-                    
+
                         if IsControlJustReleased(0, 47) then
                             exports['crp-notifications']:SendPersistantAlert('start', 'vehicleshop', 'inform', 'A tentar comprar o veículo.' )
 
                             Citizen.Wait(1500)
-                            
+
                             AttemptBuyVehicle(i)
                         end
-                        
+
                         if IsControlJustReleased(0, 38) then
                             currentVehicleLocation = i
 
@@ -132,7 +132,7 @@ Citizen.CreateThread(function()
         end
     end
 
-    Menus = { 
+    Menus = {
         ['vehicleshop'] = DrawShop,
         ['bikes'] = DrawBikes,
         ['jobs'] = DrawJobs
@@ -175,7 +175,7 @@ Citizen.CreateThread(function()
             local playerPed = GetPlayerPed(-1)
 
             if not found then
-                isMenuOpen = false 
+                isMenuOpen = false
 
                 if DoesEntityExist(fakeVehicle.entity) then
                     Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(fakeVehicle.entity))
@@ -209,7 +209,7 @@ function CheckVehicle(model)
     if DoesEntityExist(fakeVehicle.entity) then
         Citizen.InvokeNative(0xEA386986E786A54F, Citizen.PointerValueIntInitialized(fakeVehicle.entity))
     end
-    
+
     local position, vehicleHash, playerPed = { -60.939, -1108.265, 25.746, 68.048 }, GetHashKey(model), GetPlayerPed(-1)
 
     RequestModel(vehicleHash)
@@ -221,9 +221,9 @@ function CheckVehicle(model)
     local vehicle = CreateVehicle(vehicleHash, position[1], position[2], position[3], position[4], false, false)
 
     SetModelAsNoLongerNeeded(vehicleHash)
-    
+
     local timer = 9000
-    
+
     while not DoesEntityExist(vehicle) and timer > 0 do
         Citizen.Wait(1)
 
@@ -232,30 +232,30 @@ function CheckVehicle(model)
 
     FreezeEntityPosition(vehicle, true)
     SetEntityInvincible(vehicle, true)
-    
+
     SetVehicleDoorsLocked(vehicle, 4)
     --SetEntityCollision(veh,false,false)
     TaskWarpPedIntoVehicle(playerPed, vehicle, -1)
-    
+
     for i = 0, 24 do
         SetVehicleModKit(vehicle, 0)
         RemoveVehicleMod(vehicle, i)
     end
-    
+
     fakeVehicle = { model = model, entity = vehicle }
 
     if fakeVehicle.model == 'rumpo' then
         SetVehicleLivery(vehicle, 2)
     end
-    
+
     for i = 1, 5 do
         scaleform = ResetScaleForm('mp_car_stats_01', i)
 
         x, y, z = table.unpack(GetEntityCoords(playerPed, true))
-        
+
         DrawScaleformMovie_3d(scaleform, x - 1, y + 1.8, z + 7.0, 0.0, 180.0, 90.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0)
     end
-    
+
     scaleform = StartScaleForm('mp_car_stats_01', fakeVehicle.entity, fakeVehicle.model)
 end
 
@@ -265,7 +265,7 @@ function SpawnVehicles()
 
         Citizen.Wait(1500)
     end
- 
+
     DespawnVehicles()
 
     hasSpawned = true
@@ -285,7 +285,7 @@ function SpawnVehicles()
         SetVehicleOnGroundProperly(vehicle)
 		SetEntityInvincible(vehicle, true)
         FreezeEntityPosition(vehicle, true)
-        
+
         SetVehicleNumberPlateText(vehicle, 'CARRO' .. i)
 
         spawnedVehicles[#spawnedVehicles + 1] = vehicle
@@ -355,7 +355,7 @@ function StartScaleForm(scaleform, vehicle, vehicleName)
 	local topspeed = math.ceil(GetVehicleHandlingFloat(vehicle, 'CHandlingData', 'fInitialDriveMaxFlatVel') / 4)
     local handling = math.ceil(GetVehicleHandlingFloat(vehicle, 'CHandlingData', 'fSteeringLock') * 2)
     local braking = math.ceil(GetVehicleHandlingFloat(vehicle, 'CHandlingData', 'fBrakeForce') * 100)
-    local acceleration = math.ceil(GetVehicleHandlingFloat(vehicle, 'CHandlingData', 'fInitialDriveForce') * 100) 
+    local acceleration = math.ceil(GetVehicleHandlingFloat(vehicle, 'CHandlingData', 'fInitialDriveForce') * 100)
 
     if topspeed > 100 then topspeed = 100 end
     if handling > 100 then handling = 100 end
@@ -373,7 +373,7 @@ end
 
 function AttemptBuyVehicle(i)
     local vehicle = GetClosestVehicle(vehicleSpawnLocation[i]['x'], vehicleSpawnLocation[i]['y'], vehicleSpawnLocation[i]['z'], 3.000, 0, 70)
-    
+
 	if not DoesEntityExist(vehicle) then
         exports['crp-notifications']:SendPersistantAlert('end', 'vehicleshop')
         exports['crp-notifications']:SendAlert('error', 'Não foi encontrado o veículo.')
@@ -422,7 +422,7 @@ end
 function DrawText3D(x, y, z, text)
     local onScreen, _x, _y = World3dToScreen2d(x, y, z)
     local px, py, pz = table.unpack(GetGameplayCamCoords())
-    
+
     SetTextScale(0.35, 0.35)
     SetTextFont(4)
     SetTextProportional(1)

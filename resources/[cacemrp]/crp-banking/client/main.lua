@@ -3,7 +3,7 @@ local atms = { [1] = -1126237515, [2] = 506770882, [3] = -870868698, [4] = 15023
 local banks = {
     { x = 149.825,   y = -1040.409, z = 29.374,  closed = false },
     { x = -1212.895, y = -330.483,  z = 37.787,  closed = false },
-    { x = -2962.861, y = 482.823,   z = 15.703,  closed = false }, 
+    { x = -2962.861, y = 482.823,   z = 15.703,  closed = false },
     { x = -112.285,  y = 6468.836,  z = 31.627,  closed = false },
     { x = 314.133,   y = -278.859,  z = 54.171,  closed = false },
     { x = -351.054,  y = -49.573,   z = 49.043,  closed = false },
@@ -19,7 +19,7 @@ local function OpenMenu(type)
     TriggerBankAnimation(type)
 
     isMenuOpen = true
-    
+
     SendNUIMessage({ event = 'open', type = type })
 
     TriggerServerEvent('crp-banking:updateInfo')
@@ -38,7 +38,7 @@ end
 
 local function CloseMenu()
     isMenuOpen, isBankOpen, isAtmOpen = false, false, false
-    
+
     TriggerBankAnimation(isBankOpen)
 
 	EnableAllControlActions(0)
@@ -154,10 +154,10 @@ Citizen.CreateThread(function()
 
                 if (banks[i].closed) then
                     DrawText3D(banks[i].x, banks[i].y, banks[i].z, 'Este banco está fechado.')
-                else 
-                    DrawText3D(banks[i].x, banks[i].y, banks[i].z, '[E] para usar o banco.')   
+                else
+                    DrawText3D(banks[i].x, banks[i].y, banks[i].z, '[E] para usar o banco.')
                 end
-                
+
                 if IsControlJustReleased(0, 38) then
                     OpenMenu(true)
 				end
@@ -167,7 +167,7 @@ Citizen.CreateThread(function()
         if letSleep then
 			Citizen.Wait(1500)
         end
-        
+
         ::continue::
     end
 end)
@@ -175,7 +175,7 @@ end)
 function TriggerBankAnimation(type)
     local playerPed = GetPlayerPed(-1)
 
-    if (DoesEntityExist(playerPed) and not IsEntityDead(playerPed)) then 
+    if (DoesEntityExist(playerPed) and not IsEntityDead(playerPed)) then
         if (not type) then
             if (isUsingBank) then
                 LoadAnimation('amb@prop_human_atm@male@exit')
@@ -219,7 +219,7 @@ end
 function DrawText3D(x, y, z, text)
     local onScreen, _x, _y = World3dToScreen2d(x, y, z)
     local px, py, pz = table.unpack(GetGameplayCamCoords())
-    
+
     SetTextScale(0.35, 0.35)
     SetTextFont(4)
     SetTextProportional(1)

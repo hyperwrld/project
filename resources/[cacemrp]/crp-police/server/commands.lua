@@ -40,7 +40,7 @@ TriggerEvent('crp-base:addCommand', 'carro', function(source, args, user)
     if userJob == 'police' then
         if vehicles[args[1]] then
             TriggerClientEvent('crp-police:spawnvehicle', source, args[1], vehicles[args[1]])
-        else 
+        else
             TriggerClientEvent('chat:addMessage', source, { color = {255, 255, 255}, templateId = 'orange', args = { 'SYSTEM', 'Não foi encontrado nenhum veículo com esse nome.' }})
         end
     else

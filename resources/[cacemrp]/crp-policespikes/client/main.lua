@@ -42,7 +42,7 @@ AddEventHandler('crp-policespikes:watchSpikes', function(watchedSpike)
             spikeCoords[_watchedSpike]['watching'] = false
             return
         end
-        
+
 		if not spikeCoords[_watchedSpike]['watching'] then
 			return
 		end
@@ -57,7 +57,7 @@ AddEventHandler('crp-policespikes:watchSpikes', function(watchedSpike)
         local rightBack = GetOffsetFromEntityInWorldCoords(vehicle, maximum['x'] + 0.25, -0.85, 0.0)
 
         local frontLeftClose, frontRightClose, backLeftClose, backRightClose = false, false, false, false
-        
+
         if #(vector3(spike['x'], spike['y'], spike['z']) - leftFront) < 1.5 then
             if not IsVehicleTyreBurst(vehicle, 0, true) then
                 frontLeftClose = true
@@ -71,7 +71,7 @@ AddEventHandler('crp-policespikes:watchSpikes', function(watchedSpike)
         if #(vector3(spike['x'], spike['y'], spike['z']) - rightFront) < 1.5 then
             if not IsVehicleTyreBurst(vehicle, 1, true) then
                 frontRightClose = true
-                
+
                 SetVehicleTyreBurst(vehicle, 0, false, 1000.0)
                 SetVehicleTyreBurst(vehicle, 1, true,  1000.0)
                 SetVehicleTyreBurst(vehicle, 2, false, 1000.0)
@@ -82,27 +82,27 @@ AddEventHandler('crp-policespikes:watchSpikes', function(watchedSpike)
         if #(vector3(spike['x'], spike['y'], spike['z']) - leftBack) < 1.5 then
             if not IsVehicleTyreBurst(vehicle, 2, true) then
                 backLeftClose = true
-                
+
                 SetVehicleTyreBurst(vehicle, 2, true,  1000.0)
                 SetVehicleTyreBurst(vehicle, 1, false, 1000.0)
                 SetVehicleTyreBurst(vehicle, 0, false, 1000.0)
-                SetVehicleTyreBurst(vehicle, 3, false, 1000.0)	
-            end	      		
+                SetVehicleTyreBurst(vehicle, 3, false, 1000.0)
+            end
         end
 
         if #(vector3(spike['x'], spike['y'], spike['z']) - rightBack) < 1.5 then
             if not IsVehicleTyreBurst(vehicle, 3, true) then
                 backRightClose = true
-               
+
                 SetVehicleTyreBurst(vehicle, 3, true,  1000.0)
                 SetVehicleTyreBurst(vehicle, 4, false, 1000.0)
                 SetVehicleTyreBurst(vehicle, 5, false, 1000.0)
                 SetVehicleTyreBurst(vehicle, 6, false, 1000.0)
-                SetVehicleTyreBurst(vehicle, 7, false, 1000.0)  
-            end   		
+                SetVehicleTyreBurst(vehicle, 7, false, 1000.0)
+            end
         end
-        
-        if (frontLeftClose and frontRightClose) and (backLeftClose and backLeftClose) then 
+
+        if (frontLeftClose and frontRightClose) and (backLeftClose and backLeftClose) then
             Citizen.Wait(1500)
         end
 	end
@@ -149,9 +149,9 @@ AddEventHandler('crp-policespikes:pickup', function()
         RemoveSpikes()
 
         Citizen.Wait(500)
-        
+
         attempt = attempt + 1
-        
+
 		if attempt > 4 then removing = false end
     end
 
@@ -160,9 +160,9 @@ AddEventHandler('crp-policespikes:pickup', function()
     isRemovingSpikes = false
 end)
 
-function DropSpikesOnGround() 
+function DropSpikesOnGround()
     local playerPed = GetPlayerPed(-1)
-    
+
     TriggerAnimation(playerPed)
 
     Citizen.Wait(1000)
@@ -182,7 +182,7 @@ function DropSpikesOnGround()
     SetBlipSprite(spikesBlip, 238)
     SetBlipScale(spikesBlip, 1.2)
     SetBlipAsShortRange(spikesBlip, true)
-    
+
 	BeginTextCommandSetBlipName('STRING')
 	AddTextComponentString('Tapete de pregos')
     EndTextCommandSetBlipName(spikesBlip)
@@ -191,12 +191,12 @@ function DropSpikesOnGround()
 end
 
 function RenderSpike(k)
-    if spikeCoords[k].palced == true or spikeCoords[k].object ~= nil then 
-        return 
+    if spikeCoords[k].palced == true or spikeCoords[k].object ~= nil then
+        return
     end
 
     spikeCoords[k].palced = true
-    
+
 	local spike = GetHashKey('P_ld_stinger_s')
 
     RequestModel(spike)
@@ -206,7 +206,7 @@ function RenderSpike(k)
     end
 
     local spikeObject = CreateObject(spike, spikeCoords[k].x, spikeCoords[k].y, spikeCoords[k].z, 0, 1, 1)
-    
+
     PlaceObjectOnGroundProperly(spikeObject)
 	SetEntityHeading(spikeObject, spikeCoords[k].h)
 	FreezeEntityPosition(spikeObject, true)
@@ -216,9 +216,9 @@ end
 
 function DeleteSpike(k)
     local spike = spikeCoords[k].object
-    
+
     DeleteObject(spike)
-    
+
   	if DoesEntityExist(spike) then
       	SetEntityAsNoLongerNeeded(spike)
         DeleteObject(spike)
@@ -240,7 +240,7 @@ function RemoveSpikes()
             TriggerAnimation(GetPlayerPed(-1))
 
             if DoesEntityExist(spike) then
-                SetEntityAsNoLongerNeeded(spike)  
+                SetEntityAsNoLongerNeeded(spike)
                 DeleteObject(spike)
             else
                 TriggerServerEvent('crp-policespikes:removeSpikes', k)
@@ -276,7 +276,7 @@ end
 Citizen.CreateThread(function()
   	while true do
         Citizen.Wait(0)
-        
+
         local playerPed = GetPlayerPed(-1)
 
         if IsPedInAnyVehicle(playerPed, false) then
@@ -309,10 +309,10 @@ end)
 Citizen.CreateThread(function()
   	while true do
         Citizen.Wait(1000)
-           
+
         for k, v in pairs(spikeCoords) do
             local distance = #(vector3(v['x'], v['y'], v['z']) - GetEntityCoords(GetPlayerPed(-1)))
-            
+
 	    	if distance < 85.0 then
                 if v['palced'] == false or v['object'] == nil then
 					RenderSpike(k)
@@ -322,7 +322,7 @@ Citizen.CreateThread(function()
 					DeleteSpike(k)
 				end
             end
-            
+
 			Wait(100)
 	    end
     end

@@ -27,7 +27,7 @@ function StartProgressBar(action, callback)
                     CancelAction()
                 end
 
-                if action.move then         
+                if action.move then
                     DisableControlAction(0, 30, true)
                     DisableControlAction(0, 31, true)
                     DisableControlAction(0, 36, true)

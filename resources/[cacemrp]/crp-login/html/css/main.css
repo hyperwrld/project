@@ -13,19 +13,19 @@ p {
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
-    user-select: none;   
+    user-select: none;
 }
 
 ::-webkit-scrollbar {
     width: 5px;
 }
- 
+
 ::-webkit-scrollbar-thumb {
-    background: white; 
+    background: white;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: white; 
+    background: white;
 }
 
 [type="date"]::-webkit-inner-spin-button {
@@ -450,7 +450,7 @@ p {
         -o-border-radius: 50%;
         -ms-border-radius: 50%;
         -webkit-border-radius: 50%;
-        -moz-border-radius: 50%;    
+        -moz-border-radius: 50%;
 }
 
 .cssload-inner.cssload-one {

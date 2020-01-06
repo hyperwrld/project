@@ -13,4 +13,4 @@ files {
 	'html/js/main.js'
 }
 
-dependency 'crp-base' 
+dependency 'crp-base'

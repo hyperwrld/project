@@ -18,9 +18,9 @@ function CreateCharacter(source, data)
 	self.session        = {}
 	self.moneyDisplayed = false
 
-	if data.status == nil then 
+	if data.status == nil then
 		self.status = data.status
-	else 
+	else
 		self.status = json.decode(data.status)
 	end
 
@@ -28,7 +28,7 @@ function CreateCharacter(source, data)
 		self.job = data.job
 	else
         self.job = json.decode(data.job)
-        
+
         TriggerClientEvent('crp-jobmanager:updateJob', source, self.job.name, self.job.label, true)
 	end
 
@@ -56,7 +56,7 @@ function CreateCharacter(source, data)
 			print('ERROR: There seems to be an issue while setting money, something else then a number was entered.')
 		end
 	end
-	
+
 	-- Returns money for the player
 
 	rTable.getMoney = function()
@@ -100,7 +100,7 @@ function CreateCharacter(source, data)
 			local jobObject = jobs[job]
 
             self.job.name, self.job.label, self.job.grade = job, jobObject.label, grade
-            
+
 			TriggerClientEvent('crp-jobmanager:updateJob', self.source, job, jobObject.label, true)
 		else
 			print('ERROR: There seems to be an issue while setting a job, due to not founding the job.')
@@ -143,7 +143,7 @@ function CreateCharacter(source, data)
 		return self.coords
 	end
 
-	-- Sets the player coords, note this won't actually set the players coords on the client. 
+	-- Sets the player coords, note this won't actually set the players coords on the client.
 	-- So don't use this, it's for internal use
 
 	rTable.setPosition = function(x, y, z)
@@ -155,8 +155,8 @@ function CreateCharacter(source, data)
 	end
 
 	rTable.setStatus = function(status)
-		if self.status == nil then 
-			self.status = {} 
+		if self.status == nil then
+			self.status = {}
 		end
 
 		self.status = status
@@ -235,7 +235,7 @@ function CreateCharacter(source, data)
 			if not self.moneyDisplayed then
 
 				TriggerClientEvent('crp-base:money', self.source, 'activate', self.money)
-				
+
 				self.moneyDisplayed = true
 			end
 		else

@@ -36,7 +36,7 @@ function CRP.SpawnManager.InitialSpawn(self)
 	Citizen.CreateThread(function()
         DisableAllControlActions(0)
 
-        TransitionToBlurred(500)        
+        TransitionToBlurred(500)
         DoScreenFadeOut(500)
 
         while IsScreenFadingOut() do
@@ -76,7 +76,7 @@ function CRP.SpawnManager.InitialSpawn(self)
         FreezeEntityPosition(playerPed, false)
 
         NetworkResurrectLocalPlayer(spawn.x, spawn.y, spawn.z, spawn.heading, true, true, false)
-        
+
         ClearPedTasksImmediately(playerPed)
         RemoveAllPedWeapons(playerPed)
         ClearPlayerWantedLevel(PlayerId())
@@ -89,7 +89,7 @@ function CRP.SpawnManager.InitialSpawn(self)
         end
 
         Citizen.Wait(500)
-        
+
         while IsScreenFadingIn() do
             Citizen.Wait(0)
         end

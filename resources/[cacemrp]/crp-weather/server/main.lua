@@ -47,24 +47,24 @@ function ChooseNextWeatherStage()
     if currentWeather == 'CLEAR' or currentWeather == 'CLOUDS' or currentWeather == 'EXTRASUNNY'  then
         local number = math.random(1, 2)
 
-        if number == 1 then 
+        if number == 1 then
             currentWeather = 'CLEARING'
-        else 
-            currentWeather = 'OVERCAST' 
+        else
+            currentWeather = 'OVERCAST'
         end
     elseif currentWeather == 'CLEARING' or currentWeather == 'OVERCAST' then
         local number = math.random(1, 6)
 
         if number == 1 then
             if currentWeather == 'CLEARING' then
-                currentWeather = 'FOGGY' 
+                currentWeather = 'FOGGY'
             else
                 local random = math.random(1, 10)
 
                 if random <= 8 then
                     currentWeather = 'CLEARING'
                 else
-                    currentWeather = 'RAIN' 
+                    currentWeather = 'RAIN'
                 end
             end
         elseif number == 2 then

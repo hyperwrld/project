@@ -1,15 +1,15 @@
 local charset, numbercharset = {}, {}
 
-for i = 48, 57 do 
-    table.insert(numbercharset, string.char(i)) 
+for i = 48, 57 do
+    table.insert(numbercharset, string.char(i))
 end
 
-for i = 65, 90 do 
-    table.insert(charset, string.char(i)) 
+for i = 65, 90 do
+    table.insert(charset, string.char(i))
 end
 
-for i = 97, 122 do 
-    table.insert(charset, string.char(i)) 
+for i = 97, 122 do
+    table.insert(charset, string.char(i))
 end
 
 function GeneratePlate()
@@ -17,11 +17,11 @@ function GeneratePlate()
 
 	while true do
         Citizen.Wait(2)
-        
+
         math.randomseed(GetGameTimer())
-        
+
         generatedPlate = string.upper(GetRandomLetter(4) .. GetRandomNumber(4))
-        
+
         local events = exports['crp-base']:getModule('Events')
 
         events:Trigger('crp-vehicleshop:isPlateTaken', generatedPlate, function(isPlateTaken)
@@ -40,9 +40,9 @@ end
 
 function GetRandomNumber(length)
     Citizen.Wait(1)
-    
+
     math.randomseed(GetGameTimer())
-    
+
 	if length > 0 then
 		return GetRandomNumber(length - 1) .. numbercharset[math.random(1, #numbercharset)]
 	else
@@ -52,9 +52,9 @@ end
 
 function GetRandomLetter(length)
     Citizen.Wait(1)
-    
+
     math.randomseed(GetGameTimer())
-    
+
 	if length > 0 then
 		return GetRandomLetter(length - 1) .. charset[math.random(1, #charset)]
 	else
@@ -67,11 +67,11 @@ function GetVehicleProperties(vehicle)
     local pearlescentColor, wheelColor = GetVehicleExtraColours(vehicle)
 
     local extras = {}
-    
+
     for i = 0, 12 do
 		if DoesExtraExist(vehicle, i) then
             local state = IsVehicleExtraTurnedOn(vehicle, i) == 1
-            
+
 			extras[tostring(i)] = state
 		end
 	end
@@ -81,7 +81,7 @@ function GetVehicleProperties(vehicle)
 
         plate             = GetVehicleNumberPlateText(vehicle),
 		plateIndex        = GetVehicleNumberPlateTextIndex(vehicle),
-        
+
 		primary           = primary,
 		secondary         = secondary,
 
@@ -128,7 +128,7 @@ function GetVehicleProperties(vehicle)
 
 		modFrontWheels    = GetVehicleMod(vehicle, 23),
         modBackWheels     = GetVehicleMod(vehicle, 24),
-        
+
 		modPlateHolder    = GetVehicleMod(vehicle, 25),
 		modVanityPlate    = GetVehicleMod(vehicle, 26),
 		modTrimA          = GetVehicleMod(vehicle, 27),
@@ -151,7 +151,7 @@ function GetVehicleProperties(vehicle)
 		modTrimB          = GetVehicleMod(vehicle, 44),
 		modTank           = GetVehicleMod(vehicle, 45),
         modWindows        = GetVehicleMod(vehicle, 46),
-        
+
 		modLivery         = GetVehicleLivery(vehicle)
 	}
 end

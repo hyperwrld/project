@@ -53,17 +53,17 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
-    while true do 
+    while true do
         Citizen.Wait(60000)
 
         if (hour > 19 or hour < 7) and not isNightTime then
             isNightTime = true
-            
-            TriggerEvent('crp-weather:setCurrentTime', isNightTime)
+
+            TriggerEvent('crp-userinfo:setCurrentTime', isNightTime)
         elseif (hour <= 19 or hour >= 7) and isNightTime then
             isNightTime = false
 
-            TriggerEvent('crp-weather:setCurrentTime', isNightTime)
+            TriggerEvent('crp-userinfo:setCurrentTime', isNightTime)
         end
 
         -- Make it so it, there's more systems that function like this.
@@ -74,7 +74,7 @@ Citizen.CreateThread(function()
             TriggerEvent('crp-userinfo:setPrimeTime', isPrimeTime)
         elseif (hour <= 16 or hour >= 20) and isPrimeTime then
             isPrimeTime = false
-            
+
             TriggerEvent('crp-userinfo:setPrimeTime', isPrimeTime)
         end
     end
