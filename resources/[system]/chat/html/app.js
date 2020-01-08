@@ -226,7 +226,7 @@ window.APP = {
                 buf.scrollTop = buf.scrollTop + 100;
             } else if (e.which == 9) {
                 e.preventDefault();
-                
+
                 this.autocomplete();
             }
         },

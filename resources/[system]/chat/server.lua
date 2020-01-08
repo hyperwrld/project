@@ -36,13 +36,13 @@ function splitString(inputString, seperator)
     local t = {} ; i = 1
 
     if seperator == nil then seperator = '%s' end
-    
+
 	for string in string.gmatch(inputString, '([^' .. seperator .. ']+)') do
         t[i] = string
-        
+
 		i = i + 1
     end
-    
+
 	return t
 end
 

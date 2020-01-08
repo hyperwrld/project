@@ -75,7 +75,7 @@ end)
 
 RegisterNUICallback('chatResult', function(data, cb)
     chatInputActive = false
-    
+
     SetNuiFocus(false)
 
     if not data.canceled then

@@ -70,25 +70,23 @@ em {
 .chat-messages {
 	position: relative;
     height: 95%;
-	font-size: 1.25vh;
+    font-size: 1.45vh;
+    line-height: 1.6;
 	margin: 1%;
 	overflow-x: hidden;
     overflow-y: hidden;
-    
     flex-flow: row;
     flex-wrap: wrap;
     display: flex;
     padding: -100px;
-    text-shadow: 0px 0px 2px black;
 }
 
 .chat-input {
 	font-size: 1.45vh;
     position: absolute;
-    text-shadow: 0px 0px 2px black;
-	top: 23.8%;
+	top: 30.8%;
 	left: 0.8%;
-	width: 28%;
+	width: 25%;
 	max-width: 1000px;
 	box-sizing: border-box;
 }
@@ -102,7 +100,7 @@ em {
 textarea {
 	font-size: 1.45vh;
     display: block;
-    
+
 	width: 100%;
 	height: 3.15%;
 
@@ -115,7 +113,7 @@ textarea {
 
 	overflow: hidden;
     text-overflow: ellipsis;
-    
+
     box-sizing: border-box;
     border-radius: 2px;
     border-width: 2;
