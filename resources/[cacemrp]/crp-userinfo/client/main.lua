@@ -23,6 +23,14 @@ function isPed(type)
         data = isNightTime
     end
 
+    if type == 'isPolice' then
+        if job == 'police' and inService then
+            return true
+        else
+            return false
+        end
+    end
+
     return data
 end
 
