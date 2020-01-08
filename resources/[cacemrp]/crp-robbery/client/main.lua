@@ -77,8 +77,8 @@ AddEventHandler('crp-robbery:robPed', function(entity, vehicle)
 
                 Citizen.Wait(10000)
 
-                if GetRandomNumber(100) < 60 and not isAlerted then
-                    -- alert police!
+                if GetRandomNumber(100) < 95 and not isAlerted then
+                    TriggerEvent('crp-alerts:alertPolice', 8.0, 'HouseRobbery', 0, false)
 
                     isAlerted = true
                 end
@@ -145,9 +145,15 @@ AddEventHandler('crp-robbery:robPed', function(entity, vehicle)
 
         Citizen.Wait(1000)
 
-        SetAllPedAtributes(entity, false)
+        TaskWanderStandard(entity, 10.0, 10)
 
-        TaskSmartFleePed(entity, playerPed, 500, -1, false, false)
+        Citizen.Wait(GetRandomNumber(1000, 30000))
+
+        TriggerEvent('crp-alerts:alertPolice', 8.0, 'PersonRobbed', vehicle)
+    end
+
+    if #recentVictims > 25 then
+        recentVictims = {}
     end
 end)
 
@@ -224,8 +230,6 @@ Citizen.CreateThread(function()
                         ClearPedTasks(entity)
 
                         TaskLeaveVehicle(entity, vehicle, 0)
-
-                        SetAllPedAtributes(entity, true)
 
                         Citizen.Wait(1000)
 
@@ -360,24 +364,6 @@ function CheckIfShopKeeper(entity)
     end
 
     return false, 0
-end
-
-function SetAllPedAtributes(foundPed, boolean)
-	if boolean then
-		SetBlockingOfNonTemporaryEvents(foundPed, true)
-
-		SetPedFleeAttributes(foundPed, 0, 0)
-
-		SetPedCombatAttributes(foundPed, 17, true)
-		SetPedCombatAttributes(foundPed, 46, true)
-	else
-		SetBlockingOfNonTemporaryEvents(foundPed, false)
-
-		SetPedFleeAttributes(foundPed, 0, 1)
-
-		SetPedCombatAttributes(foundPed, 17, false)
-		SetPedCombatAttributes(foundPed, 46, false)
-	end
 end
 
 function GetRandomNumber(firstNumber, secondNumber)
