@@ -18,5 +18,6 @@
   "svadhesive",
   "citizen:scripting:mono",
   "citizen:scripting:v8",
+  "voip-server:mumble",
   "http-client"
 ]

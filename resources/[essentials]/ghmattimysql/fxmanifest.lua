@@ -1,6 +1,6 @@
 fx_version 'adamant'
 
-games 'gta5'
+game 'gta5'
 
 ui_page 'ui/index.html'
 
