@@ -1,4 +1,6 @@
-resource_manifest_version '44febabe-d386-4d18-afbe-5e627f4af937'
+fx_version 'adamant'
+
+games 'gta5'
 
 ui_page 'nui/ui.html'
 
@@ -7,7 +9,8 @@ client_scripts {
 }
 
 server_scripts {
-	'server/main.lua'
+    'server/main.lua',
+    'server/classes/inventory.lua'
 }
 
 files {

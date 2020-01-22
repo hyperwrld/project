@@ -36,12 +36,12 @@ AddEventHandler('crp-db:deletecharacter', function(source, data, callback)
 end)
 
 AddEventHandler('crp-db:retrievecharacter', function(identifier, id, callback)
-	exports.ghmattimysql:execute('SELECT * FROM users WHERE identifier = @identifier AND id = @id;', { identifier = identifier, id = id }, function(users)
-		if users[1] then
-			callback(users[1])
-		else
-			callback(false)
-		end
+    exports.ghmattimysql:execute('SELECT * FROM users WHERE identifier = @identifier AND id = @id;', { identifier = identifier, id = id }, function(users)
+        if users[1] then
+            callback(users[1])
+        else
+            callback(false)
+        end
 	end)
 end)
 
