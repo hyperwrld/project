@@ -5,11 +5,13 @@ game 'gta5'
 ui_page 'nui/ui.html'
 
 client_scripts {
-	'client/main.lua'
+    'client/main.lua',
+    'client/functions.lua'
 }
 
 server_scripts {
     'server/main.lua',
+    'server/shops.lua',
     'server/classes/inventory.lua'
 }
 

@@ -9,20 +9,20 @@ let itemList = {};
 
 // * INVENTORY WEAPONS
 
-itemList['1737195953'] = { displayname: 'Cacetete', weight: 10, nonStack: true, image: 'crp-cacetete.png', weapon: true, meta: { serial: true, ammo: 1 }, description: 'Cacetete com apróximadamente 50cm, fabricado em aço e super resistente.' };
-itemList['911657153'] = { displayname: 'Taser', weight: 10, nonStack: true, image: 'crp-stungun.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'Uma arma de eletrochoque é um dispositivo não-letal capaz de emitir uma descarga elétrica de alta tensão e baixa corrente com o objetivo de provocar dor e afastar um agressor.' };
-itemList['453432689'] = { displayname: 'Pistola', weight: 15, nonStack: true, image: 'crp-pistol.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'Arma de fogo de cano curto usada para uso pessoal em ações de pequeno alcance.' };
-itemList['-1076751822'] = { displayname: 'Pistola SNS', weight: 15, nonStack: true, image: 'crp-snspistol.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'SNS é uma sigla para "Saturday Night Special", uma gíria inglesa para armas de fogo pequenas e baratas.' };
-itemList['137902532'] = { displayname: 'Pistola Vintage', weight: 15, nonStack: true, image: 'crp-vintagepistol.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'Arma de fogo com cano cumprido, tem uma ótima precisão mas tem uma velocidade de fogo lenta devido ao seu recoil.' };
-itemList['-771403250'] = { displayname: 'Pistola Pesada', weight: 20, nonStack: true, image: 'crp-heavypistol.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'Uma arma de fogo .50 apresenta grande semelhança com uma desert eagle e tem um poder imenso.' };
-itemList['1593441988'] = { displayname: 'Pistola de Combate', weight: 15, nonStack: true, image: 'crp-combatpistol.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'É uma arma fogo poderosa, matando alvos com cerca de 2 tiros e se tornando muito eficaz.' };
-itemList['-619010992'] = { displayname: 'Pistola-Metralhadora', weight: 30, nonStack: true, image: 'crp-machinepistol.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'Pistola automática tem uma incrível velocidade de fogo, mas não tem uma boa precisão.' };
-itemList['-1121678507'] = { displayname: 'Mini Submetralhadora', weight: 30, nonStack: true, image: 'crp-minismg.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'Uma pequena sub-metralhadora com uma semelhança da pistola-metraladora mas com uma rapidez de fogo maior.' };
-itemList['324215364'] = { displayname: 'Micro Submetralhadora', weight: 30, nonStack: true, image: 'crp-microsmg.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'Uma das sub-metralhadoras mais poderosas do mundo.' };
-itemList['736523883'] = { displayname: 'Submetralhadora', weight: 35, nonStack: true, image: 'crp-smg.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'É uma sub-metralhadora relativamente maior e com mais poder de fogo do que as outras.' };
-itemList['1649403952'] = { displayname: 'Rifle Compacto', weight: 45, nonStack: true, image: 'crp-compactrifle.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'Um rifle pequeno de cano curto, mas forte, que causa mais dano que o rifle de assalto original em troca de mais recoil.' };
-itemList['-1074790547'] = { displayname: 'Rifle de Assalto', weight: 55, nonStack: true, image: 'crp-assaultrifle.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'Rifle de assalto com grande capacidade de precisão à longa distância.' };
-itemList['-2084633992'] = { displayname: 'Carabina', weight: 55, nonStack: true, image: 'crp-carbinerifle.png', weapon: true, meta: { serial: true, ammo: 60 }, description: 'A carabina mais leve que a rifle de assalto e com mais precisa, esta arma normalmente é utilizada pela polícia.' };
+itemList['1737195953'] = { displayname: 'Cacetete', weight: 10, nonStack: true, image: 'crp-cacetete.png', weapon: true, description: 'Cacetete com apróximadamente 50cm, fabricado em aço e super resistente.' };
+itemList['911657153'] = { displayname: 'Taser', weight: 10, nonStack: true, image: 'crp-stungun.png', weapon: true, description: 'Uma arma de eletrochoque é um dispositivo não-letal capaz de emitir uma descarga elétrica de alta tensão e baixa corrente com o objetivo de provocar dor e afastar um agressor.' };
+itemList['453432689'] = { displayname: 'Pistola', weight: 15, nonStack: true, image: 'crp-pistol.png', weapon: true, description: 'Arma de fogo de cano curto usada para uso pessoal em ações de pequeno alcance.' };
+itemList['-1076751822'] = { displayname: 'Pistola SNS', weight: 15, nonStack: true, image: 'crp-snspistol.png', weapon: true, description: 'SNS é uma sigla para "Saturday Night Special", uma gíria inglesa para armas de fogo pequenas e baratas.' };
+itemList['137902532'] = { displayname: 'Pistola Vintage', weight: 15, nonStack: true, image: 'crp-vintagepistol.png', weapon: true, description: 'Arma de fogo com cano cumprido, tem uma ótima precisão mas tem uma velocidade de fogo lenta devido ao seu recoil.' };
+itemList['-771403250'] = { displayname: 'Pistola Pesada', weight: 20, nonStack: true, image: 'crp-heavypistol.png', weapon: true, description: 'Uma arma de fogo .50 apresenta grande semelhança com uma desert eagle e tem um poder imenso.' };
+itemList['1593441988'] = { displayname: 'Pistola de Combate', weight: 15, nonStack: true, image: 'crp-combatpistol.png', weapon: true, description: 'É uma arma fogo poderosa, matando alvos com cerca de 2 tiros e se tornando muito eficaz.' };
+itemList['-619010992'] = { displayname: 'Pistola-Metralhadora', weight: 30, nonStack: true, image: 'crp-machinepistol.png', weapon: true, description: 'Pistola automática tem uma incrível velocidade de fogo, mas não tem uma boa precisão.' };
+itemList['-1121678507'] = { displayname: 'Mini Submetralhadora', weight: 30, nonStack: true, image: 'crp-minismg.png', weapon: true, description: 'Uma pequena sub-metralhadora com uma semelhança da pistola-metraladora mas com uma rapidez de fogo maior.' };
+itemList['324215364'] = { displayname: 'Micro Submetralhadora', weight: 30, nonStack: true, image: 'crp-microsmg.png', weapon: true, description: 'Uma das sub-metralhadoras mais poderosas do mundo.' };
+itemList['736523883'] = { displayname: 'Submetralhadora', weight: 35, nonStack: true, image: 'crp-smg.png', weapon: true, description: 'É uma sub-metralhadora relativamente maior e com mais poder de fogo do que as outras.' };
+itemList['1649403952'] = { displayname: 'Rifle Compacto', weight: 45, nonStack: true, image: 'crp-compactrifle.png', weapon: true, description: 'Um rifle pequeno de cano curto, mas forte, que causa mais dano que o rifle de assalto original em troca de mais recoil.' };
+itemList['-1074790547'] = { displayname: 'Rifle de Assalto', weight: 55, nonStack: true, image: 'crp-assaultrifle.png', weapon: true, description: 'Rifle de assalto com grande capacidade de precisão à longa distância.' };
+itemList['-2084633992'] = { displayname: 'Carabina', weight: 55, nonStack: true, image: 'crp-carbinerifle.png', weapon: true, description: 'A carabina mais leve que a rifle de assalto e com mais precisa, esta arma normalmente é utilizada pela polícia.' };
 
 // * NORMAL ITEMS
 
@@ -66,15 +66,7 @@ $(function () {
 
                 break;
             case 'show':
-                var items = {};
-
-                if (event.data.items != undefined) {
-                    for (const [key, value] of Object.entries(event.data.items)) {
-                        items[value.slot] = { item: value.item };
-                    }
-                }
-
-                SetupActionBar(items)
+                SetupActionBar(event.data.items)
 
                 break;
             case 'hide':
@@ -117,7 +109,7 @@ function SetupActionBar(items) {
         $('.actionbar > #' + i).prepend('<div class="number disable"><span style="top: -35%;"> ' + i + ' </span></div>');
 
         if (items[i] != undefined) {
-            var item = itemList[items[i].item];
+            var item = itemList[items[i].name];
 
             $('.actionbar > #' + i).append(
                 '<div class="item"><img class="picture" style="max-height: 110px" src="items/' +
@@ -135,7 +127,7 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
 
 	if (playerData != undefined) {
 		for (const [key, value] of Object.entries(playerData)) {
-            playerItems[value.slot] = { id: value.item, quantity: value.count, information: value.information ? JSON.parse(value.information) : null };
+            playerItems[value.slot] = { id: value.name, quantity: value.count, meta: value.meta ? value.meta : null };
 		}
 	}
 
@@ -161,7 +153,7 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
 
 	if (otherData != undefined) {
 		for (const [key, value] of Object.entries(otherData)) {
-            otherItems[value.slot] = { id: value.item, quantity: value.count, price: value.price, information: value.information ? JSON.parse(value.information) : null  };
+            otherItems[value.slot] = { id: value.name, quantity: value.count, price: value.price, meta: value.meta ? value.meta : null  };
 		}
 	}
 
@@ -215,9 +207,9 @@ function SetupInventories(playerid, playerData, otherid, otherData) {
             itemInfo.find('.item-name').text(itemData.displayname)
             itemInfo.find('.picture').attr('src', 'items/' + itemData.image);
 
-            if (itemData.weapon && item.information) {
+            if (itemData.weapon && item.meta) {
                 itemInfo.find('#description').html('<b>Descrição:</b> ' + itemData.description);
-                itemInfo.find('.desc-info').html('<b>Número de série:<b> ' + item.information.serial + ' &nbsp;-&nbsp; <b>Munição:</b> ' + item.information.ammo)
+                itemInfo.find('.desc-info').html('<b>Número de série:<b> ' + item.meta.serial + ' &nbsp;-&nbsp; <b>Munição:</b> ' + item.meta.ammo)
             } else {
                 itemInfo.find('#description').html('<b>Descrição:</b> ' + itemData.description)
                 itemInfo.find('.desc-info').html('')
@@ -442,8 +434,9 @@ async function AttemptDropInEmptySlot(currentItem, currentInventory, returnInven
 				lastSlot: _lastSlot,
 				currentInventory: $('.' + returnInventory + ' h3').text(),
 				currentSlot: _currentSlot,
-				id: item.id,
-				quantity: quantity
+				item: item.id,
+                quantity: quantity,
+                inventoryType: inventoryType,
             };
 
 			if (inventoryType == 1) data['coords'] = inventoryCoords;

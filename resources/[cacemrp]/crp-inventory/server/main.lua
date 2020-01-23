@@ -1,217 +1,197 @@
-local inventories = {}
+
+local dropInventories = {}
+
+inventories = {}
 
 AddEventHandler('crp-inventory:moveItem', function(source, data, callback)
-    if string.find(data.currentInventory, 'drop') then
-        CheckIfInventoryExists(data.currentInventory, data.coords)
-    end
+    local lastInventory = GetInventory(data.lastInventory)
+    local item = lastInventory.getItem(data.item, data.lastSlot)
 
-    exports.ghmattimysql:scalar('SELECT count FROM inventory WHERE name = @name AND item = @item AND slot = @slot;', {
-        ['@name'] = data.lastInventory, ['@item'] = data.id, ['@slot'] = data.lastSlot
-    }, function(count)
-        if count and count >= data.quantity then
-            if (count - data.quantity) > 0 then
-                exports.ghmattimysql:execute('UPDATE inventory SET count = count - @quantity WHERE name = @name AND item = @item AND slot = @slot;',
-                { ['@quantity'] = data.quantity, ['@name'] = data.lastInventory, ['@item'] = data.id, ['@slot'] = data.lastSlot })
+    if item and item.count >= data.quantity then
+        if data.inventoryType == 1 and string.find(data.currentInventory, 'drop') then
+            CheckIfInventoryExists(data.currentInventory, data.coords)
+        end
 
-                exports.ghmattimysql:execute('INSERT INTO inventory (count, item, slot, name) VALUES (@quantity, @item, @slot, @name);',
-                { ['@quantity'] = data.quantity, ['@name'] = data.currentInventory, ['@item'] = data.id, ['@slot'] = data.currentSlot })
+        local currentInventory = GetInventory(data.currentInventory)
 
-                callback({ status = true, splitItem = true })
-            else
-                exports.ghmattimysql:execute('UPDATE inventory SET name = @name, slot = @slot WHERE name = @lastname AND item = @item AND slot = @lastslot;', { ['@quantity'] = data.quantity,
-                ['@name'] = data.currentInventory, ['@lastname'] = data.lastInventory, ['@item'] = data.id, ['@slot'] = data.currentSlot, ['@lastslot'] = data.lastSlot }, function(done)
-                    if done then
-                        if string.find(data.lastInventory, 'drop') then
-                            exports.ghmattimysql:execute('SELECT * FROM inventory WHERE name = @lastname;', { ['@lastname'] = data.lastInventory }, function(result)
-                                if not result[1] then
-                                    DeleteEmptyInventory(data.lastInventory)
-                                end
+        if (item.count - data.quantity) > 0 then
+            lastInventory.updateItem(data.item, data.lastSlot, (item.count - data.quantity))
+            currentInventory.addItem(data.item, data.currentSlot, data.quantity, nil)
 
-                                callback({ status = true, splitItem = false })
-                            end)
-                        else
-                            callback({ status = true, splitItem = false })
-                        end
+            callback({ status = true, splitItem = true })
+        else
+            lastInventory.removeItem(item.name, item.slot, false)
+            currentInventory.swapItem(item.name, data.currentSlot, item.count, item.meta, data.lastInventory, data.lastSlot)
+
+            if data.inventoryType == 1 and lastInventory.checkIfEmpty() then
+                for i = 1, #dropInventories, 1 do
+                    if dropInventories[i].name == data.lastInventory then
+                        table.remove(dropInventories, i)
+
+                        TriggerClientEvent('crp-inventory:updateInventories', -1, dropInventories)
                     end
-                end)
+                end
+            end
+
+            callback({ status = true, splitItem = false })
+        end
+    else
+        callback({ status = false })
+    end
+end)
+
+AddEventHandler('crp-inventory:swapItems', function(source, data, callback)
+    local lastInventory = GetInventory(data.lastInventory)
+    local item = lastInventory.getItem(data.item, data.lastSlot)
+
+    if item and item.count >= data.quantity then
+        local currentInventory = GetInventory(data.currentInventory)
+        local _item = currentInventory.getItem(data._item, data.currentSlot)
+
+        if _item then
+            if data.canStack and (_item.count - data.quantity) > 0 then
+                lastInventory.updateItem(data.item, data.lastSlot, (item.count - data.quantity))
+                currentInventory.updateItem(data.item, data.currentSlot, (_item.count + data.quantity))
+
+                callback({ status = true, stackItems = true, delete = false })
+            else
+                local status = { status = false }
+
+                if data.canStack then
+                    lastInventory.removeItem(data.item, data.lastSlot, true)
+                    currentInventory.updateItem(data.item, data.currentSlot, (_item.count + data.quantity))
+
+                    status = { status = true, stackItems = true, delete = true }
+                elseif (item.count - data.quantity) == 0 then
+                    lastInventory.removeItem(item.name, item.slot, false)
+                    currentInventory.remove(_item.name, _item.slot, false)
+
+                    lastInventory.swapItem(_item.meta, data.lastSlot, _item.count, _item.meta, data.currentInventory, data.currentSlot)
+                    currentInventory.swapItem(item.name, data.currentSlot, item.count, item.meta, data.lastInventory, data.lastSlot)
+
+                    status = { status = true, swapItems = true }
+                end
+
+                callback(status)
             end
         else
             callback({ status = false })
         end
-	end)
-end)
-
-AddEventHandler('crp-inventory:swapItems', function(source, data, callback)
-    exports.ghmattimysql:scalar('SELECT count FROM inventory WHERE name = @name AND item = @item AND slot = @slot;', {
-        ['@name'] = data.lastInventory, ['@item'] = data.item, ['@slot'] = data.lastSlot
-    }, function(count)
-        if count and count >= data.quantity then
-            exports.ghmattimysql:scalar('SELECT count FROM inventory WHERE name = @name AND item = @item AND slot = @slot;', {
-                ['@name'] = data.currentInventory, ['@item'] = data._item, ['@slot'] = data.currentSlot
-            }, function(_count)
-                if _count then
-                    if data.canStack and (count - data.quantity) > 0 then
-                        exports.ghmattimysql:execute('UPDATE inventory SET count = count - @quantity WHERE name = @name AND item = @item AND slot = @slot;',
-                        { ['@quantity'] = data.quantity, ['@name'] = data.lastInventory, ['@item'] = data.item, ['@slot'] = data.lastSlot })
-
-                        exports.ghmattimysql:execute('UPDATE inventory SET count = count + @quantity WHERE name = @name AND item = @item AND slot = @slot;',
-                        { ['@quantity'] = data.quantity, ['@name'] = data.currentInventory, ['@item'] = data._item, ['@slot'] = data.currentSlot })
-
-                        callback({ status = true, stackItems = true, delete = false })
-                    else
-                        local status = { status = false }
-
-                        if data.canStack then
-                            exports.ghmattimysql:execute('DELETE FROM inventory WHERE name = @name AND item = @item AND slot = @slot;',
-                            { ['@name'] = data.lastInventory, ['@item'] = data.item, ['@slot'] = data.lastSlot })
-
-                            exports.ghmattimysql:execute('UPDATE inventory SET count = count + @quantity WHERE name = @name AND item = @item AND slot = @slot;',
-                            { ['@quantity'] = data.quantity, ['@name'] = data.currentInventory, ['@item'] = data._item, ['@slot'] = data.currentSlot })
-
-                            status = { status = true, stackItems = true, delete = true }
-                        elseif (count - data.quantity) == 0 then
-                            exports.ghmattimysql:execute('UPDATE inventory SET name = @_name, slot = @_slot  WHERE name = @name AND item = @item AND slot = @slot;',
-                            { ['@_name'] = data.lastInventory, ['@_slot'] = data.lastSlot, ['@name'] = data.currentInventory, ['@item'] = data._item, ['@slot'] = data.currentSlot })
-
-                            exports.ghmattimysql:execute('UPDATE inventory SET name = @_name, slot = @_slot  WHERE name = @name AND item = @item AND slot = @slot;',
-                            { ['@_name'] = data.currentInventory, ['@_slot'] = data.currentSlot, ['@name'] = data.lastInventory, ['@item'] = data.item, ['@slot'] = data.lastSlot })
-
-                            status = { status = true, swapItems = true }
-                        end
-
-                        callback(status)
-                    end
-                else
-                    callback({ status = false })
-                end
-            end)
-        else
-            callback({ status = false })
-        end
-	end)
-end)
-
-AddEventHandler('crp-inventory:getInventory', function(source, id, callback)
-    local character = exports['crp-base']:GetCharacter(source)
-
-    if character.getCharacterID() == id then
-        exports.ghmattimysql:execute('SELECT * FROM inventory WHERE name = @name;', {
-            ['@name'] = 'character-' .. id
-        }, function(result)
-            callback(result)
-        end)
     else
-        print('player tried to acess another player inventory')
+        callback({ status = false })
     end
 end)
 
-AddEventHandler('crp-inventory:getInventories', function(source, data, callback)
-    local character = exports['crp-base']:GetCharacter(source)
+AddEventHandler('crp-inventory:getInventories', function(source, inventory, callback)
+    local user = exports['crp-base']:GetCharacter(source)
+    local inventoryName = user.GetCharacterInventory()
 
-    if character.getCharacterID() == data.id then
-        exports.ghmattimysql:execute('SELECT * FROM inventory WHERE name = @name;', { ['@name'] = 'character-' .. data.id }, function(result)
-            exports.ghmattimysql:execute('SELECT * FROM inventory WHERE name = @name;', { ['@name'] = data.inventory }, function(_result)
-                callback({ player = result, secondary = _result})
-            end)
-        end)
-    else
-        print('player tried to acess another player inventory')
+    if isInventoryLoaded(inventoryName) and isInventoryLoaded(inventory) then
+        callback({ player = inventories[inventoryName].items, secondary = inventories[inventory].items or nil })
     end
 end)
 
 AddEventHandler('crp-inventory:showActionBar', function(source, data, callback)
-    local character = exports['crp-base']:GetCharacter(source)
+    local user = exports['crp-base']:GetCharacter(source)
+    local inventoryName = user.GetCharacterInventory()
 
-    exports.ghmattimysql:execute('SELECT item, slot FROM inventory WHERE name = @name AND slot IN (1, 2, 3, 4);', {
-        ['@name'] = 'character-' .. character.getCharacterID()
-    }, function(result)
-        callback(result)
-    end)
+    if isInventoryLoaded(inventoryName) then
+        callback(inventories[inventoryName].getActionBarItems())
+    end
 end)
 
 AddEventHandler('crp-inventory:getItem', function(source, slot, callback)
-    local character = exports['crp-base']:GetCharacter(source)
+    local user = exports['crp-base']:GetCharacter(source)
+    local inventoryName = user.GetCharacterInventory()
 
-    exports.ghmattimysql:execute('SELECT item, count, information FROM inventory WHERE name = @name AND slot = @slot;', {
-        ['@name'] = 'character-' .. character.getCharacterID(), ['@slot'] = slot
-    }, function(result)
-        callback(result)
-    end)
-end)
-
-RegisterServerEvent('crp-inventory:setWeaponAmmo')
-AddEventHandler('crp-inventory:setWeaponAmmo', function(weapon, weaponSlot, weaponAmmo)
-    local character = exports['crp-base']:GetCharacter(source)
-    local inventoryName = 'character-' .. character.getCharacterID()
-
-    exports.ghmattimysql:scalar('SELECT information FROM inventory WHERE item = @weapon AND slot = @slot AND name = @name;', {
-        ['@name'] = inventoryName, ['@slot'] = weaponSlot, ['@weapon'] = weapon,
-    }, function(result)
-        if result then
-            result = json.decode(result)
-            result.ammo = weaponAmmo
-
-            exports.ghmattimysql:execute('UPDATE inventory SET information = @info WHERE name = @name AND slot = @slot AND item = @weapon;',
-            { ['@name'] = inventoryName, ['@slot'] = weaponSlot, ['@weapon'] = weapon, ['@info'] = json.encode(result) })
-        end
-    end)
+    if isInventoryLoaded(inventoryName) then
+        callback(inventories[inventoryName].getActionBarItem(slot))
+    end
 end)
 
 RegisterServerEvent('crp-inventory:useItem')
-AddEventHandler('crp-inventory:useItem', function(item, itemSlot)
-    local character = exports['crp-base']:GetCharacter(source)
-    local inventoryName = 'character-' .. character.getCharacterID()
+AddEventHandler('crp-inventory:useItem', function(item, slot)
+    local user = exports['crp-base']:GetCharacter(source)
+    local inventoryName = user.GetCharacterInventory()
 
-    exports.ghmattimysql:scalar('SELECT count FROM inventory WHERE item = @item AND slot = @slot AND name = @name;', {
-        ['@name'] = inventoryName, ['@slot'] = itemSlot, ['@item'] = item,
-    }, function(count)
-        if (count - 1) > 0 then
-            exports.ghmattimysql:execute('UPDATE inventory SET count = @count WHERE name = @name AND slot = @slot AND item = @item;',
-            { ['@name'] = inventoryName, ['@slot'] = itemSlot, ['@item'] = item, ['@count'] = (count - 1) })
+    if isInventoryLoaded(inventoryName) then
+        local inventory = inventories[inventoryName]
+        local item = inventory.getItem(item, slot)
+
+        if item and (item.count - 1) > 0 then
+            inventory.updateItem(item.name, slot, (item.count - 1))
         else
-            exports.ghmattimysql:execute('DELETE FROM inventory WHERE name = @name AND slot = @slot AND item = @item;',
-            { ['@name'] = inventoryName, ['@slot'] = itemSlot, ['@item'] = item })
+            inventory.removeItem(item.name, slot, true)
         end
-    end)
+    end
 end)
 
-function CheckIfInventoryExists(inventory, coords)
-    if next(inventories) == nil then
-        table.insert(inventories, { name = inventory, coords = coords })
-
-        TriggerClientEvent('crp-inventory:updateInventories', -1, inventories)
-        return
+function isInventoryLoaded(name)
+    if inventories[name] ~= nil then
+        return true
     end
 
+    if string.find(name, 'drop-') then
+        local found = false
+
+        for i = 1, #dropInventories, 1 do
+            if dropInventories[i].name == name then
+                found = true
+                break
+            end
+        end
+
+        if found then
+            return true
+        end
+    end
+
+    local isLoading = true
+
+    exports.ghmattimysql:execute('SELECT * FROM inventory WHERE name = @name;', { ['@name'] = name }, function(result)
+        local inventoriesItems = {}
+
+        for k, v in ipairs(result) do
+            if v.name == name then
+                table.insert(inventoriesItems, { name = v.item, slot = v.slot, count = v.count, meta = json.decode(v.meta) })
+            end
+        end
+
+        inventories[name], isLoading = CreateInventory(name, inventoriesItems), false
+    end)
+
+    while isLoading do
+        Citizen.Wait(0)
+    end
+
+    return true
+end
+
+function CheckIfInventoryExists(inventory, coords)
     local found = false
 
-    for i = 1, #inventories, 1 do
-        if CompareCoords(inventories[i].coords, coords) or inventories[i].name == inventory then
+    for i = 1, #dropInventories, 1 do
+        if CompareCoords(dropInventories[i].coords, coords) or dropInventories[i].name == inventory then
             found = true
             return
         end
     end
 
     if not found then
-        table.insert(inventories, { name = inventory, coords = coords })
+        table.insert(dropInventories, { name = inventory, coords = coords })
 
-        TriggerClientEvent('crp-inventory:updateInventories', -1, inventories)
+        TriggerClientEvent('crp-inventory:updateInventories', -1, dropInventories)
     end
 end
 
-function DeleteEmptyInventory(name)
-    for i = 1, #inventories, 1 do
-        if inventories[i].name == name then
-            table.remove(inventories, i)
-
-            TriggerClientEvent('crp-inventory:updateInventories', -1, inventories)
-        end
-    end
-end
-
-function CompareCoords(coords, newcoords)
-    if (coords.x == newcoords.x and coords.y == newcoords.y and coords.z == newcoords.z) then
+function CompareCoords(coords, _coords)
+    if (coords.x == _coords.x and coords.y == _coords.y and coords.z == _coords.z) then
         return true
     end
+
     return false
+end
+
+function GetInventory(name)
+    return inventories[name]
 end
