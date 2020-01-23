@@ -14,8 +14,7 @@ function CreateCharacter(source, data)
 	self.lastname       = data.lastname
 	self.dateofbirth    = data.dateofbirth
 	self.sex            = data.sex
-	self.position       = data.position
-	self.session        = {}
+    self.position       = data.position
 	self.moneyDisplayed = false
 
 	if data.status == nil then
@@ -30,7 +29,7 @@ function CreateCharacter(source, data)
         self.job = json.decode(data.job)
 
         TriggerClientEvent('crp-jobmanager:updateJob', source, self.job.name, self.job.label, true)
-	end
+    end
 
 	local rTable = {}
 
@@ -243,57 +242,23 @@ function CreateCharacter(source, data)
 		end
 	end
 
-	-- Session variables, handy for temporary variables attached to a player
-
-	rTable.setSessionVar = function(key, value)
-		self.session[key] = value
-	end
-
-	-- Session variables, handy for temporary variables attached to a player
-
-	rTable.getSessionVar = function(k)
-		return self.session[k]
-	end
-
 	-- Returns the players identifier used in EssentialMode
 
-	rTable.getIdentifier = function(i)
+	rTable.getIdentifier = function()
 		return self.identifier
 	end
 
 	-- Returns the character id
 
-	rTable.getCharacterID = function(i)
+	rTable.getCharacterID = function()
 		return self.id
-	end
+    end
 
-	-- Global set
+    -- Returns character inventory name
 
-	rTable.set = function(k, v)
-		self[k] = v
-	end
-
-	-- Global get
-
-	rTable.get = function(k)
-		return self[k]
-	end
-
-	-- Creates globals, pretty nifty function take a look at https://docs.essentialmode.com for more info
-
-	rTable.setGlobal = function(g, default)
-		self[g] = default or ''
-
-		rTable['get' .. g:gsub('^%l', string.upper)] = function()
-			return self[g]
-		end
-
-		rTable['set' .. g:gsub('^%l', string.upper)] = function(e)
-			self[g] = e
-		end
-
-		users[self.source] = rTable
-	end
+    rTable.getCharacterInventory = function()
+        return 'character-' .. self.id
+    end
 
 	return rTable
 end

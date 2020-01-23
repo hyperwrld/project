@@ -1,23 +1,19 @@
 -- Loads the character when called, only ever needs to get called once
 
 function LoadCharacter(source, identifier, charid)
-	local _source, chardata = source, {}
+	local _source, data = source, {}
 
-	TriggerEvent('crp-db:retrievecharacter', identifier, charid, function(data, isJson)
-		if isJson then
-			data = json.decode(data)
-		end
-
-		chardata = data
+	TriggerEvent('crp-db:retrievecharacter', identifier, charid, function(_data)
+		data = _data
 	end)
 
-	while next(chardata) == nil do
+    while next(data) == nil do
 		Citizen.Wait(0)
-	end
+    end
 
-	if chardata.license then
-		users[_source] = CreateCharacter(_source, chardata)
-		users[_source].displayMoney(users[_source].getMoney())
+    if data.license then
+		users[_source] = CreateCharacter(_source, data)
+		users[_source].DisplayMoney(users[_source].GetMoney())
 
 		-- Tells other resources that a player has loaded
 		TriggerEvent('crp:playerloaded', _source, users[_source])
@@ -36,10 +32,10 @@ function LoadCharacter(source, identifier, charid)
 				license = v
 				break
 			end
-		end
+        end
 
 		if license then
-			TriggerEvent('crp-db:updatecharacter', chardata.identifier, chardata.id, license, function(done)
+			TriggerEvent('crp-db:updatecharacter', data.identifier, data.id, license, function(done)
 				if done then
 					return false
 				end

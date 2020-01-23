@@ -4,7 +4,7 @@ AddEventHandler('playerDropped', function()
  	if users[_source] then
 		TriggerEvent('crp:playerDropped', users[_source])
 
-		TriggerEvent('crp-db:updatecharacter', users[_source].get('id'), users[_source].get('identifier'), json.encode(users[_source].getStatus()), { money = users[_source].getMoney(), bank = users[_source].getBank(), position = users[_source].getPosition() })
+		TriggerEvent('crp-db:updatecharacter', users[_source].get('id'), users[_source].get('identifier'), json.encode(users[_source].getStatus()), { money = users[_source].GetMoney(), bank = users[_source].GetBank(), position = users[_source].GetPosition() })
 
 		users[_source] = nil
 	end
@@ -100,7 +100,7 @@ AddEventHandler('crp-base:selectcharacter', function(source, character, callback
 			if exists then
 				local data = LoadCharacter(_source, identifier, character)
 
-				if data then loggedIn = true end
+                if data then loggedIn = true end
 
 				callback({ loggedin = loggedIn, character = character })
 			else
