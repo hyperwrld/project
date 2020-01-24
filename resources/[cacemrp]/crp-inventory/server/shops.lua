@@ -20,8 +20,8 @@ local armoryItems = {
 }
 
 AddEventHandler('crp-inventory:getStoreItems', function(source, type, callback)
-    local user, inventory = exports['crp-base']:GetCharacter(source), {}
-    local inventoryName = user.GetCharacterInventory()
+    local user, inventory = exports['crp-base']:getCharacter(source), {}
+    local inventoryName = user.getCharacterInventory()
 
     if type == 1 then
         inventory = storeItems
@@ -41,8 +41,8 @@ AddEventHandler('crp-inventory:getStoreItems', function(source, type, callback)
 end)
 
 AddEventHandler('crp-inventory:buyItem', function(source, data, callback)
-    local user, inventory = exports['crp-base']:GetCharacter(source), {}
-    local inventoryName = user.GetCharacterInventory()
+    local user, inventory = exports['crp-base']:getCharacter(source), {}
+    local inventoryName = user.getCharacterInventory()
 
     if data.shoptype == 1 then
         inventory = storeItems
@@ -93,7 +93,7 @@ AddEventHandler('crp-inventory:buyItem', function(source, data, callback)
 
             if item.meta then
                 if item.meta.serial then
-                    meta.serial = GetRandomString() .. '-'.. user.GetCharacterID()
+                    meta.serial = GetRandomString() .. '-'.. user.getCharacterID()
                 end
 
                 if item.meta.ammo then

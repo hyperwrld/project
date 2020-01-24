@@ -1,4 +1,4 @@
-local isInventoryOpen, isShowing, isDoingAnimation, isWeaponEquiped, isUsingItem, currentWeapon, weaponSlot = false, false, false, false, false, nil, nil
+local isShowing = false
 
 local function sendMessage(data)
 	SendNUIMessage(data)

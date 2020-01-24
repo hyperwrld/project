@@ -1,8 +1,9 @@
-function CreateInventory(name, items)
+function CreateInventory(name, items, maxWeight)
 	local self = {}
 
-    self.name  = name
-    self.items = items or {}
+    self.name      = name
+    self.maxWeight = maxWeight or 325
+    self.items     = items or {}
 
     self.addItem = function(name, slot, count, meta)
         table.insert(self.items, { name = name, slot = slot, count = count, meta = meta or nil })
@@ -79,6 +80,28 @@ function CreateInventory(name, items)
         end
 
         return nil
+    end
+
+    self.canMoveItem = function(item, count, slot)
+        local item, inventoryWeight = self.getItem(name, slot), self.getInventoryWeight()
+
+        if (inventoryWeight + (itemList[item.name].weight * count)) then
+            return true
+        end
+
+        return false
+    end
+
+    self.getInventoryWeight = function()
+        local weight = 0
+
+        for i = 1, #self.items, 1 do
+            local item = itemList[self.items[i].name]
+
+            weight = weight + item.weight
+        end
+
+        return weight
     end
 
 	return self

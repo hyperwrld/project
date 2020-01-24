@@ -103,7 +103,7 @@ $(function () {
 });
 
 function SetupActionBar(items) {
-    for (var i = 1; i <= 4; i++) {
+    for (var i = 0; i <= 3; i++) {
         $('.actionbar').append('<div class="inventory-cell" id="'+ i + '" style="height: 100%; width: 20%;"><div class="inventory-bottom disable"></div></div>');
 
         $('.actionbar > #' + i).prepend('<div class="number disable"><span style="top: -35%;"> ' + i + ' </span></div>');

@@ -1,7 +1,21 @@
-
 local dropInventories = {}
 
-inventories = {}
+inventories, itemList = {}, {}
+
+itemList['1737195953']  = { weight = 10, canStack = true }
+itemList['911657153']   = { weight = 10, canStack = true }
+itemList['453432689']   = { weight = 15, canStack = true }
+itemList['-1076751822'] = { weight = 15, canStack = true }
+itemList['137902532']   = { weight = 15, canStack = true }
+itemList['-771403250']  = { weight = 20, canStack = true }
+itemList['1593441988']  = { weight = 15, canStack = true }
+itemList['-619010992']  = { weight = 30, canStack = true }
+itemList['-1121678507'] = { weight = 30, canStack = true }
+itemList['324215364']   = { weight = 30, canStack = true }
+itemList['736523883']   = { weight = 35, canStack = true }
+itemList['1649403952']  = { weight = 45, canStack = true }
+itemList['-1074790547'] = { weight = 55, canStack = true }
+itemList['-2084633992'] = { weight = 55, canStack = true }
 
 AddEventHandler('crp-inventory:moveItem', function(source, data, callback)
     local lastInventory = GetInventory(data.lastInventory)
@@ -49,7 +63,7 @@ AddEventHandler('crp-inventory:swapItems', function(source, data, callback)
         local _item = currentInventory.getItem(data._item, data.currentSlot)
 
         if _item then
-            if data.canStack and (_item.count - data.quantity) > 0 then
+            if data.canStack and (item.count - data.quantity) > 0 then
                 lastInventory.updateItem(data.item, data.lastSlot, (item.count - data.quantity))
                 currentInventory.updateItem(data.item, data.currentSlot, (_item.count + data.quantity))
 
@@ -64,9 +78,9 @@ AddEventHandler('crp-inventory:swapItems', function(source, data, callback)
                     status = { status = true, stackItems = true, delete = true }
                 elseif (item.count - data.quantity) == 0 then
                     lastInventory.removeItem(item.name, item.slot, false)
-                    currentInventory.remove(_item.name, _item.slot, false)
+                    currentInventory.removeItem(_item.name, _item.slot, false)
 
-                    lastInventory.swapItem(_item.meta, data.lastSlot, _item.count, _item.meta, data.currentInventory, data.currentSlot)
+                    lastInventory.swapItem(_item.name, data.lastSlot, _item.count, _item.meta, data.currentInventory, data.currentSlot)
                     currentInventory.swapItem(item.name, data.currentSlot, item.count, item.meta, data.lastInventory, data.lastSlot)
 
                     status = { status = true, swapItems = true }
@@ -83,8 +97,8 @@ AddEventHandler('crp-inventory:swapItems', function(source, data, callback)
 end)
 
 AddEventHandler('crp-inventory:getInventories', function(source, inventory, callback)
-    local user = exports['crp-base']:GetCharacter(source)
-    local inventoryName = user.GetCharacterInventory()
+    local user = exports['crp-base']:getCharacter(source)
+    local inventoryName = user.getCharacterInventory()
 
     if isInventoryLoaded(inventoryName) and isInventoryLoaded(inventory) then
         callback({ player = inventories[inventoryName].items, secondary = inventories[inventory].items or nil })
@@ -92,8 +106,8 @@ AddEventHandler('crp-inventory:getInventories', function(source, inventory, call
 end)
 
 AddEventHandler('crp-inventory:showActionBar', function(source, data, callback)
-    local user = exports['crp-base']:GetCharacter(source)
-    local inventoryName = user.GetCharacterInventory()
+    local user = exports['crp-base']:getCharacter(source)
+    local inventoryName = user.getCharacterInventory()
 
     if isInventoryLoaded(inventoryName) then
         callback(inventories[inventoryName].getActionBarItems())
@@ -101,8 +115,8 @@ AddEventHandler('crp-inventory:showActionBar', function(source, data, callback)
 end)
 
 AddEventHandler('crp-inventory:getItem', function(source, slot, callback)
-    local user = exports['crp-base']:GetCharacter(source)
-    local inventoryName = user.GetCharacterInventory()
+    local user = exports['crp-base']:getCharacter(source)
+    local inventoryName = user.getCharacterInventory()
 
     if isInventoryLoaded(inventoryName) then
         callback(inventories[inventoryName].getActionBarItem(slot))
@@ -111,8 +125,8 @@ end)
 
 RegisterServerEvent('crp-inventory:useItem')
 AddEventHandler('crp-inventory:useItem', function(item, slot)
-    local user = exports['crp-base']:GetCharacter(source)
-    local inventoryName = user.GetCharacterInventory()
+    local user = exports['crp-base']:getCharacter(source)
+    local inventoryName = user.getCharacterInventory()
 
     if isInventoryLoaded(inventoryName) then
         local inventory = inventories[inventoryName]
@@ -131,6 +145,8 @@ function isInventoryLoaded(name)
         return true
     end
 
+    local maxWeight = 325
+
     if string.find(name, 'drop-') then
         local found = false
 
@@ -144,6 +160,10 @@ function isInventoryLoaded(name)
         if found then
             return true
         end
+
+        maxWeight = 1000
+    elseif string.find(name, 'character-') then
+        maxWeight = 325
     end
 
     local isLoading = true
@@ -157,7 +177,7 @@ function isInventoryLoaded(name)
             end
         end
 
-        inventories[name], isLoading = CreateInventory(name, inventoriesItems), false
+        inventories[name], isLoading = CreateInventory(name, inventoriesItems, maxWeight), false
     end)
 
     while isLoading do

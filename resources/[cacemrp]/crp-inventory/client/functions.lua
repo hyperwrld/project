@@ -1,4 +1,4 @@
-inventories = {}
+inventories, isWeaponEquiped, isDoingAnimation, isUsingItem, isInventoryOpen, currentWeapon, weaponSlot = {}, false, false, false, false, nil, nil
 
 function UseItem(slot)
     local events = exports['crp-base']:getModule('Events')
