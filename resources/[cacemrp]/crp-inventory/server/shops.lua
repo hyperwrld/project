@@ -73,12 +73,12 @@ AddEventHandler('crp-inventory:buyItem', function(source, data, callback)
         return callback({ status = false })
     end
 
-    local characterMoney, itemPrice = user.GetMoney(), (data.itemdata.quantity * tonumber(item.price))
+    local characterMoney, itemPrice = user.getMoney(), (data.itemdata.quantity * tonumber(item.price))
 
     if characterMoney >= itemPrice then
         local userInventory = inventories[inventoryName]
 
-        user.RemoveMoney(itemPrice)
+        user.removeMoney(itemPrice)
 
         if data.itemdata.canStack then
             local _item = userInventory.getItem(data.itemdata.item, data.itemdata.slot)
