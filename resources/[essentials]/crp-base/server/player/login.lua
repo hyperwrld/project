@@ -13,7 +13,7 @@ function LoadCharacter(source, identifier, charid)
 
     if data.license then
 		users[_source] = CreateCharacter(_source, data)
-		users[_source].DisplayMoney(users[_source].GetMoney())
+		users[_source].displayMoney(users[_source].getMoney())
 
 		-- Tells other resources that a player has loaded
 		TriggerEvent('crp:playerloaded', _source, users[_source])

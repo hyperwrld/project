@@ -19,10 +19,6 @@ AddEventHandler('crp-keys:addKey', function(vehicle, vehiclePlate)
     local user = exports['crp-base']:GetCharacter(source)
     local characterId = user.getCharacterID()
 
-        if keys[characterId] == nil then
-        keys[characterId] = {}
-        end
-
     table.insert(keys[characterId], vehiclePlate)
 
     TriggerClientEvent('crp-keys:updateKey', source, vehicle, vehiclePlate, true)

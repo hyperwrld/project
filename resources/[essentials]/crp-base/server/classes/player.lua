@@ -13,7 +13,8 @@ function CreateCharacter(source, data)
 	self.firstname      = data.firstname
 	self.lastname       = data.lastname
 	self.dateofbirth    = data.dateofbirth
-	self.sex            = data.sex
+    self.sex            = data.sex
+    self.phonenumber    = data.phonenumber
     self.position       = data.position
 	self.moneyDisplayed = false
 
@@ -134,7 +135,13 @@ function CreateCharacter(source, data)
 
 	rTable.getSex = function()
 		return self.sex
-	end
+    end
+
+    -- Returns the player phone number
+
+    rTable.getPhoneNumber = function()
+        return self.phonenumber
+    end
 
 	-- Returns the player coords
 
