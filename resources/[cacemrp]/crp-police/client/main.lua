@@ -72,10 +72,10 @@ end)
 
 RegisterNetEvent('crp-police:spawnvehicle')
 AddEventHandler('crp-police:spawnvehicle', function(vehicleModel, data)
-    -- if not playerInService then
-    --     exports['crp-notifications']:SendAlert('error', 'Precisas de estar de serviço para poder usar este comando.')
-    --     return
-    -- end
+    if not playerInService then
+        exports['crp-notifications']:SendAlert('error', 'Precisas de estar de serviço para poder usar este comando.')
+        return
+    end
 
     local boolean, coords = false, GetEntityCoords(PlayerPedId(), 0)
 
@@ -131,7 +131,7 @@ AddEventHandler('crp-police:spawnvehicle', function(vehicleModel, data)
 
             local vehiclePlate = GetVehicleNumberPlateText(vehicle)
 
-            -- ! Adicionar as chaves ao jogador
+            TriggerServerEvent('crp-keys:addKey', vehicle, vehiclePlate)
 
             SetVehicleDirtLevel(vehicle, 0)
 
@@ -193,16 +193,16 @@ end)
 
 RegisterNetEvent('crp-police:cuffplayer')
 AddEventHandler('crp-police:cuffplayer', function(state)
-    -- if not playerInService then
-    --     exports['crp-notifications']:SendAlert('error', 'Precisas de estar de serviço para poder usar este comando.')
-    --     return
-    -- end
+    if not playerInService then
+        exports['crp-notifications']:SendAlert('error', 'Precisas de estar de serviço para poder usar este comando.')
+        return
+    end
 
-    --local isHandcuffed = exports['crp-userinfo']:isPed('handcuffed')
+    local isHandcuffed = exports['crp-userinfo']:isPed('handcuffed')
 
-    -- if isCuffing or isHandcuffed or not IsPedRagdoll(GetPlayerPed(-1)) and not IsPlayerFreeAiming(PlayerId()) and not IsPedInAnyVehicle(GetPlayerPed(-1), false) then
-    --     return
-    -- end
+    if isCuffing or isHandcuffed or not IsPedRagdoll(GetPlayerPed(-1)) and not IsPlayerFreeAiming(PlayerId()) and not IsPedInAnyVehicle(GetPlayerPed(-1), false) then
+        return
+    end
 
     isCuffing = true
 
@@ -352,10 +352,10 @@ end)
 
 RegisterNetEvent('crp-police:dragplayer')
 AddEventHandler('crp-police:dragplayer', function()
-    -- if not playerInService then
-    --     exports['crp-notifications']:SendAlert('error', 'Precisas de estar de serviço para poder usar este comando.')
-    --     return
-    -- end
+    if not playerInService then
+        exports['crp-notifications']:SendAlert('error', 'Precisas de estar de serviço para poder usar este comando.')
+        return
+    end
 
     local isHandcuffed = exports['crp-userinfo']:isPed('handcuffed')
 
