@@ -242,7 +242,6 @@ Citizen.CreateThread(function()
 
             if GetPedInVehicleSeat(vehicle, -1) == playerPed then
                 if (lastVehicle ~= vehicle and not HasVehicleKey(vehiclePlate)) or not HasVehicleKey(vehiclePlate) then
-                    print('oie?')
                     TriggerEvent('crp-keys:turnEngine', false)
                 end
 
@@ -663,6 +662,20 @@ function GetClosestPlayer()
     else
         exports['crp-notifications']:SendAlert('error', 'Não é possível fazer essa ação, porque estás num veículo.')
     end
+end
+
+function GetPlayers()
+    local players = {}
+
+	for k, player in ipairs(GetActivePlayers()) do
+		local playerPed = GetPlayerPed(player)
+
+		if DoesEntityExist(playerPed) then
+			table.insert(players, player)
+		end
+	end
+
+	return players
 end
 
 function HasVehicleKey(vehiclePlate)

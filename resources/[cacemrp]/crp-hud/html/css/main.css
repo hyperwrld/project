@@ -6,10 +6,45 @@ html {
 	position: absolute;
 }
 
+.street, .others, .time {
+    font-size: 20px;
+    color: white;
+	font-family: 'Ruda', sans-serif;
+    text-shadow: -1px 1px 2px #000, 1px 1px 2px #000, 1px -1px 0 #000, -1px -1px 0 #000;
+}
+
+.street {
+    height: 12.823529411%;
+    width: 200%;
+	left: 105.725%;
+	right: 2.725%;
+	position: absolute;
+    bottom: -5.070588235%;
+}
+
+.others {
+    height: 12.823529411%;
+    width: 200%;
+	left: 105.725%;
+	right: 2.725%;
+	position: absolute;
+    bottom: 12.070588235%;
+}
+
+.time {
+    height: 12.823529411%;
+    width: 200%;
+	left: 105.725%;
+	right: 2.725%;
+	position: absolute;
+    bottom: 25.070588235%;
+    font-size: 16px;
+}
+
 .bar {
 	height: 12.823529411%;
 	left: 2.725%;
-	right: 2.725%;;
+	right: 2.725%;
 	display: flex;
 	flex-wrap: wrap;
 	position: absolute;
