@@ -1,5 +1,3 @@
-local isRadarEnabled = nil
-
 local function SetGamePlayVars()
     Citizen.CreateThread(function()
         -- Disable Dispatch Services
@@ -36,16 +34,6 @@ local function SetGamePlayVars()
                     	SetPedIntoVehicle(playerPed, GetVehiclePedIsIn(playerPed, false), 0)
                     end
                 end
-
-                if (not isRadarEnabled) then
-                    DisplayRadar(true)
-
-                    isRadarEnabled = true
-                end
-            elseif (isRadarEnabled or isRadarEnabled == nil) then
-                DisplayRadar(false)
-
-                isRadarEnabled = false
             end
 
             if IsPedWearingHelmet(playerPed) and not IsPedInAnyVehicle(playerPed, true) then
