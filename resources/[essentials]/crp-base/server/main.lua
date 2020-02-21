@@ -2,7 +2,7 @@ AddEventHandler('playerDropped', function()
 	local _source = source
 
  	if users[_source] then
-		TriggerEvent('crp:playerDropped', users[_source])
+		TriggerEvent('crp:playerDropped', _source, users[_source])
 
 		TriggerEvent('crp-db:updatecharacter', users[_source].get('id'), users[_source].get('identifier'), json.encode(users[_source].getStatus()), { money = users[_source].getMoney(), bank = users[_source].getBank(), position = users[_source].getPosition() })
 

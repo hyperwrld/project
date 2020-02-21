@@ -4,6 +4,12 @@ AddEventHandler('crp-jobmanager:activateService', function(name)
 	inService[name] = {}
 end)
 
+AddEventHandler('crp:playerDropped', function(source, user)
+    if inService[user.getJob()] and inService[user.getJob()][source] then
+        inService[user.getJob()][source] = false
+    end
+end)
+
 RegisterServerEvent('crp-jobmanager:disableService')
 AddEventHandler('crp-jobmanager:disableService', function(name)
     local _source = source

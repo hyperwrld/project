@@ -98,6 +98,8 @@ local blips = {
     { id = nil, name = 'Departamento da polícia', scale = 0.75, color = 29, sprite = 60, x = 433.398, y = -981.87,   z = 30.71  },
     { id = nil, name = 'Departamento da polícia', scale = 0.75, color = 29, sprite = 60, x = -442.202, y = 6017.446, z = 31.688 },
     { id = nil, name = 'Departamento da polícia', scale = 0.75, color = 29, sprite = 60, x = 1855.819, y = 3682.377, z = 34.268 },
+
+    { id = nil, name = 'Hospital', scale = 0.75, color = 2, sprite = 61, x = 298.758,  y = -584.594, z = 43.261 },
 }
 
 AddEventHandler('crp-base:playerSessionStarted', function()

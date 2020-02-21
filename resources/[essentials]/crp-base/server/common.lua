@@ -1,28 +1,4 @@
-items, jobs = {
-    -- ! (Weapons)
-
-    ['1737195953']  = { weight = 10, nonStack = true, weapon = true, meta = { serial = true, ammo = 1 } },
-    ['911657153']   = { weight = 10, nonStack = true, weapon = true, meta = { serial = true, ammo = 1 } },
-    ['453432689']   = { weight = 10, nonStack = true, weapon = true, meta = { serial = true, ammo = 1 } },
-    ['-1076751822'] = { weight = 10, nonStack = true, weapon = true, meta = { serial = true, ammo = 1 } },
-    ['137902532']   = { weight = 10, nonStack = true, weapon = true, meta = { serial = true, ammo = 1 } },
-    ['-771403250']  = { weight = 10, nonStack = true, weapon = true, meta = { serial = true, ammo = 1 } },
-    ['1593441988']  = { weight = 10, nonStack = true, weapon = true, meta = { serial = true, ammo = 1 } },
-    ['-619010992']  = { weight = 10, nonStack = true, weapon = true, meta = { serial = true, ammo = 1 } },
-    ['-1121678507'] = { weight = 10, nonStack = true, weapon = true, meta = { serial = true, ammo = 1 } },
-    ['324215364']   = { weight = 10, nonStack = true, weapon = true, meta = { serial = true, ammo = 1 } },
-    ['736523883']   = { weight = 10, nonStack = true, weapon = true, meta = { serial = true, ammo = 1 } },
-    ['1649403952']  = { weight = 10, nonStack = true, weapon = true, meta = { serial = true, ammo = 1 } },
-    ['-1074790547'] = { weight = 10, nonStack = true, weapon = true, meta = { serial = true, ammo = 1 } },
-    ['-2084633992'] = { weight = 10, nonStack = true, weapon = true, meta = { serial = true, ammo = 1 } },
-
-    -- ! (Normal Items)
-
-    ['156805094'] = { weight = 10, nonStack = false, weapon = false },
-    ['130895348'] = { weight = 10, nonStack = false, weapon = false },
-    ['196068078'] = { weight = 10, nonStack = false, weapon = false },
-    ['129942349'] = { weight = 10, nonStack = false, weapon = false },
-}, {}
+jobs = {}
 
 function GetAllJobs()
     exports.ghmattimysql:execute('SELECT * FROM jobs;', {}, function(result)
