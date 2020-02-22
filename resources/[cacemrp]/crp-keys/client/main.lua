@@ -144,39 +144,6 @@ AddEventHandler('crp-keys:vehicleStatus', function(vehicle)
     isUsingKeys = false
 end)
 
--- RegisterNetEvent('crp-keys:engineHasKeys')
--- AddEventHandler('car:engineHasKeys', function(vehicle, allow)
-
---     if isCop then
---         allow = true
---     end
---     if allow then
---         if IsVehicleEngineOn(targetVehicle) then
---             if not waitKeys then
---                 waitKeys = true
---                 SetVehicleEngineOn(targetVehicle,0,1,1)
---                 SetVehicleUndriveable(targetVehicle,true)
---                 TriggerEvent("DoShortHudText", "Engine Halted",9)
---                 Citizen.Wait(300)
---                 waitKeys = false
---             end
---         else
---             if not waitKeys then
---                 waitKeys = true
---                 TriggerEvent("keys:startvehicle")
---                 TriggerEvent("DoShortHudText", "Engine Started",9)
---                 Citizen.Wait(300)
---                 waitKeys = false
---             end
---         end
---     end
--- end)
-
-
--- local bypass = false
--- local enforce = 0
--- local dele = 0
-
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
@@ -400,7 +367,7 @@ function SearchVehicle()
         return
     end
 
-    exports['crp-progressbar']:StartProgressBar({ duration = 5000, label = 'Procurando...' }, function(finished)
+    exports['crp-progressbar']:StartProgressBar({ duration = 5000, label = 'Procurando...', cancel = true }, function(finished)
         if finished then
             if not IsPedInAnyVehicle(playerPed, false) then
                 isDoingSomething = false
@@ -421,7 +388,7 @@ function SearchVehicle()
             else
                 Citizen.Wait(1000)
 
-                exports['crp-progressbar']:StartProgressBar({ duration = 5000, label = 'Procurando no resto do veículo...' }, function(finished)
+                exports['crp-progressbar']:StartProgressBar({ duration = 5000, label = 'Procurando no resto do veículo...', cancel = true }, function(finished)
                     if finished then
                         if not IsPedInAnyVehicle(playerPed, false) then
                             isDoingSomething = false
@@ -450,10 +417,6 @@ function HotwireVehicle()
     local playerPed = GetPlayerPed(-1)
     local vehicle = GetVehiclePedIsUsing(playerPed)
 
-    if hotwiredVehicles[vehicle] then
-        return
-    end
-
     TriggerAnimation(true)
 
     hotwiredVehicles[vehicle], isDoingSomething = true, true
@@ -476,7 +439,7 @@ function HotwireVehicle()
         vehicleTimer = 35000
     end
 
-    exports['crp-progressbar']:StartProgressBar({ duration = vehicleTimer, label = 'Fazendo ligação direta' }, function(finished)
+    exports['crp-progressbar']:StartProgressBar({ duration = vehicleTimer, label = 'Fazendo ligação direta', cancel = true }, function(finished)
         if finished then
             if not IsPedInAnyVehicle(playerPed, false) then
                 isDoingSomething = false
@@ -485,7 +448,7 @@ function HotwireVehicle()
 
             local randomNumber = GetRandomNumber(0, 100)
 
-            if randomNumber >= 73 then
+            if randomNumber >= 63 then
                 TriggerServerEvent('crp-keys:addKey', vehicle, GetVehicleNumberPlateText(vehicle))
 
                 Citizen.Wait(1000)

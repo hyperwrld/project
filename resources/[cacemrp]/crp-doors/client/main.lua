@@ -46,6 +46,13 @@ local doorList = {
     [37] = { name = 'gabz_pillbox_singledoor', coords = vector3(357.4, -579.61, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z =  0.1 },
     [38] = { name = 'gabz_pillbox_singledoor', coords = vector3(358.7, -593.88, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z =  0.1 },
     [39] = { name = 'gabz_pillbox_singledoor', coords = vector3(360.5, -588.99, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z =  0.1 },
+
+    [39] = { name = 'gabz_pillbox_doubledoor_r', coords = vector3(325.6, -576.30, 43.4), authorizedJob = 'medic', locked = true, x = -1.2, y = 0.0, z = 0.1 },
+    [40] = { name = 'gabz_pillbox_doubledoor_l', coords = vector3(323.2, -575.42, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z = 0.1 },
+    [41] = { name = 'gabz_pillbox_doubledoor_r', coords = vector3(320.2, -574.34, 43.4), authorizedJob = 'medic', locked = true, x = -1.2, y = 0.0, z = 0.1 },
+    [42] = { name = 'gabz_pillbox_doubledoor_l', coords = vector3(317.8, -573.46, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z = 0.1 },
+    [43] = { name = 'gabz_pillbox_doubledoor_r', coords = vector3(314.4, -572.22, 43.4), authorizedJob = 'medic', locked = true, x = -1.2, y = 0.0, z = 0.1 },
+    [44] = { name = 'gabz_pillbox_doubledoor_l', coords = vector3(312.0, -571.34, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z = 0.1 },
 }
 
 local isActive, userJob = false, 'unemployed'
