@@ -44,7 +44,7 @@ function CreateInventory(name, items, maxWeight)
 
     self.getItem = function(name, slot)
         for i = 1, #self.items, 1 do
-            if self.items[i].name == name and tonumber(self.items[i].slot) == tonumber(slot) then
+            if tonumber(self.items[i].name) == tonumber(name) and tonumber(self.items[i].slot) == tonumber(slot) then
 				return self.items[i]
 			end
         end
@@ -102,6 +102,15 @@ function CreateInventory(name, items, maxWeight)
         end
 
         return weight
+    end
+
+    self.updateAmmo = function(name, slot, ammo)
+        local item = self.getItem(name, slot)
+
+        item.meta.ammo = ammo
+
+        exports.ghmattimysql:execute('UPDATE inventory SET meta = @meta WHERE name = @name AND item = @item AND slot = @slot;',
+        { ['@name'] = self.name, ['@slot'] = slot, ['@item'] = name, ['@meta'] = json.encode(item.meta) or nil })
     end
 
 	return self

@@ -211,12 +211,14 @@ end)
 
 Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(150)
+        Citizen.Wait(0)
 
         local playerPed = GetPlayerPed(-1)
 
         if IsPedShooting(playerPed) then
             UpdateWeaponAmmo()
+
+            Citizen.Wait(1500)
         end
     end
 end)

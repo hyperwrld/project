@@ -123,6 +123,19 @@ AddEventHandler('crp-inventory:getItem', function(source, slot, callback)
     end
 end)
 
+RegisterServerEvent('crp-inventory:setWeaponAmmo')
+AddEventHandler('crp-inventory:setWeaponAmmo', function(weapon, slot, ammo)
+    local user = exports['crp-base']:getCharacter(source)
+    local inventoryName = user.getCharacterInventory()
+
+    if isInventoryLoaded(inventoryName) then
+        local inventory = inventories[inventoryName]
+        local item = inventory.getItem(weapon, slot)
+
+        inventory.updateAmmo(weapon, slot, ammo)
+    end
+end)
+
 RegisterServerEvent('crp-inventory:useItem')
 AddEventHandler('crp-inventory:useItem', function(item, slot)
     local user = exports['crp-base']:getCharacter(source)
