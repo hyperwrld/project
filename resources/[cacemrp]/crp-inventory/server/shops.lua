@@ -6,9 +6,9 @@ local storeItems = {
 }
 
 local weaponStoreItems = {
-	{ name = 911657153,   count = 50, slot = 1, price = 1000  },
-	{ name = 453432689,   count = 50, slot = 2, price = 5000  },
-	{ name = -1076751822, count = 50, slot = 3, price = 10000 },
+	{ name = 911657153,   count = 50, slot = 1, price = 1000, meta = { serial = true }  },
+	{ name = 453432689,   count = 50, slot = 2, price = 5000, meta = { serial = true, ammo = 30 }  },
+	{ name = -1076751822, count = 50, slot = 3, price = 10000, meta = { serial = true, ammo = 30 } },
 }
 
 local armoryItems = {
@@ -53,7 +53,7 @@ AddEventHandler('crp-inventory:buyItem', function(source, data, callback)
     end
 
     if data.shoptype == 3 then
-        if user.GetJob().name ~= 'police' then
+        if user.getJob().name ~= 'police' then
             return callback({ status = false, text = 'Só membros da polícia é que conseguem comprar este item.' })
         end
 

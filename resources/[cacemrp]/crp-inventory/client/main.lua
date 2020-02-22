@@ -81,7 +81,7 @@ local function nuiCallBack(data, cb)
     if data.moveitem then
         local item = data.itemdata
 
-        if (tonumber(item.id) == tonumber(currentWeapon) and tonumber(item.lastSlot) == tonumber(weaponSlot)) then
+        if (tonumber(item.item) == tonumber(currentWeapon) and tonumber(item.lastSlot) == tonumber(weaponSlot)) then
             cb({ status = false })
         else
             events:Trigger('crp-inventory:moveItem', data.itemdata, function(data)
