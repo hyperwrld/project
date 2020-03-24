@@ -107,10 +107,12 @@ function CreateInventory(name, items, maxWeight)
     self.updateAmmo = function(name, slot, ammo)
         local item = self.getItem(name, slot)
 
-        item.meta.ammo = ammo
+        if item then
+            item.meta.ammo = ammo
 
-        exports.ghmattimysql:execute('UPDATE inventory SET meta = @meta WHERE name = @name AND item = @item AND slot = @slot;',
-        { ['@name'] = self.name, ['@slot'] = slot, ['@item'] = name, ['@meta'] = json.encode(item.meta) or nil })
+            exports.ghmattimysql:execute('UPDATE inventory SET meta = @meta WHERE name = @name AND item = @item AND slot = @slot;',
+            { ['@name'] = self.name, ['@slot'] = slot, ['@item'] = name, ['@meta'] = json.encode(item.meta) or nil })
+        end
     end
 
 	return self

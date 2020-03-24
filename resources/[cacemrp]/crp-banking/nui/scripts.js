@@ -35,8 +35,6 @@ $(function () {
 $('.btn-sign-out').click(function () {
     $('#general, #waiting, #transferUI, #withdrawUI, #depositUI, #topbar').hide();
 
-    console.log('teste')
-
     $('body').removeClass('active');
 
     $.post('http://crp-banking/nuiMessage', JSON.stringify({ close: true }));
