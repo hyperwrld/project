@@ -10,14 +10,16 @@ AddEventHandler('crp-db:fetchplayercharacters', function(source, data, callback)
 	end)
 end)
 
-AddEventHandler('crp-db:createcharacter', function(data, identifier, license, cash, bank, callback)
-	local user  = { identifier = identifier, money = 5000, bank = 3333, license = license, firstname = data.firstname, lastname = data.lastname, sex = data.sex, dateofbirth = data.dateofbirth, history = data.history }
+AddEventHandler('crp-db:createcharacter', function(data, identifier, cash, bank, phone, callback)
+	local user  = { identifier = identifier, money = 5000, bank = 3333, firstname = data.firstname, lastname = data.lastname, sex = data.sex, dateofbirth = data.dateofbirth, history = data.history }
 	local error = { error = true, message = 'Ocorreu um erro ao criar a sua personagem, contacte um administrador se isto continuar.' }
 
-	if isEmpty(data.firstname) or isEmpty(data.lastname) or isEmpty(data.sex) or isEmpty(data.dateofbirth) or isEmpty(data.sex) or isEmpty(data.history) then callback(error) end
+	if isEmpty(data.firstname) or isEmpty(data.lastname) or isEmpty(data.sex) or isEmpty(data.dateofbirth) or isEmpty(data.sex) or isEmpty(data.history) then
+		callback(error)
+	end
 
-	exports.ghmattimysql:execute('INSERT INTO users (identifier, license, money, bank, firstname, lastname, dateofbirth, sex, history) VALUES (@identifier, @license, @money, @bank, @firstname, @lastname, @dateofbirth, @sex, @history);', {
-		['@identifier'] = user.identifier, ['@license'] = user.license, ['@money'] = user.money, ['@bank'] = user.bank, ['@firstname'] = user.firstname, ['@lastname'] = user.lastname, ['@dateofbirth'] = user.dateofbirth, ['@sex'] = user.sex, ['@history'] = user.history
+	exports.ghmattimysql:execute('INSERT INTO users (identifier, money, bank, firstname, lastname, dateofbirth, sex, history, phone) VALUES (@identifier, @money, @bank, @firstname, @lastname, @dateofbirth, @sex, @history, @phone);', {
+		['@identifier'] = user.identifier, ['@money'] = user.money, ['@bank'] = user.bank, ['@firstname'] = user.firstname, ['@lastname'] = user.lastname, ['@dateofbirth'] = user.dateofbirth, ['@sex'] = user.sex, ['@history'] = user.history, ['@phone'] = phone
 	}, function(done)
 		if callback then
 			callback(done)

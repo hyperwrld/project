@@ -1,7 +1,7 @@
 function CreateCharacter(source, data)
 	local self = {}
 
-	-- Initialize all initial variables for a user
+    -- Initialize all initial variables for a user
 
 	self.source         = source
 	self.id             = data.id
@@ -14,7 +14,7 @@ function CreateCharacter(source, data)
 	self.lastname       = data.lastname
 	self.dateofbirth    = data.dateofbirth
     self.sex            = data.sex
-    self.phonenumber    = data.phonenumber
+    self.phone          = data.phone
     self.position       = data.position
 	self.moneyDisplayed = false
 
@@ -140,7 +140,7 @@ function CreateCharacter(source, data)
     -- Returns the player phone number
 
     rTable.getPhoneNumber = function()
-        return self.phonenumber
+        return self.phone
     end
 
 	-- Returns the player coords
@@ -253,7 +253,11 @@ function CreateCharacter(source, data)
 
 	rTable.getIdentifier = function()
 		return self.identifier
-	end
+    end
+
+    rTable.getSource = function()
+        return self.source
+    end
 
 	-- Returns the character id
 

@@ -69,3 +69,19 @@ function DoesJobExist(job, grade)
 
     return false
 end
+
+function GeneratePhoneNumber()
+    local phoneNumber, identifier
+
+    repeat
+        math.randomseed(os.time())
+
+        phoneNumber = '96' .. math.random(0000000, 9999999)
+
+        exports.ghmattimysql:execute('SELECT * FROM users WHERE `phone` = @phone;', { ['phone'] = phoneNumber }, function(exists)
+            identifier = exists[1]
+        end)
+    until identifier == nil
+
+    return phoneNumber
+end

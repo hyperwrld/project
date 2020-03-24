@@ -11,8 +11,8 @@ function LoadCharacter(source, identifier, charid)
 		Citizen.Wait(0)
     end
 
-    if data.license then
-		users[_source] = CreateCharacter(_source, data)
+    if data.identifier then
+        users[_source] = CreateCharacter(_source, data)
 		users[_source].displayMoney(users[_source].getMoney())
 
 		-- Tells other resources that a player has loaded
@@ -25,17 +25,17 @@ function LoadCharacter(source, identifier, charid)
 
 		return users[_source]
 	else
-		local license
+		local identifier
 
 		for k, v in ipairs(GetPlayerIdentifiers(_source)) do
-			if string.sub(v, 1, string.len('license:')) == 'license:' then
-				license = v
+			if string.sub(v, 1, string.len('steam:')) == 'steam:' then
+				identifier = v
 				break
 			end
         end
 
-		if license then
-			TriggerEvent('crp-db:updatecharacter', data.identifier, data.id, license, function(done)
+		if identifier then
+			TriggerEvent('crp-db:updatecharacter', data.identifier, data.id, identifier, function(done)
 				if done then
 					return false
 				end
@@ -70,4 +70,19 @@ end)
 
 function GetCharacter(source)
 	return users[source]
+end
+
+function GetCharacterByPhone(number)
+    for k, v in ipairs(users) do
+        print(k, v, v.getPhoneNumber(), number)
+        if tonumber(v.getPhoneNumber()) == tonumber(number) then
+            return v
+        end
+    end
+
+    return false
+end
+
+function GetAllCharacters()
+    return users
 end

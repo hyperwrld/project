@@ -7,7 +7,7 @@ TriggerEvent('crp-base:addCommand', 'reparar', function(source, args, user)
     local userJob = user.getJob().name
 
     if userJob == 'police' or userJob == 'medic' then
-        TriggerClientEvent('crp-police:repairvehicle', source)
+        TriggerClientEvent('crp-' .. userJob .. ':repairVehicle', source)
     else
         TriggerClientEvent('chat:addMessage', source, { color = {255, 255, 255}, templateId = 'orange', args = { 'SYSTEM', 'Permissões insuficientes.' }})
     end
@@ -24,7 +24,14 @@ TriggerEvent('crp-base:addCommand', 'revistar', function(source, args, user)
     end
 end, { help = 'Utilize este comando para revistar um jogador.' })
 
-local vehicles = { ['chgr'] = { wheel = 17, tint = 4, suspension = 3, color = 0 } } -- extra 1 2 3 4 5  6 7 8 11
+local vehicles = {
+    ['police'] = {
+        ['chgr'] = { wheel = 17, tint = 4, suspension = 3, color = 0 } -- extra 1 2 3 4 5  6 7 8 11
+    },
+    ['medic'] = {
+
+    }
+}
 
 TriggerEvent('crp-base:addCommand', 'carro', function(source, args, user)
     local user = exports['crp-base']:GetCharacter(source)
@@ -37,9 +44,9 @@ TriggerEvent('crp-base:addCommand', 'carro', function(source, args, user)
 
     args[1] = args[1]:lower()
 
-    if userJob == 'police' then
-        if vehicles[args[1]] then
-            TriggerClientEvent('crp-police:spawnvehicle', source, args[1], vehicles[args[1]])
+    if userJob == 'police' or userJob == 'medic' then
+        if vehicles[userJob][args[1]] then
+            TriggerClientEvent('crp-' .. userJob .. ':spawnVehicle', source, args[1], vehicles[userJob][args[1]])
         else
             TriggerClientEvent('chat:addMessage', source, { color = {255, 255, 255}, templateId = 'orange', args = { 'SYSTEM', 'Não foi encontrado nenhum veículo com esse nome.' }})
         end
@@ -102,7 +109,7 @@ TriggerEvent('crp-base:addCommand', 'apreender', function(source, args, user)
     local userJob = user.getJob().name
 
     if userJob == 'police' then
-        TriggerClientEvent('crp-police:impoundvehicle', source)
+        TriggerClientEvent('crp-police:impoundVehicle', source)
     else
         TriggerClientEvent('chat:addMessage', source, { color = {255, 255, 255}, templateId = 'orange', args = { 'SYSTEM', 'Permissões insuficientes.' }})
     end
@@ -112,8 +119,8 @@ TriggerEvent('crp-base:addCommand', 'escoltar', function(source, args, user)
     local user = exports['crp-base']:GetCharacter(source)
     local userJob = user.getJob().name
 
-    if userJob == 'police' then
-        TriggerClientEvent('crp-police:dragplayer', source)
+    if userJob == 'police' or userJob == 'medic' then
+        TriggerClientEvent('crp-police:dragPlayer', source)
     else
         TriggerClientEvent('chat:addMessage', source, { color = {255, 255, 255}, templateId = 'orange', args = { 'SYSTEM', 'Permissões insuficientes.' }})
     end

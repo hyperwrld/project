@@ -23,7 +23,7 @@ AddEventHandler('playerConnecting', function(name, setKickReason)
 	end
 
 	if not steamid then
-		setKickReason('Não foi possível encontrar o seu SteamID, renicie o FiveM com a Steam aberta ou renicie o FiveM e a Steam se ela estiver aberta.')
+		setKickReason('Não foi possível encontrar o seu Steam ID, renicie o FiveM com a Steam aberta ou renicie o FiveM e a Steam se ela estiver aberta.')
 		CancelEvent()
 	elseif name ~= sanitizedName then
 		setKickReason('Não foi possível entrar no servidor, devido ao seu nome na Steam conter caracteres que não são permitidos, por favor altere o seu nome.')
@@ -63,19 +63,19 @@ AddEventHandler('crp-base:createcharacter', function(source, data, callback)
 
 			callback(error)
 		else
-			local steamid, license
+			local steamid
 
     		for k, v in pairs(GetPlayerIdentifiers(_source)) do
 			    if string.sub(v, 1, string.len('steam:')) == 'steam:' then
 			        steamid = v
-			    elseif string.sub(v, 1, string.len('license:')) == 'license:' then
-			    	license = v
 			    end
 
-			    if steamid ~= nil and license ~= nil then break end
+				if steamid ~= nil then
+					break
+				end
     		end
 
-    		TriggerEvent('crp-db:createcharacter', data, steamid, license, tonumber(settings.startingCash), tonumber(settings.startingBank), function(done)
+    		TriggerEvent('crp-db:createcharacter', data, steamid, tonumber(settings.startingCash), tonumber(settings.startingBank), GeneratePhoneNumber(), function(done)
     			callback(done)
     		end)
 		end

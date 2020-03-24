@@ -1,17 +1,30 @@
-local serviceLocations = {{ x = 442.24, y = -976.78, z = 30.69 }, { x = -449.121, y = 6011.788, z = 31.716 }}
+local serviceLocations = {
+    { x = 442.24,   y = -976.78,  z = 30.69  },
+    { x = -449.121, y = 6011.788, z = 31.716 },
+}
 
-local armoriesLocations = {{ x = 452.245, y = -980.076, z = 29.74 }, { x = -437.933, y = 5988.451, z = 30.746 }}
+local armoriesLocations = {
+    { x = 452.245,  y = -980.076,  z = 29.74 },
+    { x = -437.933, y = 5988.451, z = 30.746 },
+}
 
-local warehouseLocations = {{ x = 459.04, y = -983.05, z = 30.78 }, { x = -442.171, y = 5987.419, z = 31.716 }}
+local warehouseLocations = {
+    { x = 459.04,   y = -983.05,  z = 30.78  },
+    { x = -442.171, y = 5987.419, z = 31.716 },
+}
 
-local policePoints = {{ x = 422.469, y = -1011.87, z = 29.072 }, { x = 1855.819, y = 3682.377, z = 34.268 }, { x = -453.184, y = 6029.408, z = 31.341 }}
+local policePoints = {
+    { x = 422.469,  y = -1011.87, z = 29.072 },
+    { x = 1855.819, y = 3682.377, z = 34.268 },
+    { x = -453.184, y = 6029.408, z = 31.341 },
+}
 
 local currentActionData = {}
 local hasAlreadyEnteredMarker, isPolice, playerInService, isBeingDragged, isEscorting, draggerId, isCuffing = false, false, false, false, false, 0, false
 local lastStation, lastPart, currentAction
 
-RegisterNetEvent('crp-police:repairvehicle')
-AddEventHandler('crp-police:repairvehicle', function()
+RegisterNetEvent('crp-police:repairVehicle')
+AddEventHandler('crp-police:repairVehicle', function()
     local playerPed = PlayerPedId()
 
     if not playerInService then
@@ -70,8 +83,8 @@ AddEventHandler('crp-police:search', function()
     end
 end)
 
-RegisterNetEvent('crp-police:spawnvehicle')
-AddEventHandler('crp-police:spawnvehicle', function(vehicleModel, data)
+RegisterNetEvent('crp-police:spawnVehicle')
+AddEventHandler('crp-police:spawnVehicle', function(vehicleModel, data)
     if not playerInService then
         exports['crp-notifications']:SendAlert('error', 'Precisas de estar de serviço para poder usar este comando.')
         return
@@ -142,8 +155,8 @@ AddEventHandler('crp-police:spawnvehicle', function(vehicleModel, data)
     end
 end)
 
-RegisterNetEvent('crp-police:impoundvehicle')
-AddEventHandler('crp-police:impoundvehicle', function()
+RegisterNetEvent('crp-police:impoundVehicle')
+AddEventHandler('crp-police:impoundVehicle', function()
     if not playerInService then
         exports['crp-notifications']:SendAlert('error', 'Precisas de estar de serviço para poder usar este comando.')
         return
@@ -191,8 +204,8 @@ AddEventHandler('crp-police:impoundvehicle', function()
     end)
 end)
 
-RegisterNetEvent('crp-police:cuffplayer')
-AddEventHandler('crp-police:cuffplayer', function(state)
+RegisterNetEvent('crp-police:cuffPlayer')
+AddEventHandler('crp-police:cuffPlayer', function(state)
     if not playerInService then
         exports['crp-notifications']:SendAlert('error', 'Precisas de estar de serviço para poder usar este comando.')
         return
@@ -215,18 +228,18 @@ AddEventHandler('crp-police:cuffplayer', function(state)
             exports['crp-notifications']:SendAlert('inform', 'Colocaste as algemas largas no jogador.')
         end
 
-        TriggerServerEvent('crp-police:cuffplayer', user, state)
+        TriggerServerEvent('crp-police:cuffPlayer', user, state)
     end
 end)
 
-RegisterNetEvent('crp-police:uncuffplayer')
-AddEventHandler('crp-police:uncuffplayer', function(state)
+RegisterNetEvent('crp-police:uncuffPlayer')
+AddEventHandler('crp-police:uncuffPlayer', function(state)
     local user, distance = GetClosestPlayer()
 
     if distance ~= nil and distance ~= -1 and distance < 2.0 then
         exports['crp-notifications']:SendAlert('inform', 'Desalgemaste um jogador.')
 
-        TriggerServerEvent('crp-police:uncuffplayer', user)
+        TriggerServerEvent('crp-police:uncuffPlayer', user)
         TriggerServerEvent('interact-sound:playWithinDistance', 2.5, 'uncuff', 0.1)
     end
 end)
@@ -242,8 +255,8 @@ AddEventHandler('crp-police:uncuff', function()
     TriggerEvent('crp-userinfo:updateCuffs', false)
 end)
 
-RegisterNetEvent('crp-police:getcuffed')
-AddEventHandler('crp-police:getcuffed', function(cuffer, state)
+RegisterNetEvent('crp-police:getCuffed')
+AddEventHandler('crp-police:getCuffed', function(cuffer, state)
     local playerPed = GetPlayerPed(-1)
 
     ClearPedTasksImmediately(playerPed)
@@ -350,8 +363,8 @@ AddEventHandler('crp-police:cuff', function(cuffer, state)
     isCuffing = false
 end)
 
-RegisterNetEvent('crp-police:dragplayer')
-AddEventHandler('crp-police:dragplayer', function()
+RegisterNetEvent('crp-police:dragPlayer')
+AddEventHandler('crp-police:dragPlayer', function()
     if not playerInService then
         exports['crp-notifications']:SendAlert('error', 'Precisas de estar de serviço para poder usar este comando.')
         return
@@ -368,7 +381,7 @@ AddEventHandler('crp-police:dragplayer', function()
 
     if distance ~= nil and distance ~= -1 and distance < 1.0 then
         if not isBeingDragged then
-            TriggerServerEvent('crp-police:dragplayer', user)
+            TriggerServerEvent('crp-police:dragPlayer', user)
         end
     end
 end)
@@ -397,7 +410,7 @@ AddEventHandler('crp-police:drag', function(player)
         end)
 
         if draggerId ~= -1 then
-            TriggerServerEvent('crp-police:updatedragger', draggerId, true)
+            TriggerServerEvent('crp-police:updateDragger', draggerId, true)
         end
     else
         local playerPed = GetPlayerPed(-1)
@@ -407,13 +420,13 @@ AddEventHandler('crp-police:drag', function(player)
         DetachEntity(playerPed, true, false)
 
         if draggerId ~= -1 then
-            TriggerServerEvent('crp-police:updatedragger', draggerId, false)
+            TriggerServerEvent('crp-police:updateDragger', draggerId, false)
         end
     end
 end)
 
-RegisterNetEvent('crp-police:updatedragger')
-AddEventHandler('crp-police:updatedragger', function(status)
+RegisterNetEvent('crp-police:updateDragger')
+AddEventHandler('crp-police:updateDragger', function(status)
     isEscorting = status
 
     if isEscorting then
@@ -466,7 +479,7 @@ AddEventHandler('crp-police:putInVehicle', function()
 
                 Citizen.Wait(1000)
 
-                TriggerServerEvent('crp-police:dragplayer', GetPlayerServerId(user))
+                TriggerServerEvent('crp-police:dragPlayer', GetPlayerServerId(user))
             else
                 exports['crp-notifications']:SendAlert('error', 'Não foi encontrado nenhum jogador próximo.')
             end
@@ -569,19 +582,19 @@ Citizen.CreateThread(function()
                 end
             else
 				if IsControlJustReleased(2, 172) and not IsControlPressed(0, 19) then
-                    TriggerEvent('crp-police:cuffplayer', false)
+                    TriggerEvent('crp-police:cuffPlayer', false)
 
 					Citizen.Wait(500)
 				end
 
 				if IsControlJustReleased(2, 172) and IsControlPressed(0, 19) then
-                    TriggerEvent('crp-police:cuffplayer', true)
+                    TriggerEvent('crp-police:cuffPlayer', true)
 
 					Citizen.Wait(500)
                 end
 
 				if IsControlJustReleased(2, 173) then
-                    TriggerEvent('crp-police:uncuffplayer')
+                    TriggerEvent('crp-police:uncuffPlayer')
 
 					Citizen.Wait(500)
                 end
@@ -593,7 +606,7 @@ Citizen.CreateThread(function()
                 end
 
                 if IsControlJustReleased(2, 175) then
-                    TriggerEvent('crp-police:dragplayer')
+                    TriggerEvent('crp-police:dragPlayer')
 
 					Citizen.Wait(500)
                 end

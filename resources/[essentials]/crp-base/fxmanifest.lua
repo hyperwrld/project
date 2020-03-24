@@ -37,8 +37,10 @@ server_scripts {
 }
 
 server_exports {
-	'GetCharacter',
-	'CheckIfHigherRank'
+    'GetCharacter',
+    'GetCharacterByPhone',
+    'GetAllCharacters',
+    'CheckIfHigherRank'
 }
 
 files {
