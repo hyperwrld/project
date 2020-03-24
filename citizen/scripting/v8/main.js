@@ -515,4 +515,4 @@ const EXT_LOCALFUNCREF = 11;
 	};
 
 	global.exports = createExports();
-})(this || window);
+})(this || globalThis);
