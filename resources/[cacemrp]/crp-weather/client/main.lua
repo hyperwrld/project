@@ -4,27 +4,39 @@ local baseTime, timeOffset, timer, densityMultiplier, hour, minute = 0, 0, 0, 0.
 
 Citizen.CreateThread(function()
     while true do
-        if lastWeather ~= currentWeather then
-            lastWeather = currentWeather
+        if not weatherDesync then
+            if lastWeather ~= currentWeather then
+                lastWeather = currentWeather
 
-            SetWeatherTypeOverTime(currentWeather, 15.0)
+                SetWeatherTypeOverTime(currentWeather, 15.0)
 
-            Citizen.Wait(15000)
-        end
+                Citizen.Wait(15000)
+            end
 
-        Citizen.Wait(100)
+            Citizen.Wait(100)
 
-        ClearOverrideWeather()
-        ClearWeatherTypePersist()
+            ClearOverrideWeather()
+            ClearWeatherTypePersist()
 
-        SetWeatherTypePersist(lastWeather)
-        SetWeatherTypeNow(lastWeather)
-        SetWeatherTypeNowPersist(lastWeather)
+            SetWeatherTypePersist(lastWeather)
+            SetWeatherTypeNow(lastWeather)
+            SetWeatherTypeNowPersist(lastWeather)
 
-        if lastWeather == 'XMAS' then
-            SetForceVehicleTrails(true)
-            SetForcePedFootstepsTracks(true)
+            if lastWeather == 'XMAS' then
+                SetForceVehicleTrails(true)
+                SetForcePedFootstepsTracks(true)
+            else
+                SetForceVehicleTrails(false)
+                SetForcePedFootstepsTracks(false)
+            end
         else
+            ClearOverrideWeather()
+            ClearWeatherTypePersist()
+
+            SetWeatherTypePersist('EXTRASUNNY')
+            SetWeatherTypeNow('EXTRASUNNY')
+            SetWeatherTypeNowPersist('EXTRASUNNY')
+
             SetForceVehicleTrails(false)
             SetForcePedFootstepsTracks(false)
         end
@@ -141,9 +153,9 @@ AddEventHandler('crp-weather:setDensityStatus', function(boolean)
 	isAllowedToSpawn = boolean
 end)
 
-RegisterNetEvent('crp-weather:desyncWeather')
-AddEventHandler('crp-weather:desyncWeather', function(boolean)
-    desyncWeather = boolean
+RegisterNetEvent('crp-weather:weatherDesync')
+AddEventHandler('crp-weather:weatherDesync', function(boolean)
+    weatherDesync = boolean
 end)
 
 AddEventHandler('playerSpawned', function()
