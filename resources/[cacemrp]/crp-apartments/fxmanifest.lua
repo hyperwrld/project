@@ -2,20 +2,25 @@ fx_version 'adamant'
 
 game 'gta5'
 
-ui_page 'html/ui.html'
+ui_page 'nui/ui.html'
 
 client_scripts {
-	'client/hotel.lua'
+    'client/spawn.lua',
+    'client/motel.lua',
+    'client/functions.lua'
 }
 
 server_scripts {
-	'server/hotel.lua'
+	'server/main.lua'
+}
+
+server_exports {
+    'GetMotelOwner'
 }
 
 files {
-	'html/ui.html',
-	'html/css/main.css',
-	'html/css/pdown.ttf',
-	'html/js/main.js',
-	'html/ui.html'
+	'nui/ui.html',
+	'nui/css/main.css',
+	'nui/css/pdown.ttf',
+	'nui/js/main.js'
 }
