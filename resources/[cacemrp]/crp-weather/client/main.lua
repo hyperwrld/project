@@ -4,6 +4,8 @@ local baseTime, timeOffset, timer, densityMultiplier, hour, minute = 0, 0, 0, 0.
 
 Citizen.CreateThread(function()
     while true do
+        Citizen.Wait(100)
+
         if not weatherDesync then
             if lastWeather ~= currentWeather then
                 lastWeather = currentWeather
@@ -12,8 +14,6 @@ Citizen.CreateThread(function()
 
                 Citizen.Wait(15000)
             end
-
-            Citizen.Wait(100)
 
             ClearOverrideWeather()
             ClearWeatherTypePersist()
