@@ -26,11 +26,11 @@ itemList['-2084633992'] = { displayname: 'Carabina', weight: 55, nonStack: true,
 
 // * NORMAL ITEMS
 
-itemList['156805094'] = { displayname: 'Colete', weight: 25, nonStack: false, image: 'crp-colete.png', weapon: false, price: 20, description: 'É um artefato militar ou policial e que tem como objetivo proteger os utilizadores contra projéteis ou destroços.' };
-itemList['130895348'] = { displayname: 'Ligadura', weight: 2.5, nonStack: false, image: 'crp-ligadura.png', weapon: false, price: 150, description: 'Uma faixa de tecido que recobre uma ferida, geralmente para fixar curativos.' };
-
-itemList['196068078'] = { displayname: 'Coca-Cola', weight: 1, nonStack: false, image: 'crp-coca.png', weapon: false, price: 500, description: 'Coca-Cola é um refrigerante que muda o sabor da tua vida.' };
-itemList['129942349'] = { displayname: 'Batatas', weight: 1, nonStack: false, image: 'crp-batatas.png', weapon: false, price: 3, description: 'Batatas fritas são comumente servidas como petisco ou acompanhamento.' };
+itemList['156805094'] = { displayname: 'Colete', weight: 25, nonStack: false, image: 'crp-colete.png', weapon: false, description: 'É um artefato militar ou policial e que tem como objetivo proteger os utilizadores contra projéteis ou destroços.' };
+itemList['130895348'] = { displayname: 'Ligadura', weight: 2.5, nonStack: false, image: 'crp-ligadura.png', weapon: false, description: 'Uma faixa de tecido que recobre uma ferida, geralmente para fixar curativos.' };
+itemList['196068078'] = { displayname: 'Coca-Cola', weight: 1, nonStack: false, image: 'crp-coca.png', weapon: false, description: 'Coca-Cola é um refrigerante que muda o sabor da tua vida.' };
+itemList['129942349'] = { displayname: 'Batatas', weight: 1, nonStack: false, image: 'crp-batatas.png', weapon: false, description: 'Batatas fritas são comumente servidas como petisco ou acompanhamento.' };
+itemList['119399505'] = { displayname: 'Gazua', weight: 1, nonStack: false, image: 'crp-lockpick.png', weapon: false, description: 'Alguém que escreva esta merda' };
 
 $(function () {
     defaultHTML = $('.ui').clone();
@@ -361,7 +361,7 @@ async function AttemptBuyFromStore(currentItem, currentInventory, returnItem, re
 
 	var result = ErrorCheck(currentInventory, returnInventory, (weight * quantity));
 
-	if (result == 'Success') {
+	if (result == true) {
 		var _currentSlot = currentSlot.replace(/\D/g, ''), boolean = { status: false }, canStack = false, _item = undefined;
 
 		_item = returnItem.data('item');
@@ -423,7 +423,7 @@ async function AttemptDropInEmptySlot(currentItem, currentInventory, returnInven
 
 	var result = ErrorCheck(currentInventory, returnInventory, (weight * quantity));
 
-	if (result == 'Success') {
+	if (result == true) {
 		var _lastSlot = lastSlot.replace(/\D/g, ''), _currentSlot = currentSlot.replace(/\D/g, '');
 
 		var boolean = false;
@@ -487,7 +487,7 @@ async function AttemptDropInFilledSlot(currentItem, currentInventory, returnItem
 	var result = ErrorCheck(currentInventory, returnInventory, (weight * quantity));
 	var _result = ErrorCheck(returnInventory, currentInventory, (_weight * _quantity));
 
-	if (result == 'Success' && _result == 'Success') {
+	if (result == true && _result == true) {
 		var _lastSlot = lastSlot.replace(/\D/g, ''), _currentSlot = currentSlot.replace(/\D/g, '');
 
 		var boolean = false;
@@ -537,34 +537,26 @@ async function AttemptDropInFilledSlot(currentItem, currentInventory, returnItem
 }
 
 function ErrorCheck(startingInventory, inventoryDropName, movementWeight) {
-	var sameInventory = true;
-	var errorReason = 'Success';
+	var sameInventory = true, errorReason = true;
 
 	if (startingInventory == 'player-inventory' && inventoryDropName != 'player-inventory') {
 		sameInventory = false;
-		console.log('Moving a item from player to secondary');
 	} else if (startingInventory != inventoryDropName) {
 		sameInventory = false;
-		console.log('Moving a item from secondary to player');
 	}
 
-	if (sameInventory == true) {
-		console.log('Moving items in the same inventory');
-	} else {
+	if (sameInventory == false) {
 		if (startingInventory == 'player-inventory') {
 			if (movementWeight + secondaryWeight > secondaryMaxWeight) {
-				console.log('movementWeight + secondaryWeight: ' + (movementWeight + secondaryWeight) + ' > ' + secondaryMaxWeight);
-				errorReason = "You can't move the item, because you don't have space on the target inventory";
-				console.log(errorReason);
+				errorReason = false;
 			}
 		} else {
 			if (movementWeight + personalWeight > personalMaxWeight) {
-				console.log('movementWeight + personalWeight: ' + (movementWeight + personalWeight) + ' > ' + personalMaxWeight);
-				errorReason = "You can't move the item, because you don't have space on your inventory";
-				console.log(errorReason);
+				errorReason = false;
 			}
 		}
-	}
+    }
+
 	return errorReason;
 }
 

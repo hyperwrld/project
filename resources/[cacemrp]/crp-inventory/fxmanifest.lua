@@ -41,5 +41,6 @@ files {
 	'nui/items/crp-colete.png',
 	'nui/items/crp-ligadura.png',
 	'nui/items/crp-coca.png',
-	'nui/items/crp-batatas.png',
+    'nui/items/crp-batatas.png',
+    'nui/items/crp-lockpick.png'
 }
