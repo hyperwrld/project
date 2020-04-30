@@ -31,6 +31,14 @@ function isPed(type)
         end
     end
 
+    if type == 'isWhitelisted' then
+        if (job == 'police' or job == 'medic') and inService then
+            return true
+        else
+            return false
+        end
+    end
+
     return data
 end
 

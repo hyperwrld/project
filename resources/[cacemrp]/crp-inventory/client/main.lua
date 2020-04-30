@@ -109,8 +109,6 @@ local function nuiCallBack(data, cb)
     end
 
     if data.useitem then
-        local events = exports['crp-base']:getModule('Events')
-
         events:Trigger('crp-inventory:getItem', data.itemdata.slot, function(_data)
             if _data[1] == nil then
                 cb(false)
