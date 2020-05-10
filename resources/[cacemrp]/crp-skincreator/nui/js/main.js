@@ -28,6 +28,8 @@ $(function() {
 			case 'enableClothesMenu':
                 isMenuOpen = event.data.status;
 
+                console.log('pqppp')
+
                 if (isMenuOpen) {
                     currentMenu = $('#' + event.data.menuName);
                     isInService = event.data.isInService;

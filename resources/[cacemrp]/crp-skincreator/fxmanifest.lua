@@ -5,8 +5,8 @@ game 'gta5'
 ui_page 'nui/index.html'
 
 client_scripts {
-    'client/utils.lua',
-    'client/main.lua',
+    'client/utils.js',
+    'client/main.js',
 }
 
 server_scripts {
