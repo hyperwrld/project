@@ -10,7 +10,7 @@ client_scripts {
 }
 
 server_scripts {
-    'server/main.lua'
+    'server/main.js'
 }
 
 files {
