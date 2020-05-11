@@ -16,7 +16,7 @@ var shopLocations = [
     { x : 301.116,   y : -596.436,  z : 42.308, type : 'clothesmenu' } // Médicos
 ];
 
-var isMenuOpen = false, cam = 0, isCamActive = false, oldSkin = {}, currentTattoos = {};
+var isMenuOpen = false, cam = 0, isCamActive = false, oldSkin = {}, currentTattoos = {}, isNewCharacter = false;
 var playerPed = GetPlayerPed(-1), tattoosCategories = GetTattoosCategories(), tattoosHashList = GetTemporaryTattoosList(), toggleClothes = [];
 
 function RefreshMenu() {
@@ -73,37 +73,33 @@ function RefreshMenu() {
     }));
 };
 
-function OpenMenu(name) {
-    playerPed = GetPlayerPed(-1), oldSkin = GetCurrentPed();
+function OpenMenu(name, isNew) {
+    playerPed = GetPlayerPed(-1), oldSkin = GetCurrentPed(), isNewCharacter = isNew;
 
     FreezePedCameraRotation(playerPed, true);
 
     RefreshMenu();
     ToggleMenu(true, name);
 
-    const thread = setTick(async () => {
-        await Wait(0);
-
-        do {
-            await Wait(5000);
-
-            console.log('oalaaa')
+    var thread = setTick(async () => {
+        if (isMenuOpen) {
+            await Wait(25000);
 
             InvalidateIdleCam();
-        } while(isMenuOpen);
-
-        console.log('pqqqqqqqqqqqqqqqqqqqqqqqqq')
-
-        clearTick(thread);
+        } else {
+            clearTick(thread)
+        }
     });
 };
 
-on('crp-skincreator:openMenu', (name) => {
-    OpenMenu(name);
+on('crp-skincreator:openMenu', (name, isNew) => {
+    OpenMenu(name, isNew);
 });
 
 on('crp-skincreator:setPedFeatures', (data) => {
     playerPed = GetPlayerPed(-1);
+
+    console.log(JSON.stringify(data))
 
     LoadSkin(data);
 });
@@ -170,7 +166,7 @@ const nuiCallBack = function(data, cb) {
 
     if (data.saveHairColor) {
         if (data.firstColour != null && data.secondColour != null) {
-            SetPedHairColor(playerPed, Number(data.firstColour), Number(data.secondColour));
+            SetPedHairColor(GetPlayerPed(-1), Number(data.firstColour), Number(data.secondColour));
         };
 
         cb(true);
@@ -212,7 +208,7 @@ const nuiCallBack = function(data, cb) {
     if (data.close) {
         SaveSkin(data.canSave);
 
-        ToggleMenu(false, false);
+        ToggleMenu(false, data.menuName);
 
         cb(true);
     };
@@ -264,18 +260,14 @@ const nuiCallBack = function(data, cb) {
 RegisterNuiCallbackType('nuiMessage');
 on('__cfx_nui:nuiMessage', nuiCallBack);
 
-//RegisterNUICallback('nuiMessage', nuiCallBack);
-
 setTick(async() => {
-    await Wait(0)
-
     var coords = GetEntityCoords(PlayerPedId()), letSleep = true;
 
     for (const [k, v] of Object.entries(shopLocations)) {
-        const distance = GetDistanceBetweenCoords(coords, v.x, v.y, v.z, true);
+        const distance = GetDistanceBetweenCoords(coords[0], coords[1], coords[2], v.x, v.y, v.z, true);
 
         if (distance < 10.0) {
-            DrawMarker(27, v.x, v.y, v.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 44, 130, 201, 100, false, false, 2, false, null, null, false);
+            DrawMarker(27, v.x, v.y, v.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 44, 130, 201, 100, false, false, 2, true, null, null, false);
 
             letSleep = false;
 
@@ -283,14 +275,14 @@ setTick(async() => {
                 DisplayHelpText('Pressiona ~INPUT_CONTEXT~ para abrir a ~g~loja~s~.');
 
                 if (IsControlJustReleased(0, 38)) {
-					OpenMenu(v.type);
+					OpenMenu(v.type, false);
             	};
             };
         };
     };
 
     if (letSleep) {
-		Wait(1500)
+        await Wait(3000);
     };
 });
 

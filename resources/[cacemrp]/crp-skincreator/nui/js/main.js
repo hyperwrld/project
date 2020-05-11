@@ -25,10 +25,8 @@ $(function() {
 
     window.addEventListener('message', function (event) {
         switch (event.data.eventName) {
-			case 'enableClothesMenu':
+			case 'enableMenu':
                 isMenuOpen = event.data.status;
-
-                console.log('pqppp')
 
                 if (isMenuOpen) {
                     currentMenu = $('#' + event.data.menuName);
@@ -230,7 +228,7 @@ $(function() {
 });
 
 function CloseMenu(canSave) {
-    $.post('http://crp-skincreator/nuiMessage', JSON.stringify({ close: true, canSave: canSave }));
+    $.post('http://crp-skincreator/nuiMessage', JSON.stringify({ close: true, canSave: canSave, menuName: currentMenu.selector.replace('#', '') }));
 }
 
 function UpdateTotals(drawTotal, propDrawTotal, textureTotal, headOverlayTotal, skinTotal) {

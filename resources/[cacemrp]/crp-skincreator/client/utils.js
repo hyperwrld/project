@@ -311,7 +311,7 @@ function SetHeadStructure(data) {
 function GetDrawables() {
     var drawables = [], currentModel = GetEntityModel(PlayerPedId()), isMpModel = false;
 
-    if (currentModel == `mp_f_freemode_01` || currentModel == `mp_m_freemode_01`) {
+    if (currentModel == GetHashKey('mp_f_freemode_01') || currentModel == GetHashKey('mp_m_freemode_01')) {
         isMpModel = true;
     };
 
@@ -417,14 +417,14 @@ function RotateEntity(direction) {
 };
 
 function LoadSkin(data) {
-    SetSkin(data.model, true);
+    SetSkin(Number(data.model), true);
     SetClothing(data.drawables, data.props, data.drawTextures, data.propTextures);
 
     Citizen.Wait(500)
 
     SetPedHairColor(playerPed, Number(data.hairColor[0]), Number(data.hairColor[1]));
 
-    if (data.model == `mp_f_freemode_01` || data.model == `mp_m_freemode_01`) {
+    if (data.model == GetHashKey('mp_f_freemode_01') || data.model == GetHashKey('mp_m_freemode_01')) {
         SetPedHeadBlend(data.headBlend);
     };
 
@@ -433,15 +433,20 @@ function LoadSkin(data) {
     return
 };
 
-function SetSkin(model, setDefault) {
+async function SetSkin(model, setDefault) {
     SetEntityInvincible(PlayerPedId(), true);
+
+    console.log(model, GetHashKey('mp_f_freemode_01'), GetHashKey('mp_m_freemode_01'))
+    console.log(IsModelInCdimage(model), IsModelValid(model))
 
     if (IsModelInCdimage(model) && IsModelValid(model)) {
         RequestModel(model);
 
         while (!HasModelLoaded(model)) {
-            Citizen.Wait(0);
+            await Wait(0);
         };
+
+        console.log('oieeeeeee???')
 
         SetPlayerModel(PlayerId(), model);
         SetModelAsNoLongerNeeded(model);
@@ -451,7 +456,7 @@ function SetSkin(model, setDefault) {
         FreezePedCameraRotation(playerPed, true);
 
         if (setDefault && model != null) {
-            if (model != `mp_f_freemode_01` && model != `mp_m_freemode_01`) {
+            if (model != GetHashKey('mp_f_freemode_01') && model != GetHashKey('mp_m_freemode_01')) {
                 SetPedRandomComponentVariation(playerPed, true);
             } else {
                 SetPedHeadBlendData(playerPed, 0, 0, 0, 15, 0, 0, 0, 1.0, 0, false);
@@ -528,15 +533,13 @@ function ToggleMenu(status, menu) {
     isMenuOpen = status;
 
     SendNuiMessage(JSON.stringify({
-        eventName: 'enableClothesMenu',
+        eventName: 'enableMenu',
         status: status,
         menuName: menu,
         isInService: isInService,
     }));
 
     if (!status) {
-        emit('crp-skincreator:payClothes');
-
         for (const [k, v] of Object.entries(toggleClothes)) {
             var selectedValue = hasValue(drawableNames, k);
 
@@ -556,6 +559,20 @@ function ToggleMenu(status, menu) {
         };
 
         oldSkin = {};
+
+        if (isNewCharacter) {
+            if (menu == 'barbermenu') {
+                setTimeout(function () {
+                    OpenMenu('clothesmenu', true);
+                }, 1000);
+            } else {
+                isNewCharacter = false;
+
+                FreezeEntityPosition(playerPed, false)
+            }
+        } else {
+            emit('crp-skincreator:payClothes');
+        };
     };
 };
 
@@ -563,7 +580,7 @@ function SaveSkin(data) {
     if (data) {
         currentPed = GetCurrentPed();
 
-        emit('crp-skincreator:saveSkin', JSON.stringify(currentPed));
+        emitNet('crp-skincreator:saveSkin', JSON.stringify(currentPed));
     } else {
         LoadSkin(oldSkin);
     };
@@ -687,6 +704,9 @@ function GetCurrentPed() {
         propTextures: GetPropTextures(),
     };
 };
+
+Wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+Delay = (ms) => new Promise(res => setTimeout(res, ms));
 
 RegisterCommand('skin', async(source, args) => {
     OpenMenu('charactermenu');
