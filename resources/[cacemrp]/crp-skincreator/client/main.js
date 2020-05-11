@@ -93,7 +93,7 @@ const nuiCallBack = function(data, cb) {
         if (selectedValue > -1) {
             SetPedComponentVariation(playerPed, Number(selectedValue), Number(data.value), Number(data.texture), 2);
 
-            cb([Number(GetNumberOfPedPropTextureVariations(playerPed, Number(selectedValue), Number(data.value)))]);
+            cb([Number(GetNumberOfPedTextureVariations(playerPed, Number(selectedValue), Number(data.value)))]);
         } else {
             selectedValue = hasValue(propNames, data.name);
 
@@ -186,9 +186,8 @@ const nuiCallBack = function(data, cb) {
     };
 
     if (data.close) {
-        SaveSkin(data.canSave);
-
         ToggleMenu(false, data.menuName);
+        SaveSkin(data.canSave);
 
         cb(true);
     };
