@@ -436,17 +436,12 @@ function LoadSkin(data) {
 async function SetSkin(model, setDefault) {
     SetEntityInvincible(PlayerPedId(), true);
 
-    console.log(model, GetHashKey('mp_f_freemode_01'), GetHashKey('mp_m_freemode_01'))
-    console.log(IsModelInCdimage(model), IsModelValid(model))
-
     if (IsModelInCdimage(model) && IsModelValid(model)) {
         RequestModel(model);
 
         while (!HasModelLoaded(model)) {
             await Wait(0);
         };
-
-        console.log('oieeeeeee???')
 
         SetPlayerModel(PlayerId(), model);
         SetModelAsNoLongerNeeded(model);
@@ -625,13 +620,13 @@ function TriggerCustomCamera(position) {
 
         if (position == 'head') {
             bonePosition = GetPedBoneCoords(playerPed, 31086);
-            bonePosition = vector3(bonePosition.x - 0.1, bonePosition.y + 0.4, bonePosition.z + 0.05);
+            bonePosition = { x: bonePosition[0] - 0.1, y: bonePosition[1] + 0.4, z: bonePosition[2] + 0.05 };
         } else if (position == 'torso') {
             bonePosition = GetPedBoneCoords(playerPed, 11816);
-            bonePosition = vector3(bonePosition.x - 0.4, bonePosition.y + 2.2, bonePosition.z + 0.2);
+            bonePosition = { x: bonePosition[0] - 0.4, y: bonePosition[1] + 2.2, z: bonePosition[2] + 0.2 };
         } else if (position == 'leg') {
             bonePosition = GetPedBoneCoords(playerPed, 46078);
-            bonePosition = vector3(bonePosition.x - 0.1, bonePosition.y + 1, bonePosition.z);
+            bonePosition = { x: bonePosition[0] - 0.1, y: bonePosition[1] + 1, z: bonePosition[2] };
         };
 
         SetCamCoord(cam, bonePosition.x, bonePosition.y, bonePosition.z);
@@ -680,13 +675,19 @@ function ToggleProps(name) {
 };
 
 function GetPedHeadBlend() {
-    const [success, headBlendData] = GetPedHeadBlendData(playerPed);
+    var arrayInt = new Uint32Array(new ArrayBuffer(10 * 8)), arrayFloat = new Float32Array(new ArrayBuffer(10 * 8));
 
-    if (!success) {
-        return false
-    }
+    if (!Citizen.invokeNative('0x2746BD9D88C5C5D0', playerPed, arrayInt, true)) {
+        return false;
+    };
 
-    return headBlendData;
+    Citizen.invokeNative('0x2746BD9D88C5C5D0', playerPed, arrayFloat, true);
+
+    return {
+        shapeFirst: arrayInt[0], shapeSecond: arrayInt[2], shapeThird: arrayInt[4],
+        skinFirst: arrayInt[6], skinSecond: arrayInt[8], skinThird: arrayInt[10],
+        shapeMix: arrayFloat[12], skinMix: arrayFloat[14], thirdMix: arrayFloat[16]
+    };
 };
 
 function GetCurrentPed() {
@@ -706,10 +707,5 @@ function GetCurrentPed() {
 };
 
 Wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-Delay = (ms) => new Promise(res => setTimeout(res, ms));
-
-RegisterCommand('skin', async(source, args) => {
-    OpenMenu('charactermenu');
-});
 
 ReplaceTattoosList()

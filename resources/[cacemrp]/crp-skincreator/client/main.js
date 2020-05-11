@@ -99,8 +99,6 @@ on('crp-skincreator:openMenu', (name, isNew) => {
 on('crp-skincreator:setPedFeatures', (data) => {
     playerPed = GetPlayerPed(-1);
 
-    console.log(JSON.stringify(data))
-
     LoadSkin(data);
 });
 
