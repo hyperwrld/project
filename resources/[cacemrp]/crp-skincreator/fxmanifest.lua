@@ -6,7 +6,7 @@ ui_page 'nui/index.html'
 
 client_scripts {
     'client/utils.js',
-    'client/main.js',
+    'client/main.js'
 }
 
 server_scripts {

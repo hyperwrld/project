@@ -435,7 +435,7 @@ function SetHairColor(data) {
 }
 
 function SetupHeadBlend() {
-    if (headBlend == null)  {
+    if (headBlend == null || !headBlend)  {
         return;
     }
 
