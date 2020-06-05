@@ -31,7 +31,7 @@
 
 
 <div class="row justify-content-md-center">
-    <div class="col-md-7">
+    <div class="col-md-7 mw-col8">
 
         <!-- Global Card -->
         <div class="card card-accent-primary">
@@ -44,7 +44,7 @@
             <div class="card-body">
                 <div class="table-responsive text-center">
 
-                    <table class="table table-responsive-md table-striped">
+                    <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>Username</th>
@@ -67,7 +67,7 @@
                                     <i class="admin-icon"><svg><use xlink:href="#password-icon"></use></svg></i>
                                 </td>
                                 <td>{{@this.perms}}</td>
-                                <td>
+                                <td class="tableActions">
                                     <button class="btn btn-sm btn-outline-primary"
                                         onclick="getEditModal('{{@this.name}}')" {{@this.disableActions|isDisabled}}>
                                         <i class="icon-pencil"></i> Edit
@@ -107,8 +107,8 @@
             <div class="modal-body">
                 <div class="form-group row">
                     <label for="modAddAdmin-name" class="col-sm-3 col-form-label">
-                        Username
-                        <span class="text-danger">*</span>
+                        Username <br>
+                        <small class="text-danger">(required)</small>
                     </label>
                     <div class="col-sm-9">
                         <div class="input-group">
@@ -123,7 +123,8 @@
 
                 <div class="form-group row">
                     <label for="modAddAdmin-citizenfxID" class="col-sm-3 col-form-label">
-                        CitizenFX ID
+                        CitizenFX ID <br>
+                        <small class="text-muted">(optional)</small>
                     </label>
                     <div class="col-sm-9">
                         <div class="input-group">
@@ -138,7 +139,8 @@
 
                 <div class="form-group row">
                     <label for="modAddAdmin-discordID" class="col-sm-3 col-form-label">
-                        Discord ID
+                        Discord ID <br>
+                        <small class="text-muted">(optional)</small>
                     </label>
                     <div class="col-sm-9">
                         <div class="input-group">
@@ -168,7 +170,7 @@
 
             </div>
             <div class="modal-footer text-center">
-                <div class="mx-auto button-spacer">
+                <div class="mx-auto">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-success" id="modAddAdmin-save">Save</button>
                 </div>
@@ -201,7 +203,7 @@
                 </div>
             </div>
             <div class="modal-footer text-center">
-                <div class="mx-auto button-spacer">
+                <div class="mx-auto">
                     <button type="button" class="btn btn-primary" onclick="window.location.reload(false);">Close & Refresh</button>
                 </div>
             </div>
@@ -223,7 +225,7 @@
             </div>
             <div class="modal-body" id="modEditAdmin-body"></div>
             <div class="modal-footer text-center">
-                <div class="mx-auto button-spacer">
+                <div class="mx-auto">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-success" id="modEditAdmin-save">Save</button>
                 </div>
@@ -251,7 +253,7 @@
         $.ajax({
             type: "POST",
             url: '/adminManager/delete',
-            timeout: 2000,
+            timeout: timeoutMedium,
             data: {name: name},
             success: function (data) {
                 if(data.message == 'refresh'){
@@ -274,7 +276,7 @@
         $.ajax({
             type: "POST",
             url: '/adminManager/getModal',
-            timeout: 2000,
+            timeout: timeoutMedium,
             data: {name: name},
             success: function (data) {
                 $('#modEditAdmin-body').html(data);
@@ -309,7 +311,7 @@
         $.ajax({
             type: "POST",
             url: '/adminManager/edit',
-            timeout: 2000,
+            timeout: timeoutMedium,
             data: data,
             dataType: 'json',
             success: function (data) {
@@ -351,7 +353,7 @@
         $.ajax({
             type: "POST",
             url: '/adminManager/add',
-            timeout: 2000,
+            timeout: timeoutMedium,
             data: data,
             dataType: 'json',
             success: function (data) {

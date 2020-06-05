@@ -1,25 +1,21 @@
-</div>
-</div>
-</main>
-<aside class="aside-menu">
-
-    <!-- Tab panes-->
-    <div class="tab-content">
-
-        <div class="tab-pane p-3 active" role="tabpanel">
-            <h5>Playerlist:</h5>
-            <div id="playerlist">
-                <div class="row justify-content-center">
-                    <span class="m-4">Loading...</span>
+<!-- End Page Content -->
+                    </div>
                 </div>
-            </div>
+            </main>
+
+            <!-- Footer -->
+            <footer class="c-footer text-center">
+                <div class="mx-auto d-md-none"> v{{txAdminVersion}} atop FXServer {{fxServerVersion}}</div>
+                <div class="d-sm-down-none"> Written with ❤️ by
+                    <a href="https://github.com/tabarra" class="credit-links" target="_blank">Tabarra</a> for the
+                    <a href="https://github.com/citizenfx" class="credit-links" target="_blank">CitizenFX
+                        Collective</a>.
+                </div>
+                <div class="ml-auto d-sm-down-none"> v{{txAdminVersion}} atop FXServer {{fxServerVersion}}</div>
+            </footer>
         </div>
     </div>
 
-</aside>
-</div>
-
-<!-- Begin modals -->
 
 <!-- Player info modal -->
 <div class="modal fade" id="modPlayerInfo" tabindex="-1" role="dialog" aria-labelledby="modPlayerInfoTitle" aria-hidden="true">
@@ -38,7 +34,7 @@
 
             </div>
             <div class="modal-footer text-center">
-                <div class="mx-auto button-spacer" id="modPlayerInfoButtons">
+                <div class="mx-auto" id="modPlayerInfoButtons">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -74,7 +70,7 @@
                                     id="modChangePassword-oldPassword" maxlength="64">
                             </div>
                         </div>
-                        <div class="col-sm-12 main-top-spacer"></div>
+                        <div class="col-sm-12" style="margin-top: 1.75em;"></div>
                     {{/if}}
 
 
@@ -104,7 +100,7 @@
                 </div>
             </div>
             <div class="modal-footer text-center">
-                <div class="mx-auto button-spacer">
+                <div class="mx-auto">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-success" id="modChangePassword-save">Save</button>
                 </div>
@@ -114,32 +110,11 @@
 </div>
 
 
-<footer class="app-footer text-center">
-
-    <!-- Display pequeno -->
-    <div class="mx-auto d-md-none">
-        Written with ❤️ by <a href="https://github.com/tabarra" class="credit-links" target="_blank">Tabarra</a> for the <a href="https://github.com/citizenfx" class="credit-links" target="_blank">CitizenFX Collective</a>.
-    </div>
-
-    <!-- Display grande -->
-    <div class="d-sm-down-none">
-        Written with ❤️ by <a href="https://github.com/tabarra" class="credit-links" target="_blank">Tabarra</a> for the <a href="https://github.com/citizenfx" class="credit-links" target="_blank">CitizenFX Collective</a>.
-    </div>
-    <div class="ml-auto d-sm-down-none">
-         v{{txAdminVersion|safe}} atop {{fxserverVersion|safe}}
-    </div>
-
-</footer>
-<!-- CoreUI and necessary plugins-->
-<script src="js/jquery.min.js"></script>
-<script src="js/popper.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-<script src="js/pace.min.js"></script>
-<script src="js/perfect-scrollbar.min.js"></script>
-<script src="js/coreui.min.js"></script>
-<script src="js/bootstrap-notify.min.js"></script>
-<!-- Plugins and scripts required by this view-->
-<script src="js/common.js"></script>
+    <!-- CoreUI and necessary plugins-->
+    <script src="js/jquery.min.js"></script>
+    <script src="js/coreui.bundle.min.js"></script>
+    <script src="js/bootstrap-notify.min.js"></script>
+    <script src="js/common.js"></script>
 </body>
 
 </html>

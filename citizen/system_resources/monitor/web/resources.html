@@ -6,7 +6,7 @@
 
 
 <div class="row justify-content-md-center">
-    <div class="col-md-7">
+    <div class="col-md-7 mw-col6">
         <div class="card card-accent-primary">
             <div class="card-header float-left">
                 <span style="font-size: large">All Resources</span>
@@ -20,9 +20,9 @@
                         Default resources:
                     </span>
                     &nbsp;&nbsp;
-                    <label class="switch switch-label switch-pill switch-success fix-pill-form">
-                        <input type="checkbox" id="defResCheckbox" class="switch-input">
-                        <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                    <label class="c-switch c-switch-label c-switch-pill c-switch-success fix-pill-form">
+                        <input type="checkbox" id="defResCheckbox" class="c-switch-input">
+                        <span class="c-switch-slider" data-checked="On" data-unchecked="Off"></span>
                     </label>
                 </div>
             </div>
@@ -30,20 +30,19 @@
     </div>
 </div>
 <div class="row justify-content-md-center">
-    <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
+    <div class="col-sm-12 col-lg-7 mw-col8">
         <div class="card card-accent-primary table-responsive-sm">
             <table class="table table-hover table-outline mb-0">
                 {{foreach(options.resGroups)}}
                     <thead class="thead-light" id="resList-card-{{@this.divName}}">
                         <tr>
-                            <th class="text-break">{{@this.subPath}}</th>
-                            <th class="text-right">Actions</th>
+                            <th class="text-break text-center" colspan="2">{{@this.subPath}}</th>
                         </tr>
                     </thead>
                     <tbody id="resList-cardBody-{{@this.divName}}"
                         aria-labelledby="resList-cardHeader-{{@this.divName}}">
                         {{each(@this.resources)}}
-                        <tr class="{{@this.statusClass ? 'table-' + @this.statusClass : ''}}" id="res-{{@this.divName}}">
+                        <tr id="res-{{@this.divName}}">
                             <td>
                                 <strong style="word-wrap: break-word;">{{@this.name}}</strong>
                                 {{if(@this.version!='')}}
@@ -58,20 +57,20 @@
                                 {{/if}}
                             </td>
 
-                            <td class="text-right">
+                            <td class="tableActions">
                                 {{if(@this.status=='started')}}
-                                <a class="btn btn-sm btn-outline-primary d-block d-md-inline-block mr-md-1 mb-1 mb-md-0"
+                                <a class="btn btn-sm btn-outline-warning d-block d-md-inline-block mr-md-1 mb-1 mb-md-0 {{disableActions}}"
                                     href="#"
                                     onclick="btnCommand('ensure_res', '{{@this.name}}'); event.preventDefault();" {{disableActions}}>
                                     Restart
                                 </a>
-                                <a class="btn btn-sm btn-outline-primary d-block d-md-inline-block m-0"
+                                <a class="btn btn-sm btn-outline-danger d-block d-md-inline-block m-0 {{disableActions}}"
                                     href="#"
                                     onclick="btnCommand('stop_res', '{{@this.name}}'); event.preventDefault();" {{disableActions}}>
                                     Stop
                                 </a>
                                 {{#else}}
-                                <a class="btn btn-sm btn-outline-primary d-block d-md-inline-block"
+                                <a class="btn btn-sm btn-outline-success d-block d-md-inline-block {{disableActions}}"
                                     href="#"
                                     onclick="btnCommand('ensure_res', '{{@this.name}}'); event.preventDefault();" {{disableActions}}>
                                     Start
@@ -102,6 +101,7 @@
     //intentionally 'blank' line
     const defaultResources = [
         "webadmin",
+        "monitor",
         "race-test",
         "race",
         "channelfeed",
@@ -125,7 +125,8 @@
         "yarn",
         "betaguns",
         "gameInit",
-        "keks"
+        "keks",
+        "runcode",
     ]
 
 
@@ -135,13 +136,16 @@
         $.ajax({
             type: "POST",
             url: '/fxserver/commands',
-            timeout: 2000,
+            timeout: timeoutLong,
             data: { action: 'refresh_res', parameter: '' },
             success: function (data) {
-                window.location.reload(true);
-                // notify.update('progress', 0);
-                // notify.update('type', data.type);
-                // notify.update('message', data.message);
+                if(data.type !== 'danger'){
+                    window.location.reload(true);
+                }else{
+                    notify.update('progress', 0);
+                    notify.update('type', data.type);
+                    notify.update('message', data.message);
+                }
             },
             error: function (xmlhttprequest, textstatus, message) {
                 notify.update('progress', 0);
@@ -158,10 +162,16 @@
         $.ajax({
             type: "POST",
             url: '/fxserver/commands',
-            timeout: 2000,
+            timeout: timeoutMedium,
             data: { action, parameter },
             success: function (data) {
-                window.location.reload(true);
+                if(data.type !== 'danger'){
+                    window.location.reload(true);
+                }else{
+                    notify.update('progress', 0);
+                    notify.update('type', data.type);
+                    notify.update('message', data.message);
+                }
             },
             error: function (xmlhttprequest, textstatus, message) {
                 notify.update('progress', 0);
@@ -193,6 +203,10 @@
                 $(`#resList-card-${folder.divName}`).show();
             }
         });
+        if(!filter.length){
+            hideDefaultResources();
+        }
+
     }
 
     //============================================== Hide defaults

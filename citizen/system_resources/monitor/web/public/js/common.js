@@ -1,12 +1,147 @@
 //================================================================
+//============================================== Settings
+//================================================================
+const timeoutShort = 1500;
+const timeoutMedium = 2500;
+const timeoutLong = 4000;
+
+//================================================================
 //============================================== Dynamic Stats
 //================================================================
+//Vars and elements
+let cachedPlayers = [];
+let playerlistElement = document.getElementById('playerlist');
+let plistMsgElement = document.getElementById('playerlist-message');
+let plistCountElement = document.getElementById('plist-count');
+let plistSearchElement = document.getElementById('plist-search');
+
+//Apply filter
+function applyPlayerlistFilter(){
+    let search = plistSearchElement.value.toLowerCase();
+    Array.from(playerlistElement.children).forEach(el => {
+        if(el.id == 'playerlist-message') return;
+        if(
+            search == '' || 
+            (typeof el.dataset['pname'] == 'string' && el.dataset['pname'].includes(search))
+        ){
+            el.hidden = false;
+        }else{
+            el.hidden = true;
+        }
+    });
+}
+
+//Search function
+plistSearchElement.addEventListener('input', function (ev) {
+    applyPlayerlistFilter();
+});
+
+//TODO: try this again, currently doesn't feel a very polished experience
+// Clear search when the user clicks away
+// plistSearchElement.addEventListener('focusout', (event) => {
+//     setTimeout(() => {  
+//         event.target.value = ''
+//         Array.from(playerlistElement.children).forEach(el => {
+//             if(el.id == 'playerlist-message') return;
+//             el.hidden = false;
+//         });
+//     }, 1000);
+// });
+
+//Handle Remove, Add and Update playerlist
+function removePlayer(player){
+    document.getElementById(`divPlayer${player.id}`).remove();
+}
+
+function addPlayer(player){
+    let div = `<div class="list-group-item list-group-item-accent-secondary player text-truncate" 
+                onclick="showPlayer(${player.id})" id="divPlayer${player.id}">
+                    <span class="pping text-secondary">&nbsp;??</span>
+                    <span class="pname">#${player.id}</span>
+            </div>`
+    $("#playerlist").append(div);
+}
+
+function updatePlayer(player){
+    let el = document.getElementById(`divPlayer${player.id}`);
+
+    let pingClass;
+    player.ping = parseInt(player.ping);
+    if (player.ping < 0) {
+        pingClass = 'secondary';
+        player.ping = '??';
+    } else if (player.ping < 60) {
+        pingClass = 'success';
+    } else if (player.ping < 100) {
+        pingClass = 'warning';
+    } else {
+        pingClass = 'danger';
+    }
+
+    el.classList.remove('list-group-item-accent-secondary', 'list-group-item-accent-success', 'list-group-item-accent-warning', 'list-group-item-accent-danger');
+    el.classList.add('list-group-item-accent-' + pingClass);
+    el.firstElementChild.classList.remove('text-secondary', 'text-success', 'text-warning', 'text-danger');
+    el.firstElementChild.classList.add('text-' + pingClass);
+    el.firstElementChild.innerHTML = player.ping.toString().padStart(3, 'x').replace(/x/g, '&nbsp;');
+    el.lastElementChild.textContent = player.name;
+    el.dataset['pname'] = player.name.toLowerCase();
+}
+
+
+function processPlayers(players) {
+    //If invalid playerlist or error message
+    if(!Array.isArray(players)){
+        Array.from(playerlistElement.children).forEach(el => el.hidden = true);
+        if(typeof players == 'string'){
+            plistMsgElement.textContent = players;
+        }else if(players === false){
+            plistMsgElement.textContent = 'Playerlist not available.';
+        }else{
+            plistMsgElement.textContent = 'Invalid playerlist';
+        }
+        plistMsgElement.hidden = false
+        return;
+    }
+    plistMsgElement.hidden = true;
+    applyPlayerlistFilter();
+    
+    let newPlayers, removedPlayers, updatedPlayers;
+    try {
+        newPlayers = players.filter(p => {
+            return !cachedPlayers.filter(x => x.id === p.id).length;
+        });
+        
+        removedPlayers = cachedPlayers.filter(p => {
+            return !players.filter(x => x.id === p.id).length;
+        });
+
+        updatedPlayers = cachedPlayers.filter(p => {
+            return players.filter(x => x.id === p.id).length;
+        });
+    } catch (error) {
+        console.log(`Failed to process the playerlist with message: ${error.message}`);
+    }
+
+    removedPlayers.forEach(removePlayer);
+    newPlayers.forEach(addPlayer);
+    updatedPlayers.forEach(updatePlayer);
+
+    if(!players.length){
+        plistMsgElement.hidden = false
+        plistMsgElement.textContent = 'No Players Online';
+    }
+    cachedPlayers = players;
+    plistCountElement.textContent = players.length;
+}
+
+
+
 function refreshData() {
     $.ajax({
         url: "/status",
         type: "GET",
         dataType: "json",
-        timeout: 1500,
+        timeout: timeoutShort,
         success: function (data) {
             if (data.logout) {
                 window.location = '/auth?logout';
@@ -17,25 +152,25 @@ function refreshData() {
             $('#hostusage-memory-bar').attr('aria-valuenow', data.host.memory.pct).css('width', data.host.memory.pct+"%");
             $('#hostusage-memory-text').html(data.host.memory.text);
             $("#status-card").html(data.status);
-            $("#playerlist").html(data.players);
             $("#favicon").attr("href", 'img/' + data.meta.favicon + ".png");
             document.title = data.meta.title;
+            processPlayers(data.players)
         },
         error: function (xmlhttprequest, textstatus, message) {
             let out = null;
             if (textstatus == 'parsererror') {
-                out = `Response parse error.\n<br>Try refreshing your window.`;
+                out = `Response parse error.\nTry refreshing your window.`;
             } else {
-                out = `Request error: ${textstatus}\n<br>${message}`;
+                out = `Request error: ${textstatus}\n${message}`;
             }
             $('#hostusage-cpu-bar').attr('aria-valuenow', 0).css('width', 0);
             $('#hostusage-cpu-text').html('error');
             $('#hostusage-memory-bar').attr('aria-valuenow', 0).css('width', 0);
             $('#hostusage-memory-text').html('error');
-            $("#status-card").html(out);
-            $("#playerlist").html(out);
-            $("#favicon").attr("href", "img/favicon_off.png");
+            $("#status-card").html(out.replace('\n', '\n<br>'));
+            $("#favicon").attr("href", "img/favicon_offline.png");
             document.title = 'ERROR - txAdmin';
+            processPlayers(out)
         }
     });
 };
@@ -55,7 +190,7 @@ function showPlayer(id) {
         url: "/getPlayerData/" + id,
         type: "GET",
         dataType: "json",
-        timeout: 2000,
+        timeout: timeoutMedium,
         success: function (data) {
             if (data.logout) {
                 window.location = '/auth?logout';
@@ -87,7 +222,7 @@ function messagePlayer(id) {
     $.ajax({
         type: "POST",
         url: '/fxserver/commands',
-        timeout: 2000,
+        timeout: timeoutLong,
         data: data,
         // dataType: 'json',
         success: function (data) {
@@ -118,7 +253,7 @@ function kickPlayer(id) {
     $.ajax({
         type: "POST",
         url: '/fxserver/commands',
-        timeout: 2000,
+        timeout: timeoutLong,
         data: data,
         // dataType: 'json',
         success: function (data) {
@@ -179,7 +314,7 @@ $('#modChangePassword-save').click(function () {
     $.ajax({
         type: "POST",
         url: '/changePassword',
-        timeout: 2000,
+        timeout: timeoutMedium,
         data: data,
         dataType: 'json',
         success: function (data) {
