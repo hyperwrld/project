@@ -38,8 +38,8 @@
     };
 </script>
 
-<style lang="scss">
-    @import 'assets/css/materialize.min.css';
+<style lang='scss'>
+    @import 'assets/materialize.min.css';
 
     html, body {
         height: 100%;
@@ -56,7 +56,7 @@
 
     .title {
         font-size: 16px;
-        background-color: rgba(45, 102, 225, 0.70);
+        background-color: rgba(122, 120, 120, 0.70);
         text-align: center;
         padding: 1.8%;
         color: #FFFFFF;

@@ -16,9 +16,9 @@ server_scripts {
 
 files {
     'nui/dist/index.html',
-    'nui/dist/js/app.aa1fc830.js',
-    'nui/dist/js/app.aa1fc830.js.map',
+    'nui/dist/js/app.362cdc34.js',
+    'nui/dist/js/app.362cdc34.js.map',
     'nui/dist/js/chunk-vendors.e92ed4a8.js',
     'nui/dist/js/chunk-vendors.e92ed4a8.js.map',
-    'nui/dist/css/app.60ab3e40.css',
+    'nui/dist/css/app.0f36b37d.css',
 }
