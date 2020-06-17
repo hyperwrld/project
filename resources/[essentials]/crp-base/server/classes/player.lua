@@ -32,11 +32,15 @@ function CreateCharacter(source, data)
         TriggerClientEvent('crp-jobmanager:updateJob', source, self.job.name, self.job.label, true)
     end
 
-	local rTable = {}
+    if data.skin == nil then
+        self.skin = data.skin
+    else
+        self.skin = json.decode(data.skin)
+    end
 
 	-- Sets money for the user
 
-	rTable.setMoney = function(money)
+	self.setMoney = function(money)
 		if type(money) == 'number' then
 			local prevMoney = self.money
 			local newMoney = money
@@ -59,13 +63,13 @@ function CreateCharacter(source, data)
 
 	-- Returns money for the player
 
-	rTable.getMoney = function()
+	self.getMoney = function()
 		return self.money
 	end
 
 	-- Sets a players bank balance
 
-	rTable.setBankBalance = function(money)
+	self.setBankBalance = function(money)
 		if type(money) == 'number' then
 			-- Triggers an event to save it to the database
 
@@ -79,19 +83,19 @@ function CreateCharacter(source, data)
 
 	-- Returns the players bank
 
-	rTable.getBank = function()
+	self.getBank = function()
 		return self.bank
 	end
 
 	-- Returns the player job
 
-	rTable.getJob = function()
+	self.getJob = function()
 		return self.job
 	end
 
 	-- Sets the player job
 
-	rTable.setJob = function(job, grade)
+	self.setJob = function(job, grade)
 		local lastJob = json.decode(json.encode(self.job))
 
 		grade = tonumber(grade)
@@ -109,58 +113,58 @@ function CreateCharacter(source, data)
 
 	-- Returns the player firstname
 
-	rTable.getFirstName = function()
+	self.getFirstName = function()
 		return self.firstname
 	end
 
 	-- Returns the player lastname
 
-	rTable.getLastName = function()
+	self.getLastName = function()
 		return self.lastname
 	end
 
 	-- Returns the player fullname
 
-	rTable.getFullName = function()
+	self.getFullName = function()
 		return self.firstname .. ' ' .. self.lastname
 	end
 
 	-- Returns the player dateofbirth
 
-	rTable.getDateOfBirth = function()
+	self.getDateOfBirth = function()
 		return self.dateofbirth
 	end
 
 	-- Returns the player sex
 
-	rTable.getSex = function()
+	self.getSex = function()
 		return self.sex
     end
 
     -- Returns the player phone number
 
-    rTable.getPhoneNumber = function()
+    self.getPhoneNumber = function()
         return self.phone
     end
 
 	-- Returns the player coords
 
-	rTable.getPosition = function()
+	self.getPosition = function()
 		return self.coords
 	end
 
 	-- Sets the player coords, note this won't actually set the players coords on the client.
 	-- So don't use this, it's for internal use
 
-	rTable.setPosition = function(x, y, z)
+	self.setPosition = function(x, y, z)
 		self.coords = { x = x, y = y, z = z }
 	end
 
-	rTable.getStatus = function()
+	self.getStatus = function()
 		return self.status
 	end
 
-	rTable.setStatus = function(status)
+	self.setStatus = function(status)
 		if self.status == nil then
 			self.status = {}
 		end
@@ -170,13 +174,13 @@ function CreateCharacter(source, data)
 
 	-- Kicks the player with the specified reason
 
-	rTable.kick = function(reason)
+	self.kick = function(reason)
 		DropPlayer(self.source, reason)
 	end
 
 	-- Adds money to the user
 
-	rTable.addMoney = function(money)
+	self.addMoney = function(money)
 		if type(money) == 'number' then
 			local newMoney = self.money + money
 
@@ -194,7 +198,7 @@ function CreateCharacter(source, data)
 
 	-- Removes money from the user
 
-	rTable.removeMoney = function(money)
+	self.removeMoney = function(money)
 		if type(money) == 'number' then
 			local newMoney = self.money - money
 
@@ -212,7 +216,7 @@ function CreateCharacter(source, data)
 
 	-- Adds money to a users bank
 
-	rTable.addBank = function(money)
+	self.addBank = function(money)
 		if type(money) == 'number' then
 			local newBank = self.bank + money
 
@@ -224,7 +228,7 @@ function CreateCharacter(source, data)
 
 	-- Removes money from a users bank
 
-	rTable.removeBank = function(money)
+	self.removeBank = function(money)
 		if type(money) == 'number' then
 			local newBank = self.bank - money
 
@@ -236,7 +240,7 @@ function CreateCharacter(source, data)
 
 	-- This is used to initially start displaying money to the user
 
-	rTable.displayMoney = function(money)
+	self.displayMoney = function(money)
 		if type(money) == 'number' then
 			if not self.moneyDisplayed then
 
@@ -251,25 +255,25 @@ function CreateCharacter(source, data)
 
 	-- Returns the players identifier used in EssentialMode
 
-	rTable.getIdentifier = function()
+	self.getIdentifier = function()
 		return self.identifier
     end
 
-    rTable.getSource = function()
+    self.getSource = function()
         return self.source
     end
 
 	-- Returns the character id
 
-	rTable.getCharacterID = function()
+	self.getCharacterID = function()
 		return self.id
     end
 
     -- Returns character inventory name
 
-    rTable.getCharacterInventory = function()
+    self.getCharacterInventory = function()
         return 'character-' .. self.id
     end
 
-	return rTable
+	return self
 end

@@ -20,11 +20,11 @@ function CRP.Spawn.InitializeMenu(self)
     SetEntityCoordsNoOffset(playerPed, 180.789, -1035.451, 296.092, false, false, false, true)
     SetEntityVisible(playerPed, false)
 
-    TriggerEvent('crp-base:openMainMenu')
-
     DoScreenFadeIn(500)
 
     while IsScreenFadingIn() do
         Citizen.Wait(0)
     end
+
+    TriggerEvent('crp-base:openMainMenu')
 end

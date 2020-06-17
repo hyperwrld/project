@@ -1,3 +1,5 @@
+local isMenuOpen = false
+
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(0)
@@ -10,6 +12,113 @@ Citizen.CreateThread(function()
 		end
 	end
 end)
+
+AddEventHandler('crp-base:openMainMenu', function()
+    isMenuOpen = true
+
+    SendNUIMessage({ eventName = 'toggleMenu', status = true, component = 'mainMenu' })
+
+    SetNuiFocus(true, true)
+
+    Citizen.CreateThread(function()
+        while isMenuOpen do
+			Citizen.Wait(0)
+
+			HideHudAndRadarThisFrame()
+			DisableAllControlActions(0)
+			TaskSetBlockingOfNonTemporaryEvents(GetPlayerPed(-1), true)
+		end
+    end)
+end)
+
+local function closeMenu()
+	isMenuOpen = false
+
+	EnableAllControlActions(0)
+	TaskSetBlockingOfNonTemporaryEvents(GetPlayerPed(-1), false)
+	SetNuiFocus(false, false)
+end
+
+local function nuiCallBack(data, cb)
+	if data.close then closeMenu() end
+	if data.disconnect then TriggerServerEvent('crp-base:disconnect') end
+
+    if data.error then
+        exports['crp-notifications']:SendAlert('error', data.errorMessage)
+    end
+
+    if data.fetchCharacters then
+        cb(CRP.RPC:execute('FetchCharacters'))
+	end
+
+    if data.createCharacter then
+        local _data = CRP.RPC:execute('CreateCharacter', data.character)
+
+        if _data and not _data.status then
+            local errorMessage = 'Ocorreu um erro ao criar a sua personagem, contacte um administrador, caso o problema continue.'
+
+            if data.message then
+                errorMessage = data.message
+            end
+
+            exports['crp-notifications']:SendAlert('error', errorMessage)
+
+            cb({ status = false })
+            return
+        end
+
+        cb(_data)
+	end
+
+    if data.deleteCharacter then
+		events:Trigger('crp-base:deleteCharacter', data.characterId, function(deleted)
+			cb(true)
+		end)
+	end
+
+    if data.selectCharacter then
+        events:Trigger('crp-base:selectCharacter', data.characterId, function(data)
+			if not data.isLoggedIn then
+				cb({ status = true, message = 'Ocorreu um erro ao entrar na sua personagem, contacte um administrador se isto continuar.' })
+				return
+            end
+
+            local playerPed, player, newCharacter = GetPlayerPed(-1), exports['crp-base']:getModule('Player'), false
+
+            if data.characterData.skin == nil then
+                newCharacter = true
+            end
+
+			player:setVar('character', data.id)
+
+			SendNUIMessage({ eventName = 'close' })
+
+            SetPlayerInvincible(playerPed, true)
+
+			closeMenu()
+
+            Citizen.Wait(5000)
+
+            RenderScriptCams(false, false, 0, 1, 0)
+            DestroyCam(cam, false)
+            TriggerScreenblurFadeOut(500)
+
+            if newCharacter then
+                TriggerEvent('crp-base:spawnPlayer')
+            else
+                TriggerEvent('crp-skincreator:setPedFeatures', data.characterData.skin)
+            end
+
+            TriggerServerEvent('crp-apartments:spawnSelection', newCharacter)
+
+            Citizen.Wait(1000)
+
+			SetPlayerInvincible(GetPlayerPed(-1), false)
+		end)
+	end
+end
+
+RegisterNUICallback('nuiMessage', nuiCallBack)
 
 AddEventHandler('crp-base:spawnPlayer', function()
     Citizen.CreateThread(function()

@@ -1,4 +1,4 @@
-local resourceName, promises, functions, callIdentifier = GetCurrentResourceName(), {}, {}, 0
+local resourceName, promises, functions = GetCurrentResourceName(), {}, {}
 
 CRP.RPC = {}
 
@@ -8,20 +8,18 @@ function ClearPromise(callId)
     end)
 end
 
-function CRP.RPC:execute(name, ...)
-    local callId, isSolved = callIdentifier, false
-
-    callIdentifier = callIdentifier + 1
+function CRP.RPC:execute(name, target, ...)
+    local callId, isSolved = GetRandomString(12), false
 
     promises[callId] = promise:new()
 
-    TriggerServerEvent('rpc:request', resourceName, name, callId, {...})
+    TriggerClientEvent('rpc:request', target, resourceName, name, callId, {...})
 
     Citizen.SetTimeout(1000, function()
         if not isSolved then
             promises[callId]:resolve({nil})
 
-            TriggerEvent('rpc:server:timeout', resourceName, name)
+            TriggerEvent('rpc:client:timeout', resourceName, name, target)
         end
     end)
 
@@ -34,20 +32,18 @@ function CRP.RPC:execute(name, ...)
     return table.unpack(response)
 end
 
-function CRP.RPC:executeLatent(name, timeout, ...)
-    local callId, isSolved = callIdentifier, false
-
-    callIdentifier = callIdentifier + 1
+function CRP.RPC:executeLatent(name, target, ...)
+    local callId, isSolved = GetRandomString(12), false
 
     promises[callId] = promise:new()
 
-    TriggerLatentClientEvent('rpc:lantent:request', 50000, resourceName, name, callId, {...})
+    TriggerLatentClientEvent('rpc:lantent:request', target, 50000, resourceName, name, callId, {...})
 
-    Citizen.SetTimeout(timeout, function()
+    Citizen.SetTimeout(5000, function()
         if not isSolved then
             promises[callId]:resolve({nil})
 
-            TriggerEvent('rpc:server:timeout', resourceName, name)
+            TriggerEvent('rpc:client:timeout', resourceName, name, target)
         end
     end)
 
@@ -77,46 +73,60 @@ end
 
 RegisterNetEvent('rpc:request')
 AddEventHandler('rpc:request', function(origin, name, callId, params)
-    local response
+    local serverId, response = source
 
     if functions[name] == nil then
         return
     end
 
     local success, error = pcall(function()
-        response = table.pack(functions[name](table.unpack(params)))
+        response = table.pack(functions[name](serverId, table.unpack(params)))
     end)
 
     if not success then
-        TriggerEvent('rpc:client:error', resourceName, origin, name, error)
+        TriggerEvent('rpc:server:error', resourceName, origin, name, serverId, error)
     end
 
     if response == nil then
         response = {}
     end
 
-    TriggerClientEvent('rpc:response', callId, response)
+    TriggerClientEvent('rpc:response', serverId, callId, response)
 end)
 
 RegisterNetEvent('rpc:latent:request')
 AddEventHandler('rpc:latent:request', function(origin, name, callId, params)
-    local response
+    local serverId, response = source
 
     if functions[name] == nil then
         return
     end
 
     local success, error = pcall(function()
-        response = table.pack(functions[name](table.unpack(params)))
+        response = table.pack(functions[name](serverId, table.unpack(params)))
     end)
 
     if not success then
-        TriggerEvent('rpc:client:error', resourceName, origin, name, error)
+        TriggerEvent('rpc:server:error', resourceName, origin, name, serverId, error)
     end
 
     if response == nil then
         response = {}
     end
 
-    TriggerLatentClientEvent('rpc:response', callId, response)
+    TriggerLatentClientEvent('rpc:response', serverId, callId, response)
 end)
+
+function GetRandomString(length)
+    local chars, randomString, stringLength, charTable = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', '', length or 10, {}
+
+    for char in chars:gmatch'.' do
+        charTable[#charTable + 1] = char
+    end
+
+    for i = 1, stringLength do
+        randomString = randomString .. charTable[math.random(1, #charTable)]
+    end
+
+    return randomString
+end

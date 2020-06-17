@@ -1,11 +1,13 @@
+users = {}
+
 -- Loads the character when called, only ever needs to get called once
 
-function LoadCharacter(source, identifier, charid)
-	local _source, data = source, {}
+function LoadCharacter(source, identifier, charId)
+    local _source, data = source, {}
 
-	TriggerEvent('crp-db:retrievecharacter', identifier, charid, function(_data)
-		data = _data
-	end)
+    TriggerEvent('crp-base:retrieveCharacter', { identifier = identifier, charId = charId }, function(_data)
+        data = _data
+    end)
 
     while next(data) == nil do
 		Citizen.Wait(0)
@@ -13,76 +15,37 @@ function LoadCharacter(source, identifier, charid)
 
     if data.identifier then
         users[_source] = CreateCharacter(_source, data)
-		users[_source].displayMoney(users[_source].getMoney())
+        users[_source].displayMoney(users[_source].getMoney())
 
-		-- Tells other resources that a player has loaded
-		TriggerEvent('crp:playerloaded', _source, users[_source])
+        -- Tells other resources that a player has loaded
 
-		-- Sends the command suggestions to the client, this creates a neat autocomplete
-		for k, v in pairs(commandSuggestions) do
-			TriggerClientEvent('chat:addSuggestion', _source, '/' .. k, v.help, v.params)
-		end
+        TriggerEvent('crp:playerloaded', _source, users[_source])
 
-		return users[_source]
-	else
-		local identifier
+        -- Sends the command suggestions to the client, this creates a neat autocomplete
 
-		for k, v in ipairs(GetPlayerIdentifiers(_source)) do
-			if string.sub(v, 1, string.len('steam:')) == 'steam:' then
-				identifier = v
-				break
-			end
+        for k, v in pairs(commandSuggestions) do
+            TriggerClientEvent('chat:addSuggestion', _source, '/' .. k, v.help, v.params)
         end
 
-		if identifier then
-			TriggerEvent('crp-db:updatecharacter', data.identifier, data.id, identifier, function(done)
-				if done then
-					return false
-				end
-			end)
-		else
-			return false
-		end
-	end
-end
+        return users[_source]
+    else
+        local identifier
 
-AddEventHandler('crp-base:setPlayerData', function(user, k, v, cb)
-	if (users[user]) then
-		if (users[user].get(k)) then
-			if (k ~= 'money') then
-				users[user].set(k, v)
+        for k, v in ipairs(GetPlayerIdentifiers(_source)) do
+            if string.sub(v, 1, string.len('steam:')) == 'steam:' then
+                identifier = v
+                break
+            end
+        end
 
-				TriggerEvent('crp-db:updatecharacter', users[user].get('identifier'), { [k] = v }, function(status)
-					if status then
-						cb('Player data was successfully edited', true)
-					else
-						cb(status, false)
-					end
-				end)
-			end
-		else
-			cb('Column does not exist!', false)
-		end
-	else
-		cb('User could not be found!', false)
-	end
-end)
-
-function GetCharacter(source)
-	return users[source]
-end
-
-function GetCharacterByPhone(number)
-    for k, v in ipairs(users) do
-        print(k, v, v.getPhoneNumber(), number)
-        if tonumber(v.getPhoneNumber()) == tonumber(number) then
-            return v
+        if identifier then
+            TriggerEvent('crp-db:updatecharacter', data.identifier, data.id, identifier, function(done)
+                if done then
+                    return false
+                end
+            end)
+        else
+            return false
         end
     end
-
-    return false
-end
-
-function GetAllCharacters()
-    return users
 end

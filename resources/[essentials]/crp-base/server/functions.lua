@@ -1,82 +1,18 @@
-function SavePlayers()
-    local players = GetPlayers()
+CRP.Util = {}
 
-    for i = 1, #players, 1 do
-        local player = GetCharacter(players[i])
+local function GenerateRandomNumber(min, max)
+    min, max = math.ceil(min), math.floor(max)
 
-        exports.ghmattimysql:execute('UPDATE users SET money = @money, bank = @bank, job = @job, status = @status, position = @position WHERE identifier = @identifier AND id = @id ;', {
-            ['@money'] = player.getMoney(), ['@bank'] = player.getBank(), ['@position'] = json.encode(player.getPosition()), ['@job'] = json.encode(player.getJob()),
-            ['@status'] = json.encode(player.getStatus()), ['@id'] = player.getCharacterID(), ['@identifier'] = player.getIdentifier()
-        })
-    end
-
-    print('^3CRP-BASE:^0 All the players on the server were saved sucessefully. ^7')
+    return math.floor(math.random() * (max - min + 1)) + min
 end
 
-function GetPlayers()
-    local sources = {}
-
-    for k, v in pairs(users) do
-        table.insert(sources, k)
-    end
-
-    return sources
-end
-
-function StartSavingPlayers()
-    function saveData()
-        SavePlayers()
-
-		SetTimeout(15 * 60000, saveData)
-	end
-
-	SetTimeout(15 * 60000, saveData)
-end
-
-function StartPayChecks()
-    local players = GetPlayers()
-
-    for i = 1, #players, 1 do
-        local player = GetCharacter(players[i])
-        local playerJob = player.getJob()
-
-        local salary = (jobs[playerJob.name].salary) + (jobs[playerJob.name].salary * (tonumber(playerJob.grade) / 10))
-
-        player.addBank(math.floor(salary))
-
-        TriggerClientEvent('crp-notifications:SendAlert', players[i], { type = 'inform', text = 'Acabaste de receber o teu salario de ' .. math.floor(salary) .. '€.' })
-    end
-
-    SetTimeout(5 * 60000, StartPayChecks)
-end
-
-function CheckIfHigherRank(name, grade)
-    if jobs[name] and grade == jobs[name].maxgrade then
-        return true
-    end
-
-    return false
-end
-
-function DoesJobExist(job, grade)
-    grade = tonumber(grade)
-
-    if job and grade then
-        if jobs[job] and grade >= jobs[job].mingrade and grade <= jobs[job].maxgrade then
-            return true
-        end
-    end
-
-    return false
-end
-
-function GeneratePhoneNumber()
+function CRP.Util:GeneratePhoneNumber()
     local phoneNumber, identifier
 
     repeat
         math.randomseed(os.time())
 
-        phoneNumber = '96' .. math.random(0000000, 9999999)
+        phoneNumber = '96' .. GenerateRandomNumber(9999999, 0000000)
 
         exports.ghmattimysql:execute('SELECT * FROM users WHERE `phone` = @phone;', { ['phone'] = phoneNumber }, function(exists)
             identifier = exists[1]
@@ -84,4 +20,25 @@ function GeneratePhoneNumber()
     until identifier == nil
 
     return phoneNumber
+end
+
+function CRP.Util:GetPlayerIdentifier(source)
+    local identifier
+
+    for k, v in ipairs(GetPlayerIdentifiers(source)) do
+        if string.match(v, 'discord:') then
+            identifier = string.sub(v, 9)
+            break
+        end
+    end
+
+    return identifier
+end
+
+function CRP.Util:Print(string, module)
+    if not module then
+        print('[^1crp-base^r]: ' .. string)
+    else
+        print('[^1crp-base^r] - [^3' .. module .. '^r]: ' .. string)
+    end
 end
