@@ -2,7 +2,6 @@ CRP.Player, CRP.Characters = {}, {}
 
 function CRP.Player:LoadCharacter(source, data)
     CRP.Characters[source] = CRP.Player:CreateCharacter(source, data)
-    CRP.Characters[source].displayMoney(CRP.Characters[source].getMoney())
 
     TriggerEvent('crp-base:playerloaded', source, CRP.Characters[source])
 
@@ -31,7 +30,6 @@ function CRP.Player:CreateCharacter(source, data)
     self.sex            = data.sex
     self.phone          = data.phone
     self.position       = data.position
-	self.moneyDisplayed = false
 
 	if data.status == nil then
 		self.status = data.status
@@ -53,24 +51,23 @@ function CRP.Player:CreateCharacter(source, data)
         self.skin = json.decode(data.skin)
     end
 
+    TriggerClientEvent('crp-ui:setMoney', self.source, self.money)
+
 	-- Sets money for the user
 
 	self.setMoney = function(money)
 		if type(money) == 'number' then
-			local prevMoney = self.money
-			local newMoney = money
+			local prevMoney, newMoney = self.money, money
 
 			self.money = money
 
 			-- Performs some math to see if money was added or removed, mainly for the UI component
 
-			if ((prevMoney - newMoney) < 0) then
-				TriggerClientEvent('crp-base:money', self.source, 'add', math.abs(prevMoney - newMoney))
-			else
-				TriggerClientEvent('crp-base:money', self.source, 'remove', math.abs(prevMoney - newMoney))
+            if ((prevMoney - newMoney) < 0) then
+                TriggerClientEvent('crp-ui:addMoney', self.source, math.abs(prevMoney - newMoney))
+            else
+                TriggerClientEvent('crp-ui:removeMoney', self.source, math.abs(prevMoney - newMoney))
 			end
-
-			TriggerClientEvent('crp-base:money', self.source, 'activate', self.money)
 		else
 			print('ERROR: There seems to be an issue while setting money, something else then a number was entered.')
 		end
@@ -201,11 +198,9 @@ function CRP.Player:CreateCharacter(source, data)
 
 			self.money = newMoney
 
-			-- This is used for every UI component to tell them money was just added
+            -- This is used for every UI component to tell them money was just added
 
-			TriggerClientEvent('crp-base:money', self.source, 'add', money)
-
-			TriggerClientEvent('crp-base:money', self.source, 'activate', self.money)
+            TriggerClientEvent('crp-ui:addMoney', self.source, money)
 		else
 			print('ERROR: There seems to be an issue while adding money, a different type then number was trying to be added.')
 		end
@@ -221,9 +216,7 @@ function CRP.Player:CreateCharacter(source, data)
 
 			-- This is used for every UI component to tell them money was just removed
 
-			TriggerClientEvent('crp-base:money', self.source, 'remove', money)
-
-			TriggerClientEvent('crp-base:money', self.source, 'activate', self.money)
+			TriggerClientEvent('crp-ui:removeMoney', self.source, money)
 		else
 			print('ERROR: There seems to be an issue while removing money, a different type then number was trying to be removed.')
 		end
@@ -250,21 +243,6 @@ function CRP.Player:CreateCharacter(source, data)
 			self.bank = newBank
 		else
 			print('ERROR: There seems to be an issue while removing from bank, a different type then number was trying to be removed.')
-		end
-	end
-
-	-- This is used to initially start displaying money to the user
-
-	self.displayMoney = function(money)
-		if type(money) == 'number' then
-			if not self.moneyDisplayed then
-
-				TriggerClientEvent('crp-base:money', self.source, 'activate', self.money)
-
-				self.moneyDisplayed = true
-			end
-		else
-			print('ERROR: There seems to be an issue while displaying money, a different type then number was trying to be shown.')
 		end
 	end
 
