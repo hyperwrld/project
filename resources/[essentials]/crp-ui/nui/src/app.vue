@@ -18,19 +18,16 @@
     export default {
         name: 'app',
         components: {
-            characterList,
-            dialogs,
-            cash
+            characterList, dialogs, cash
         },
         computed: {
             ...mapState({
-                charactersData: state => state.characterList.userCharacters,
+                charactersData: state => state.characterList.userCharacters
             }),
         },
         data() {
             return {
-                isEnabled: true,
-                currentComponent: 'characterList'
+                isEnabled: true, currentComponent: 'characterList'
             }
         },
         destroyed() {
@@ -47,16 +44,16 @@
                         this.isEnabled = event.data.status, this.currentComponent = event.data.component;
                         break;
                     case 'setMoneyStatus':
-                        this.$store.dispatch('cash/setMoney', event.data.status)
+                        this.$store.dispatch('cash/setMoney', event.data.status);
                         break;
                     case 'setMoney':
-                        this.$store.dispatch('cash/setMoney', event.data.money)
+                        this.$store.dispatch('cash/setMoney', event.data.money);
                         break;
                     case 'removeMoney':
-                        this.$store.dispatch('cash/removeMoney', event.data.quantity)
+                        this.$store.dispatch('cash/removeMoney', event.data.quantity);
                         break;
                     case 'addMoney':
-                        this.$store.dispatch('cash/addMoney', event.data.quantity)
+                        this.$store.dispatch('cash/addMoney', event.data.quantity);
                         break;
                     case 'closeMenu':
                         this.isEnabled = false;

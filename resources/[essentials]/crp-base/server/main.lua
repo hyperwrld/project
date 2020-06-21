@@ -9,7 +9,7 @@ end)
 
 exports('GetModule', function(module)
     if not CRP[module] then
-        log("Couldn't find the module " .. tostring(module))
+        CRP.Util:Print("Couldn't find the module " .. tostring(module))
         return false
     end
 
@@ -18,9 +18,9 @@ end)
 
 exports('AddModule', function(module, table)
     if CRP[module] then
-        log('Module (' .. tostring(module) .. ') is being overridden')
+        CRP.Util:Print('Module (' .. tostring(module) .. ') is being overridden')
     else
-        log('Successfully added the module ' .. tostring(module))
+        CRP.Util:Print('Successfully added the module ' .. tostring(module))
     end
 
 	CRP[module] = table
