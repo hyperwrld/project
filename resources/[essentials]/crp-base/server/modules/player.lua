@@ -1,4 +1,19 @@
-function CreateCharacter(source, data)
+CRP.Player, CRP.Characters = {}, {}
+
+function CRP.Player:LoadCharacter(source, data)
+    CRP.Characters[source] = CRP.Player.CreateCharacter(source, data)
+    CRP.Characters[source].displayMoney(CRP.Characters[source].getMoney())
+
+    TriggerEvent('crp-base:playerloaded', source, CRP.Characters[source])
+
+    for i = 1, #CRP.Commands do
+        TriggerClientEvent('chat:addSuggestion', source, '/' .. CRP.Commands[i][1], CRP.Commands[i][2], CRP.Commands[i][3])
+    end
+
+    return CRP.Characters[source]
+end
+
+function CRP.Player.CreateCharacter(self, source, data)
 	local self = {}
 
     -- Initialize all initial variables for a user
@@ -277,3 +292,21 @@ function CreateCharacter(source, data)
 
 	return self
 end
+
+exports('GetAllCharacters', function(source)
+	return CRP.Characters
+end)
+
+exports('GetCharacter', function(source)
+	return CRP.Characters[source]
+end)
+
+exports('GetCharacterByPhone', function(number)
+    for i = 1, #CRP.Characters do
+        if tonumber(CRP.Characters[i].getPhoneNumber()) == tonumber(number) then
+            return CRP.Characters[i]
+        end
+    end
+
+	return false
+end)

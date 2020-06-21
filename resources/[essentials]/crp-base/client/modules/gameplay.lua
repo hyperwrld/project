@@ -41,7 +41,7 @@ local function SetGameplayVariables()
 end
 
 AddEventHandler('crp-base:onPlayerJoined', function()
-    CRP.Spawn.InitializeMenu()
+    CRP.Spawn:InitializeMenu()
 
     SetGameplayVariables()
 end)

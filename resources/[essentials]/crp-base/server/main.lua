@@ -1,39 +1,27 @@
-RegisterServerEvent('crp-base:onPlayerJoined')
-AddEventHandler('crp-base:onPlayerJoined', function()
-	local _source = source
-
-	Citizen.CreateThread(function()
-		local steamid
-
-		for k, v in ipairs(GetPlayerIdentifiers(_source)) do
-			if string.sub(v, 1, string.len('steam:')) == 'steam:' then
-				steamid = v
-				break
-			end
-		end
-
-		if not steamid then
-			DropPlayer(_source, 'Não foi possível encontrar o seu Steam ID, tente entrar com a Steam aberta.')
-		end
-
-		return
-	end)
+RegisterServerEvent('crp-base:disconnect')
+AddEventHandler('crp-base:disconnect', function()
+	DropPlayer(source, 'Foste desconectado do servidor.')
 end)
 
-CRP.RPC:register('FetchCharacters', function(source)
-    local charactersPromise = promise:new()
-
-    CRP.DB:FetchCharacters(CRP.Util:GetPlayerIdentifier(source), charactersPromise)
-
-    return Citizen.Await(charactersPromise)
+AddEventHandler('crp-base:loadCharacter', function(data, callback)
+    callback(CRP.Player:LoadCharacter(data.source, data.characterData))
 end)
 
-CRP.RPC:register('CreateCharacter', function(source, data)
-    local characterPromise = promise:new()
+exports('GetModule', function(module)
+    if not CRP[module] then
+        log("Couldn't find the module " .. tostring(module))
+        return false
+    end
 
-    print('estive aqui?')
+	return CRP[module]
+end)
 
-    CRP.DB:CreateCharacter(CRP.Util:GetPlayerIdentifier(source), data, characterPromise)
+exports('AddModule', function(module, table)
+    if CRP[module] then
+        log('Module (' .. tostring(module) .. ') is being overridden')
+    else
+        log('Successfully added the module ' .. tostring(module))
+    end
 
-    return Citizen.Await(characterPromise)
+	CRP[module] = table
 end)

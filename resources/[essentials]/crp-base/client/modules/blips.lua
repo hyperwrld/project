@@ -1,6 +1,6 @@
 CRP.BlipManager, CRP.Blips = CRP.BlipManager or {}, CRP.Blips or {}
 
-function CRP.BlipManager.CreateBlip(self, id, data)
+function CRP.BlipManager:CreateBlip(id, data)
     local blip = AddBlipForCoord(data['x'], data['y'], data['z'])
 
     if data.sprite then SetBlipSprite(blip, data['sprite']) end
@@ -26,7 +26,7 @@ function CRP.BlipManager.CreateBlip(self, id, data)
     end
 end
 
-function CRP.BlipManager.RemoveBlip(self, id)
+function CRP.BlipManager:RemoveBlip(self, id)
     local blip = CRP.Blips[id]
 
     if blip then RemoveBlip(blip.blip) end
@@ -34,7 +34,7 @@ function CRP.BlipManager.RemoveBlip(self, id)
     CRP.Blips[id] = nil
 end
 
-function CRP.BlipManager.HideBlip(self, id, toggle)
+function CRP.BlipManager:HideBlip(self, id, toggle)
     local blip = CRP.Blips[id]
 
     if not blip then return end
@@ -42,7 +42,7 @@ function CRP.BlipManager.HideBlip(self, id, toggle)
     if toggle then SetBlipAlpha(blip, 0) else SetBlipAlpha(blip, 255) end
 end
 
-function CRP.BlipManager.GetBlip(self, id)
+function CRP.BlipManager:GetBlip(self, id)
     local blip = CRP.Blips[id]
 
     if not blip then return false end
