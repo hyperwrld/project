@@ -12,22 +12,22 @@
     import { mapState } from 'vuex';
 
     import dialogs from './components/dialogs.vue';
-    import characterList from './components/base/characterList.vue';
+    import character from './components/base/character.vue';
     import cash from './components/cash/cash.vue';
 
     export default {
         name: 'app',
         components: {
-            characterList, dialogs, cash
+            character, dialogs, cash
         },
         computed: {
             ...mapState({
-                charactersData: state => state.characterList.userCharacters
+                charactersData: state => state.character.userCharacters
             }),
         },
         data() {
             return {
-                isEnabled: true, currentComponent: 'characterList'
+                isEnabled: true, currentComponent: 'character'
             }
         },
         destroyed() {
@@ -37,8 +37,8 @@
             this.listener = window.addEventListener('message', (event) => {
                 switch (event.data.eventName) {
                     case 'toggleMenu':
-                        if (event.data.component == 'characterList') {
-                            this.$store.dispatch('characterList/setUserCharacters');
+                        if (event.data.component == 'character') {
+                            this.$store.dispatch('character/setUserCharacters');
                         }
 
                         this.isEnabled = event.data.status, this.currentComponent = event.data.component;

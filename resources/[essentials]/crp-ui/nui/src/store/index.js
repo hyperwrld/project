@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import dialogs from './modules/dialogs';
-import characterList from './modules/characterList';
+import character from './modules/character';
 import cash from './modules/cash';
 
 Vue.use(Vuex);
@@ -10,7 +10,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     modules: {
         dialogs,
-        characterList,
+        character,
         cash
     }
 })

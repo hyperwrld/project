@@ -26,7 +26,7 @@ function CRP.Spawn:InitializeMenu()
         Citizen.Wait(0)
     end
 
-    TriggerEvent('crp-ui:openMenu', 'characterList')
+    TriggerEvent('crp-ui:openMenu', 'character')
 end
 
 function CRP.Spawn:InitializeFirstSpawn()

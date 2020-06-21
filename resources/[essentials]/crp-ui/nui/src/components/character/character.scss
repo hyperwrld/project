@@ -1,0 +1,258 @@
+@import url('https://fonts.googleapis.com/css2?family=Quantico&display=swap');
+
+.row {
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.mainMenu {
+    border-radius: 0% !important;
+    height: 100%;
+    width: 40%;
+    font-family: 'Quantico', sans-serif;
+
+    .mainDiv {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        height: 22vh;
+        background-color: rgb(12, 12, 12);
+        bottom: 2%;
+
+        .characterList {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            height: 100%;
+            background-color: rgb(12, 12, 12);
+            bottom: 2%;
+            overflow-x: auto;
+            overflow-y: hidden;
+
+            .character {
+                height: 98% !important;
+                width: 22%;
+                padding: 1% !important;
+                margin-left: 2%;
+                border: 1px solid #272727 !important;
+                border-radius: 2px !important;
+                box-shadow: 0px 0px 5px 0px black;
+                color: white !important;
+                background: transparent;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: transparent !important;
+
+                .v-card__actions {
+                    width: 100%;
+                    bottom: 0;
+                    padding: 0;
+                    height: 15%;
+                    position: absolute;
+
+                    .v-btn:before, .v-btn:after {
+                        background-color: transparent;
+                    }
+
+                    button > span > i {
+                        font-size: 20px;
+                    }
+                }
+
+                & > *, & > .v-card__actions > button {
+                    color: rgb(166, 166, 166) !important;
+                }
+
+                &:first-child {
+                    margin-left: 0%;
+                }
+
+                .characterName {
+                    text-align: center;
+                    word-spacing: 100vw;
+                }
+            }
+
+            .not-hover {
+                border-color: #272727 !important;
+            }
+
+            .active {
+                border-color: white !important;
+            }
+
+            .on-hover {
+                border-color: #2577fa !important;
+            }
+
+            &::-webkit-scrollbar {
+                height: 2%
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background-color: rgb(27, 27, 27);
+                border-radius: 1px;
+            }
+
+            &::-webkit-scrollbar-button {
+                display: none
+            }
+        }
+
+        .loading {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+
+            p {
+                color: white;
+            }
+
+            .multi-ripple {
+                width: 2.6rem;
+                height: 2.6rem;
+                margin: 2rem;
+
+                div {
+                    position: absolute;
+                    width: 2rem;
+                    height: 2rem;
+                    border-radius: 50%;
+                    border: 0.3rem solid #979fd0;
+                    animation: 1.5s ripple infinite;
+
+                    &:nth-child(2) {
+                        animation-delay: 0.5s;
+                    }
+                }
+            }
+
+            @keyframes ripple {
+                from {
+                    transform: scale(0);
+                    opacity: 1;
+                }
+
+                to {
+                    transform: scale(1);
+                    opacity: 0;
+                }
+            }
+        }
+    }
+
+    .characterInfo {
+        flex-shrink: 0;
+        width: 100%;
+        overflow-y: hidden;
+        background-color: rgb(166, 166, 166);
+        padding: 1.5%;
+        border-radius: 2px;
+        height: 22vh;
+
+        .textBox {
+            overflow: auto;
+            max-height: 100%;
+            height: 100%;
+            color: rgb(12, 12, 12);
+
+            &::-webkit-scrollbar {
+                width: 0.5%
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background-color: rgb(12, 12, 12);
+                border-radius: 1px;
+            }
+
+            &::-webkit-scrollbar-button {
+                display: none
+            }
+        }
+    }
+
+    .buttons {
+        background-color: rgb(27, 27, 27);
+        height: fit-content;
+
+        button {
+            border-radius: 2px;
+            background-color: rgb(12, 12, 12) !important;
+            color: rgb(166, 166, 166) !important;
+            height: 28px !important;
+            margin-left: 5px;
+
+            &:hover {
+                color: white !important;
+            }
+        }
+
+        .disconnect {
+            color: white !important;
+            background-color: #B71C1C !important;
+            margin-left: 0;
+
+            &:hover {
+                color: rgb(166, 166, 166) !important;
+            }
+        }
+    }
+}
+
+.serverInfo {
+    border-radius: 0% !important;
+    width: 20%;
+    margin-left: 1%;
+    font-family: 'Quantico', sans-serif;
+    background-color: rgb(12, 12, 12) !important;
+    color: #a6a6a6 !important;
+    height: 26.073518518518515vh;
+
+    .v-card__text {
+        overflow-y: auto;
+        height: 100%;
+
+        .post {
+            color: #a6a6a6;
+
+            h3 {
+                text-align: center;
+            }
+
+            p {
+                font-size: 0.575rem;
+            }
+
+            .v-divider {
+                background-color: #a6a6a6 !important;
+                margin-bottom: 1px;
+            }
+        }
+
+        &::-webkit-scrollbar {
+            width: 1%
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background-color: #a6a6a6;
+            border-radius: 1px;
+        }
+
+        &:-webkit-scrollbar-button {
+            display: none
+        }
+    }
+}
+
+.normal {
+    height: 26.073518518518515vh;
+}
+
+.bigger {
+    height: 48.073518518518515vh;
+}
