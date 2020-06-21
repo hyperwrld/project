@@ -25,7 +25,7 @@ CRP.Commands = {
     end},
 }
 
-CRP.Commands:RegisterCommands = function()
+function CRP.Commands:RegisterCommands()
     for i = 1, #CRP.Commands do
         RegisterCommand(CRP.Commands[i][1], CRP.Commands[i][4], false)
     end

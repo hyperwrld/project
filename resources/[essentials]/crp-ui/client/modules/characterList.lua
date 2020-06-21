@@ -49,7 +49,7 @@ end)
 RegisterNUICallback('selectCharacter', function(characterId, cb)
     local data = CRP.RPC:execute('SelectCharacter', characterId)
 
-    if not data then
+    if not data and data ~= nil then
         exports['crp-notifications']:SendAlert('error', 'Ocorreu um erro ao carregar a sua personagem, contacte um administrador se isto continuar.')
         return
     end

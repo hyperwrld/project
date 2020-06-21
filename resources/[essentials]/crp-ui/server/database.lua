@@ -101,7 +101,7 @@ function CRP.DB:RetrieveCharacter(identifier, data, callback)
     exports.ghmattimysql:execute(query, parameters, function(result)
         if #result > 0 then
             TriggerEvent('crp-base:loadCharacter', { source = data.source, characterData = result }, function(data)
-                callback:resolve(data)
+                callback:resolve(result[1].skin)
             end)
         else
             callback:resolve(false)

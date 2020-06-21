@@ -1,7 +1,7 @@
 CRP.Player, CRP.Characters = {}, {}
 
 function CRP.Player:LoadCharacter(source, data)
-    CRP.Characters[source] = CRP.Player.CreateCharacter(source, data)
+    CRP.Characters[source] = CRP.Player:CreateCharacter(source, data)
     CRP.Characters[source].displayMoney(CRP.Characters[source].getMoney())
 
     TriggerEvent('crp-base:playerloaded', source, CRP.Characters[source])
@@ -13,7 +13,7 @@ function CRP.Player:LoadCharacter(source, data)
     return CRP.Characters[source]
 end
 
-function CRP.Player.CreateCharacter(self, source, data)
+function CRP.Player:CreateCharacter(source, data)
 	local self = {}
 
     -- Initialize all initial variables for a user

@@ -14,7 +14,7 @@ end)
 AddEventHandler('crp-base:spawnPlayer', function(data)
     local playerPed, isNewCharacter = GetPlayerPed(-1), false
 
-    if data.skin == nil then
+    if data == nil then
         isNewCharacter = true
     end
 
@@ -27,10 +27,10 @@ AddEventHandler('crp-base:spawnPlayer', function(data)
 
     TriggerScreenblurFadeOut(500)
 
-    if newCharacter then
+    if isNewCharacter then
         CRP.Spawn:InitializeFirstSpawn()
     else
-        TriggerEvent('crp-skincreator:setPedFeatures', data.skin)
+        TriggerEvent('crp-skincreator:setPedFeatures', data)
     end
 
     TriggerServerEvent('crp-apartments:spawnSelection', newCharacter)
