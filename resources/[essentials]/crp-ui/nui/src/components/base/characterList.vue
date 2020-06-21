@@ -94,7 +94,7 @@
     import nui from '../../utils/nui';
 
     export default {
-        name: 'mainMenu',
+        name: 'characterList',
         computed: {
             ...mapState({
                 charactersData: state => state.characterList.userCharacters,

@@ -8,7 +8,8 @@ client_scripts {
     '@crp-base/shared.lua',
     '@crp-base/client/modules/rpc.lua',
     'client/main.lua',
-    'client/modules/characterList.lua'
+    'client/modules/characterList.lua',
+    'client/modules/cash.lua'
 }
 
 server_scripts {
@@ -24,6 +25,7 @@ files {
     'nui/dist/index.html',
     'nui/dist/js/app.js',
     'nui/dist/js/chunk-vendors.js',
+    'nui/dist/fonts/pdown.ttf',
     'nui/dist/css/app.css',
     'nui/dist/css/chunk-vendors.css'
 }

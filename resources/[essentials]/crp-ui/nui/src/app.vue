@@ -1,8 +1,9 @@
 <template>
-    <v-app v-if='isEnabled'>
-        <component :is='currentComponent'/>
+    <v-app>
+        <component :is='currentComponent' v-if='isEnabled'/>
 
-        <dialogs/>
+        <dialogs v-if='isEnabled'/>
+        <cash/>
     </v-app>
 </template>
 
@@ -12,12 +13,14 @@
 
     import dialogs from './components/dialogs.vue';
     import characterList from './components/base/characterList.vue';
+    import cash from './components/cash/cash.vue';
 
     export default {
         name: 'app',
         components: {
             characterList,
-            dialogs
+            dialogs,
+            cash
         },
         computed: {
             ...mapState({
@@ -43,6 +46,18 @@
 
                         this.isEnabled = event.data.status, this.currentComponent = event.data.component;
                         break;
+                    case 'setMoneyStatus':
+                        this.$store.dispatch('cash/setMoney', event.data.status)
+                        break;
+                    case 'setMoney':
+                        this.$store.dispatch('cash/setMoney', event.data.money)
+                        break;
+                    case 'removeMoney':
+                        this.$store.dispatch('cash/removeMoney', event.data.quantity)
+                        break;
+                    case 'addMoney':
+                        this.$store.dispatch('cash/addMoney', event.data.quantity)
+                        break;
                     case 'closeMenu':
                         this.isEnabled = false;
                         break;
@@ -55,6 +70,8 @@
 </script>
 
 <style lang='scss'>
+    @import 'https://unpkg.com/vue2-animate/dist/vue2-animate.min.css';
+
     html, body {
         background-color: transparent;
         user-select: none;
