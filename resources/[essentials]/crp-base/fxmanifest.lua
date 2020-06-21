@@ -17,5 +17,6 @@ server_scripts {
     'server/modules/commands.lua',
     'server/modules/utils.lua',
     'server/modules/rpc.lua',
+    'server/modules/database.lua',
     'server/main.lua'
 }

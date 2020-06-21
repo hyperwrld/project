@@ -8,7 +8,7 @@ client_scripts {
     '@crp-base/shared.lua',
     '@crp-base/client/modules/rpc.lua',
     'client/main.lua',
-    'client/modules/characterList.lua',
+    'client/modules/character.lua',
     'client/modules/cash.lua'
 }
 
@@ -16,6 +16,7 @@ server_scripts {
     '@crp-base/shared.lua',
     '@crp-base/server/modules/rpc.lua',
     '@crp-base/server/modules/utils.lua',
+    '@crp-base/server/modules/database.lua',
     'server/modules/character.lua',
     'server/database.lua',
     'server/main.lua'
