@@ -1,9 +1,8 @@
 <template>
     <v-app>
+        <cash/><hud/>
         <component :is='currentComponent' v-if='isEnabled'/>
-
         <dialogs v-if='isEnabled'/>
-        <cash/>
     </v-app>
 </template>
 
@@ -12,13 +11,14 @@
     import { mapState } from 'vuex';
 
     import dialogs from './components/dialogs.vue';
-    import character from './components/base/character.vue';
+    import character from './components/character/character.vue';
     import cash from './components/cash/cash.vue';
+    import hud from './components/hud/hud.vue';
 
     export default {
         name: 'app',
         components: {
-            character, dialogs, cash
+            character, dialogs, cash, hud
         },
         computed: {
             ...mapState({

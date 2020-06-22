@@ -126,5 +126,5 @@
 </script>
 
 <style scoped lang='scss'>
-    @import url('./character.scss');
+    @import './character.scss';
 </style>

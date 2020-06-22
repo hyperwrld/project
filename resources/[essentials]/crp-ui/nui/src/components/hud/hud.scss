@@ -1,0 +1,161 @@
+html, .container {
+    position: absolute;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+}
+
+.minimap {
+    position: absolute;
+    height: fit-content;
+    width: fit-content;
+}
+
+.street, .others, .time {
+    font-size: 20px;
+    color: white;
+	font-family: 'Ruda', sans-serif;
+    text-shadow: -1px 1px 2px #000, 1px 1px 2px #000, 1px -1px 0 #000, -1px -1px 0 #000;
+}
+
+.street {
+    height: 12.823529411%;
+    width: 200%;
+	left: 105.725%;
+	right: 2.725%;
+	position: absolute;
+    bottom: -5.070588235%;
+}
+
+.others {
+    height: 12.823529411%;
+    width: 200%;
+	left: 105.725%;
+	right: 2.725%;
+	position: absolute;
+    bottom: 12.070588235%;
+}
+
+.time {
+    height: 12.823529411%;
+    width: 200%;
+	left: 105.725%;
+	right: 2.725%;
+	position: absolute;
+    bottom: 25.070588235%;
+    font-size: 16px;
+}
+
+.bar {
+	height: 26.823529411%;
+	left: 2.725%;
+	right: 2.725%;
+	display: flex;
+	flex-wrap: wrap;
+	position: absolute;
+	bottom: -11.570588235%;
+	align-items: center;
+	justify-content: center;
+}
+
+.bar > * {
+    margin-right: 0.5%;
+    margin-left: 0.5%;
+	height: 50% !important;
+}
+
+.sub-bar > * {
+	width: 100%;
+}
+
+.status-bar > * {
+	width: 100%;
+}
+
+.bar > *:first-child {
+	margin-left: 0 !important;
+}
+
+.bar > *:last-child {
+	margin-right: 0 !important;
+}
+
+.sub-bar {
+	width: 50%;
+	display: flex;
+}
+
+.status-bar {
+	width: 100%;
+	display: flex;
+}
+
+.health, .armour {
+    width: 23.5%;
+	box-sizing: border-box;
+    border: 2px solid rgba(54, 52, 52, 0.8);
+    background-color: #545454;
+
+    :first-child {
+        position: absolute;
+        margin-top: 1.5%;
+        margin-left: 1.5%;
+        color: white;
+        z-index: 999;
+    }
+
+    :last-child {
+        height: 100%;
+        transition: 0.2s ease-in-out;
+    }
+
+    .sub-health {
+        background-color: #73be73;
+    }
+
+    .sub-armour {
+        background-color: #6a89cc;
+    }
+}
+
+.hunger, .thirst, .breath, .stress {
+    width: 12%;
+    border: 2px solid rgba(54, 52, 52, 0.8);
+    background-color: #545454;
+
+    :first-child {
+        position: absolute;
+        color: rgb(255, 255, 255);
+        z-index: 999;
+        margin-top: 1.5%;
+        margin-left: 1.5%;
+    }
+
+    .fa-tint:first-child {
+        margin-top: 1.5% !important;
+        margin-left: 3% !important;
+    }
+
+    div:last-child {
+        position: relative;
+        bottom: 0;
+        transition: 0.2s ease-in-out;
+        max-height: 100%;
+    }
+
+    .sub-hunger {
+        background-color: #f6b93b;
+    }
+
+    .sub-thirst {
+        background-color: #4d79ff;
+    }
+
+    .sub-breath {
+        background-color: rgba(130, 210, 255, 0.93);
+    }
+
+    .sub-stress {
+        background-color: #c70039;
+    }
+}

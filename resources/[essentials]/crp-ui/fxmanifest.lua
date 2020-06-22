@@ -9,7 +9,8 @@ client_scripts {
     '@crp-base/client/modules/rpc.lua',
     'client/main.lua',
     'client/modules/character.lua',
-    'client/modules/cash.lua'
+    'client/modules/cash.lua',
+    'client/modules/hud.lua'
 }
 
 server_scripts {

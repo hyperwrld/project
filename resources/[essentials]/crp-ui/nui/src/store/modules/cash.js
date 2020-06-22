@@ -26,7 +26,7 @@ const mutations = {
     setMoney(state, money) {
         state.currentMoney = money, state.canShow = true;
 
-        setTimeout(() => { state.canShow = false }, 10000);
+        setTimeout(() => { state.canShow = false }, 15000);
     },
     removeMoney(state, quantity) {
         state.changedMoney = { status: true, type: 'remove', quantity: quantity };
