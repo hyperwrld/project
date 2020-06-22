@@ -10,9 +10,6 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
-        dialogs,
-        character,
-        cash,
-        hud
+        dialogs, character, cash, hud
     }
 })
