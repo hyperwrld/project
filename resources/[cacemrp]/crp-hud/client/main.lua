@@ -1,5 +1,5 @@
 local _lastHealth, _lastArmour, _lastBreath, _lastStress = 0, 0, 0, 0
-local hunger, thirst, stress, isHudActive = 100, 100, 0, false
+local hunger, thirst, stress, isHudActive, isCompassOn = 100, 100, 0, false, false
 
 local zoneNames = {
     AIRP = 'Los Santos International Airport', ALAMO = 'Alamo Sea', ALTA = 'Alta', ARMYB = 'Fort Zancudo', BANHAMC = 'Banham Canyon Dr', BANNING = 'Banning',
@@ -19,31 +19,33 @@ local zoneNames = {
     WINDF = 'Ron Alternates Wind Farm', WVINE = 'West Vinewood', ZANCUDO = 'Zancudo River', ZP_ORT = 'Port of South Los Santos', ZQ_UAR = 'Davis Quartz'
 }
 
-RegisterNetEvent('crp-hud:setmeta')
-AddEventHandler('crp-hud:setmeta', function(meta)
-	if meta == nil then
+RegisterNetEvent('crp-hud:setMeta')
+AddEventHandler('crp-hud:setMeta', function(data)
+	if data == nil then
 	 	return
 	end
 
 	local playerPed = GetPlayerPed(-1)
 
-	if meta.hunger == nil then hunger = 100 else hunger = meta.hunger end
-	if meta.thirst == nil then thirst = 100 else thirst = meta.thirst end
-	if meta.stress == nil then stress = 0   else stress = meta.stress end
+	if data.hunger == nil then hunger = 100 else hunger = data.hunger end
+	if data.thirst == nil then thirst = 100 else thirst = data.thirst end
+	if data.stress == nil then stress = 0   else stress = data.stress end
 
-	if meta.health < 10.0 then
+	if data.health < 10.0 then
 		SetEntityHealth(playerPed, 10.0)
 	else
-		SetEntityHealth(playerPed, meta.health)
+		SetEntityHealth(playerPed, data.health)
 	end
 
-	SetPedArmour(playerPed, meta.armour)
+    SetPedArmour(playerPed, data.armour)
 
 	StartFunction()
 end)
 
-RegisterNetEvent('crp-hud:changemeta')
-AddEventHandler('crp-hud:changemeta', function(data)
+RegisterNetEvent('crp-hud:changeMeta')
+AddEventHandler('crp-hud:changeMeta', function(data)
+    local playerPed = GetPlayerPed(-1)
+
 	if data.hunger then
 		hunger = hunger + 25
 
@@ -56,28 +58,34 @@ AddEventHandler('crp-hud:changemeta', function(data)
 		if thirst > 100 then thirst = 100 end
     end
 
-    SendNUIMessage({ eventName = 'updateStatus', hunger = hunger, thirst = thirst, stress = stress })
-	TriggerServerEvent('crp-hud:update', GetEntityHealth(GetPlayerPed(-1)), GetPedArmour(GetPlayerPed(-1)), hunger, thirst, stress)
+    TriggerEvent('crp-ui:updateData', { ['hunger'] = hunger, ['thirst'] = thirst, ['stress'] = stress })
+	TriggerServerEvent('crp-hud:updateData', GetEntityHealth(playerPed), GetPedArmour(playerPed), hunger, thirst, stress)
 end)
 
-RegisterNetEvent('crp-hud:changestress')
-AddEventHandler('crp-hud:changestress', function(status, value)
+RegisterNetEvent('crp-hud:changeStress')
+AddEventHandler('crp-hud:changeStress', function(status, value)
+    local playerPed = GetPlayerPed(-1)
+
     if status then
         stress = stress + value
 
-        if stress > 100 then stress = 100 end
+        if stress > 100 then
+            stress = 100
+        end
 
         exports['crp-notifications']:SendAlert('inform', 'Ganhaste stress.')
     else
         stress = stress - value
 
-        if stress < 0 then stress = 0 end
+        if stress < 0 then
+            stress = 0
+        end
 
         exports['crp-notifications']:SendAlert('inform', 'Perdeste stress.')
     end
 
-    SendNUIMessage({ eventName = 'updateStatus', hunger = hunger, thirst = thirst, stress = stress })
-	TriggerServerEvent('crp-hud:update', GetEntityHealth(GetPlayerPed(-1)), GetPedArmour(GetPlayerPed(-1)), hunger, thirst, stress)
+    TriggerEvent('crp-ui:updateData', { ['hunger'] = hunger, ['thirst'] = thirst, ['stress'] = stress })
+	TriggerServerEvent('crp-hud:updateData', GetEntityHealth(playerPed), GetPedArmour(playerPed), hunger, thirst, stress)
 end)
 
 function StartFunction()
@@ -99,15 +107,15 @@ function StartFunction()
 
 	    	SetScriptGfxAlign(string.byte('L'), string.byte('B'))
 
-	    	local _topX, _topY = GetScriptGfxPosition(-0.0045, 0.002 + (-0.188888))
+	    	local topX, topY = GetScriptGfxPosition(-0.0045, 0.002 + (-0.188888))
 
-	    	ResetScriptGfxAlign()
+            ResetScriptGfxAlign()
 
-	    	SendNUIMessage({ eventName = 'hudPosition', topX = _topX, topY = _topY })
+            TriggerEvent('crp-ui:setHudPosition', topX, topY)
 
-	    	TriggerServerEvent('crp-hud:update', GetEntityHealth(playerPed), GetPedArmour(playerPed), hunger, thirst, stress)
+            TriggerServerEvent('crp-hud:updateData', GetEntityHealth(playerPed), GetPedArmour(playerPed), hunger, thirst, stress)
 
-	    	SendNUIMessage({ eventName = 'updateStatus', hunger = hunger, thirst = thirst })
+            TriggerEvent('crp-ui:updateData', { ['hunger'] = hunger, ['thirst'] = thirst })
 
 	    	Citizen.Wait(30000)
 
@@ -127,24 +135,19 @@ function StartFunction()
 
 			playerPed = GetPlayerPed(-1)
 
-			if CheckUpdate(health, armour, breath, stress) then
-				SendNUIMessage({
-                    eventName = 'updateHud',
-                    health = health,
-                    armour = armour,
-                    breath = breath,
-                    isUnderWater = IsPedSwimmingUnderWater(PlayerPedId()),
-                    stress = stress
-                })
+            if CheckUpdate(health, armour, breath, stress) then
+                TriggerEvent('crp-ui:updateData', { ['health'] = health / 2, ['armour'] = armour, ['breath'] = breath * 2.5, ['stress'] = stress  })
             end
 		end
     end)
 
     Citizen.CreateThread(function()
         while true do
-            Citizen.Wait(500)
+            Citizen.Wait(100)
 
-            if IsPedInAnyVehicle(PlayerPedId(), true) then
+            local playerPed = PlayerPedId()
+
+            if IsVehicleEngineOn(GetVehiclePedIsIn(playerPed)) then
                 local position = GetEntityCoords(playerPed)
                 local zoneName = zoneNames[GetNameOfZone(position.x, position.y, position.z)]
                 local streetName = GetStreetNameFromHashKey(GetStreetNameAtCoord(position.x, position.y, position.z))
@@ -159,33 +162,71 @@ function StartFunction()
                     DisplayRadar(true)
 
                     isHudActive = true
-
-                    SendNUIMessage({
-                        eventName = 'updateGps',
-                        show = true,
-                        locationName = GetDirectionHeading(playerPed) .. ' | ' .. locationString,
-                        speed = speed,
-                        fuel = 0,
-                        time = currentTime
-                    })
-                else
-                    SendNUIMessage({
-                        eventName = 'updateGps',
-                        locationName = GetDirectionHeading(playerPed) .. ' | ' .. locationString,
-                        speed = speed,
-                        fuel = 0,
-                        time = currentTime
-                    })
                 end
-            elseif isHudActive then
+
+                TriggerEvent('crp-ui:updateVehicleInfo', { status = isHudActive, data = { location = locationString, speed = speed, fuel = fuel, time = currentTime }})
+            elseif isCompassOn then
                 isHudActive = false
 
                 DisplayRadar(false)
 
-                SendNUIMessage({ eventName = 'updateGps', hide = true })
+                TriggerEvent('crp-ui:updateCompassInfo', { time = currentTime, direction = 0 })
+            elseif not isHudActive then
+                isHudActive = false
+
+                DisplayRadar(false)
+
+                TriggerEvent('crp-ui:updateVehicleInfo', { status = isHudActive })
             end
         end
     end)
+
+    -- Citizen.CreateThread(function()
+    --     while true do
+    --         Citizen.Wait(500)
+
+    --         if IsPedInAnyVehicle(PlayerPedId(), true) then
+    --             local position = GetEntityCoords(playerPed)
+    --             local zoneName = zoneNames[GetNameOfZone(position.x, position.y, position.z)]
+    --             local streetName = GetStreetNameFromHashKey(GetStreetNameAtCoord(position.x, position.y, position.z))
+    --             local speed = math.ceil(GetEntitySpeed(GetVehiclePedIsIn(playerPed, false)) * 3.6)
+    --             local locationString, currentTime = streetName, GetCurrentTime()
+
+    --             if zoneName then
+    --                 locationString = streetName .. ' | ' .. zoneName
+    --             end
+
+    --             if not isHudActive then
+    --                 DisplayRadar(true)
+
+    --                 isHudActive = true
+
+    --                 SendNUIMessage({
+    --                     eventName = 'updateGps',
+    --                     show = true,
+    --                     locationName = GetDirectionHeading(playerPed) .. ' | ' .. locationString,
+    --                     speed = speed,
+    --                     fuel = 0,
+    --                     time = currentTime
+    --                 })
+    --             else
+    --                 SendNUIMessage({
+    --                     eventName = 'updateGps',
+    --                     locationName = GetDirectionHeading(playerPed) .. ' | ' .. locationString,
+    --                     speed = speed,
+    --                     fuel = 0,
+    --                     time = currentTime
+    --                 })
+    --             end
+    --         elseif isHudActive then
+    --             isHudActive = false
+
+    --             DisplayRadar(false)
+
+    --             SendNUIMessage({ eventName = 'updateGps', hide = true })
+    --         end
+    --     end
+    -- end)
 
 	Citizen.CreateThread(function()
 		while true do
@@ -215,18 +256,34 @@ function CheckUpdate(health, armour, breath, stress)
 	return true
 end
 
-function GetDirectionHeading(playerPed)
-    local heading = GetEntityHeading(playerPed)
+local width = 0;
+local south, west = (-100) + width, (-100 * 2) + width
+local north, east, south2 = (-100 * 3) + width, (-100 * 4) + width, (-100 * 5) + width
 
-    if heading >= 315 or heading < 45 then
-        return 'Sentido Norte'
-    elseif heading >= 45 and heading < 135 then
-        return 'Sentido Oeste'
-    elseif heading >=135 and heading < 225 then
-        return 'Sentido Sul'
-    elseif heading >= 225 and heading < 315 then
-        return 'Sentido Este'
+function GetDirectionHeading(playerPed)
+    local heading = -GetEntityHeading(player) % 360
+
+    if (heading < 90) then
+        local rangePercent = heading / 90
+
+        return math.floor((1 - rangePercent) * north + rangePercent * east)
+    elseif (direction < 180) then
+        local rangePercent = CalculateRangePercent(90, 180, direction)
+
+        return math.floor((1 - rangePercent) * east + rangePercent * south2)
+    elseif (direction < 270) then
+        local rangePercent = CalculateRangePercent(180, 270, direction)
+
+        return math.floor((1 - rangePercent) * south + rangePercent * west)
+    elseif (direction <= 360) then
+        local rangePercent = CalculateRangePercent(270, 360, direction)
+
+        return math.floor((1 - rangePercent) * west + rangePercent * north)
     end
+end
+
+function CalculateRangePercent(min, max, amt)
+    return (((amt - min) * 100) / (max - min)) / 100
 end
 
 function GetCurrentTime()

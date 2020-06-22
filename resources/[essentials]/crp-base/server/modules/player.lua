@@ -3,7 +3,7 @@ CRP.Player, CRP.Characters = {}, {}
 function CRP.Player:LoadCharacter(source, data)
     CRP.Characters[source] = CRP.Player:CreateCharacter(source, data)
 
-    TriggerEvent('crp-base:playerloaded', source, CRP.Characters[source])
+    TriggerEvent('crp-base:playerLoaded', source, CRP.Characters[source])
 
     for i = 1, #CRP.Commands do
         TriggerClientEvent('chat:addSuggestion', source, '/' .. CRP.Commands[i][1], CRP.Commands[i][2], CRP.Commands[i][3])

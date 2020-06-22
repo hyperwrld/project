@@ -1,8 +1,8 @@
 const state = () => ({
     isEnabled: true,
     characterData: {
-        'health': '100%', 'armour': '100%',
-        'hunger': { value: '100%', leftOver: '0%' }, 'thirst': { value: '100%', leftOver: '0%' }, 'breath': { value: '100%', leftOver: '0%' }, 'stress': { value: '100%', leftOver: '0%' },
+        'health': '0%', 'armour': '0%',
+        'hunger': { value: '0%', leftOver: '100%' }, 'thirst': { value: '0%', leftOver: '100%' }, 'breath': { value: '0%', leftOver: '100%' }, 'stress': { value: '0%', leftOver: '100%' },
     },
     isOnVehicle: false,
 })

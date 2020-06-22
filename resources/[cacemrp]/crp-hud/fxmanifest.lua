@@ -1,8 +1,6 @@
-fx_version 'adamant'
+fx_version 'bodacious'
 
 game 'gta5'
-
-ui_page 'html/ui.html'
 
 client_scripts {
 	'client/main.lua'
@@ -11,11 +9,3 @@ client_scripts {
 server_scripts {
 	'server/main.lua'
 }
-
-files {
-	'html/ui.html',
-	'html/css/main.css',
-	'html/js/main.js'
-}
-
-dependency 'crp-base'

@@ -1,23 +1,22 @@
-AddEventHandler('crp:playerloaded', function(source, user)
-	local status = user.getStatus()
+AddEventHandler('crp-base:playerLoaded', function(source, character)
+	local status = character.getStatus()
 
 	if status == nil then
 		status = { health = 200, armour = 0, hunger = 100, thirst = 100, stress = 0 }
 
-		user.setStatus(status)
+		character.setStatus(status)
 	end
 
 	Citizen.Wait(10000)
 
-	TriggerClientEvent('crp-hud:setmeta', source, status)
+	TriggerClientEvent('crp-hud:setMeta', source, status)
 end)
 
-RegisterNetEvent('crp-hud:update')
-AddEventHandler('crp-hud:update', function(health, armour, hunger, thirst, stress)
-	local _source, status = source, {}
-	local user = exports['crp-base']:getCharacter(_source)
+RegisterNetEvent('crp-hud:updateData')
+AddEventHandler('crp-hud:updateData', function(health, armour, hunger, thirst, stress)
+	local character, status = exports['crp-base']:GetCharacter(source), {}
 
 	status = { health = health, armour = armour, hunger = hunger, thirst = thirst, stress = stress }
 
-	user.setStatus(status)
+	character.setStatus(status)
 end)

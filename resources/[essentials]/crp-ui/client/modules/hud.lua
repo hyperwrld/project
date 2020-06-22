@@ -1,5 +1,5 @@
-AddEventHandler('crp-ui:setHudPosition', function()
-    SendNUIMessage({ eventName = 'setHudPosition', topX = _topX, topY = _topY })
+AddEventHandler('crp-ui:setHudPosition', function(topX, topY)
+    SendNUIMessage({ eventName = 'setHudPosition', topX = topX, topY = topY })
 end)
 
 AddEventHandler('crp-ui:updateData', function(data)
