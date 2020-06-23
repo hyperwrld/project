@@ -23,6 +23,9 @@ CRP.Commands = {
 
         TriggerClientEvent('crp-base:displayMe', -1, source, args)
     end},
+    {'dinheiro', 'Utilize este comando para conseguir ver o seu dinheiro.', {}, function(source, args)
+        TriggerClientEvent('crp-ui:setMoneyStatus', source, { status = true, time = 5000 })
+    end}
 }
 
 function CRP.Commands:RegisterCommands()

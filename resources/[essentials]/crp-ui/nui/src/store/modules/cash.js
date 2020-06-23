@@ -1,12 +1,10 @@
 const state = () => ({
-    canShow: false,
-    currentMoney: 0,
-    changedMoney: { status: false, type: 'remove', quantity: 0 }
+    canShow: false, currentMoney: 0, changedMoney: { status: false, type: 'remove', quantity: 0 }
 })
 
 const actions = {
-    setMoneyStatus(state, status) {
-        state.commit('setMoneyStatus', status);
+    setMoneyStatus(state, data) {
+        state.commit('setMoneyStatus', data);
     },
     setMoney(state, money) {
         state.commit('setMoney', money);
@@ -20,8 +18,12 @@ const actions = {
 }
 
 const mutations = {
-    setMoneyStatus(state, status) {
-        state.canShow = status;
+    setMoneyStatus(state, data) {
+        state.canShow = data.status ? data.status : data;
+
+        if (data.time) {
+            setTimeout(() => { state.canShow = false }, data.time);
+        }
     },
     setMoney(state, money) {
         state.currentMoney = money, state.canShow = true;

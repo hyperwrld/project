@@ -44,7 +44,7 @@
                         this.isEnabled = event.data.status, this.currentComponent = event.data.component;
                         break;
                     case 'setMoneyStatus':
-                        this.$store.dispatch('cash/setMoney', event.data.status);
+                        this.$store.dispatch('cash/setMoneyStatus', event.data.data);
                         break;
                     case 'setMoney':
                         this.$store.dispatch('cash/setMoney', event.data.money);

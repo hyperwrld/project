@@ -94,7 +94,7 @@
         methods: {
             handleCharacterDeletion: function() {
                 this.$store.dispatch('dialogs/setDialogStatus', { name: 'deleteCharacter', status: false });
-                this.$store.dispatch('characterList/removeCharacter');
+                this.$store.dispatch('character/removeCharacter');
             },
             formatDate: function(date) {
                 if (!date) return null
@@ -119,7 +119,7 @@
                 }
 
                 if (errorMessage.length > 0) {
-                    nui.send('error', message);
+                    nui.send('error', errorMessage);
                 } else {
                     nui.send('createCharacter', {
                         firstname: data.firstname, lastname: data.lastname,
@@ -127,7 +127,7 @@
                     }).then(_data => {
                         if (_data.status) {
                             this.$store.dispatch('dialogs/setDialogStatus', { name: 'createCharacter', status: false, reset: true });
-                            this.$store.dispatch('characterList/addCharacter', _data.characterData);
+                            this.$store.dispatch('character/addCharacter', _data.characterData);
                         }
                     });
                 }

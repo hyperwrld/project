@@ -1,5 +1,6 @@
-AddEventHandler('crp-ui:setMoneyStatus', function(status)
-    SendNUIMessage({ eventName = 'setMoneyStatus', status = status })
+RegisterNetEvent('crp-ui:setMoneyStatus')
+AddEventHandler('crp-ui:setMoneyStatus', function(data)
+    SendNUIMessage({ eventName = 'setMoneyStatus', data = data })
 end)
 
 RegisterNetEvent('crp-ui:setMoney')
