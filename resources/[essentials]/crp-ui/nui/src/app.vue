@@ -27,7 +27,7 @@
         },
         data() {
             return {
-                isEnabled: true, currentComponent: 'character'
+                isEnabled: false, currentComponent: 'character'
             }
         },
         destroyed() {

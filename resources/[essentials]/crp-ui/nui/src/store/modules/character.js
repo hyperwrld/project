@@ -3,7 +3,7 @@ import nui from '../../utils/nui';
 const state = () => ({
     userCharacters: [],
     currentItem: 0,
-    loading: { status: false, message: 'Aguarde...' }
+    loading: { status: true, message: 'Aguarde...' }
 })
 
 const getters = {
