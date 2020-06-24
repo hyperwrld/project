@@ -54,7 +54,7 @@ AddEventHandler('crp-hud:changeMeta', function(data)
 		if thirst > 100 then thirst = 100 end
     end
 
-    TriggerEvent('crp-ui:updateData', { ['hunger'] = hunger, ['thirst'] = thirst, ['stress'] = stress })
+    TriggerEvent('crp-ui:updateCharacterData', { ['hunger'] = hunger, ['thirst'] = thirst, ['stress'] = stress })
 	TriggerServerEvent('crp-hud:updateData', GetEntityHealth(playerPed), GetPedArmour(playerPed), hunger, thirst, stress)
 end)
 
@@ -78,7 +78,7 @@ AddEventHandler('crp-hud:changeStress', function(status, value)
         exports['crp-notifications']:SendAlert('inform', 'Perdeste stress.')
     end
 
-    TriggerEvent('crp-ui:updateData', { ['hunger'] = hunger, ['thirst'] = thirst, ['stress'] = stress })
+    TriggerEvent('crp-ui:updateCharacterData', { ['hunger'] = hunger, ['thirst'] = thirst, ['stress'] = stress })
 	TriggerServerEvent('crp-hud:updateData', GetEntityHealth(playerPed), GetPedArmour(playerPed), hunger, thirst, stress)
 end)
 
@@ -104,7 +104,7 @@ function StartThreads()
             ResetScriptGfxAlign()
 
             TriggerEvent('crp-ui:setHudPosition', topX, topY)
-            TriggerEvent('crp-ui:updateData', { ['hunger'] = hunger, ['thirst'] = thirst })
+            TriggerEvent('crp-ui:updateCharacterData', { ['hunger'] = hunger, ['thirst'] = thirst })
             TriggerServerEvent('crp-hud:updateData', GetEntityHealth(playerPed), GetPedArmour(playerPed), hunger, thirst, stress)
 
 	    	Citizen.Wait(30000)
@@ -124,7 +124,7 @@ function StartThreads()
             local health, armour, breath = GetEntityHealth(playerPed), GetPedArmour(playerPed), GetPlayerUnderwaterTimeRemaining(PlayerId())
 
             if CheckUpdate(health, armour, breath, stress) then
-                TriggerEvent('crp-ui:updateData', { ['health'] = health / 2, ['armour'] = armour, ['breath'] = breath * 2.5, ['stress'] = stress  })
+                TriggerEvent('crp-ui:updateCharacterData', { ['health'] = health / 2, ['armour'] = armour, ['breath'] = breath * 2.5, ['stress'] = stress  })
             end
 		end
     end)
