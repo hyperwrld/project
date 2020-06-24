@@ -31,7 +31,7 @@ Citizen.CreateThread(function()
                 isHudActive = true
             end
 
-            SendNUIMessage({ eventName = 'updateCompassInfo', vehicleData = { time = currentTime, direction = GetDirectionHeading() }})
+            SendNUIMessage({ eventName = 'updateCompassData', direction = GetDirectionHeading() })
         elseif isHudActive then
             isHudActive = false
 
@@ -65,7 +65,7 @@ Citizen.CreateThread(function()
                 streetName = streetName .. ' | [' .. zoneName .. ']'
             end
 
-            SendNUIMessage({ eventName = 'updateVehicleInfo', vehicleData = { location = streetName, speed = speed, fuel = fuel }})
+            SendNUIMessage({ eventName = 'updateVehicleData', vehicleData = { location = streetName, speed = speed, fuel = fuel, time = GetCurrentTime() }})
         end
     end
 end)
@@ -97,10 +97,24 @@ function CalculateRangePercent(min, max, amt)
     return (((amt - min) * 100) / (max - min)) / 100
 end
 
-AddEventHandler('crp-ui:setHudPosition', function(topX, topY)
-    SendNUIMessage({ eventName = 'setHudPosition', topX = topX, topY = topY })
+function GetCurrentTime()
+	local hours, minutes = GetClockHours(), GetClockMinutes()
+
+    if hours >= 0 and hours < 10 then
+        hours = '0' .. hours
+    end
+
+    if minutes >= 0 and minutes < 10 then
+        minutes = '0' .. minutes
+    end
+
+    return hours .. ':' .. minutes
+end
+
+AddEventHandler('crp-ui:setHudPosition', function(x, y)
+    SendNUIMessage({ eventName = 'setHudPosition', minimapData = { x = x, y = y }})
 end)
 
-AddEventHandler('crp-ui:updateData', function(data)
-    SendNUIMessage({ eventName = 'updateData', status = data })
+AddEventHandler('crp-ui:updateCharacterData', function(data)
+    SendNUIMessage({ eventName = 'updateCharacterData', status = data })
 end)

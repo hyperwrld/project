@@ -55,6 +55,18 @@
                     case 'addMoney':
                         this.$store.dispatch('cash/addMoney', event.data.quantity);
                         break;
+                    case 'setHudPosition':
+                        this.$store.dispatch('hud/setMinimapData', event.data.minimapData)
+                        break;
+                    case 'updateCharacterData':
+                        this.$store.dispatch('hud/setCharacterData', event.data.status);
+                        break;
+                    case 'updateVehicleData':
+                        this.$store.dispatch('hud/setVehicleData', event.data.vehicleData);
+                        break;
+                    case 'updateCompassData':
+                        this.$store.dispatch('hud/setCompassDirection', event.data.direction);
+                        break;
                     case 'closeMenu':
                         this.isEnabled = false;
                         break;
