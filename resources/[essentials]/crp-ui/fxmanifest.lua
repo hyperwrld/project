@@ -28,6 +28,8 @@ files {
     'nui/dist/js/app.js',
     'nui/dist/js/chunk-vendors.js',
     'nui/dist/fonts/pdown.ttf',
+    'nui/dist/img/compass.png',
+    'nui/dist/img/seatbelt.svg',
     'nui/dist/css/app.css',
     'nui/dist/css/chunk-vendors.css'
 }
