@@ -1,5 +1,5 @@
 local _lastHealth, _lastArmour, _lastBreath, _lastStress = 0, 0, 0, 0
-local hunger, thirst, stress, isHudActive, isCompassOn = 100, 100, 0, false, false
+local hunger, thirst, stress, playerPed = 100, 100, 0, PlayerPedId()
 
 local zoneNames = {
     AIRP = 'Los Santos International Airport', ALAMO = 'Alamo Sea', ALTA = 'Alta', ARMYB = 'Fort Zancudo', BANHAMC = 'Banham Canyon Dr', BANNING = 'Banning',
@@ -25,8 +25,6 @@ AddEventHandler('crp-hud:setMeta', function(data)
 	 	return
 	end
 
-	local playerPed = GetPlayerPed(-1)
-
 	if data.hunger == nil then hunger = 100 else hunger = data.hunger end
 	if data.thirst == nil then thirst = 100 else thirst = data.thirst end
 	if data.stress == nil then stress = 0   else stress = data.stress end
@@ -39,13 +37,11 @@ AddEventHandler('crp-hud:setMeta', function(data)
 
     SetPedArmour(playerPed, data.armour)
 
-	StartFunction()
+	StartThreads()
 end)
 
 RegisterNetEvent('crp-hud:changeMeta')
 AddEventHandler('crp-hud:changeMeta', function(data)
-    local playerPed = GetPlayerPed(-1)
-
 	if data.hunger then
 		hunger = hunger + 25
 
@@ -64,8 +60,6 @@ end)
 
 RegisterNetEvent('crp-hud:changeStress')
 AddEventHandler('crp-hud:changeStress', function(status, value)
-    local playerPed = GetPlayerPed(-1)
-
     if status then
         stress = stress + value
 
@@ -88,9 +82,7 @@ AddEventHandler('crp-hud:changeStress', function(status, value)
 	TriggerServerEvent('crp-hud:updateData', GetEntityHealth(playerPed), GetPedArmour(playerPed), hunger, thirst, stress)
 end)
 
-function StartFunction()
-	local playerPed = GetPlayerPed(-1)
-
+function StartThreads()
 	Citizen.CreateThread(function()
 	    while true do
 	    	if hunger > 0 then
@@ -112,18 +104,16 @@ function StartFunction()
             ResetScriptGfxAlign()
 
             TriggerEvent('crp-ui:setHudPosition', topX, topY)
-
-            TriggerServerEvent('crp-hud:updateData', GetEntityHealth(playerPed), GetPedArmour(playerPed), hunger, thirst, stress)
-
             TriggerEvent('crp-ui:updateData', { ['hunger'] = hunger, ['thirst'] = thirst })
+            TriggerServerEvent('crp-hud:updateData', GetEntityHealth(playerPed), GetPedArmour(playerPed), hunger, thirst, stress)
 
 	    	Citizen.Wait(30000)
 
-	    	if hunger < 20 or thirst < 20 then
-	    		local newHealth = GetEntityHealth(playerPed) - math.random(10)
+	    	-- if hunger < 20 or thirst < 20 then
+	    	-- 	local newHealth = GetEntityHealth(playerPed) - math.random(10)
 
-				SetEntityHealth(playerPed, newHealth)
-	    	end
+			-- 	SetEntityHealth(playerPed, newHealth)
+	    	-- end
 		end
 	end)
 
@@ -133,104 +123,17 @@ function StartFunction()
 
             local health, armour, breath = GetEntityHealth(playerPed), GetPedArmour(playerPed), GetPlayerUnderwaterTimeRemaining(PlayerId())
 
-			playerPed = GetPlayerPed(-1)
-
             if CheckUpdate(health, armour, breath, stress) then
                 TriggerEvent('crp-ui:updateData', { ['health'] = health / 2, ['armour'] = armour, ['breath'] = breath * 2.5, ['stress'] = stress  })
             end
 		end
     end)
 
-    Citizen.CreateThread(function()
-        while true do
-            Citizen.Wait(100)
-
-            local playerPed = PlayerPedId()
-
-            if IsVehicleEngineOn(GetVehiclePedIsIn(playerPed)) then
-                local position = GetEntityCoords(playerPed)
-                local zoneName = zoneNames[GetNameOfZone(position.x, position.y, position.z)]
-                local streetName = GetStreetNameFromHashKey(GetStreetNameAtCoord(position.x, position.y, position.z))
-                local speed = math.ceil(GetEntitySpeed(GetVehiclePedIsIn(playerPed, false)) * 3.6)
-                local locationString, currentTime = streetName, GetCurrentTime()
-
-                if zoneName then
-                    locationString = streetName .. ' | ' .. zoneName
-                end
-
-                if not isHudActive then
-                    DisplayRadar(true)
-
-                    isHudActive = true
-                end
-
-                TriggerEvent('crp-ui:updateVehicleInfo', { status = isHudActive, data = { location = locationString, speed = speed, fuel = fuel, time = currentTime }})
-            elseif isCompassOn then
-                isHudActive = false
-
-                DisplayRadar(false)
-
-                TriggerEvent('crp-ui:updateCompassInfo', { time = currentTime, direction = 0 })
-            elseif not isHudActive then
-                isHudActive = false
-
-                DisplayRadar(false)
-
-                TriggerEvent('crp-ui:updateVehicleInfo', { status = isHudActive })
-            end
-        end
-    end)
-
-    -- Citizen.CreateThread(function()
-    --     while true do
-    --         Citizen.Wait(500)
-
-    --         if IsPedInAnyVehicle(PlayerPedId(), true) then
-    --             local position = GetEntityCoords(playerPed)
-    --             local zoneName = zoneNames[GetNameOfZone(position.x, position.y, position.z)]
-    --             local streetName = GetStreetNameFromHashKey(GetStreetNameAtCoord(position.x, position.y, position.z))
-    --             local speed = math.ceil(GetEntitySpeed(GetVehiclePedIsIn(playerPed, false)) * 3.6)
-    --             local locationString, currentTime = streetName, GetCurrentTime()
-
-    --             if zoneName then
-    --                 locationString = streetName .. ' | ' .. zoneName
-    --             end
-
-    --             if not isHudActive then
-    --                 DisplayRadar(true)
-
-    --                 isHudActive = true
-
-    --                 SendNUIMessage({
-    --                     eventName = 'updateGps',
-    --                     show = true,
-    --                     locationName = GetDirectionHeading(playerPed) .. ' | ' .. locationString,
-    --                     speed = speed,
-    --                     fuel = 0,
-    --                     time = currentTime
-    --                 })
-    --             else
-    --                 SendNUIMessage({
-    --                     eventName = 'updateGps',
-    --                     locationName = GetDirectionHeading(playerPed) .. ' | ' .. locationString,
-    --                     speed = speed,
-    --                     fuel = 0,
-    --                     time = currentTime
-    --                 })
-    --             end
-    --         elseif isHudActive then
-    --             isHudActive = false
-
-    --             DisplayRadar(false)
-
-    --             SendNUIMessage({ eventName = 'updateGps', hide = true })
-    --         end
-    --     end
-    -- end)
-
 	Citizen.CreateThread(function()
 		while true do
-			Citizen.Wait(2000)
+            Citizen.Wait(2000)
+
+            playerPed = PlayerPedId()
 
 			if stress >= 75 then
 				ShakeGameplayCam('SMALL_EXPLOSION_SHAKE', 0.1)
@@ -254,48 +157,4 @@ function CheckUpdate(health, armour, breath, stress)
 	_lastStress = stress
 
 	return true
-end
-
-local width = 0;
-local south, west = (-100) + width, (-100 * 2) + width
-local north, east, south2 = (-100 * 3) + width, (-100 * 4) + width, (-100 * 5) + width
-
-function GetDirectionHeading(playerPed)
-    local heading = -GetEntityHeading(player) % 360
-
-    if (heading < 90) then
-        local rangePercent = heading / 90
-
-        return math.floor((1 - rangePercent) * north + rangePercent * east)
-    elseif (direction < 180) then
-        local rangePercent = CalculateRangePercent(90, 180, direction)
-
-        return math.floor((1 - rangePercent) * east + rangePercent * south2)
-    elseif (direction < 270) then
-        local rangePercent = CalculateRangePercent(180, 270, direction)
-
-        return math.floor((1 - rangePercent) * south + rangePercent * west)
-    elseif (direction <= 360) then
-        local rangePercent = CalculateRangePercent(270, 360, direction)
-
-        return math.floor((1 - rangePercent) * west + rangePercent * north)
-    end
-end
-
-function CalculateRangePercent(min, max, amt)
-    return (((amt - min) * 100) / (max - min)) / 100
-end
-
-function GetCurrentTime()
-	local hours, minutes = GetClockHours(), GetClockMinutes()
-
-    if hours >= 0 and hours < 10 then
-        hours = '0' .. hours
-    end
-
-    if minutes >= 0 and minutes < 10 then
-        minutes = '0' .. minutes
-    end
-
-    return hours .. ':' .. minutes
 end

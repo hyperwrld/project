@@ -14,7 +14,8 @@ end)
 
 RegisterNetEvent('crp-hud:updateData')
 AddEventHandler('crp-hud:updateData', function(health, armour, hunger, thirst, stress)
-	local character, status = exports['crp-base']:GetCharacter(source), {}
+    local _source, status = source, {}
+	local character = exports['crp-base']:GetCharacter(_source)
 
 	status = { health = health, armour = armour, hunger = hunger, thirst = thirst, stress = stress }
 
