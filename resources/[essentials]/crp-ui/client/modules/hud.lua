@@ -1,4 +1,4 @@
-local isHudActive, isCompassOn, playerPed = false, false, PlayerPedId()
+local isOnVehicle, isCompassOn, playerPed = false, false, PlayerPedId()
 local south, west = (-100), (-100 * 2)
 local north, east, south2 = (-100 * 3), (-100 * 4), (-100 * 5)
 
@@ -25,17 +25,7 @@ Citizen.CreateThread(function()
         Citizen.Wait(50)
 
         if isCompassOn or IsVehicleEngineOn(GetVehiclePedIsUsing(playerPed)) then
-            if not isCompassOn and not isHudActive then
-                DisplayRadar(true)
-
-                isHudActive = true
-            end
-
             SendNUIMessage({ eventName = 'updateCompassData', direction = GetDirectionHeading() })
-        elseif isHudActive then
-            isHudActive = false
-
-            DisplayRadar(false)
         else
             Citizen.Wait(1000)
         end
@@ -57,6 +47,14 @@ Citizen.CreateThread(function()
             local streetName, crossingRoadName = GetStreetNameFromHashKey(currentStreetHash), GetStreetNameFromHashKey(crossingRoadHash)
             local speed = math.ceil(GetEntitySpeed(vehicle) * 3.6)
 
+            if not isOnVehicle then
+                DisplayRadar(true)
+
+                SendNUIMessage({ eventName = 'setVehicleStatus', status = true })
+
+                isOnVehicle = true
+            end
+
             if crossingRoadName ~= '' then
                 streetName = streetName .. ' | ' .. crossingRoadName
             end
@@ -66,6 +64,14 @@ Citizen.CreateThread(function()
             end
 
             SendNUIMessage({ eventName = 'updateVehicleData', vehicleData = { location = streetName, speed = speed, fuel = fuel, time = GetCurrentTime() }})
+        elseif isOnVehicle then
+            isOnVehicle = false
+
+            SendNUIMessage({ eventName = 'setVehicleStatus', status = false })
+
+            DisplayRadar(false)
+        else
+            Citizen.Wait(1000)
         end
     end
 end)
@@ -110,6 +116,10 @@ function GetCurrentTime()
 
     return hours .. ':' .. minutes
 end
+
+AddEventHandler('crp-ui:setCompassStatus', function(status)
+    SendNUIMessage({ eventName = 'setCompassStatus', status = status })
+end)
 
 AddEventHandler('crp-ui:setHudPosition', function(x, y)
     SendNUIMessage({ eventName = 'setHudPosition', minimapData = { x = x, y = y }})
