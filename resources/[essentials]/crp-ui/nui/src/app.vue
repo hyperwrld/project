@@ -55,6 +55,12 @@
                     case 'addMoney':
                         this.$store.dispatch('cash/addMoney', event.data.quantity);
                         break;
+                    case 'setVehicleStatus':
+                        this.$store.dispatch('hud/setVehicleStatus', event.data.status)
+                        break;
+                    case 'setCompassStatus':
+                        this.$store.dispatch('hud/setCompassStatus', event.data.status)
+                        break;
                     case 'setHudPosition':
                         this.$store.dispatch('hud/setMinimapData', event.data.minimapData)
                         break;

@@ -27,24 +27,28 @@
                     <div class='sub-stress' v-bind:style='{ height: characterData["stress"].value, top: characterData["stress"].leftOver }'></div>
                 </div>
             </div>
-            <div class='vehicle-info'>
-                <div class='top'>
+            <div class='vehicle-info' v-if='vehicleData.isOnVehicle || vehicleData.isCompassOn'>
+                <div class='top' :class='{ "compass": vehicleData.isCompassOn == true && !vehicleData.isOnVehicle }'>
                     <p>{{ vehicleData.time }}</p>
                 </div>
-                <div class='middle'>
+                <div class='middle' v-if='vehicleData.isOnVehicle'>
                     <div class='fuel'>
-                        <p>{{ vehicleData.fuel }}</p><p>Combustível</p>
+                        <p :class='{ "low": vehicleData.fuel <= 15 }'>{{ vehicleData.fuel }}</p>
+                        <font-awesome-icon icon='gas-pump'></font-awesome-icon>
                     </div>
                     <div class='speed'>
                         <p>{{ vehicleData.speed }}</p><p>km/h</p>
                     </div>
-                    <div class='seatbelt'>
+                    <div class='seatbelt' v-if='!vehicleData.hasSeatBelt'>
                         <img src='../../assets/seatbelt.svg'>
+                    </div>
+                    <div class='speed-limiter' v-if='vehicleData.isSpeedLimiterOn'>
+                        <img src='../../assets/speed-limiter.svg'>
                     </div>
                 </div>
                 <div class='bottom'>
                     <div class='direction'><div class='image' v-bind:style='{ transform: "translate3d(" + vehicleData.direction + "px, 0px, 0px)" }'></div></div>
-                    <p>{{ vehicleData.location }}</p>
+                    <p v-if='vehicleData.isOnVehicle'>{{ vehicleData.location }}</p>
                 </div>
             </div>
         </div>
@@ -60,7 +64,7 @@
             ...mapState({
                 minimapData: state => state.hud.minimapData,
                 characterData: state => state.hud.characterData,
-                vehicleData: state => state.hud.vehicleData,
+                vehicleData: state => state.hud.vehicleData
             })
         }
     };

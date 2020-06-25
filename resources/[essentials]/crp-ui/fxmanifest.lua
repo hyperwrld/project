@@ -30,6 +30,7 @@ files {
     'nui/dist/fonts/pdown.ttf',
     'nui/dist/img/compass.png',
     'nui/dist/img/seatbelt.svg',
+    'nui/dist/img/speed-limiter.svg',
     'nui/dist/css/app.css',
     'nui/dist/css/chunk-vendors.css'
 }

@@ -5,11 +5,16 @@ const state = () => ({
         'health': '0%', 'armour': '0%',
         'hunger': { value: '0%', leftOver: '100%' }, 'thirst': { value: '0%', leftOver: '100%' }, 'breath': { value: '0%', leftOver: '100%' }, 'stress': { value: '0%', leftOver: '100%' },
     },
-    isOnVehicle: false,
-    vehicleData: { time: '00:00', fuel: 0, speed: 0, hasSeatBelt: false, location: '', direction: 0 }
+    vehicleData: { isOnVehicle: false, isCompassOn: false, time: '00:00', fuel: 0, speed: 0, hasSeatBelt: false, location: '', direction: 0 }
 })
 
 const actions = {
+    setVehicleStatus(state, status) {
+        state.commit('setVehicleStatus', status);
+    },
+    setCompassStatus(state, status) {
+        state.commit('setCompassStatus', status);
+    },
     setMinimapData(state, data) {
         state.commit('setMinimapData', data);
     },
@@ -25,6 +30,12 @@ const actions = {
 }
 
 const mutations = {
+    setVehicleStatus(state, status) {
+        state.vehicleData.isOnVehicle = status;
+    },
+    setCompassStatus(state, status) {
+        state.vehicleData.isCompassOn = status;
+    },
     setMinimapData(state, data) {
         const width = window.innerWidth, height = window.innerHeight;
 
