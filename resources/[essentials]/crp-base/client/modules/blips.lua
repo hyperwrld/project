@@ -1,4 +1,4 @@
-CRP.BlipManager, CRP.Blips = CRP.BlipManager or {}, CRP.Blips or {}
+CRP.BlipManager = CRP.BlipManager or {}
 
 function CRP.BlipManager:CreateBlip(id, data)
     local blip = AddBlipForCoord(data['x'], data['y'], data['z'])
@@ -20,34 +20,6 @@ function CRP.BlipManager:CreateBlip(id, data)
     BeginTextCommandSetBlipName('STRING')
     AddTextComponentString(data['name'])
     EndTextCommandSetBlipName(blip)
-
-    if (id ~= nil) then
-        CRP.Blips[id] = { blip = blip, data = data }
-    end
-end
-
-function CRP.BlipManager:RemoveBlip(self, id)
-    local blip = CRP.Blips[id]
-
-    if blip then RemoveBlip(blip.blip) end
-
-    CRP.Blips[id] = nil
-end
-
-function CRP.BlipManager:HideBlip(self, id, toggle)
-    local blip = CRP.Blips[id]
-
-    if not blip then return end
-
-    if toggle then SetBlipAlpha(blip, 0) else SetBlipAlpha(blip, 255) end
-end
-
-function CRP.BlipManager:GetBlip(self, id)
-    local blip = CRP.Blips[id]
-
-    if not blip then return false end
-
-    return blip
 end
 
 local blips = {
