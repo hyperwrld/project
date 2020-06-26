@@ -63,7 +63,7 @@ Citizen.CreateThread(function()
                 streetName = streetName .. ' | [' .. zoneName .. ']'
             end
 
-            SendNUIMessage({ eventName = 'updateVehicleData', vehicleData = { location = streetName, speed = speed, fuel = fuel, time = GetCurrentTime() }})
+            SendNUIMessage({ eventName = 'updateVehicleData', vehicleData = { location = streetName, speed = speed, fuel = DecorGetInt(vehicle, 'currentFuel'), time = GetCurrentTime() }})
         elseif isOnVehicle then
             isOnVehicle = false
 
