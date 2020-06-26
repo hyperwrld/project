@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <cash/><hud/>
+        <cash/><hud/><notifications/>
         <component :is='currentComponent' v-if='isEnabled'/>
         <dialogs v-if='isEnabled'/>
     </v-app>
@@ -12,13 +12,15 @@
 
     import dialogs from './components/dialogs.vue';
     import character from './components/character/character.vue';
+
     import cash from './components/cash/cash.vue';
     import hud from './components/hud/hud.vue';
+    import notifications from './components/notifications/notifications.vue';
 
     export default {
         name: 'app',
         components: {
-            character, dialogs, cash, hud
+            character, dialogs, cash, hud, notifications
         },
         computed: {
             ...mapState({
@@ -72,6 +74,12 @@
                         break;
                     case 'updateCompassData':
                         this.$store.dispatch('hud/setCompassDirection', event.data.direction);
+                        break;
+                    case 'setAlert':
+                        this.$store.dispatch('notifications/setAlert', event.data.alertData);
+                        break;
+                    case 'setCustomAlert':
+                        this.$store.dispatch('notifications/setCustomAlert', event.data.alertData);
                         break;
                     case 'closeMenu':
                         this.isEnabled = false;
