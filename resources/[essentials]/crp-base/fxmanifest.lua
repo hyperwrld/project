@@ -8,6 +8,7 @@ client_scripts {
     'client/modules/gameplay.lua',
     'client/modules/rpc.lua',
     'client/modules/spawn.lua',
+    'client/modules/error.lua',
     'client/main.lua'
 }
 

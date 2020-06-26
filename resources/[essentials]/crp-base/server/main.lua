@@ -3,6 +3,13 @@ AddEventHandler('crp-base:disconnect', function()
 	DropPlayer(source, 'Foste desconectado do servidor.')
 end)
 
+RegisterServerEvent('crp-base:logClientError')
+AddEventHandler('crp-base:logClientError', function(resourceName, ...)
+    CRP.Util:Print('Error in resource: ' .. resourceName .. ' (' .. CRP.Util:GetPlayerIdentifier(source) .. ')', 'error')
+    print(...)
+    CRP.Util:Print('End of the error', 'error')
+end)
+
 AddEventHandler('crp-base:loadCharacter', function(data, callback)
     callback(CRP.Player:LoadCharacter(data.source, data.characterData))
 end)

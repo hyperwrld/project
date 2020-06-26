@@ -37,8 +37,8 @@ end
 
 function CRP.Util:Print(string, module)
     if not module then
-        print('[^1crp-base^r]: ' .. string)
+        print('[^1crp-base^0]: ' .. string)
     else
-        print('[^1crp-base^r] - [^3' .. module .. '^r]: ' .. string)
+        print('[^1crp-base^0] - [^3' .. module .. '^0]: ' .. string)
     end
 end
