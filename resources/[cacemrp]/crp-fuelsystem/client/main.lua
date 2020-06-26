@@ -24,14 +24,20 @@ Citizen.CreateThread(function()
             end
 
             if not isBlacklisted and GetPedInVehicleSeat(vehicle, -1) == playerPed then
-                if not DecorExistOn(vehicle, 'currentFuel') then
-                    currentFuel = math.random(20, 60)
+                if lastVehicle ~= vehicle then
+                    if not DecorExistOn(vehicle, 'currentFuel') then
+                        currentFuel = math.random(20, 60)
 
-                    DecorSetInt(vehicle, 'currentFuel', math.floor(currentFuel + 0.5))
+                        DecorSetInt(vehicle, 'currentFuel', math.floor(currentFuel + 0.5))
+                    else
+                        currentFuel = DecorGetInt(vehicle, 'currentFuel')
+                    end
+
+                    lastVehicle, lastUpdate = vehicle, 0
                 end
 
                 if lastUpdate > 150 then
-                    DecorSetInt(vehicle, 'currentFuel', math.floor(currentFuel))
+                    DecorSetInt(vehicle, 'currentFuel', math.floor(currentFuel + 0.5))
 
                     lastUpdate = 0
                 end
@@ -72,7 +78,13 @@ Citizen.CreateThread(function()
                         end
                     end
                 end
-			end
+            end
+        elseif lastVehicle ~= 0 then
+            DecorSetInt(lastVehicle, 'currentFuel', math.floor(currentFuel + 0.5))
+
+            lastVehicle = 0
+
+            Citizen.Wait(500)
         end
     end
 end)
@@ -88,7 +100,7 @@ Citizen.CreateThread(function()
             local vehicleCoords = GetEntityCoords(vehicle)
 
             if DoesEntityExist(vehicle) and #(GetEntityCoords(playerPed) - vehicleCoords) < 2.5 then
-                local entityCoords, vehicleFuel = GetEntityCoords(isNearPump), 100 -- DecorGetInt(vehicle, 'currentFuel')
+                local entityCoords, vehicleFuel = GetEntityCoords(isNearPump), DecorGetInt(vehicle, 'currentFuel')
 
                 DisplayHelpText('Pressiona ~INPUT_CONTEXT~ para abastecer o ~g~veículo~s~.')
                 DrawMarker(20, vehicleCoords.x, vehicleCoords.y, vehicleCoords.z + 1.5, 0, 0, 0, 0, 0, 0, 0.5, 0.5, 0.5, 150, 0, 0, 150, 0, 1, 0, 0)
