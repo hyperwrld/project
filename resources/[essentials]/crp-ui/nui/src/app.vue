@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <cash/><hud/><notifications/><taskbar/>
+        <cash/><hud/><notifications/><taskbar ref='teste'/>
         <component :is='currentComponent' v-if='isEnabled'/>
         <dialogs v-if='isEnabled'/>
     </v-app>
@@ -84,6 +84,9 @@
                         break;
                     case 'setTaskbar':
                         this.$store.dispatch('taskbar/setTaskbar', event.data.taskbarData);
+                        break;
+                    case 'setSkillbar':
+                        this.$store.dispatch('taskbar/setSkillbar', event.data.skillbarData);
                         break;
                     case 'closeMenu':
                         this.isEnabled = false;

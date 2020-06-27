@@ -23,7 +23,6 @@
     };
 </script>
 
-
 <style scoped lang='scss'>
     @import './notifications.scss';
 </style>

@@ -54,4 +54,46 @@ html, .container {
             text-shadow: 0px 0px 3px #000;
         }
     }
+
+    .skillbar-container {
+        position: fixed;
+        width: fit-content;
+        min-width: 10%;
+
+        height: 3%;
+        bottom: 12.65%;
+
+        left: 0;
+        right: 0;
+
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+        align-items: center;
+
+        border: 2px solid rgba(54,52,52,.8);
+        background-color: #545454;
+        font-family: 'Quantico', sans-serif;
+        color: white;
+
+        .stick {
+            width: 3%;
+            background-color: white;
+            position: absolute;
+            height: 100%;
+            z-index: 333;
+        }
+
+        .rectangle {
+            width: 30%;
+            left: 65px;
+            position: relative;
+            display: block;
+            height: 100%;
+            overflow: hidden;
+            white-space: nowrap;
+            background-color: #4d79ff;
+            transition: .2s ease-in-out;
+        }
+    }
 }

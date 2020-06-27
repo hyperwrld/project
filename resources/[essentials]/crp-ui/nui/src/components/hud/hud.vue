@@ -70,7 +70,6 @@
     };
 </script>
 
-
 <style scoped lang='scss'>
     @import './hud.scss';
 </style>
