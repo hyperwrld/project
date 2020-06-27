@@ -7,10 +7,11 @@
             </div>
         </transition>
         <transition name='fade'>
-            <div class='skillbar-container' ref='skillbar'>
+            <div class='skillbar-container' ref='skillbar' v-if='skillbarInfo.status'>
                 <div class='stick' v-bind:style='{ left: skillbarInfo.left + "px" }'></div>
-                <div class='rectangle' ref='rectangle'></div>
-                <!-- <div class='text'>{{ taskbarInfo.text }}</div> -->
+                <div class='rectangle' ref='rectangle' v-bind:style='{ width: skillbarInfo.rectangle.width + "px", left: skillbarInfo.rectangle.left + "px" }'>
+                    <p>{{ (skillbarInfo.counter / 10) + 's' }}</p>
+                </div>
             </div>
         </transition>
     </v-container>
@@ -31,14 +32,10 @@
             window.removeEventListener('message', this.listener);
         },
         mounted() {
-            this.$store.dispatch('taskbar/setSkillbarWidth', { skillbarWidth: this.$refs.skillbar.clientWidth, rectangleWidth: this.$refs.rectangle.clientWidth });
-
             this.listener = window.addEventListener('keypress', (event) => {
                 if (event.keyCode == 97) {
-                    console.log('teste123')
                     this.$store.dispatch('taskbar/moveStick', 'left');
                 } else if (event.keyCode == 100) {
-                    console.log('pqp')
                     this.$store.dispatch('taskbar/moveStick', 'right');
                 }
             }, false);

@@ -1,11 +1,15 @@
 const state = () => ({
     isEnabled: true,
-    minimapData: { top: '0px', left: '0px', width: '0px', height: '0px' },
+    minimapData: {
+        top: '0px', left: '0px', width: '0px', height: '0px'
+    },
     characterData: {
         'health': '0%', 'armour': '0%',
         'hunger': { value: '0%', leftOver: '100%' }, 'thirst': { value: '0%', leftOver: '100%' }, 'breath': { value: '0%', leftOver: '100%' }, 'stress': { value: '0%', leftOver: '100%' },
     },
-    vehicleData: { isOnVehicle: false, isCompassOn: false, time: '00:00', fuel: 0, speed: 0, hasSeatBelt: false, location: '', direction: 0 }
+    vehicleData: {
+        isOnVehicle: false, isCompassOn: false, time: '00:00', fuel: 0, speed: 0, hasSeatBelt: false, location: '', direction: 0
+    }
 })
 
 const actions = {
