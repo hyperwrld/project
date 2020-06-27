@@ -7,11 +7,13 @@ import character from './modules/character';
 import cash from './modules/cash';
 import hud from './modules/hud';
 import notifications from './modules/notifications';
+import taskbar from './modules/taskbar';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
-        dialogs, character, cash, hud, notifications
+        dialogs, character, cash,
+        hud, notifications, taskbar
     }
 })

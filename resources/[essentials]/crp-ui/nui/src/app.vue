@@ -1,6 +1,6 @@
 <template>
     <v-app>
-        <cash/><hud/><notifications/>
+        <cash/><hud/><notifications/><taskbar/>
         <component :is='currentComponent' v-if='isEnabled'/>
         <dialogs v-if='isEnabled'/>
     </v-app>
@@ -16,11 +16,12 @@
     import cash from './components/cash/cash.vue';
     import hud from './components/hud/hud.vue';
     import notifications from './components/notifications/notifications.vue';
+    import taskbar from './components/taskbar/taskbar.vue';
 
     export default {
         name: 'app',
         components: {
-            character, dialogs, cash, hud, notifications
+            character, dialogs, cash, hud, notifications, taskbar
         },
         computed: {
             ...mapState({
@@ -81,6 +82,9 @@
                     case 'setCustomAlert':
                         this.$store.dispatch('notifications/setCustomAlert', event.data.alertData);
                         break;
+                    case 'setTaskbar':
+                        this.$store.dispatch('taskbar/setTaskbar', event.data.taskbarData);
+                        break;
                     case 'closeMenu':
                         this.isEnabled = false;
                         break;
@@ -94,6 +98,7 @@
 
 <style lang='scss'>
     @import 'https://unpkg.com/vue2-animate/dist/vue2-animate.min.css';
+    @import 'https://fonts.googleapis.com/css2?family=Quantico&display=swap';
 
     html, body {
         background-color: transparent;
