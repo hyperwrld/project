@@ -107,7 +107,7 @@ Citizen.CreateThread(function()
 
                 if IsControlJustReleased(0, 38) then
                     if vehicleFuel < 100 then
-                        TriggerServerEvent('crp-fuelsystem:checkFuelValue', vehicleFuel, isNearPump)
+                        TriggerServerEvent('crp-fuelsystem:checkFuelValue', vehicleFuel, vehicle)
                     else
                         TriggerEvent('crp-ui:setAlert', { text = 'O depósito do veículo já está cheio.', type = 'inform' })
                     end
@@ -135,6 +135,35 @@ Citizen.CreateThread(function()
 			Citizen.Wait(math.ceil(pumpDistance * 20))
 		end
     end
+end)
+
+RegisterNetEvent('crp-fuelsystem:refuelVehicle')
+AddEventHandler('crp-fuelsystem:refuelVehicle', function(time, vehicle)
+    ClearPedSecondaryTask(playerPed)
+    TaskTurnPedToFaceEntity(playerPed, vehicle, 1000)
+
+    if not HasAnimDictLoaded('weapon@w_sp_jerrycan') then
+		RequestAnimDict('weapon@w_sp_jerrycan')
+
+		while not HasAnimDictLoaded('weapon@w_sp_jerrycan') do
+			Citizen.Wait(0)
+		end
+    end
+
+    TaskPlayAnim(playerPed, 'weapon@w_sp_jerrycan', 'fire', 8.0, 1.0, -1, 1, 0, 0, 0, 0)
+
+    TriggerEvent('crp-ui:setTaskbar', { text = 'Abastecer', time = time }, function(data)
+        if data.status then
+            DecorSetInt(vehicle, 'currentFuel', 100)
+        else
+            local fuel = DecorGetInt(vehicle, 'currentFuel')
+
+            DecorSetInt(vehicle, 'currentFuel', math.ceil((100 - fuel) * (data.percentage / 100) + fuel))
+        end
+
+        ClearPedTasks(playerPed)
+        RemoveAnimDict('weapon@w_sp_jerrycan')
+    end)
 end)
 
 function FindNearestFuelPump()
