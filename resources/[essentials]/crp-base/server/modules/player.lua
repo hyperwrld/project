@@ -196,11 +196,11 @@ function CRP.Player:CreateCharacter(source, data)
 		if type(money) == 'number' then
 			local newMoney = self.money + money
 
-			self.money = newMoney
+			self.money = math.floor(newMoney)
 
             -- This is used for every UI component to tell them money was just added
 
-            TriggerClientEvent('crp-ui:addMoney', self.source, money)
+            TriggerClientEvent('crp-ui:addMoney', self.source, math.floor(money))
 		else
 			print('ERROR: There seems to be an issue while adding money, a different type then number was trying to be added.')
 		end
@@ -212,11 +212,11 @@ function CRP.Player:CreateCharacter(source, data)
 		if type(money) == 'number' then
 			local newMoney = self.money - money
 
-			self.money = newMoney
+            self.money = math.floor(newMoney)
 
 			-- This is used for every UI component to tell them money was just removed
 
-			TriggerClientEvent('crp-ui:removeMoney', self.source, money)
+			TriggerClientEvent('crp-ui:removeMoney', self.source, math.floor(money))
 		else
 			print('ERROR: There seems to be an issue while removing money, a different type then number was trying to be removed.')
 		end
@@ -228,7 +228,7 @@ function CRP.Player:CreateCharacter(source, data)
 		if type(money) == 'number' then
 			local newBank = self.bank + money
 
-			self.bank = newBank
+			self.bank = math.floor(newBank)
 		else
 			print('ERROR: There seems to be an issue while adding to bank, a different type then number was trying to be added.')
 		end
@@ -240,7 +240,7 @@ function CRP.Player:CreateCharacter(source, data)
 		if type(money) == 'number' then
 			local newBank = self.bank - money
 
-			self.bank = newBank
+			self.bank = math.floor(newBank)
 		else
 			print('ERROR: There seems to be an issue while removing from bank, a different type then number was trying to be removed.')
 		end
