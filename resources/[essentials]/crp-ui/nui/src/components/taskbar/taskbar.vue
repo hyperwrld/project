@@ -28,16 +28,29 @@
                 skillbarInfo: state => state.taskbar.skillbarInfo,
             })
         },
+        data() {
+            return {
+                isDown: false
+            }
+        },
         destroyed() {
             window.removeEventListener('message', this.listener);
         },
         mounted() {
-            this.listener = window.addEventListener('keypress', (event) => {
-                if (event.keyCode == 97) {
+            this.listener = window.addEventListener('keydown', (event) => {
+                // if (this.isDown || !this.skillbarInfo.status) return;
+
+                // this.isDown = true;
+
+                if (event.keyCode == 65) {
                     this.$store.dispatch('taskbar/moveStick', 'left');
-                } else if (event.keyCode == 100) {
+                } else if (event.keyCode == 68) {
                     this.$store.dispatch('taskbar/moveStick', 'right');
                 }
+            }, false);
+
+            window.addEventListener('keyup', (event) => {
+                this.isDown = false;
             }, false);
         }
     };
