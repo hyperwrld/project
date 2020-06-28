@@ -49,12 +49,14 @@ const mutations = {
 
                 nui.send('finishedTask');
             }
-        }, data.time);
+        }, (data.time * 1000) / 100);
     },
     stopTaskbar(state) {
         clearInterval(state.taskbarInfo.interval);
 
         state.taskbarInfo.status = false;
+
+        nui.send('canceledTask', state.taskbarInfo.progress);
     },
     setSkillbar(state, data) {
         state.skillbarInfo.status = true, state.skillbarInfo.difficulty.status = data.difficulty, state.skillbarInfo.skillbarWidth = window.innerWidth * 0.125;
