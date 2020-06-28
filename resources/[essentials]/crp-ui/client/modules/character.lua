@@ -4,8 +4,8 @@ RegisterNUICallback('disconnect', function(data, cb)
     cb(true)
 end)
 
-RegisterNUICallback('error', function(message, cb)
-    exports['crp-notifications']:SendAlert('error', message)
+RegisterNUICallback('error', function(errorMessage, cb)
+    TriggerEvent('crp-ui:setAlert', { text = errorMessage, type = 'error' })
 
     cb(true)
 end)
@@ -24,7 +24,7 @@ RegisterNUICallback('createCharacter', function(characterData, cb)
             errorMessage = data.message
         end
 
-        exports['crp-notifications']:SendAlert('error', errorMessage)
+        TriggerEvent('crp-ui:setAlert', { text = errorMessage, type = 'error' })
 
         cb({ status = false })
         return
@@ -37,7 +37,7 @@ RegisterNUICallback('deleteCharacter', function(characterId, cb)
     local data = CRP.RPC:execute('DeleteCharacter', characterId)
 
     if not data.status then
-        exports['crp-notifications']:SendAlert('error', 'Ocorreu um erro ao eliminar a sua personagem, contacte um administrado, caso o problema continue.')
+        TriggerEvent('crp-ui:setAlert', { text = 'Ocorreu um erro ao eliminar a sua personagem, contacte um administrado, caso o problema continue.', type = 'error' })
 
         cb({ status = false })
         return
@@ -50,7 +50,7 @@ RegisterNUICallback('selectCharacter', function(characterId, cb)
     local data = CRP.RPC:execute('SelectCharacter', characterId)
 
     if not data and data ~= nil then
-        exports['crp-notifications']:SendAlert('error', 'Ocorreu um erro ao carregar a sua personagem, contacte um administrador se isto continuar.')
+        TriggerEvent('crp-ui:setAlert', { text = 'Ocorreu um erro ao carregar a sua personagem, contacte um administrador se isto continuar.', type = 'error' })
         return
     end
 
