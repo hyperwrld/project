@@ -27,13 +27,13 @@ AddEventHandler('crp-ui:setTaskbar', function(data, callback)
     end
 end)
 
-RegisterNUICallback('finishedTask', function(cb, data)
+RegisterNUICallback('finishedTask', function(data, cb)
     isDoingAction, wasCancelled = false, false
 
     cb(true)
 end)
 
-RegisterNUICallback('canceledTask', function(cb, data)
+RegisterNUICallback('canceledTask', function(data, cb)
     isDoingAction, wasCancelled, percentage = false, true, data
 
     cb(true)

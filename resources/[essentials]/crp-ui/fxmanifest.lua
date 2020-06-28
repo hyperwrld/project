@@ -12,7 +12,8 @@ client_scripts {
     'client/modules/character.lua',
     'client/modules/cash.lua',
     'client/modules/hud.lua',
-    'client/modules/notifications.lua'
+    'client/modules/notifications.lua',
+    'client/modules/taskbar.lua'
 }
 
 server_scripts {
