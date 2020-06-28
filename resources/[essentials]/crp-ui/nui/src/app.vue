@@ -85,6 +85,9 @@
                     case 'setTaskbar':
                         this.$store.dispatch('taskbar/setTaskbar', event.data.taskbarData);
                         break;
+                    case 'stopTaskbar':
+                        this.$store.dispatch('taskbar/stopTaskbar');
+                        break;
                     case 'setSkillbar':
                         this.$store.dispatch('taskbar/setSkillbar', event.data.skillbarData);
                         break;

@@ -1,6 +1,6 @@
 RegisterNetEvent('crp-ui:setAlert')
 AddEventHandler('crp-ui:setAlert', function(data)
-    SendNUIMessage({ eventName = 'setAlert', alertData = { text = data.text, type = data.type }})
+    SendNUIMessage({ eventName = 'setAlert', alertData = { text = data.text, type = data.type, time = data.time }})
 end)
 
 RegisterNetEvent('crp-ui:setCustomAlert')

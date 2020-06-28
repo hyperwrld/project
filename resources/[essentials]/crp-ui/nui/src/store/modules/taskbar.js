@@ -1,3 +1,5 @@
+import nui from '../../utils/nui';
+
 const state = () => ({
     taskbarInfo: { status: false, text: '...', progress: 0, interval: null },
     skillbarInfo: {
@@ -14,6 +16,9 @@ const state = () => ({
 const actions = {
     setTaskbar(state, data) {
         state.commit('setTaskbar', data);
+    },
+    stopTaskbar(state) {
+        state.commit('stopTaskbar');
     },
     setSkillbar(state, data) {
         state.commit('setSkillbar', data);
@@ -41,8 +46,15 @@ const mutations = {
                 clearInterval(state.taskbarInfo.interval);
 
                 state.taskbarInfo.status = false;
+
+                nui.send('finishedTask');
             }
         }, data.time);
+    },
+    stopTaskbar(state) {
+        clearInterval(state.taskbarInfo.interval);
+
+        state.taskbarInfo.status = false;
     },
     setSkillbar(state, data) {
         state.skillbarInfo.status = true, state.skillbarInfo.difficulty.status = data.difficulty, state.skillbarInfo.skillbarWidth = window.innerWidth * 0.125;
