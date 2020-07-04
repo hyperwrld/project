@@ -1,19 +1,20 @@
-function CreateInventory(name, items, maxWeight)
-	local self = {}
+function CreateInventory(data, items)
+    local self = {}
 
-    self.name      = name
-    self.maxWeight = maxWeight or 325
+    self.name      = data.name
+    self.maxWeight = data.maxWeight or 325
+    self.maxSlots  = data.maxSlots or 40
     self.items     = items or {}
 
-    self.addItem = function(name, slot, count, meta)
-        table.insert(self.items, { name = name, slot = slot, count = count, meta = meta or nil })
+    self.addItem = function(itemData, slot, count)
+        table.insert(self.items, { name = itemData.name, slot = slot, count = count, meta = itemData.meta })
 
-        exports.ghmattimysql:execute('INSERT INTO inventory (name, item, slot, count, meta) VALUES (@name, @item, @slot, @count, @meta);',
-        { ['@name'] = self.name, ['@item'] = name, ['@slot'] = slot, ['@count'] = count, ['@meta'] = json.encode(meta) or nil })
+        exports.ghmattimysql:execute('INSERT INTO inventory (name, item, count, slot, meta) VALUES (@name, @item, @count, @slot, @meta)',
+        { ['@name'] = self.name, ['@item'] = itemData.name, ['@count'] = count, ['@slot'] = slot, ['@meta'] = json.encode(itemData.meta) })
     end
 
     self.updateItem = function(name, slot, count)
-        local item = self.getItem(name, slot)
+        local item = self.getItem(slot)
 
         item.count = count
 
@@ -21,11 +22,20 @@ function CreateInventory(name, items, maxWeight)
         { ['@count'] = count, ['@name'] = self.name, ['@item'] = name, ['@slot'] = slot })
     end
 
-    self.swapItem = function(name, slot, count, meta, _name, _slot)
-        table.insert(self.items, { name = name, slot = slot, count = count, meta = meta or nil })
+    self.swapItem = function(itemData, currentInventory, futureSlot)
+        for i = 1, #self.items, 1 do
+            if tonumber(self.items[i].slot) == tonumber(futureSlot) then
+                table.remove(self.items, i)
+                break
+			end
+        end
 
-        exports.ghmattimysql:execute('UPDATE inventory SET name = @name, slot = @slot WHERE name = @_name AND item = @item AND slot = @_slot;',
-        { ['@name'] = self.name, ['@slot'] = slot, ['@_name'] = _name, ['@item'] = name, ['@_slot'] = _slot })
+        table.insert(self.items, { name = itemData.name, slot = futureSlot, count = itemData.count, meta = itemData.meta })
+
+        exports.ghmattimysql:execute('UPDATE inventory SET name = @futureInventory, slot = @futureSlot WHERE name = @currentInventory AND item = @itemName AND slot = @currentSlot;',
+        { ['@futureInventory'] = self.name, ['@futureSlot'] = futureSlot, ['@currentInventory'] = currentInventory, ['@itemName'] = itemData.name, ['@currentSlot'] = itemData.slot })
+
+        return true
     end
 
     self.removeItem = function(name, slot, state)
@@ -40,11 +50,13 @@ function CreateInventory(name, items, maxWeight)
             exports.ghmattimysql:execute('DELETE from inventory WHERE name = @name AND item = @item AND slot = @slot;',
             { ['@name'] = self.name, ['@item'] = name, ['@slot'] = slot })
         end
+
+        return true
 	end
 
-    self.getItem = function(name, slot)
+    self.getItem = function(slot)
         for i = 1, #self.items, 1 do
-            if tonumber(self.items[i].name) == tonumber(name) and tonumber(self.items[i].slot) == tonumber(slot) then
+            if tonumber(self.items[i].slot) == tonumber(slot) then
 				return self.items[i]
 			end
         end
@@ -82,23 +94,15 @@ function CreateInventory(name, items, maxWeight)
         return nil
     end
 
-    self.canMoveItem = function(item, count, slot)
-        local item, inventoryWeight = self.getItem(name, slot), self.getInventoryWeight()
-
-        if (inventoryWeight + (itemList[item.name].weight * count)) then
-            return true
-        end
-
-        return false
-    end
-
-    self.getInventoryWeight = function()
+    self.getInventoryWeight = function(itemSlot)
         local weight = 0
 
         for i = 1, #self.items, 1 do
-            local item = itemList[self.items[i].name]
+            if not self.items[i].slot == itemSlot then
+                local item = itemsList[self.items[i].name]
 
-            weight = weight + item.weight
+                weight = weight + item.weight
+            end
         end
 
         return weight

@@ -1,196 +1,140 @@
-local dropInventories = {}
+Inventories, DropInventories = {}, {}
 
-inventories, itemList = {}, {}
+-- inventory type: 1 (drop) / 2 (...)
 
-itemList['1737195953']  = { weight = 10, canStack = true }
-itemList['911657153']   = { weight = 10, canStack = true }
-itemList['453432689']   = { weight = 15, canStack = true }
-itemList['-1076751822'] = { weight = 15, canStack = true }
-itemList['137902532']   = { weight = 15, canStack = true }
-itemList['-771403250']  = { weight = 20, canStack = true }
-itemList['1593441988']  = { weight = 15, canStack = true }
-itemList['-619010992']  = { weight = 30, canStack = true }
-itemList['-1121678507'] = { weight = 30, canStack = true }
-itemList['324215364']   = { weight = 30, canStack = true }
-itemList['736523883']   = { weight = 35, canStack = true }
-itemList['1649403952']  = { weight = 45, canStack = true }
-itemList['-1074790547'] = { weight = 55, canStack = true }
-itemList['-2084633992'] = { weight = 55, canStack = true }
+function GetInventories(source, data, callback)
+    local user = exports['crp-base']:GetCharacter(source)
+    local inventoryName = 'character-' .. user.getCharacterID()
 
-AddEventHandler('crp-inventory:moveItem', function(source, data, callback)
-    local lastInventory = GetInventory(data.lastInventory)
-    local item = lastInventory.getItem(data.item, data.lastSlot)
+    if isInventoryLoaded(inventoryName) and isInventoryLoaded(data.name, data) then
+        local items, maxWeight, maxSlots = {}, 1000, 40
 
-    if item and item.count >= data.quantity then
-        if data.inventoryType == 1 and string.find(data.currentInventory, 'drop') then
-            CheckIfInventoryExists(data.currentInventory, data.coords)
+        if Inventories[data.name] then
+            items, maxWeight, maxSlots = Inventories[data.name].items, Inventories[data.name].maxWeight, Inventories[data.name].maxSlots
         end
 
-        local currentInventory = GetInventory(data.currentInventory)
+        callback:resolve({ playerInventory = {
+            name = Inventories[inventoryName].name, items = Inventories[inventoryName].items
+        }, secondaryInventory = {
+            name = data.name, items = items,
+            maxWeight = maxWeight, maxSlots = maxSlots, type = data.type, coords = data.coords
+        }})
+    end
+end
 
-        if (item.count - data.quantity) > 0 then
-            lastInventory.updateItem(data.item, data.lastSlot, (item.count - data.quantity))
-            currentInventory.addItem(data.item, data.currentSlot, data.quantity, nil)
+function MoveItem(source, data, callback)
+    if Inventories[data.currentInventory] == nil then
+        callback:resolve({ status = false })
+        return
+    end
 
-            callback({ status = true, splitItem = true })
-        else
-            lastInventory.removeItem(item.name, item.slot, false)
-            currentInventory.swapItem(item.name, data.currentSlot, item.count, item.meta, data.lastInventory, data.lastSlot)
+    if data.type == 1 and string.find(data.futureInventory, 'drop') then
+        CheckIfDropExists(data.futureInventory, data.coords)
+    elseif Inventories[data.futureInventory] == nil then
+        callback:resolve({ status = false })
+        return
+    end
 
-            if data.inventoryType == 1 and lastInventory.checkIfEmpty() then
-                for i = 1, #dropInventories, 1 do
-                    if dropInventories[i].name == data.lastInventory then
-                        table.remove(dropInventories, i)
+    local status, item = false, Inventories[data.currentInventory].getItem(data.currentIndex)
 
-                        TriggerClientEvent('crp-inventory:updateInventories', -1, dropInventories)
+    if item and item.count >= data.itemCount then
+        local itemFuture = Inventories[data.futureInventory].getItem(data.futureIndex)
+
+        if data.itemCount == 0 then
+            data.itemCount = item.count
+        end
+
+        if itemFuture then
+            if item.name == itemFuture.name and itemsList[item.name].canStack then
+                if (item.count - data.itemCount) > 0 then
+                    if CanMove(data.currentInventory, data.futureInventory, item.name, data.itemCount) then
+                        print('qqqqqqq????')
+                        Inventories[data.currentInventory].updateItem(item.name, data.currentIndex, (item.count - data.itemCount))
+                        Inventories[data.futureInventory].updateItem(item.name, data.futureIndex, (itemFuture.count + data.itemCount))
+
+                        status = true
                     end
+                elseif CanMove(data.currentInventory, data.futureInventory, item.name, item.count) then
+                    print('111111111')
+                    Inventories[data.currentInventory].removeItem(item.name, data.currentIndex, true)
+                    Inventories[data.futureInventory].updateItem(item.name, data.futureIndex, (itemFuture.count + item.count))
+
+                    if Inventories[data.currentInventory].checkIfEmpty() then
+                        DeleteDropInventory(data.currentInventory)
+                    end
+
+                    status = true
                 end
-            end
+            elseif CanMove(data.currentInventory, data.futureInventory, item.name, item.count, itemFuture.slot) and CanMove(data.futureInventory, data.currentInventory, itemFuture.name, itemFuture.count, item.slot) then
+                Inventories[data.currentInventory].swapItem(itemFuture, data.futureInventory, data.currentIndex)
+                Inventories[data.futureInventory].swapItem(item, data.currentInventory, data.futureIndex)
 
-            callback({ status = true, splitItem = false })
-        end
-    else
-        callback({ status = false })
-    end
-end)
-
-AddEventHandler('crp-inventory:swapItems', function(source, data, callback)
-    local lastInventory = GetInventory(data.lastInventory)
-    local item = lastInventory.getItem(data.item, data.lastSlot)
-
-    if item and item.count >= data.quantity then
-        local currentInventory = GetInventory(data.currentInventory)
-        local _item = currentInventory.getItem(data._item, data.currentSlot)
-
-        if _item then
-            if data.canStack and (item.count - data.quantity) > 0 then
-                lastInventory.updateItem(data.item, data.lastSlot, (item.count - data.quantity))
-                currentInventory.updateItem(data.item, data.currentSlot, (_item.count + data.quantity))
-
-                callback({ status = true, stackItems = true, delete = false })
-            else
-                local status = { status = false }
-
-                if data.canStack then
-                    lastInventory.removeItem(data.item, data.lastSlot, true)
-                    currentInventory.updateItem(data.item, data.currentSlot, (_item.count + data.quantity))
-
-                    status = { status = true, stackItems = true, delete = true }
-                elseif (item.count - data.quantity) == 0 then
-                    lastInventory.removeItem(item.name, item.slot, false)
-                    currentInventory.removeItem(_item.name, _item.slot, false)
-
-                    lastInventory.swapItem(_item.name, data.lastSlot, _item.count, _item.meta, data.currentInventory, data.currentSlot)
-                    currentInventory.swapItem(item.name, data.currentSlot, item.count, item.meta, data.lastInventory, data.lastSlot)
-
-                    status = { status = true, swapItems = true }
-                end
-
-                callback(status)
+                status = true
             end
         else
-            callback({ status = false })
+            if (item.count - data.itemCount) > 0 then
+                if CanMove(data.currentInventory, data.futureInventory, item.name, data.itemCount) then
+                    print(item.count, data.itemCount)
+                    Inventories[data.currentInventory].updateItem(item.name, data.currentIndex, (item.count - data.itemCount))
+                    Inventories[data.futureInventory].addItem(item, data.futureIndex, data.itemCount)
+
+                    status = true
+                end
+            elseif CanMove(data.currentInventory, data.futureInventory, item.name, item.count) then
+                Inventories[data.currentInventory].removeItem(item.name, item.slot, false)
+                Inventories[data.futureInventory].swapItem(item, data.currentInventory, data.futureIndex)
+
+                if Inventories[data.currentInventory].checkIfEmpty() then
+                    DeleteDropInventory(data.currentInventory)
+                end
+
+                status = true
+            end
         end
+    end
+
+    if status then
+        callback:resolve({
+            status = true, currentSlot = Inventories[data.currentInventory] and Inventories[data.currentInventory].getItem(data.currentIndex) or {},
+            futureSlot = Inventories[data.futureInventory] and Inventories[data.futureInventory].getItem(data.futureIndex) or {}
+        })
     else
-        callback({ status = false })
+        callback:resolve({ status = false })
     end
-end)
+end
 
-AddEventHandler('crp-inventory:getInventories', function(source, inventory, callback)
-    local user = exports['crp-base']:getCharacter(source)
-    local inventoryName = user.getCharacterInventory()
-
-    if isInventoryLoaded(inventoryName) and isInventoryLoaded(inventory) then
-        callback({ player = inventories[inventoryName].items, secondary = inventories[inventory].items or nil })
-    end
-end)
-
-AddEventHandler('crp-inventory:showActionBar', function(source, data, callback)
-    local user = exports['crp-base']:getCharacter(source)
-    local inventoryName = user.getCharacterInventory()
-
-    if isInventoryLoaded(inventoryName) then
-        callback(inventories[inventoryName].getActionBarItems())
-    end
-end)
-
-AddEventHandler('crp-inventory:getItem', function(source, slot, callback)
-    local user = exports['crp-base']:getCharacter(source)
-    local inventoryName = user.getCharacterInventory()
-
-    if isInventoryLoaded(inventoryName) then
-        callback(inventories[inventoryName].getActionBarItem(slot))
-    end
-end)
-
-RegisterServerEvent('crp-inventory:setWeaponAmmo')
-AddEventHandler('crp-inventory:setWeaponAmmo', function(weapon, slot, ammo)
-    local user = exports['crp-base']:getCharacter(source)
-    local inventoryName = user.getCharacterInventory()
-
-    if isInventoryLoaded(inventoryName) then
-        local inventory = inventories[inventoryName]
-        local item = inventory.getItem(weapon, slot)
-
-        inventory.updateAmmo(weapon, slot, ammo)
-    end
-end)
-
-RegisterServerEvent('crp-inventory:useItem')
-AddEventHandler('crp-inventory:useItem', function(item, slot)
-    local user = exports['crp-base']:getCharacter(source)
-    local inventoryName = user.getCharacterInventory()
-
-    if isInventoryLoaded(inventoryName) then
-        local inventory = inventories[inventoryName]
-        local item = inventory.getItem(item, slot)
-
-        if item and (item.count - 1) > 0 then
-            inventory.updateItem(item.name, slot, (item.count - 1))
-        else
-            inventory.removeItem(item.name, slot, true)
-        end
-    end
-end)
-
-function isInventoryLoaded(name)
-    if inventories[name] ~= nil then
+function isInventoryLoaded(name, data)
+    if Inventories[name] ~= nil then
         return true
     end
 
-    local maxWeight = 325
+    local maxWeight, maxSlots = 325, 40
 
-    if string.find(name, 'drop-') then
-        local found = false
-
-        for i = 1, #dropInventories, 1 do
-            if dropInventories[i].name == name then
-                found = true
-                break
-            end
-        end
-
-        if found then
+    if data then
+        if data.type == 1 then
             return true
         end
-
-        maxWeight = 1000
-    elseif string.find(name, 'character-') then
-        maxWeight = 325
     end
 
-    local isLoading = true
+    return LoadInventory({ name = name, maxWeight = maxWeight, maxSlots = maxSlots })
+end
 
-    exports.ghmattimysql:execute('SELECT * FROM inventory WHERE name = @name;', { ['@name'] = name }, function(result)
-        local inventoriesItems = {}
+function LoadInventory(data)
+    if not data.name or type(data.name) ~= 'string' then return false end
 
-        for k, v in ipairs(result) do
-            if v.name == name then
-                table.insert(inventoriesItems, { name = v.item, slot = v.slot, count = v.count, meta = json.decode(v.meta) })
-            end
+    local query, isLoading = [[SELECT item, count, slot, meta FROM inventory WHERE name = @name;]], true
+
+    exports.ghmattimysql:execute(query, { ['@name'] = data.name }, function(result)
+        local inventoryItems = {}
+
+        for i = 1, #result, 1 do
+            table.insert(inventoryItems, {
+                name = result[i].item, count = result[i].count,
+                slot = result[i].slot, meta = json.decode(result[i].meta)
+            })
         end
 
-        inventories[name], isLoading = CreateInventory(name, inventoriesItems, maxWeight), false
+        Inventories[data.name], isLoading = CreateInventory(data, inventoryItems), false
     end)
 
     while isLoading do
@@ -200,31 +144,69 @@ function isInventoryLoaded(name)
     return true
 end
 
-function CheckIfInventoryExists(inventory, coords)
-    local found = false
-
-    for i = 1, #dropInventories, 1 do
-        if CompareCoords(dropInventories[i].coords, coords) or dropInventories[i].name == inventory then
-            found = true
-            return
-        end
-    end
-
-    if not found then
-        table.insert(dropInventories, { name = inventory, coords = coords })
-
-        TriggerClientEvent('crp-inventory:updateInventories', -1, dropInventories)
-    end
-end
-
-function CompareCoords(coords, _coords)
-    if (coords.x == _coords.x and coords.y == _coords.y and coords.z == _coords.z) then
+function CanMove(currentInventory, futureInventory, itemName, itemQuantity, itemSlot)
+    if currentInventory == futureInventory then
         return true
     end
 
-    return false
+    local inventory = Inventories[futureInventory]
+
+    if (itemsList[itemName].weight * itemQuantity) + inventory.getInventoryWeight(itemSlot) > inventory.maxWeight then
+        return false
+    end
+
+    return true
 end
 
-function GetInventory(name)
-    return inventories[name]
+function CheckIfDropExists(inventoryName, inventoryCoords)
+    local hasFound = false
+
+    for i = 1, #DropInventories, 1 do
+        if DropInventories[i].name == inventoryName or vector3(DropInventories[i].coords) == vector3(inventoryCoords) then
+            hasFound = true
+
+            break
+        end
+    end
+
+    print(hasFound)
+
+    if not hasFound then
+        print('alo alo', inventoryName)
+        LoadInventory({ name = inventoryName, maxWeight = 1000, maxSlots = 40 })
+
+        table.insert(DropInventories, { name = inventoryName, coords = inventoryCoords })
+
+        TriggerClientEvent('crp-inventory:updateDropInventories', -1, DropInventories)
+    end
 end
+
+function DeleteDropInventory(inventoryName)
+    for i = 1, #DropInventories, 1 do
+        print(DropInventories[i].name, inventoryName)
+        if DropInventories[i].name == inventoryName then
+            table.remove(DropInventories, i)
+
+            Inventories[inventoryName] = nil
+
+            TriggerClientEvent('crp-inventory:updateDropInventories', -1, DropInventories)
+            break
+        end
+    end
+end
+
+CRP.RPC:register('GetInventories', function(source, data)
+    local inventoryPromise = promise:new()
+
+    GetInventories(source, data, inventoryPromise)
+
+    return Citizen.Await(inventoryPromise)
+end)
+
+CRP.RPC:register('moveItem', function(source, data)
+    local inventoryPromise = promise:new()
+
+    MoveItem(source, data, inventoryPromise)
+
+    return Citizen.Await(inventoryPromise)
+end)
