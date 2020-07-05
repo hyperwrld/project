@@ -73,7 +73,7 @@ function MoveItem(source, data, callback)
             if (item.count - data.itemCount) > 0 then
                 if Inventories[data.futureInventory].canCarryItem((data.currentInventory == data.futureInventory), item.name, data.itemCount) then
                     Inventories[data.currentInventory].updateInventoryItem(item.name, data.currentIndex, (item.count - data.itemCount))
-                    Inventories[data.futureInventory].addInventoryItem(item, data.futureIndex, data.itemCount)
+                    Inventories[data.futureInventory].addInventoryItem(item.name, data.futureIndex, data.itemCount, item.meta)
 
                     status = true
                 end

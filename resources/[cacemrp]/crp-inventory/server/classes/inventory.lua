@@ -38,7 +38,7 @@ function CreateInventory(data, items)
         self.weight = self.weight + (itemsList[name].weight * count)
 
         exports.ghmattimysql:execute('INSERT INTO inventory (name, item, count, slot, meta) VALUES (@name, @item, @count, @slot, @meta)',
-        { ['@name'] = self.name, ['@item'] = name, ['@count'] = count, ['@slot'] = slot, ['@meta'] = json.encode(meta) })
+        { ['@name'] = self.name, ['@item'] = name, ['@count'] = count, ['@slot'] = slot, ['@meta'] = meta and json.encode(meta) or json.encode({}) })
     end
 
     self.removeInventoryItem = function(name, slot, state)
