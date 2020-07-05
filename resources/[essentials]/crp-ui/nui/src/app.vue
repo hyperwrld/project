@@ -12,6 +12,7 @@
 
     import dialogs from './components/dialogs.vue';
     import character from './components/character/character.vue';
+    import inventory from './components/inventory/inventory.vue';
 
     import cash from './components/cash/cash.vue';
     import hud from './components/hud/hud.vue';
@@ -21,7 +22,7 @@
     export default {
         name: 'app',
         components: {
-            character, dialogs, cash, hud, notifications, taskbar
+            character, dialogs, inventory, cash, hud, notifications, taskbar
         },
         computed: {
             ...mapState({
@@ -40,11 +41,22 @@
             this.listener = window.addEventListener('message', (event) => {
                 switch (event.data.eventName) {
                     case 'toggleMenu':
-                        if (event.data.component == 'character') {
-                            this.$store.dispatch('character/setUserCharacters');
+                        if (event.data.component) {
+                            switch(event.data.component) {
+                                case 'character':
+                                    this.$store.dispatch('character/setUserCharacters');
+                                    break;
+                                case 'inventory':
+                                    this.$store.dispatch('inventory/setInventory', event.data.menuData);
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            this.currentComponent = event.data.component;
                         }
 
-                        this.isEnabled = event.data.status, this.currentComponent = event.data.component;
+                        this.isEnabled = event.data.status;
                         break;
                     case 'setMoneyStatus':
                         this.$store.dispatch('cash/setMoneyStatus', event.data.data);
@@ -90,9 +102,6 @@
                         break;
                     case 'setSkillbar':
                         this.$store.dispatch('taskbar/setSkillbar', event.data.skillbarData);
-                        break;
-                    case 'closeMenu':
-                        this.isEnabled = false;
                         break;
                     default:
                         break;

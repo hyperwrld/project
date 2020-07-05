@@ -63,7 +63,7 @@
             <v-card class='serverInfo' :class='isShowingInfo ? "bigger" : "normal"'>
                 <v-card-text>
                     <div class='post'>
-                        <h3>Update 14/06/2020</h3>
+                        <h3>Info</h3>
                         <v-divider></v-divider>
                         <p>[RENDERING]<br>– Texture streaming now loads textures flagged with no mip maps or no lod at full initial resolution.</p>
                         <p>[MAPS]<br>Chlorine<br>-Added missing glowy eyes texture</p>
@@ -104,7 +104,7 @@
         },
         methods: {
             handleDisconnect: function() {
-                nui.send({ disconnect: true });
+                nui.send('disconnect');
             },
             handleChangeItem: function(index) {
                 if (this.currentItem != index) {

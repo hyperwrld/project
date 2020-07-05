@@ -10,7 +10,7 @@
             <div class='skillbar-container' ref='skillbar' v-if='skillbarInfo.status'>
                 <div class='stick' v-bind:style='{ left: skillbarInfo.left + "px" }'></div>
                 <div class='rectangle' ref='rectangle' v-bind:style='{ width: skillbarInfo.rectangle.width + "px", left: skillbarInfo.rectangle.left + "px" }'>
-                    <p>{{ (skillbarInfo.counter / 10) + 's' }}</p>
+                    <p>{{ (skillbarInfo.counter) + 's' }}</p>
                 </div>
             </div>
         </transition>
@@ -38,9 +38,9 @@
         },
         mounted() {
             this.listener = window.addEventListener('keydown', (event) => {
-                // if (this.isDown || !this.skillbarInfo.status) return;
+                if (this.isDown || !this.skillbarInfo.status) return;
 
-                // this.isDown = true;
+                this.isDown = true;
 
                 if (event.keyCode == 65) {
                     this.$store.dispatch('taskbar/moveStick', 'left');
