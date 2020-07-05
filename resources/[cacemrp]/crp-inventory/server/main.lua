@@ -13,32 +13,30 @@ function GetInventories(source, data, callback)
             items, maxWeight, maxSlots = Inventories[data.name].items, Inventories[data.name].maxWeight, Inventories[data.name].maxSlots
         end
 
-        callback:resolve({ playerInventory = {
+        return { playerInventory = {
             name = Inventories[inventoryName].name, items = Inventories[inventoryName].items
         }, secondaryInventory = {
             name = data.name, items = items,
             maxWeight = maxWeight, maxSlots = maxSlots, type = data.type, coords = data.coords
-        }})
+        }}
     end
 end
 
 function MoveItem(source, data, callback)
     if Inventories[data.currentInventory] == nil then
-        callback:resolve({ status = false })
-        return
+        return { status = false }
     end
 
     if data.type == 1 and string.find(data.futureInventory, 'drop') then
         CheckIfDropExists(data.futureInventory, data.coords)
     elseif Inventories[data.futureInventory] == nil then
-        callback:resolve({ status = false })
-        return
+        return { status = false }
     end
 
-    local status, item = false, Inventories[data.currentInventory].getItem(data.currentIndex)
+    local status, item = false, Inventories[data.currentInventory].getInventoryItem(data.currentIndex)
 
     if item and item.count >= data.itemCount then
-        local itemFuture = Inventories[data.futureInventory].getItem(data.futureIndex)
+        local itemFuture = Inventories[data.futureInventory].getInventoryItem(data.futureIndex)
 
         if data.itemCount == 0 then
             data.itemCount = item.count
@@ -47,46 +45,45 @@ function MoveItem(source, data, callback)
         if itemFuture then
             if item.name == itemFuture.name and itemsList[item.name].canStack then
                 if (item.count - data.itemCount) > 0 then
-                    if CanMove(data.currentInventory, data.futureInventory, item.name, data.itemCount) then
-                        print('qqqqqqq????')
-                        Inventories[data.currentInventory].updateItem(item.name, data.currentIndex, (item.count - data.itemCount))
-                        Inventories[data.futureInventory].updateItem(item.name, data.futureIndex, (itemFuture.count + data.itemCount))
+                    if Inventories[data.futureInventory].canCarryItem((data.currentInventory == data.futureInventory), item.name, data.itemCount) then
+                        Inventories[data.currentInventory].updateInventoryItem(item.name, data.currentIndex, (item.count - data.itemCount))
+                        Inventories[data.futureInventory].updateInventoryItem(item.name, data.futureIndex, (itemFuture.count + data.itemCount))
 
                         status = true
                     end
-                elseif CanMove(data.currentInventory, data.futureInventory, item.name, item.count) then
-                    print('111111111')
-                    Inventories[data.currentInventory].removeItem(item.name, data.currentIndex, true)
-                    Inventories[data.futureInventory].updateItem(item.name, data.futureIndex, (itemFuture.count + item.count))
+                elseif Inventories[data.futureInventory].canCarryItem((data.currentInventory == data.futureInventory), item.name, item.count) then
+                    Inventories[data.currentInventory].removeInventoryItem(item.name, data.currentIndex, true)
+                    Inventories[data.futureInventory].updateInventoryItem(item.name, data.futureIndex, (itemFuture.count + item.count))
 
-                    if Inventories[data.currentInventory].checkIfEmpty() then
-                        DeleteDropInventory(data.currentInventory)
-                    end
+                    -- if Inventories[data.currentInventory].checkIfEmpty() then
+                    --     DeleteDropInventory(data.currentInventory)
+                    -- end
 
                     status = true
                 end
-            elseif CanMove(data.currentInventory, data.futureInventory, item.name, item.count, itemFuture.slot) and CanMove(data.futureInventory, data.currentInventory, itemFuture.name, itemFuture.count, item.slot) then
-                Inventories[data.currentInventory].swapItem(itemFuture, data.futureInventory, data.currentIndex)
-                Inventories[data.futureInventory].swapItem(item, data.currentInventory, data.futureIndex)
+            elseif Inventories[data.futureInventory].canCarryItem((data.currentInventory == data.futureInventory), item.name, item.count, itemFuture.slot) and
+                   Inventories[data.currentInventory].canCarryItem((data.currentInventory == data.futureInventory), itemFuture.name, itemFuture.count, item.slot) then
+
+                Inventories[data.currentInventory].swapInventoryItem(itemFuture, data.futureInventory, data.currentIndex)
+                Inventories[data.futureInventory].swapInventoryItem(item, data.currentInventory, data.futureIndex)
 
                 status = true
             end
         else
             if (item.count - data.itemCount) > 0 then
-                if CanMove(data.currentInventory, data.futureInventory, item.name, data.itemCount) then
-                    print(item.count, data.itemCount)
-                    Inventories[data.currentInventory].updateItem(item.name, data.currentIndex, (item.count - data.itemCount))
-                    Inventories[data.futureInventory].addItem(item, data.futureIndex, data.itemCount)
+                if Inventories[data.futureInventory].canCarryItem((data.currentInventory == data.futureInventory), item.name, data.itemCount) then
+                    Inventories[data.currentInventory].updateInventoryItem(item.name, data.currentIndex, (item.count - data.itemCount))
+                    Inventories[data.futureInventory].addInventoryItem(item, data.futureIndex, data.itemCount)
 
                     status = true
                 end
-            elseif CanMove(data.currentInventory, data.futureInventory, item.name, item.count) then
-                Inventories[data.currentInventory].removeItem(item.name, item.slot, false)
-                Inventories[data.futureInventory].swapItem(item, data.currentInventory, data.futureIndex)
+            elseif Inventories[data.futureInventory].canCarryItem((data.currentInventory == data.futureInventory), item.name, item.count) then
+                Inventories[data.currentInventory].removeInventoryItem(item.name, item.slot, false)
+                Inventories[data.futureInventory].swapInventoryItem(item, data.currentInventory, data.futureIndex)
 
-                if Inventories[data.currentInventory].checkIfEmpty() then
-                    DeleteDropInventory(data.currentInventory)
-                end
+                -- if Inventories[data.currentInventory].checkIfEmpty() then
+                --     DeleteDropInventory(data.currentInventory)
+                -- end
 
                 status = true
             end
@@ -94,12 +91,12 @@ function MoveItem(source, data, callback)
     end
 
     if status then
-        callback:resolve({
-            status = true, currentSlot = Inventories[data.currentInventory] and Inventories[data.currentInventory].getItem(data.currentIndex) or {},
-            futureSlot = Inventories[data.futureInventory] and Inventories[data.futureInventory].getItem(data.futureIndex) or {}
-        })
+        return {
+            status = true, currentSlot = Inventories[data.currentInventory] and Inventories[data.currentInventory].getInventoryItem(data.currentIndex) or {},
+            futureSlot = Inventories[data.futureInventory] and Inventories[data.futureInventory].getInventoryItem(data.futureIndex) or {}
+        }
     else
-        callback:resolve({ status = false })
+        return { status = false }
     end
 end
 
@@ -130,7 +127,7 @@ function LoadInventory(data)
         for i = 1, #result, 1 do
             table.insert(inventoryItems, {
                 name = result[i].item, count = result[i].count,
-                slot = result[i].slot, meta = json.decode(result[i].meta)
+                slot = result[i].slot, meta = result[i].meta and json.decode(result[i].meta) or {}
             })
         end
 
@@ -169,10 +166,7 @@ function CheckIfDropExists(inventoryName, inventoryCoords)
         end
     end
 
-    print(hasFound)
-
     if not hasFound then
-        print('alo alo', inventoryName)
         LoadInventory({ name = inventoryName, maxWeight = 1000, maxSlots = 40 })
 
         table.insert(DropInventories, { name = inventoryName, coords = inventoryCoords })
@@ -183,7 +177,6 @@ end
 
 function DeleteDropInventory(inventoryName)
     for i = 1, #DropInventories, 1 do
-        print(DropInventories[i].name, inventoryName)
         if DropInventories[i].name == inventoryName then
             table.remove(DropInventories, i)
 
@@ -196,17 +189,9 @@ function DeleteDropInventory(inventoryName)
 end
 
 CRP.RPC:register('GetInventories', function(source, data)
-    local inventoryPromise = promise:new()
-
-    GetInventories(source, data, inventoryPromise)
-
-    return Citizen.Await(inventoryPromise)
+    return GetInventories(source, data)
 end)
 
-CRP.RPC:register('moveItem', function(source, data)
-    local inventoryPromise = promise:new()
-
-    MoveItem(source, data, inventoryPromise)
-
-    return Citizen.Await(inventoryPromise)
+CRP.RPC:register('MoveItem', function(source, data)
+    return MoveItem(source, data)
 end)

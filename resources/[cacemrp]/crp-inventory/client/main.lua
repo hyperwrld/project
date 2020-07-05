@@ -108,7 +108,7 @@ function TriggerInventoryAnimation(playerPed)
         Citizen.Wait(0)
     end
 
-    TaskPlayAnim(playerPed,'pickup_object', 'putdown_low',5.0, 1.0, 1.0, 48, 0.0, 0, 0, 0)
+    TaskPlayAnim(playerPed,'pickup_object', 'putdown_low', 5.0, 2.5, 1.0, 48, 0.0, 0, 0, 0)
 end
 
 function DoesDropInventoryExist(inventoryName)
@@ -129,12 +129,14 @@ function GetVehicleInFront(playerPed)
     return entityHit
 end
 
-RegisterNUICallback('crp-ui:getInventories', function(data, cb)
+function RegisterUiCallback(name, func) TriggerEvent('crp-ui:registerNuiCallback', name, func) end
+
+RegisterUiCallback('getInventories', function(data, cb)
     cb(CRP.RPC:execute('GetInventories', data))
 end)
 
-RegisterNUICallback('crp-ui:moveItem', function(moveData, cb)
-    local data = CRP.RPC:execute('moveItem', moveData)
+RegisterUiCallback('moveItem', function(moveData, cb)
+    local data = CRP.RPC:execute('MoveItem', moveData)
 
     if not data.status then
         PlaySoundFrontend(-1, 'ERROR', 'HUD_FRONTEND_DEFAULT_SOUNDSET', false)
