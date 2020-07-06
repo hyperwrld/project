@@ -1,4 +1,4 @@
-local isMenuOpen = false
+local isMenuOpen, isReady = false, false
 
 AddEventHandler('crp-ui:openMenu', function(menuType, data)
     isMenuOpen = true
@@ -17,6 +17,10 @@ AddEventHandler('crp-ui:openMenu', function(menuType, data)
     end)
 end)
 
+AddEventHandler('crp-ui:closeMenu', function()
+    closeMenu()
+end)
+
 function closeMenu()
     isMenuOpen = false
 
@@ -33,6 +37,16 @@ RegisterNUICallback('closeMenu', function(moveData, cb)
     cb(true)
 end)
 
-AddEventHandler('crp-ui:registerNuiCallback', function(name, func)
-    RegisterNUICallback(name, func)
+exports('isNuiCallbackReady', function()
+    return isReady
 end)
+
+function RegisterNuiCallback()
+    AddEventHandler('crp-ui:registerNuiCallback', function(name, func)
+        RegisterNUICallback(name, func)
+    end)
+
+    isReady = true
+end
+
+RegisterNuiCallback()

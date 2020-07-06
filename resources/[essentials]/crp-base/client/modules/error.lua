@@ -5,14 +5,14 @@ local errorWords = {
 }
 
 function Citizen.Trace(...)
-    --oldTrace(...)
+    oldTrace(...)
 
     if type(...) == 'string' then
         args = string.lower(...)
 
         for _, word in ipairs(errorWords) do
             if string.find(args, word) then
-                TriggerServerEvent('crp-base:logClientError', GetCurrentResourceName(), ...)
+                TriggerServerEvent('crp-base:clientError', GetCurrentResourceName(), ...)
                 return
             end
         end

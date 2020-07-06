@@ -7,22 +7,9 @@ ui_page 'nui/dist/index.html'
 client_scripts {
     '@crp-base/shared.lua',
     '@crp-base/client/modules/rpc.lua',
-    -- '@crp-base/client/modules/error.lua',
+    '@crp-base/client/modules/error.lua',
     'client/main.lua',
-    'client/modules/character.lua',
-    'client/modules/cash.lua',
-    'client/modules/hud.lua',
-    'client/modules/notifications.lua',
-    'client/modules/taskbar.lua'
-}
-
-server_scripts {
-    '@crp-base/shared.lua',
-    '@crp-base/server/modules/rpc.lua',
-    '@crp-base/server/modules/utils.lua',
-    '@crp-base/server/modules/database.lua',
-    'server/modules/character.lua',
-    'server/main.lua'
+    'client/modules/*.lua',
 }
 
 files {
