@@ -49,8 +49,8 @@ function CRP.DB:DeleteCharacter(identifier, characterId)
     if not identifier or identifier == '' then return { status = false } end
     if not characterId or type(characterId) ~= 'number' then return { status = false } end
 
-    local query = [[DELETE FROM users WHERE id = ? AND identifier = ?;]]
-    local result = Citizen.Await(CRP.DB:Execute(query, characterId, identifier))
+    local query = [[DELETE FROM users WHERE identifier = ? AND id = ?;]]
+    local result = Citizen.Await(CRP.DB:Execute(query, identifier, characterId))
 
     if not result.changedRows then
         return { status = false }
@@ -59,12 +59,12 @@ function CRP.DB:DeleteCharacter(identifier, characterId)
     return { status = true }
 end
 
-function CRP.DB:RetrieveCharacter(identifier, data, callback)
+function CRP.DB:RetrieveCharacter(identifier, data)
     if not identifier or identifier == '' then return false end
     if not data.characterId or type(data.characterId) ~= 'number' then return false end
 
     local query = [[SELECT * FROM users WHERE identifier = ? AND id = ?;]]
-    local result = Citizen.Await(CRP.DB:Execute(query, characterId, identifier))
+    local result = Citizen.Await(CRP.DB:Execute(query, identifier, data.characterId))
 
     if result == 0 then
         return false
