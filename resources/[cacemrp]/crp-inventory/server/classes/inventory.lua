@@ -104,5 +104,13 @@ function CreateInventory(data, items)
         end
     end
 
+    self.isEmpty = function()
+        if string.find(self.name, 'drop') and #self.items <= 0 then
+            return true
+        end
+
+        return false
+    end
+
     return self
 end
