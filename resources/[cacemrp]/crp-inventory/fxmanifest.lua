@@ -13,7 +13,6 @@ client_scripts {
 server_scripts {
     '@crp-base/shared.lua',
     '@crp-base/server/modules/rpc.lua',
-    '@crp-base/server/modules/database.lua',
     'server/classes/inventory.lua',
     'server/items.lua',
     'server/main.lua'

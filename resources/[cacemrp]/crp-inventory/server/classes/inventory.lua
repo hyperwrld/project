@@ -25,7 +25,7 @@ function CreateInventory(data, items)
     self.getInventoryItem = function(slot)
         for i = 1, #self.items, 1 do
             if self.items[i].slot == slot then
-                return self.items[i]
+                return self.items[i], i
             end
         end
 
@@ -42,12 +42,12 @@ function CreateInventory(data, items)
     end
 
     self.removeInventoryItem = function(name, slot, state)
-        local item = self.getInventoryItem(slot)
+        local item, index = self.getInventoryItem(slot)
 
         if item then
-            self.weight = self.weight - (itemsList[name].weight * item.count)
+            self.weight = self.weight - (itemsList[item.name].weight * item.count)
 
-            table.remove(self.items, item.slot)
+            table.remove(self.items, index)
 
             if state then
                 exports.ghmattimysql:execute('DELETE from inventory WHERE name = @name AND item = @item AND slot = @slot;',
@@ -57,12 +57,12 @@ function CreateInventory(data, items)
     end
 
     self.updateInventoryItem = function(name, slot, count)
-        local item = self.getInventoryItem(slot)
+        local item, index = self.getInventoryItem(slot)
 
         if item then
-            self.weight = (self.weight - (itemsList[name].weight * item.count)) + itemsList[name].weight * count
+            self.weight = (self.weight - (itemsList[item.name].weight * item.count)) + (itemsList[name].weight * count)
 
-            item.count = count
+            self.items[index].count = count
 
             exports.ghmattimysql:execute('UPDATE inventory SET count = @count WHERE name = @name AND item = @item AND slot = @slot;',
             { ['@count'] = count, ['@name'] = self.name, ['@item'] = name, ['@slot'] = slot })
@@ -70,18 +70,21 @@ function CreateInventory(data, items)
     end
 
     self.swapInventoryItem = function(itemData, currentInventory, currentSlot)
-        for i = 1, #self.items, 1 do
-            if self.items[i].slot == currentSlot then
-                self.weight = self.weight - (itemsList[self.items[i].name].weight * self.items[i].count)
+        local item, index = self.getInventoryItem(currentSlot)
 
-                table.remove(self.items, i)
-                break
-			end
+        local weight = 0
+
+        if item then
+            weight = itemsList[item.name].weight * item.count
         end
 
-        self.weight = self.weight + (itemsList[itemData.name].weight * itemData.count)
+        self.weight = (self.weight - weight) + (itemsList[itemData.name].weight * itemData.count)
 
-        table.insert(self.items, { name = itemData.name, slot = currentSlot, count = itemData.count, meta = itemData.meta })
+        if item then
+            self.items[index] = { name = itemData.name, slot = currentSlot, count = itemData.count, meta = itemData.meta }
+        else
+            table.insert(self.items, { name = itemData.name, slot = currentSlot, count = itemData.count, meta = itemData.meta })
+        end
 
         exports.ghmattimysql:execute('UPDATE inventory SET name = @inventory, slot = @slot WHERE name = @currentInventory AND item = @name AND slot = @currentSlot;',
         { ['@inventory'] = self.name, ['@slot'] = currentSlot, ['@currentInventory'] = currentInventory, ['@name'] = itemData.name, ['@currentSlot'] = itemData.slot })
@@ -93,7 +96,7 @@ function CreateInventory(data, items)
         end
 
         if slot then
-            local item = self.getInventoryItem(slot)
+            local item, index = self.getInventoryItem(slot)
 
             return (self.weight - (itemsList[item.name].weight * item.count) + (itemsList[name].weight * count)) <= self.maxWeight
         else

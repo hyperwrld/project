@@ -129,7 +129,9 @@ function GetVehicleInFront(playerPed)
     return entityHit
 end
 
-function RegisterUiCallback(name, func) TriggerEvent('crp-ui:registerNuiCallback', name, func) end
+function RegisterUiCallback(name, func)
+    TriggerEvent('crp-ui:registerNuiCallback', name, func)
+end
 
 RegisterUiCallback('getInventories', function(data, cb)
     cb(CRP.RPC:execute('GetInventories', data))
@@ -145,4 +147,10 @@ RegisterUiCallback('moveItem', function(moveData, cb)
     end
 
     cb(data)
+end)
+
+AddEventHandler('onResourceStop', function(resourceName)
+    if resourceName == 'crp-inventory' then
+        TriggerEvent('crp-ui:closeMenu')
+    end
 end)
