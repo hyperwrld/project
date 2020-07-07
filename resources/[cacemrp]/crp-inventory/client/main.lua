@@ -73,17 +73,37 @@ function openInventory()
                     return
                 end
 
-                local vehicleStatus = GetVehicleDoorLockStatus(vehicle)
+                local minimum, maximum = GetModelDimensions(vehicle)
+                local position = GetOffsetFromEntityInWorldCoords(vehicle, 0.0, minimum - 0.5, 0.0)
 
-                if vehicleStatus == 0 and vehicleStatus == 1 then
-                    local minimum, maximum = GetModelDimensions(vehicle)
-                    local position = GetOffsetFromEntityInWorldCoords(vehicle, 0.0, minimum - 0.5, 0.0)
+                if #(position - GetEntityCoords(playerPed)) < 3.5 then
+                    local vehicleStatus = GetVehicleDoorLockStatus(vehicle)
 
-                    if #(position - GetEntityCoords(playerPed)) then
+                    if vehicleStatus == 0 or vehicleStatus == 1 then
+                        SetVehicleDoorOpen(vehicle, 5, 0, 0)
+
+                        RequestAnimDict('mini@repair')
+
+                        while not HasAnimDictLoaded('mini@repair') do
+                            Citizen.Wait(0)
+                        end
+
+                        TaskTurnPedToFaceEntity(playerPed, vehicle, 1.0)
+
+                        Citizen.Wait(1000)
+
                         TriggerEvent('crp-ui:openMenu', 'inventory', { type = 2, name = 'trunk-' .. GetVehicleNumberPlateText(vehicle) })
+
+                        while true do
+                            if not IsEntityPlayingAnim(playerPed, 'mini@repair', 'fixing_a_player', 3) then
+                                TaskPlayAnim(playerPed, 'mini@repair', 'fixing_a_player', 8.0, -8, -1, 16, 0, 0, 0, 0)
+                            end
+
+                            Citizen.Wait(0)
+                        end
+                    else
+                        TriggerEvent('crp-ui:setAlert', { text = 'O veículo está trancado', type = 'inform' })
                     end
-                else
-                    TriggerEvent('crp-ui:setAlert', { text = 'O veículo está trancado', type = 'inform' })
                 end
             else
                 local inventoryName = 'drop-' .. math.random(0, 100000)
@@ -122,9 +142,9 @@ function DoesDropInventoryExist(inventoryName)
 end
 
 function GetVehicleInFront(playerPed)
-    local position, entity = GetEntityCoords(playerPed), GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 3.0, 0.0)
-    local rayHandle = CastRayPointToPoint(position.x, position.y, position.z, entity.x, entity.y, entity.z, 10, playerPed, 0)
-    local retval, hit, endCoords, surfaceNormal, entityHit = GetRaycastResult(rayHandle)
+    local position, entity = GetEntityCoords(playerPed), GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 2.0, 0.0)
+    local rayHandle = StartShapeTestRay(position.x, position.y, position.z, entity.x, entity.y, entity.z, 10, playerPed, 0)
+    local retval, hit, endCoords, surfaceNormal, entityHit = GetShapeTestResult(rayHandle)
 
     return entityHit
 end

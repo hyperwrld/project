@@ -12,7 +12,6 @@ AddEventHandler('crp-ui:openMenu', function(menuType, data)
 
 			HideHudAndRadarThisFrame()
 			DisableAllControlActions(0)
-			TaskSetBlockingOfNonTemporaryEvents(GetPlayerPed(-1), true)
 		end
     end)
 end)
@@ -27,7 +26,6 @@ function closeMenu()
     SendNUIMessage({ eventName = 'toggleMenu', status = false })
 
 	EnableAllControlActions(0)
-	TaskSetBlockingOfNonTemporaryEvents(GetPlayerPed(-1), false)
 	SetNuiFocus(false, false)
 end
 
