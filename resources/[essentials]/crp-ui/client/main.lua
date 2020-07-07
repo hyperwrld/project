@@ -50,3 +50,9 @@ function RegisterNuiCallback()
 end
 
 RegisterNuiCallback()
+
+AddEventHandler('onResourceStop', function(resourceName)
+    if resourceName == 'crp-ui' then
+        SetNuiFocus(false, false)
+    end
+end)

@@ -48,19 +48,21 @@ const mutations = {
         const from = data.currentInventory == 'player-inventory' ? true : false, to = data.futureInventory == 'player-inventory' ? true : false;
         var fromArray = from ? state.playerInventory.items : state.secondaryInventory.items, toArray = to ? state.playerInventory.items : state.secondaryInventory.items;
 
-        nui.send('moveItem', {
-            currentInventory: from ? state.playerInventory.name : state.secondaryInventory.name, futureInventory: to ? state.playerInventory.name : state.secondaryInventory.name,
-            currentIndex: Number(data.currentIndex) + 1, futureIndex: Number(data.futureIndex) + 1, itemCount: Number(data.itemCount), type: Number(state.secondaryInventory.type), coords: state.secondaryInventory.coords
-        }).then(moveData => {
-            if (moveData.status) {
-                const currentSlotData = moveData.currentSlot ? { itemId: moveData.currentSlot.name, quantity: moveData.currentSlot.count, durability: moveData.currentSlot.durability } : {};
-                const futureSlotData = moveData.futureSlot ? { itemId: moveData.futureSlot.name, quantity: moveData.futureSlot.count, durability: moveData.futureSlot.durability } : {};
+        if ((Number(data.currentIndex) != Number(data.futureIndex)) || (from != to)) {
+            nui.send('moveItem', {
+                currentInventory: from ? state.playerInventory.name : state.secondaryInventory.name, futureInventory: to ? state.playerInventory.name : state.secondaryInventory.name,
+                currentIndex: Number(data.currentIndex) + 1, futureIndex: Number(data.futureIndex) + 1, itemCount: Number(data.itemCount), type: Number(state.secondaryInventory.type), coords: state.secondaryInventory.coords
+            }).then(moveData => {
+                if (moveData.status) {
+                    const currentSlotData = moveData.currentSlot ? { itemId: moveData.currentSlot.name, quantity: moveData.currentSlot.count, durability: moveData.currentSlot.durability } : {};
+                    const futureSlotData = moveData.futureSlot ? { itemId: moveData.futureSlot.name, quantity: moveData.futureSlot.count, durability: moveData.futureSlot.durability } : {};
 
-                fromArray.splice(data.currentIndex, 1, currentSlotData), toArray.splice(data.futureIndex, 1, futureSlotData);
+                    fromArray.splice(data.currentIndex, 1, currentSlotData), toArray.splice(data.futureIndex, 1, futureSlotData);
 
-                this.commit('inventory/calculateWeight');
-            }
-        });
+                    this.commit('inventory/calculateWeight');
+                }
+            });
+        }
     },
     calculateWeight(state) {
         var playerWeight = 0, secondaryWeight = 0;

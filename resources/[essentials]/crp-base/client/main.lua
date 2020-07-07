@@ -51,7 +51,7 @@ function WaitRegisterUiCallback()
     while not isReady do
         Citizen.Wait(1000)
 
-        isReady = exports['crp-nui']:isNuiCallbackReady()
+        isReady = exports['crp-ui']:isNuiCallbackReady()
     end
 
     RegisterUiCallback('disconnect', function(data, cb)
