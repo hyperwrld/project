@@ -5,6 +5,9 @@ end
 function logError(x)
     print("^5[txAdminClientLUA]^1 " .. x .. "^0")
 end
+function unDeQuote(x)
+    return string.gsub(x, utf8.char(65282), '"')
+end
 
 --Check Environment
 local apiPort = GetConvar("txAdmin-apiPort", "invalid")
@@ -20,22 +23,25 @@ end
 
 
 -- Setup threads and commands
+local hbReturnData = 'no-data'
 log("Version "..txAdminClientVersion.." starting...")
-Citizen.CreateThread(function()
+CreateThread(function()
     RegisterCommand("txaPing", txaPing, true)
+    RegisterCommand("txaWarnID", txaWarnID, true)
     RegisterCommand("txaKickAll", txaKickAll, true)
     RegisterCommand("txaKickID", txaKickID, true)
-    RegisterCommand("txaKickIdentifier", txaKickIdentifier, true)
+    RegisterCommand("txaDropIdentifiers", txaDropIdentifiers, true)
     RegisterCommand("txaBroadcast", txaBroadcast, true)
     RegisterCommand("txaSendDM", txaSendDM, true)
     RegisterCommand("txaReportResources", txaReportResources, true)
-    Citizen.CreateThread(function()
+    CreateThread(function()
         while true do
             HeartBeat()
-            Citizen.Wait(3000)
+            Wait(3000)
         end
     end)
     AddEventHandler('playerConnecting', handleConnections)
+    SetHttpHandler(handleHttp)
     log("Threads and commands set up. All Ready.")
 end)
 
@@ -47,19 +53,21 @@ function HeartBeat()
     local players = {}
     for i = 0, playerCount - 1 do
         local player = GetPlayerFromIndex(i)
-        local numIds = GetNumPlayerIdentifiers(player)
-        
-        local ids = {}
-        for j = 0, numIds - 1 do
-            table.insert(ids, GetPlayerIdentifier(player, j))
-        end
-        local playerData = {
-            id = player,
-            identifiers = ids,
-            name = GetPlayerName(player),
-            ping = GetPlayerPing(player)
-        }
-        table.insert(players, playerData)
+		if player ~= nil then
+			local numIds = GetNumPlayerIdentifiers(player)
+
+			local ids = {}
+			for j = 0, numIds - 1 do
+				table.insert(ids, GetPlayerIdentifier(player, j))
+			end
+			local playerData = {
+				id = player,
+				identifiers = ids,
+				name = GetPlayerName(player),
+				ping = GetPlayerPing(player)
+			}
+			table.insert(players, playerData)
+		end
     end
 
     local url = "http://localhost:"..apiPort.."/intercom/monitor"
@@ -70,9 +78,21 @@ function HeartBeat()
     PerformHttpRequest(url, function(httpCode, data, resultHeaders)
         local resp = tostring(data)
         if httpCode ~= 200 then
-            logError("HeartBeat failed with code "..httpCode.." and message: "..resp)
+            hbReturnData = "HeartBeat failed with code "..httpCode.." and message: "..resp
+            logError(hbReturnData)
+        else
+            hbReturnData = resp
         end
     end, 'POST', json.encode(exData), {['Content-Type']='application/json'})
+end
+
+-- HTTP request handler
+function handleHttp(req, res)
+    if req.path == '/stats.json' then
+        return res.send(hbReturnData)
+    else
+        return res.send('')
+    end
 end
 
 -- Ping!
@@ -81,10 +101,32 @@ function txaPing(source, args)
     CancelEvent()
 end
 
+-- Warn specific player via server ID
+function txaWarnID(source, args)
+    if #args == 6 then
+        for k,v in pairs(args) do
+            args[k] = unDeQuote(v)
+        end
+        local id, author, reason, tTitle, tWarnedBy, tInstruction = table.unpack(args)
+        local pName = GetPlayerName(id)
+        if pName ~= nil then
+            TriggerClientEvent('txAdminClient:warn', id, author, reason, tTitle, tWarnedBy, tInstruction)
+            log("Warning "..pName.." with reason: "..reason)
+        else
+            logError('txaWarnID: player not found')
+        end
+    else
+        logError('Invalid arguments for txaWarnID')
+    end
+    CancelEvent()
+end
+
 -- Kick all players
 function txaKickAll(source, args)
     if args[1] == nil then
         args[1] = 'no reason provided'
+    else
+        args[1] = unDeQuote(args[1])
     end
     log("Kicking all players with reason: "..args[1])
     for _, pid in pairs(GetPlayers()) do
@@ -95,36 +137,59 @@ end
 
 -- Kick specific player via server ID
 function txaKickID(source, args)
-    if args[1] ~= nil then
-        if args[2] == nil then
-            args[2] = 'no reason provided'
-        end
-        log("Kicking #"..args[1].." with reason: "..args[2])
-        DropPlayer(args[1], "Kicked for: " .. args[2])
-    else
-        logError('Invalid arguments for txaKickID')
+    if #args ~= 2 then
+        return logError("Invalid arguments for txaKickID")
     end
+    local playerID, quotedMessage = table.unpack(args)
+
+    local dropMessage = 'Kicked with no reason provided.'
+    if quotedMessage ~= nil then dropMessage = unDeQuote(quotedMessage) end
+
+    log("Kicking #"..playerID.." with reason: "..dropMessage)
+    DropPlayer(playerID, dropMessage)
     CancelEvent()
 end
 
--- Kick specific player via identifier
-function txaKickIdentifier(source, args)
-    if args[1] ~= nil then
-        if args[2] == nil then
-            args[2] = 'no reason provided'
-        end
-        log("Kicking "..args[1].." with reason: "..args[2])
-        for _,player in ipairs(GetPlayers()) do
-            local identifiers = GetPlayerIdentifiers(player)
-            for _,id in ipairs(identifiers) do
-                if id == args[1] then
-                    log('Player: ' .. GetPlayerName(player) .. ' (' .. id .. ') kicked')
-                    DropPlayer(player, "Kicked for: " .. args[2])
+-- Kick any player with matching identifiers
+function txaDropIdentifiers(_, args)
+    if #args ~= 2 then
+        return logError("Invalid arguments for txaDropIdentifiers")
+    end
+    local rawIdentifiers, quotedReason = table.unpack(args)
+
+    local dropMessage = 'no reason provided'
+    if quotedReason ~= nil then dropMessage = unDeQuote(quotedReason) end
+
+    local searchIdentifiers = {}
+    for id in string.gmatch(rawIdentifiers, '([^,;%s]+)') do
+        table.insert(searchIdentifiers, id)
+    end
+
+    -- find players to kick
+    local kickCount = 0
+    for _, playerID in pairs(GetPlayers()) do
+        local identifiers = GetPlayerIdentifiers(playerID)
+        if identifiers ~= nil then
+            local found = false
+            for _, searchIdentifier in pairs(searchIdentifiers) do
+                if found then break end
+
+                for _, playerIdentifier in pairs(identifiers) do
+                    if searchIdentifier == playerIdentifier then
+                        log("Kicking #"..playerID.." with message: "..dropMessage)
+                        kickCount = kickCount + 1
+                        DropPlayer(playerID, dropMessage)
+                        found = true
+                        break
+                    end
                 end
             end
+
         end
-    else
-        logError('Invalid arguments for txaKickIdentifier')
+    end
+
+    if kickCount == 0 then
+        log("No players found to kick")
     end
     CancelEvent()
 end
@@ -132,6 +197,8 @@ end
 -- Broadcast admin message to all players
 function txaBroadcast(source, args)
     if args[1] ~= nil and args[2] ~= nil then
+        args[1] = unDeQuote(args[1])
+        args[2] = unDeQuote(args[2])
         log("Admin Broadcast - "..args[1]..": "..args[2])
         TriggerClientEvent("chat:addMessage", -1, {
             args = {
@@ -150,6 +217,8 @@ end
 -- Send admin direct message to specific player
 function txaSendDM(source, args)
     if args[1] ~= nil and args[2] ~= nil and args[3] ~= nil then
+        args[2] = unDeQuote(args[2])
+        args[3] = unDeQuote(args[3])
         local pName = GetPlayerName(args[1])
         if pName ~= nil then
             log("Admin DM to "..pName.." from "..args[2]..": "..args[3])
@@ -205,45 +274,45 @@ end
 
 -- Player connecting handler
 function handleConnections(name, skr, d)
-    local isEnabled = GetConvar("txAdmin-expBanEnabled", "invalid")
-    if isEnabled == "true" then
+    if  GetConvar("txAdmin-checkPlayerJoin", "invalid") == "true" then
         d.defer()
-        local url = "http://localhost:"..apiPort.."/intercom/checkWhitelist"
+        local url = "http://localhost:"..apiPort.."/intercom/checkPlayerJoin"
         local exData = {
             txAdminToken = apiToken,
-            identifiers  = GetPlayerIdentifiers(source)
+            identifiers  = GetPlayerIdentifiers(source),
+            name = name
         }
 
         --Attempt to validate the user
-        Citizen.CreateThread(function()
+        CreateThread(function()
             local attempts = 0
             local isDone = false;
             --Do 5 attempts
             while isDone == false and attempts < 5 do
                 attempts = attempts + 1
-                d.update("Checking whitelist... ("..attempts.."/5)")
+                d.update("[txAdmin] Checking banlist/whitelist... ("..attempts.."/5)")
                 PerformHttpRequest(url, function(httpCode, data, resultHeaders)
                     local resp = tostring(data)
                     if httpCode ~= 200 then
-                        logError("Checking whitelist failed with code "..httpCode.." and message: "..resp)
-                    elseif data == 'whitelist-ok' then
+                        logError("[txAdmin] Checking banlist/whitelist failed with code "..httpCode.." and message: "..resp)
+                    elseif data == 'allow' then
                         if not isDone then
                             d.done()
                             isDone = true
                         end
-                    elseif data == 'whitelist-block' then
+                    else
                         if not isDone then
-                            d.done('[txAdmin] You were banned from this server.')
+                            d.done(data)
                             isDone = true
                         end
                     end
                 end, 'POST', json.encode(exData), {['Content-Type']='application/json'})
-                Citizen.Wait(2000)
+                Wait(2000)
             end
 
             --Block client if failed
             if not isDone then
-                d.done('[txAdmin] Failed to validate your whitelist status. Try again later.')
+                d.done('[txAdmin] Failed to validate your banlist/whitelist status. Try again later.')
                 isDone = true
             end
         end)

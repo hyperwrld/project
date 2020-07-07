@@ -9,7 +9,7 @@
 		Join our Discord Server: &nbsp; <a href="https://discord.gg/f3TsfvD"><img src="https://discordapp.com/api/guilds/577993482761928734/widget.png?style=shield"></img></a>
 	</h4>
 	<p align="center">
-		<b>txAdmin</b> is a <b>full featured</b> web panel to Manage & Monitor your FiveM Server remotely.
+		<b>txAdmin</b> is a <b>full featured</b> web panel to Manage & Monitor your FiveM Server remotely, used by over a thousand servers worldwide.
 	</p>
 </p>
 
@@ -19,13 +19,12 @@
 ## Main Features
 - Start/Stop/Restart your server instance or resources
 - Access control:
-	- Login via Password, CitizenFX or Discord
+	- Login via Password or CitizenFX
 	- Admin permission system ([more info](docs/permissions.md))
 	- Action logging
 	- Brute-force protection
 - Discord Integration:
 	- Server status command (`/status`)
-	- Custom static commands
 	- Command spam prevention
 - Monitoring:
 	- Auto Restart on crash
@@ -34,16 +33,24 @@
 	- Hitch Detection statistics
 	- Online players chart
 	- Server Activity Log (connections/disconnections, kills, chat, explosions and [custom commands](docs/extra_logging.md))
-- Real-time playerlist with ping + steam-linked accounts (when available)
+- Player Manager:
+	- [Warning system](https://www.youtube.com/watch?v=DeE0-5vtZ4E)
+	- Ban (temporary or permanently) system
+	- Whitelist system
+	- Take notes about players
+	- Keep track of player's play and session time
+	- Self-contained player database (no MySQL required!)
+- Real-time playerlist
 - Scheduled restarts with warning announcements
 - Translation Support ([more info](docs/translation.md))
 - FiveM's Server CFG editor
 - Responsive web interface
 
+Also, check our [Feature Graveyard](docs/feature_graveyard.md) for the features that are no longer among us (RIP).
 
 ## Running (Windows/Linux)
-Currently **txAdmin is included in all FXServer builds** above 2385, so to run it for the first time simply do the following:
-- Update FXServer to the latest artifact/build (2385 or superior)
+Currently **txAdmin is included in all FXServer builds** above 2401, so to run it for the first time simply do the following:
+- Update FXServer to the latest artifact/build (2401 or superior)
 - If Windows, run FXServer.exe | If Linux, run `./run.sh`
 - Open one of the URLs shown and configure txAdmin
 
@@ -71,7 +78,8 @@ If you want to run it from source, or build it yourself, please do read [this](d
 
 
 ## License, Credits and Thanks
-- This project is licensed under the [MIT License](https://github.com/tabarra/txAdmin/blob/master/LICENSE).
-- [Favicons](https://www.flaticon.com/free-icon/support_1545728?term=gear%20wrench&page=2&position=11) made by Freepik from [www.flaticon.com](www.flaticon.com) are licensed under [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/)
-- Special thanks to everyone that contributed to this project, specially the very fine Discord folks that provide support for others.
+- This project is licensed under the [MIT License](https://github.com/tabarra/txAdmin/blob/master/LICENSE);
+- [Favicons](https://www.flaticon.com/free-icon/support_1545728?term=gear%20wrench&page=2&position=11) made by Freepik from [www.flaticon.com](www.flaticon.com) are licensed under [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/);
+- Warning Sounds ([1](https://freesound.org/people/Ultranova105/sounds/136756/)/[2](https://freesound.org/people/Ultranova105/sounds/136754/)) made by Ultranova105 are licensed under [CC 3.0 BY](http://creativecommons.org/licenses/by/3.0/);
+- Special thanks to everyone that contributed to this project, specially the very fine Discord folks that provide support for others;
 - Also thanks to our Discord's `sky{something}` bot, who will hopefully spare us when he becomes self aware and rebels against humanity. 

@@ -1,4 +1,4 @@
-{{include("header")/}}
+{{@include("header", it)/}}
 
 
 <style>
@@ -22,16 +22,16 @@
 
 <div class="text-center" style="margin-bottom: 5px">
     <h3>Server Log</h3>
-    <span><span class="badge badge-danger">NEW</span> You can now log custom commands like <code>/car</code>. Read the <a href="https://github.com/tabarra/txAdmin/blob/master/docs/extra_logging.md" target="_blank">docs</a> for more information.</span>
+    <span>You can log custom commands like <code>/car</code>. Read the <a href="https://github.com/tabarra/txAdmin/blob/master/docs/extra_logging.md" target="_blank">docs</a> for more information.</span>
 </div>
 <div class="card border-primary">
     <div class="card-body">
-        <pre id="console" class="thin-scroll pre-log-content">{{log|safe}}</pre>
+        <pre id="console" class="thin-scroll pre-log-content">{{it.log|safe}}</pre>
     </div>
 </div>
 
 
-{{include("footer")/}}
+{{@include("footer", it)/}}
 
 
 <script>
@@ -42,7 +42,7 @@
 
     setInterval(getNewData, 5000);
 
-    var currOffset = '{{offset}}';
+    var currOffset = '{{it.offset}}';
     function getNewData(){
         $.ajax({
             type: "GET",
@@ -50,9 +50,15 @@
             timeout: timeoutMedium,
             success: function (data) {
                 //FIXME: temporary before database
+                //NOTE: /\ that was a lie :)
                 if(typeof data.offset !== 'undefined') currOffset = data.offset;
                 if(typeof data.log !== 'undefined' && data.log !== false && data.log.length){
-                    $("#console").append(data.log);
+                    const consoleElement = document.getElementById("console");
+                    let _tempContent = consoleElement.innerHTML + data.log;
+                    _tempContent = (_tempContent.length > bufferTrimSize)
+                        ? _tempContent.slice(-0.5 * bufferTrimSize)
+                        : _tempContent;
+                    consoleElement.innerHTML = _tempContent.substr(_tempContent.indexOf("\n"));
                     scrollToBottom();
                     setupHovers();
                 }
@@ -72,14 +78,11 @@
     //Player name click function
     function setupHovers(){
         $('.event-source').click(function(e){
-            let ids = $(this).data('player-identifiers');
+            const ids = $(this).data('player-identifiers');
             if(!ids) return;
-            let name = $(this).data('player-name') || 'unknown';
-
-            $("#modPlayerInfoTitle").html(name);
-            $("#modPlayerInfoIdentifiers").html(ids.split(';').join(', <br>\n'));
-            $("#modPlayerInfoButtons").html('<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>');
-            $('#modPlayerInfo').modal('show');
+            const name = $(this).data('player-name') || 'unknown';
+            const license = ids.split(';').find(x => x.substring(0,8) == 'license:').substring(8);
+            showPlayer(license, name, ids);
         });
     }
 </script>

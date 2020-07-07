@@ -1,141 +1,96 @@
-## TODO Conversion
-> didn't keep track of what came before, but basically: new auth system, from express to koa
-> v2.0.0-conv
-- [x] why auto login when creating master doesn't work??
-- [x] acessar /auth?logout da state mismatch
-- [x] wrong ip, check x-forwarded-for
-- [x] do I still need the clientCompatVersion convar? No
-- [x] build path to the global info - check for globals.fxRunner.something
-- [x] add txDataPath convar + docs
-- [x] reorganize globals.info.xxx
-- [x] remover messages.json temporariamente
-- [x] add the stdout sniffer for wrong port and hangs (*must* be improved tho)
-- [x] Fix bug: new profile > save global settings > reload page > fxserver: both will be undefined
-- [x] clean this dumb file
-- [x] perform end2end test
-> v2.0.0-rc1
-- [x] when you open the settings page, go directly to the fxserver tab
-- [x] fix broken authorization
-- [x] fix `run.cmd` compatibility with build 2270
-- [x] increase ajax timeouts
-- [x] disable resources page buttons when you don't have permission to use them
-- [x] fix scrollbars and colors from the live console page
-- [x] update packages - npm outdated
-> v2.0.0-rc2
-- [x] minor interface tweaks
-- [x] improve responsivity on smaller monitors (between 1474 and 900 width)
-- [x] clean custom.css an rename it to txAdmin.css
-- [x] hide memory usage on linux?
-- [x] change (fix?) cpu usage on diagnostics page
-- [x] disable editing the master admin by other admins
-- [x] join action/console log and protect with permission
-- [x] end2end test + beta testers run
-- [x] fix linux run.sh reference
-- [x] update readme
-> v2.0.0
-- [x] improved docs and messages/strings
-- [x] allow for admin names with 3 characters due to discourse rules
-- [x] increased CitizenFX openid-client time skew tolerances to 2 hours 
-> v2.0.1
-- [x] improve user onboarding experience by adding an wizzard/stepper setup
-- [x] fix arabic language and merge language PRs
-- [x] add text-truncate (class) to playerlist
-> v2.1.0
-- [x] Remove maxsize for some Setup Wizard inputs
-> v2.1.1
-- [x] make player list dynamic and searchable
-- [x] clean up the resource injector?
-- [x] Rename basePath to serverDataPath
-- [x] Change code exchange error messages
-> v2.2.0
-- [x] Rework the entire monitor
-- [x] Change all the `monitor.statusServer` references
-- [x] fix bug: resources page when you type then delete what you typed, it shows hidden default resources
-> v2.3.0
-- [x] fix /status showing objects instead of player count
-- [x] fix playerlist not updating the ping colors
-- [x] fixed double server spawning bug
-> v2.3.1
-- [x] rename `extensions` folder to `scripts` nad adjust webpack
-- [x] upgrade packages (Note: discord.js v12 didn't work)
-- [x] improved error handling for code exchange errors and increased timeout
-- [x] create debug playerlist generator
-- [x] created `globals.servicebus` to replace "temporary" variables
-- [x] added FXServer update checker
-- [x] improved monitor handling of very low-spec servers 
-- [x] add greek + pt_pt
-> v2.4.0
-- [ ] add an fxserver changelog page
+## TODO v2
+> v2.5.1
+- [x] validate that min session time is valid
+- [x] fix revoke button always visible
+- [x] add player/action search feature
+- [x] add search button for player modal
+- [x] adapt all modal actions to offline players
+- [x] change Server Log page to use the new modal
+- [x] upgrade to Discord.js v12
+- [x] upgrade to squirrelly 8 (omg why sooo hard???)
+- [x] convert cl_logger.js to lua
+- [x] set autostart as default, but only call spawnfunc if the cfg/data paths are set
+- [x] improve input readability in low-contrast monitors (css tweak)
+- [x] action revoking based on permission
+- [x] give `manage.admins` permission to edit their social IDs
+- [x] convert discordBot to use a commands folder
+- [x] discord bot: add /addwl command
+- [x] discord bot: change settings to accept prefix
+- [x] remove html tags from kick messages (hopefully temporarily)
+- [x] update dependencies
+- [x] add stats endpoint
+- [x] replace timestamp function in update checking
+- [x] build test + version bump
+> v2.6.0
+- [ ] xxx
 
-> Soon™
-- [ ] convert cl_logger.js to lua, and stop it when not in `monitorMode`
+TODO: Bot commands:
+/ban <mention> <time> <reason>
+/unban <ban-id>
+/info - shows your info like join date and play time
+/info <mention> - shows someone else's info
+/addwl <wl req id>
+/addwl <license>
+/addwl <mention>
+/removewl <mention>
+/log <mention> - shows the last 5 log entries for an discord identifier
+/kick <mention>
+
+> Soon™ (hopefully the next update)
+- [ ] discord bot: re-add spam limiter
+- [ ] adapt kick messages to use some basic HTML formatting and 🆃🆇🅰🅳🅼🅸🅽
+- [ ] check why scheduled restarts are not kicking players
+- [ ] add sv endpoint to say the whitelist/banlist usage
+- [ ] use the new fd3 stream (added on 2427, ask ferrum before dropping support for older fxserver)
+- [ ] break player page into `Players` and `Player Access`
+        - `Player Access` will only contain the whitelist and band ids cards
+        - `Players` will have a central search and will show players and actions at the same time
+- [ ] monitor checks for duplicate active users every 10 minutes, then reports in diagnostics page
+- [ ] check everything done for xss
+- [ ] apply the new action log html to the modal
+- [ ] make `fxRunner.srvCmd()` itself perform the escaping
+- [ ] replace `clone` with `lodash/clonedeep` and check the places where I'm doing `Object.assign()` for shallow clones
+- [ ] add `<fivem://connect/xxxxx>` to `/status` by getting `web_baseUrl` maybe from the heartbeat
+- [ ] add ban server-side ban cache (last 500 bans?), updated on every ban change 
+- [ ] add a commend system?
+- [ ] add stopwatch (or something) to the db functions and print on `/diagnostics`
+- [ ] change webserver token every time the server starts
+
+
+> Soon™® (hopefully in two months or so)
+- [ ] get all functions from `web\public\js\txadmin\players.js` and wrap in some object.
+- [ ] add some chart to the players page?
+- [ ] the weekly playtime counter per user?
+- [ ] tweak dashboard update checker behavior
+- [ ] add an fxserver changelog page
 - [ ] Social auth provider setup retry every 15 seconds
 - [ ] show error when saving discord settings with wrong token
-
-
-How to fix the restart loop problem:
-- [x] launch fxserver directly instead of using `cmd.exe /c` or `/bin/sh`
-- [x] create fxRunner.history[] with pid, ts.started, ts.killed, ts.exited, ts.closed
-- [x] create fxRunner.getStatus()
-- [x] make monitor use the fxRunner.getStatus()
-- [x] make monitor show status on the interface when monitor status != online
-- [ ] make fxRunner.spawn() wait for last history = closed
-- [ ] add fxRunner.history[] card to the diagnostics interface
-Another idea:
-    - wait for the last one to close for up to 15 seconds
-    - cache all the endpoint_add_xxx commands
-    - start server
-    - if it errors out, try to execute those commands again
-For the monitor:
-    - create checkStatus, that will check the timestamp of the last successfull client heartbeat and /info heartbeat
-    - execute it every 1 second
-    - execute /info heartbeat in the same setInterval
-
-
-# For the new access control system
-- vRP grabs the first matched ID
-- esx uses licenses
-- For txAdmin:
-    - `players` table: index by license ID
-        - Name (overwrite on every update)
-        - Last connection timestamp
-        - Notes
-        - Online time counter
-    - `ids_events`
-        - timestamp
-        - IDs array
-        - author (the admin name)
-        - type [ban|warn]
-        - message (reason)
-
-- How do I do whitelisting in a smart way? 
-    - By license? 
-    - By any ID? 
-    - Could we add a temp ID to memory and show it on the `deferral.done()`? 
-
-
+- [ ] break down playerController into separate files!
+- [ ] rename playerController to playerManager?
 
 ## "in the roadmap"
 - [ ] Check config management libraries (specially 'convict' by Mozilla and nconf)
-- [ ] Make messages/commands.json via lowdb and remove the `Players online` and `File reloaded` spam.
-- [ ] Add "discord client id" in the admin settings, this would enable "/kick @user"
-- [ ] Hide the verbosity option. People don't fucking read and click on it anyway,
+- [ ] revisit the issue with server restarting too fast (before close) and the the bind failing, causing restart loop. Almost all cases were windows server 2012.
 - [ ] xxxxxx
 
+=======================================
 
-## ETC
+## CLTR+C+V
 ```bash
 # run
 cd /e/FiveM/builds
-npx nodemon --watch "2339/citizen/system_resources/monitor/src/*" --exec "2339/FXServer.exe +set txAdminVerbose truex"
+nodemon --watch "2627/citizen/system_resources/monitor/src/*" --exec "2627/FXServer.exe +set txAdmin1337 IKnowWhatImDoing +set txAdminVerbose truex +set txAdminFakePlayerlist yesplzx"
 
 # build
-cd /e/FiveM/builds/2339/citizen/system_resources/monitor
+cd /e/FiveM/builds/2627/citizen/system_resources/monitor
 rm -rf dist
 npm run build
 
 # upgrade util:
 npm-upgrade
+
+# F8
+con_miniconChannels script:monitor*
 ```
 
 ### Links + random stuff
@@ -229,7 +184,11 @@ tasks:
       pattern: 's/wtf/ftw/g'
   - append_file:
       path: server.cfg
-      data: |
+      data: 
          start wtfwtf
          start uberadmin
 ```
+
+
+### the ace permissions editor thing
+https://discordapp.com/channels/192358910387159041/450373719974477835/724266730024861717
