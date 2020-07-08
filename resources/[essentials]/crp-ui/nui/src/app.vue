@@ -103,6 +103,11 @@
                     case 'setSkillbar':
                         this.$store.dispatch('taskbar/setSkillbar', event.data.skillbarData);
                         break;
+                    case 'setActionBar':
+                        this.$store.dispatch('inventory/setActionBar', { status: event.data.status, items: event.data.actionData });
+
+                        this.isEnabled = event.data.status, this.currentComponent = 'inventory';
+                        break;
                     default:
                         break;
                 }

@@ -49,6 +49,10 @@ end
 
 RegisterNuiCallback()
 
+AddEventHandler('crp-ui:sendNuiMessage', function(data)
+    SendNUIMessage(data)
+end)
+
 AddEventHandler('onResourceStop', function(resourceName)
     if resourceName == 'crp-ui' then
         SetNuiFocus(false, false)

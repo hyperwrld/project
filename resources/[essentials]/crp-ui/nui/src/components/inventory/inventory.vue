@@ -1,6 +1,6 @@
 <template>
-    <v-container fluid>
-        <div class='inventory'>
+    <v-container fluid :class='{ background: statusData.inventory }'>
+        <div class='inventory' v-if='statusData.inventory && !statusData.actionbar'>
             <div class='inventory-info'>
                 <div class='player-info'>
                     <div class='inventory-name'>
@@ -65,6 +65,7 @@
                 </div>
             </div>
         </div>
+        <actionbar v-else-if='statusData.actionbar'/>
     </v-container>
 </template>
 
@@ -72,13 +73,15 @@
     import { Drag, Drop } from 'vue-easy-dnd';
     import { mapState } from 'vuex';
 
+    import actionbar from './actionbar/actionbar'
+
     import nui from '../../utils/nui';
     import items from './items';
 
     export default {
         name: 'inventory',
         components: {
-            Drag, Drop
+            Drag, Drop, actionbar
         },
         data() {
             return {
@@ -89,7 +92,8 @@
         computed: {
             ...mapState({
                 playerInventory: state => state.inventory.playerInventory,
-                secondaryInventory: state => state.inventory.secondaryInventory
+                secondaryInventory: state => state.inventory.secondaryInventory,
+                statusData: state => state.inventory.statusData
             })
         },
         methods: {
@@ -112,6 +116,8 @@
                 }
             },
             closeMenu() {
+                this.statusData.inventory = false;
+
                 nui.send('closeMenu');
             }
         },

@@ -2,8 +2,10 @@ import nui from '../../utils/nui';
 import itemsList from '../../components/inventory/items';
 
 const state = () => ({
+    statusData: { inventory: false, actionbar: false },
     playerInventory: { name: 'undefined', weight: 0, maxWeight: 325, items: [] },
-    secondaryInventory: { name: 'undefined', type: 0, weight: 0, maxWeight: 1000, items: [], coords: {} }
+    secondaryInventory: { name: 'undefined', type: 0, weight: 0, maxWeight: 1000, items: [], coords: {} },
+    actionItems: []
 })
 
 const actions = {
@@ -15,6 +17,9 @@ const actions = {
     },
     calculateWeight(state) {
         state.commit('calculateWeight');
+    },
+    setActionBar(state, data) {
+        state.commit('setActionBar', data);
     }
 }
 
@@ -43,6 +48,8 @@ const mutations = {
 
             this.commit('inventory/calculateWeight');
         });
+
+        state.statusData.inventory = true;
     },
     moveItem(state, data) {
         const from = data.currentInventory == 'player-inventory' ? true : false, to = data.futureInventory == 'player-inventory' ? true : false;
@@ -80,6 +87,21 @@ const mutations = {
         }
 
         state.playerInventory.weight = playerWeight, state.secondaryInventory.weight = secondaryWeight;
+    },
+    setActionBar(state, data) {
+        if (data.items) {
+            state.actionItems = [];
+
+            for (let i = 0; i < 4; i++) {
+                if (data.items[i]) {
+                    state.actionItems.push({ itemId: data.items[i].name, quantity: data.items[i].count, durability: data.items[i].durability });
+                } else {
+                    state.actionItems.push({});
+                }
+            }
+        }
+
+        state.statusData.actionbar = data.status;
     }
 }
 

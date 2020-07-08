@@ -112,5 +112,17 @@ function CreateInventory(data, items)
         return false
     end
 
+    self.getActionBarData = function()
+        local items = {}
+
+        for i = 1, #self.items, 1 do
+            if self.items[i].slot >= 1 and self.items[i].slot <= 4 then
+                items[self.items[i].slot] = { name = self.items[i].name, count = self.items[i].count, durability = self.items[i].durability }
+            end
+        end
+
+        return items
+    end
+
     return self
 end

@@ -1,8 +1,8 @@
 Inventories, DropInventories = {}, {}
 
--- inventory type: 1 (drop) / 2 (...)
+-- inventory type: 1 (drop) / 2 (trunk) / 3 (glovebox) / 4 (...)
 
-function GetInventories(source, data, callback)
+function GetInventories(source, data)
     local user = exports['crp-base']:GetCharacter(source)
     local inventoryName = 'character-' .. user.getCharacterID()
 
@@ -22,7 +22,7 @@ function GetInventories(source, data, callback)
     end
 end
 
-function MoveProcess(source, data, callback)
+function MoveProcess(source, data)
     if Inventories[data.currentInventory] == nil then
         return { status = false }
     end
@@ -44,16 +44,16 @@ function MoveProcess(source, data, callback)
         end
 
         if itemFuture then
-            return swapItem(item, itemFuture, data)
+            return SwapItem(item, itemFuture, data)
         else
-            return moveItem(item, data)
+            return MoveItem(item, data)
         end
     end
 
     return { status = false }
 end
 
-function swapItem(item, itemFuture, data)
+function SwapItem(item, itemFuture, data)
     local status = false
 
     if item.name == itemFuture.name and itemsList[item.name].canStack then
@@ -100,7 +100,7 @@ function swapItem(item, itemFuture, data)
     return { status = false }
 end
 
-function moveItem(item, data)
+function MoveItem(item, data)
     local status = false
 
     if (item.count - data.itemCount) > 0 then
@@ -136,6 +136,24 @@ function moveItem(item, data)
     end
 
     return { status = false }
+end
+
+function GetActionBarData(source)
+    local user = exports['crp-base']:GetCharacter(source)
+    local inventoryName = 'character-' .. user.getCharacterID()
+
+    if isInventoryLoaded(inventoryName) then
+        return Inventories[inventoryName].getActionBarData()
+    end
+end
+
+function GetItem(source, slot)
+    local user = exports['crp-base']:GetCharacter(source)
+    local inventoryName = 'character-' .. user.getCharacterID()
+
+    if isInventoryLoaded(inventoryName) then
+        return Inventories[inventoryName].getInventoryItem(slot)
+    end
 end
 
 function isInventoryLoaded(name, data)
@@ -236,4 +254,12 @@ end)
 
 CRP.RPC:register('MoveItem', function(source, data)
     return MoveProcess(source, data)
+end)
+
+CRP.RPC:register('GetActionBarData', function(source)
+    return GetActionBarData(source)
+end)
+
+CRP.RPC:register('GetItem', function(source, slot)
+    return GetItem(source, slot)
 end)

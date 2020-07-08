@@ -1,11 +1,55 @@
-local dropInventories = {}
+dropInventories, isShowingTaskbar = {}, false
 
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
 
-        if IsControlJustReleased(0, 289) then
+        if IsControlJustReleased(0, 289) and IsInputDisabled(0) and not isUsingItem then
             openInventory()
+        end
+
+        if not isShowingTaskbar and (IsDisabledControlJustPressed(0, 37)) then
+            isShowingTaskbar = true
+
+            SendUiMessage({ eventName = 'setActionBar', status = true, actionData = CRP.RPC:execute('GetActionBarData') })
+        end
+
+        if isShowingTaskbar and (IsDisabledControlReleased(0, 37)) then
+            SendUiMessage({ eventName = 'setActionBar', status = false })
+
+            isShowingTaskbar = false
+        end
+
+        if IsControlJustPressed(0, 157) and not isUsingItem then
+            if not isWeaponEquiped or (isWeaponEquiped and weaponSlot ~= 1) then
+                UseItem(1)
+            elseif isWeaponEquiped then
+                Holster()
+            end
+        end
+
+        if IsControlJustPressed(0, 158) and not isUsingItem then
+            if not isWeaponEquiped or (isWeaponEquiped and weaponSlot ~= 2) then
+                UseItem(2)
+            elseif isWeaponEquiped then
+                Holster()
+            end
+        end
+
+        if IsControlJustPressed(0, 160) and not isUsingItem then
+            if not isWeaponEquiped or (isWeaponEquiped and weaponSlot ~= 3) then
+                UseItem(3)
+            elseif isWeaponEquiped then
+                Holster()
+            end
+        end
+
+        if IsControlJustPressed(0, 164) and not isUsingItem then
+            if not isWeaponEquiped or (isWeaponEquiped and weaponSlot ~= 4) then
+                UseItem(4)
+            elseif isWeaponEquiped then
+                Holster()
+            end
         end
     end
 end)
@@ -32,9 +76,21 @@ Citizen.CreateThread(function()
 	end
 end)
 
-RegisterNetEvent('crp-inventory:updateDropInventories')
-AddEventHandler('crp-inventory:updateDropInventories', function(newInventories)
-	dropInventories = newInventories
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(0)
+
+        DisableControlAction(0, 14, true)
+        DisableControlAction(0, 15, true)
+        DisableControlAction(0, 16, true)
+        DisableControlAction(0, 17, true)
+        DisableControlAction(0, 37, true)
+        DisableControlAction(0, 99, true)
+
+        DisableControlAction(0, 100, true)
+        DisableControlAction(0, 115, true)
+        DisableControlAction(0, 116, true)
+    end
 end)
 
 function openInventory()
@@ -88,6 +144,12 @@ function openInventory()
                             Citizen.Wait(0)
                         end
 
+                        -- RequestAnimDict('amb@prop_human_bum_bin@idle_b')
+
+                        -- while not HasAnimDictLoaded('amb@prop_human_bum_bin@idle_b') do
+                        --     Citizen.Wait(0)
+                        -- end
+
                         TaskTurnPedToFaceEntity(playerPed, vehicle, 1.0)
 
                         Citizen.Wait(1000)
@@ -98,6 +160,10 @@ function openInventory()
                             if not IsEntityPlayingAnim(playerPed, 'mini@repair', 'fixing_a_player', 3) then
                                 TaskPlayAnim(playerPed, 'mini@repair', 'fixing_a_player', 8.0, -8, -1, 16, 0, 0, 0, 0)
                             end
+
+                            -- if not IsEntityPlayingAnim(playerPed, 'amb@prop_human_bum_bin@idle_b', 'idle_d', 3) then
+                            --     TaskPlayAnim(playerPed, 'amb@prop_human_bum_bin@idle_b', 'idle_d', 8.0, -8, -1, 16, 0, 0, 0, 0)
+                            -- end
 
                             Citizen.Wait(0)
                         end
@@ -121,38 +187,6 @@ function openInventory()
     end
 end
 
-function TriggerInventoryAnimation(playerPed)
-    RequestAnimDict('pickup_object')
-
-    while not HasAnimDictLoaded('pickup_object') do
-        Citizen.Wait(0)
-    end
-
-    TaskPlayAnim(playerPed,'pickup_object', 'putdown_low', 5.0, 2.5, 1.0, 48, 0.0, 0, 0, 0)
-end
-
-function DoesDropInventoryExist(inventoryName)
-    for i = 1, #dropInventories, 1 do
-        if dropInventories[i].name == inventoryName then
-            return true
-        end
-    end
-
-    return false
-end
-
-function GetVehicleInFront(playerPed)
-    local position, entity = GetEntityCoords(playerPed), GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 2.0, 0.0)
-    local rayHandle = StartShapeTestRay(position.x, position.y, position.z, entity.x, entity.y, entity.z, 10, playerPed, 0)
-    local retval, hit, endCoords, surfaceNormal, entityHit = GetShapeTestResult(rayHandle)
-
-    return entityHit
-end
-
-function RegisterUiCallback(name, func)
-    TriggerEvent('crp-ui:registerNuiCallback', name, func)
-end
-
 RegisterUiCallback('getInventories', function(data, cb)
     cb(CRP.RPC:execute('GetInventories', data))
 end)
@@ -167,6 +201,11 @@ RegisterUiCallback('moveItem', function(moveData, cb)
     end
 
     cb(data)
+end)
+
+RegisterNetEvent('crp-inventory:updateDropInventories')
+AddEventHandler('crp-inventory:updateDropInventories', function(newInventories)
+	dropInventories = newInventories
 end)
 
 AddEventHandler('onResourceStop', function(resourceName)
