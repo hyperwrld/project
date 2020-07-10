@@ -42,7 +42,7 @@ function CRP.Player:CreateCharacter(source, data)
 	else
         self.job = json.decode(data.job)
 
-        TriggerClientEvent('crp-jobmanager:updateJob', source, self.job.name, self.job.label, true)
+        TriggerClientEvent('crp-base:updateJob', source, self.job.name, CRP.JobsList[self.job.name].label, true)
     end
 
     if data.skin == nil then
@@ -115,9 +115,9 @@ function CRP.Player:CreateCharacter(source, data)
 		if DoesJobExist(job, grade) then
 			local jobObject = jobs[job]
 
-            self.job.name, self.job.label, self.job.grade = job, jobObject.label, grade
+            self.job.name, self.job.grade = job, grade
 
-			TriggerClientEvent('crp-jobmanager:updateJob', self.source, job, jobObject.label, true)
+			TriggerClientEvent('crp-base:updateJob', self.source, self.job.name, CRP.JobsList[self.job.name], true)
 		else
 			print('ERROR: There seems to be an issue while setting a job, due to not founding the job.')
 		end
@@ -158,19 +158,6 @@ function CRP.Player:CreateCharacter(source, data)
     self.getPhoneNumber = function()
         return self.phone
     end
-
-	-- Returns the player coords
-
-	self.getPosition = function()
-		return self.coords
-	end
-
-	-- Sets the player coords, note this won't actually set the players coords on the client.
-	-- So don't use this, it's for internal use
-
-	self.setPosition = function(x, y, z)
-		self.coords = { x = x, y = y, z = z }
-	end
 
 	self.getStatus = function()
 		return self.status
@@ -260,12 +247,6 @@ function CRP.Player:CreateCharacter(source, data)
 
 	self.getCharacterID = function()
 		return self.id
-    end
-
-    -- Returns character inventory name
-
-    self.getCharacterInventory = function()
-        return 'character-' .. self.id
     end
 
 	return self

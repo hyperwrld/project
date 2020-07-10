@@ -25,7 +25,10 @@ CRP.Commands = {
     end},
     {'dinheiro', 'Utilize este comando para conseguir ver o seu dinheiro.', {}, function(source, args)
         TriggerClientEvent('crp-ui:setMoneyStatus', source, { status = true, time = 5000 })
-    end}
+    end},
+    {'recrutar', 'Recrute uma pessoa para a sua organização.', {{ name = 'id do jogador' }, { name = 'cargo' }}, function(source, args)
+        --- TODO: COMMAND
+    end},
 }
 
 function CRP.Commands:RegisterCommands()

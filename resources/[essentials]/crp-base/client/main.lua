@@ -41,6 +41,25 @@ AddEventHandler('crp-base:spawnPlayer', function(data)
     FreezeEntityPosition(GetPlayerPed(-1), false)
 end)
 
+RegisterNetEvent('crp-base:updateJob')
+AddEventHandler('crp-base:updateJob', function(job, name, notify)
+    if notify then
+        local text = 'Novo trabalho: ' .. name .. '.'
+
+        if job == 'unemployed' then
+            text = 'Estás desempregado.'
+        end
+
+        TriggerEvent('crp-ui:setAlert', { type = 'inform', text = text, time = 3500 })
+    end
+
+    if job == 'unemployed' then
+		SetPedRelationshipGroupDefaultHash(GetPlayerPed(-1), GetHashKey('PLAYER'))
+    end
+
+    TriggerEvent('crp-userinfo:updateJob', job)
+end)
+
 function RegisterUiCallback(name, func)
     TriggerEvent('crp-ui:registerNuiCallback', name, func)
 end
