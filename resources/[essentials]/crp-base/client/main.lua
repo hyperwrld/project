@@ -57,7 +57,7 @@ AddEventHandler('crp-base:updateJob', function(job, name, notify)
 		SetPedRelationshipGroupDefaultHash(GetPlayerPed(-1), GetHashKey('PLAYER'))
     end
 
-    TriggerEvent('crp-userinfo:updateJob', job)
+    TriggerEvent('crp-base:updateCurrentJob', job)
 end)
 
 function RegisterUiCallback(name, func)

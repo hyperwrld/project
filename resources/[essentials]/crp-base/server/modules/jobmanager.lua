@@ -69,7 +69,7 @@ AddEventHandler('crp-base:leaveJobService', function(name)
 
     Citizen.Wait(1000)
 
-    TriggerClientEvent('crp-userinfo:updateService', source, name, false)
+    TriggerClientEvent('crp-base:updateJobService', source, name, false)
 end)
 
 RegisterServerEvent('crp-base:joinJobService')
@@ -80,5 +80,5 @@ AddEventHandler('crp-base:joinJobService', function(name)
 
     Citizen.Wait(1000)
 
-    TriggerClientEvent('crp-userinfo:updateService', source, name, true)
+    TriggerClientEvent('crp-base:updateJobService', source, name, true)
 end)
