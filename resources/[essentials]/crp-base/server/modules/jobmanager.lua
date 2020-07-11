@@ -23,7 +23,7 @@ function CRP.Jobs:DeliverPaychecks()
 
         local salary = math.floor((CRP.JobsList[characterJob.name].salary) + (CRP.JobsList[characterJob.name].salary * (tonumber(characterJob.grade) / 10)))
 
-        player.addBank(salary)
+        character.addBank(salary)
 
         TriggerClientEvent('crp-ui:setAlert', character.source, { type = 'inform', text = 'Acabaste de receber o teu salario de ' .. salary .. '€.' })
     end
