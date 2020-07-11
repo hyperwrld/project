@@ -15,7 +15,7 @@ end
 CRP.Jobs:GetJobsList()
 
 function CRP.Jobs:DeliverPaychecks()
-    local characters = GetAllCharacters()
+    local characters = CRP.Characters or {}
 
     for i = 1, #characters, 1 do
         local character = characters[i]
@@ -28,7 +28,7 @@ function CRP.Jobs:DeliverPaychecks()
         TriggerClientEvent('crp-ui:setAlert', character.source, { type = 'inform', text = 'Acabaste de receber o teu salario de ' .. salary .. '€.' })
     end
 
-    SetTimeout(5 * 60000, CRP.Jobs:DeliverPaychecks)
+    SetTimeout(5 * 60000, CRP.Jobs.DeliverPaychecks)
 end
 
 CRP.Jobs:DeliverPaychecks()
