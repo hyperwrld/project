@@ -33,12 +33,17 @@ AddEventHandler('crp-base:spawnPlayer', function(data)
         TriggerEvent('crp-skincreator:setPedFeatures', data)
     end
 
-    TriggerServerEvent('crp-apartments:spawnSelection', newCharacter)
+    TriggerServerEvent('crp-apartments:selectMotel', isNewCharacter)
 
     Citizen.Wait(1000)
 
     SetPlayerInvincible(GetPlayerPed(-1), false)
     FreezeEntityPosition(GetPlayerPed(-1), false)
+end)
+
+AddEventHandler('crp-base:spawnSelection', function(spawnPoint)
+    print(spawnPoint, ' llçll')
+    CRP.Spawn:InitializeSpawnSelection(spawnPoint)
 end)
 
 RegisterNetEvent('crp-base:updateJob')
@@ -134,6 +139,18 @@ function WaitRegisterUiCallback()
         Citizen.Wait(4000)
 
         TriggerEvent('crp-ui:closeMenu')
+
+        cb(true)
+    end)
+
+    RegisterUiCallback('changeSelection', function(index, cb)
+        CRP.Spawn:ChangeSelection(index)
+
+        cb(true)
+    end)
+
+    RegisterUiCallback('confirmSpawn', function(data, cb)
+        CRP.Spawn:SpawnCharacter()
 
         cb(true)
     end)
