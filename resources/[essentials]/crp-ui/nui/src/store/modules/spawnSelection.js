@@ -26,7 +26,9 @@ const mutations = {
 
         nui.send('changeSelection', index + 1);
     },
-    confirmSpawn() {
+    confirmSpawn(state) {
+        this.commit('app/setAppData', { status: false });
+
         nui.send('confirmSpawn');
     }
 }

@@ -1,6 +1,6 @@
 <template>
-    <v-container fluid :class='{ background: statusData.inventory }'>
-        <div class='inventory' v-if='statusData.inventory && !statusData.actionbar'>
+    <v-container fluid>
+        <div class='inventory'>
             <div class='inventory-info'>
                 <div class='player-info'>
                     <div class='inventory-name'>
@@ -28,13 +28,13 @@
                             <template v-slot:drag-image>
                                 <div class='item-info' v-if='itemCount != 0 && itemCount <= slot.quantity '>{{ itemCount }} [{{ itemsList[slot.itemId].weight.toFixed(2) }}]</div>
                                 <div class='item-info' v-else>{{ slot.quantity }} [{{ itemsList[slot.itemId].weight.toFixed(2) }}]</div>
-                                <div class='item-image'><img v-bind:src='require("./../../assets/" + itemsList[slot.itemId].image)'></div>
+                                <div class='item-image'><img v-bind:src='require("./../../../assets/" + itemsList[slot.itemId].image)'></div>
                                 <div class='item-durability' v-if='slot.durability >= 5' :style='{ width: slot.durability + "%" }'>{{ slot.durability }}</div><div class='item-durability destroyed' v-else>Destruído</div>
                                 <div class='item-name'>{{ itemsList[slot.itemId].name }}</div>
                             </template>
 
                             <div class='item-info'>{{ slot.quantity }} [{{ itemsList[slot.itemId].weight.toFixed(2) }}]</div>
-                            <div class='item-image'><img v-bind:src='require("./../../assets/" + itemsList[slot.itemId].image)'></div>
+                            <div class='item-image'><img v-bind:src='require("./../../../assets/" + itemsList[slot.itemId].image)'></div>
                             <div class='item-durability' v-if='slot.durability >= 5' :style='{ width: slot.durability + "%" }'>{{ slot.durability }}</div><div class='item-durability destroyed' v-else>Destruído</div>
                             <div class='item-name'>{{ itemsList[slot.itemId].name }}</div>
                         </drag>
@@ -51,13 +51,13 @@
                             <template v-slot:drag-image>
                                 <div class='item-info' v-if='itemCount != 0 && itemCount <= slot.quantity '>{{ itemCount }} [{{ itemsList[slot.itemId].weight.toFixed(2) }}]</div>
                                 <div class='item-info' v-else>{{ slot.quantity }} [{{ itemsList[slot.itemId].weight.toFixed(2) }}]</div>
-                                <div class='item-image'><img v-bind:src='require("./../../assets/" + itemsList[slot.itemId].image)'></div>
+                                <div class='item-image'><img v-bind:src='require("./../../../assets/" + itemsList[slot.itemId].image)'></div>
                                 <div class='item-durability' v-if='slot.durability >= 5' :style='{ width: slot.durability + "%" }'>{{ slot.durability }}</div><div class='item-durability destroyed' v-else>Destruído</div>
                                 <div class='item-name'>{{ itemsList[slot.itemId].name }}</div>
                             </template>
 
                             <div class='item-info'>{{ slot.quantity }} [{{ itemsList[slot.itemId].weight.toFixed(2) }}]</div>
-                            <div class='item-image'><img v-bind:src='require("./../../assets/" + itemsList[slot.itemId].image)'></div>
+                            <div class='item-image'><img v-bind:src='require("./../../../assets/" + itemsList[slot.itemId].image)'></div>
                             <div class='item-durability' v-if='slot.durability >= 5' :style='{ width: slot.durability + "%" }'>{{ slot.durability }}</div><div class='item-durability destroyed' v-else>Destruído</div>
                             <div class='item-name'>{{ itemsList[slot.itemId].name }}</div>
                         </drag>
@@ -65,7 +65,6 @@
                 </div>
             </div>
         </div>
-        <actionbar v-else-if='statusData.actionbar'/>
     </v-container>
 </template>
 
@@ -73,15 +72,13 @@
     import { Drag, Drop } from 'vue-easy-dnd';
     import { mapState } from 'vuex';
 
-    import actionbar from './actionbar/actionbar'
-
-    import nui from '../../utils/nui';
-    import items from './items';
+    import nui from '../../../utils/nui';
+    import items from '../items';
 
     export default {
         name: 'inventory',
         components: {
-            Drag, Drop, actionbar
+            Drag, Drop
         },
         data() {
             return {
@@ -92,8 +89,7 @@
         computed: {
             ...mapState({
                 playerInventory: state => state.inventory.playerInventory,
-                secondaryInventory: state => state.inventory.secondaryInventory,
-                statusData: state => state.inventory.statusData
+                secondaryInventory: state => state.inventory.secondaryInventory
             })
         },
         methods: {
@@ -116,9 +112,7 @@
                 }
             },
             closeMenu() {
-                this.statusData.inventory = false;
-
-                nui.send('closeMenu');
+                this.$store.dispatch('app/setAppData', { status: false });
             }
         },
         destroyed() {

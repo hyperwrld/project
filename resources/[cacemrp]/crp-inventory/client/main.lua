@@ -11,11 +11,11 @@ Citizen.CreateThread(function()
         if not isShowingTaskbar and (IsDisabledControlJustPressed(0, 37)) then
             isShowingTaskbar = true
 
-            SendUiMessage({ eventName = 'setActionBar', status = true, actionData = CRP.RPC:execute('GetActionBarData') })
+            SendUiMessage({ eventName = 'toggleMenu', status = true, component = 'actionbar', menuData = CRP.RPC:execute('GetActionBarData') })
         end
 
         if isShowingTaskbar and (IsDisabledControlReleased(0, 37)) then
-            SendUiMessage({ eventName = 'setActionBar', status = false })
+            SendUiMessage({ eventName = 'toggleMenu', status = false, component = 'actionbar' })
 
             isShowingTaskbar = false
         end

@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
+import app from './modules/app';
 import dialogs from './modules/dialogs';
 
 import character from './modules/character';
@@ -17,7 +18,8 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
-        dialogs, character, spawnSelection, inventory, vehicleshop, cash,
-        hud, notifications, taskbar
+        app, dialogs,
+        character, spawnSelection, inventory, vehicleshop,
+        cash, hud, notifications, taskbar
     }
 })

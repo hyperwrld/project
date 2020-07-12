@@ -1,8 +1,8 @@
 <template>
     <v-app>
         <cash/><hud/><notifications/><taskbar ref='teste'/>
-        <component :is='currentComponent' v-if='isEnabled'/>
-        <dialogs v-if='isEnabled'/>
+        <component :is='appData.currentComponent' v-if='appData.isEnabled'/>
+        <dialogs v-if='appData.isEnabled'/>
     </v-app>
 </template>
 
@@ -14,7 +14,8 @@
 
     import character from './components/character/character.vue';
     import spawnSelection from './components/spawnSelection/spawnSelection.vue';
-    import inventory from './components/inventory/inventory.vue';
+    import inventory from './components/inventory/main/inventory.vue';
+    import actionbar from './components/inventory/actionbar/actionbar.vue';
     import vehicleshop from './components/vehicleshop/vehicleshop.vue';
 
     import cash from './components/cash/cash.vue';
@@ -25,17 +26,12 @@
     export default {
         name: 'app',
         components: {
-            dialogs, character, spawnSelection, inventory, vehicleshop, cash, hud, notifications, taskbar
+            dialogs, character, spawnSelection, inventory, actionbar, vehicleshop, cash, hud, notifications, taskbar
         },
         computed: {
             ...mapState({
-                charactersData: state => state.character.userCharacters
+                appData: state => state.app
             }),
-        },
-        data() {
-            return {
-                isEnabled: false, currentComponent: 'character'
-            }
         },
         destroyed() {
             window.removeEventListener('message', this.listener);
@@ -52,17 +48,18 @@
                                 case 'inventory':
                                     this.$store.dispatch('inventory/setInventory', event.data.menuData);
                                     break;
+                                case 'actionbar':
+                                    this.$store.dispatch('inventory/setActionBar', event.data.menuData);
+                                    break;
                                 case 'spawnSelection':
-                                    this.$store.dispatch('spawnSelection/setSpawnSelection', event.data.menuData)
+                                    this.$store.dispatch('spawnSelection/setSpawnSelection', event.data.menuData);
                                     break;
                                 default:
                                     break;
                             }
-
-                            this.currentComponent = event.data.component;
                         }
 
-                        this.isEnabled = event.data.status;
+                        this.$store.dispatch('app/setAppData', { status: event.data.status, component: event.data.component });
                         break;
                     case 'setMoneyStatus':
                         this.$store.dispatch('cash/setMoneyStatus', event.data.data);
@@ -108,11 +105,6 @@
                         break;
                     case 'setSkillbar':
                         this.$store.dispatch('taskbar/setSkillbar', event.data.skillbarData);
-                        break;
-                    case 'setActionBar':
-                        this.$store.dispatch('inventory/setActionBar', { status: event.data.status, items: event.data.actionData });
-
-                        this.isEnabled = event.data.status, this.currentComponent = 'inventory';
                         break;
                     default:
                         break;

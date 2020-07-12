@@ -16,7 +16,6 @@
 <script>
     import { mapState } from 'vuex';
 
-    import nui from '../../../utils/nui';
     import items from '../items';
 
     export default {

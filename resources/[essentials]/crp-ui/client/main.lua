@@ -4,6 +4,7 @@ AddEventHandler('crp-ui:openMenu', function(menuType, data)
     isMenuOpen = true
 
     SendNUIMessage({ eventName = 'toggleMenu', status = true, component = menuType, menuData = data })
+
     SetNuiFocus(true, true)
 
     Citizen.CreateThread(function()
@@ -17,20 +18,22 @@ AddEventHandler('crp-ui:openMenu', function(menuType, data)
 end)
 
 AddEventHandler('crp-ui:closeMenu', function()
-    closeMenu()
+    closeMenu(true)
 end)
 
-function closeMenu()
+function closeMenu(state)
     isMenuOpen = false
 
-    SendNUIMessage({ eventName = 'toggleMenu', status = false })
+    if state then
+        SendNUIMessage({ eventName = 'toggleMenu', status = false })
+    end
 
 	EnableAllControlActions(0)
 	SetNuiFocus(false, false)
 end
 
 RegisterNUICallback('closeMenu', function(moveData, cb)
-    closeMenu()
+    closeMenu(false)
 
     cb(true)
 end)
