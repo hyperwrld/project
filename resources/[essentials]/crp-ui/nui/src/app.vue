@@ -11,8 +11,11 @@
     import { mapState } from 'vuex';
 
     import dialogs from './components/dialogs.vue';
+
     import character from './components/character/character.vue';
+    import spawnSelection from './components/spawnSelection/spawnSelection.vue';
     import inventory from './components/inventory/inventory.vue';
+    import vehicleshop from './components/vehicleshop/vehicleshop.vue';
 
     import cash from './components/cash/cash.vue';
     import hud from './components/hud/hud.vue';
@@ -22,7 +25,7 @@
     export default {
         name: 'app',
         components: {
-            character, dialogs, inventory, cash, hud, notifications, taskbar
+            dialogs, character, spawnSelection, inventory, vehicleshop, cash, hud, notifications, taskbar
         },
         computed: {
             ...mapState({
@@ -48,6 +51,9 @@
                                     break;
                                 case 'inventory':
                                     this.$store.dispatch('inventory/setInventory', event.data.menuData);
+                                    break;
+                                case 'spawnSelection':
+                                    this.$store.dispatch('spawnSelection/setSpawnSelection', event.data.menuData)
                                     break;
                                 default:
                                     break;

@@ -101,14 +101,14 @@ function CRP.Spawn:InitializeSpawnSelection(motelSpawnPoint)
     SetEntityInvincible(playerPed, true)
 
     CRP.SpawnPoints = {
-        { ['x'] = -204.93,  ['y'] = -1010.13, ['z'] = 29.55,  ['h'] = 180.99, ['info'] = ' Altee Street Train Station', ['spawnType'] = 1 },
-        { ['x'] = 272.16,   ['y'] = 185.44,   ['z'] = 104.67, ['h'] = 320.57, ['info'] = ' Vinewood Blvd Taxi Stand',   ['spawnType'] = 1 },
-        { ['x'] = -1833.96, ['y'] = -1223.5,  ['z'] = 13.02,  ['h'] = 310.63, ['info'] = ' The Boardwalk',              ['spawnType'] = 1 },
-        { ['x'] = 145.62,   ['y'] = 6563.19,  ['z'] = 32.0,   ['h'] = 42.83,  ['info'] = ' Paleto Gas Station',         ['spawnType'] = 1 },
-        { ['x'] = -214.24,  ['y'] = 6178.87,  ['z'] = 31.17,  ['h'] = 40.11,  ['info'] = ' Paleto Bus Stop',            ['spawnType'] = 1 },
-        { ['x'] = 1122.11,  ['y'] = 2667.24,  ['z'] = 38.04,  ['h'] = 180.39, ['info'] = ' Harmony Motel',              ['spawnType'] = 1 },
-        { ['x'] = 453.29,   ['y'] = -662.23,  ['z'] = 28.01,  ['h'] = 5.73,   ['info'] = ' LS Bus Station',             ['spawnType'] = 1 },
-        { ['x'] = -1266.53, ['y'] = 273.86,   ['z'] = 64.66,  ['h'] = 28.52,  ['info'] = ' The Richman Hotel',          ['spawnType'] = 1 }
+        { ['x'] = -204.93,  ['y'] = -1010.13, ['z'] = 29.55,  ['h'] = 180.99, ['info'] = 'ALTEE STREET TRAIN STATION', ['spawnType'] = 1 },
+        { ['x'] = 272.16,   ['y'] = 185.44,   ['z'] = 104.67, ['h'] = 320.57, ['info'] = 'VINEWOOD BLVD TAXI STAND',   ['spawnType'] = 1 },
+        { ['x'] = -1833.96, ['y'] = -1223.5,  ['z'] = 13.02,  ['h'] = 310.63, ['info'] = 'THE BOARDWALK',              ['spawnType'] = 1 },
+        { ['x'] = 1122.11,  ['y'] = 2667.24,  ['z'] = 38.04,  ['h'] = 180.39, ['info'] = 'HARMONY MOTEL',              ['spawnType'] = 1 },
+        { ['x'] = 453.29,   ['y'] = -662.23,  ['z'] = 28.01,  ['h'] = 5.73,   ['info'] = 'LS BUS STATION',             ['spawnType'] = 1 },
+        { ['x'] = -1266.53, ['y'] = 273.86,   ['z'] = 64.66,  ['h'] = 28.52,  ['info'] = 'THE RICHMAN HOTEL',          ['spawnType'] = 1 },
+        { ['x'] = 145.62,   ['y'] = 6563.19,  ['z'] = 32.0,   ['h'] = 42.83,  ['info'] = 'PALETO GAS STATION',         ['spawnType'] = 1 },
+        { ['x'] = -214.24,  ['y'] = 6178.87,  ['z'] = 31.17,  ['h'] = 40.11,  ['info'] = 'PALETO BUS STOP',            ['spawnType'] = 1 }
     }
 
     CRP.SpawnPoints[#CRP.SpawnPoints + 1] = motelSpawnPoint
