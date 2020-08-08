@@ -1,4 +1,4 @@
-CRP.DB = {}
+CRP, CRP.DB = CRP or {}, {}
 
 function CRP.DB:FetchCharacters(identifier)
     if not identifier or identifier == '' then return false end

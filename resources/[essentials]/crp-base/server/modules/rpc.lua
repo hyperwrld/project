@@ -1,6 +1,6 @@
 local resourceName, promises, functions = GetCurrentResourceName(), {}, {}
 
-CRP.RPC = {}
+CRP, CRP.RPC = CRP or {}, {}
 
 function ClearPromise(callId)
     Citizen.SetTimeout(5000, function()
@@ -82,6 +82,8 @@ AddEventHandler('rpc:request', function(origin, name, callId, params)
     local success, error = pcall(function()
         response = table.pack(functions[name](serverId, table.unpack(params)))
     end)
+
+    print(success, error)
 
     if not success then
         TriggerEvent('rpc:server:error', resourceName, origin, name, serverId, error)
