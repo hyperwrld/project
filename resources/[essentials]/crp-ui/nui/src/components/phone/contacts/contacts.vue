@@ -14,7 +14,7 @@
                         <div class='contact-info'>
 							<div class='avatar'>
 								<v-avatar v-bind:style='{ background: getContactColor((contact.name).substring(0, 2)) }' size='30'>
-									<span class='white--text headline'>{{ (contact.name).substring(0, 2).toUpperCase() }}</span>
+									<span>{{ (contact.name).substring(0, 2).toUpperCase() }}</span>
 								</v-avatar>
 							</div>
                             <div class='name'>{{ contact.name }}</div>
