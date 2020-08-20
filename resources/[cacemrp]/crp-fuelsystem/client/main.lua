@@ -45,7 +45,7 @@ Citizen.CreateThread(function()
                 lastUpdate = lastUpdate + 1
 
                 if currentFuel > 0 and IsVehicleEngineOn(vehicle) then
-                    currentFuel = currentFuel - (math.floor(GetVehicleCurrentRpm(vehicle) * 10 + 0.5) / 10) / 100
+                    currentFuel = currentFuel - (math.floor(GetVehicleCurrentRpm(vehicle) * 10 + 0.5) / 10) / 80
                 end
 
                 if currentFuel < 1 then
