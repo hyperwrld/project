@@ -4,7 +4,6 @@ AddEventHandler('crp-ui:openMenu', function(menuType, data)
     isMenuOpen = true
 
     SendNUIMessage({ eventName = 'toggleMenu', status = true, component = menuType, menuData = data })
-
     SetNuiFocus(true, true)
 
     Citizen.CreateThread(function()
