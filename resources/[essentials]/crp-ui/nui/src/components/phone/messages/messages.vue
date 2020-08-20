@@ -10,7 +10,13 @@
         <div class='messages-list'>
 			<div v-if='filterItems().length > 0'>
 				<div class='message-square' v-for='call in filterItems()' :key='call.name'>
-					<div class='number-info' @click='openMessage(call.number)'>
+					<div class='avatar'>
+						<v-avatar v-bind:style='{ background: getMessageColor((call.name).toString().substring(0, 2)) }' size='30'>
+							<span v-if='isNaN(call.name)'>{{ (call.name).substring(0, 2).toUpperCase() }}</span>
+							<font-awesome-icon :icon='["fas", "user"]' v-else></font-awesome-icon>
+						</v-avatar>
+					</div>
+					<div class='message-info' @click='openMessage(call.number)'>
 						<div class='name'>{{ call.name }}</div>
 						<div class='message'>{{ call.message }}</div>
 						<div class='time'>{{ getTime(call.time) }}</div>
@@ -73,6 +79,15 @@
 				} else {
 					return this.conversations.filter(c => c.name.toString().toLowerCase().indexOf(search) > -1);
 				}
+			},
+			getMessageColor: function(string) {
+				var hash = 0;
+
+    			for (var i = 0; i < string.length; i++) {
+      				hash = string.charCodeAt(i) + ((hash << 5) - hash);
+				}
+
+    			return 'hsl(' + hash % 360 + ', 30%, 70%)';
 			},
 			openMessage: function(number) {
 				this.$store.dispatch('phone/setMessages', number);

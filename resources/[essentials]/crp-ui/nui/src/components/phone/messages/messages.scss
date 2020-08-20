@@ -104,23 +104,34 @@ html, .container {
 
             padding: 1%;
             flex: 0 1 auto;
-            flex-direction: column;
             border-bottom: solid 1px rgba(219, 219, 219, 1);
-            border-radius: 0;
+			border-radius: 0;
+			align-items: center;
 
-			.number-info {
+			.avatar {
+				width: 20%;
+				display: flex;
+				justify-content: center;
+				color: white;
+
+				* {
+					font-size: 0.8rem !important;
+				}
+			}
+
+			.message-info {
 				width: 100%;
 				margin: 0;
 				flex-direction: column;
 				position: relative;
 
 				* {
-					margin: 0 2%;
+					margin: 0 4%;
 				}
 
 				.name {
 					font-size: 0.75rem;
-					width: 90%;
+					width: 70%;
 					white-space: nowrap;
 					text-overflow: ellipsis;
 					overflow: hidden
