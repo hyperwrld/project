@@ -1,0 +1,252 @@
+@import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css');
+
+html, .container {
+    position: absolute;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    flex-flow: wrap;
+    align-content: flex-start;
+    z-index: -1 !important;
+	padding: 3% 0;
+
+	.v-dialog__content {
+		position: absolute;
+
+		& > :first-child {
+			box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.55);
+			margin: 5% !important;
+
+			.v-card {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				overflow: hidden;
+				min-height: 120px;
+
+				& > :first-child {
+					width: 100%;
+				}
+
+				.v-card__title {
+					width: 100%;
+					font-size: 1.3rem !important;
+					padding: 5%;
+					justify-content: center;
+				}
+
+				.v-card__text {
+					padding: 0 10% 5%;
+					line-height: normal;
+
+					:first-child {
+						margin-bottom: 2.5%;
+					}
+
+					input, textarea {
+						border: 1px solid #1a1a1a;
+						color: #afafaf;
+						background: #242424;
+						outline: none;
+						padding: 3.5%;
+						width: 100%;
+					}
+
+					input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+						-webkit-appearance: none;
+						margin: 0;
+					}
+				}
+
+				.v-card__actions {
+					padding: 0 5% 5%;
+					justify-content: center;
+
+					* {
+						font-size: 0.8rem;
+					}
+				}
+
+				.loader {
+					opacity: 0;
+					display: flex;
+					flex-direction: column;
+					-moz-transition: 0.5s opacity ease-in-out;
+					-o-transition: 0.5s opacity ease-in-out;
+					-webkit-transition: 0.5s opacity ease-in-out;
+					transition: 0.5s opacity ease-in-out;
+					justify-content: center;
+    				align-items: center;
+
+					&::before {
+						font-family: FontAwesome;
+						content: '\f00c';
+						color: white;
+						font-size: 20px;
+						position: absolute;
+						opacity: 0;
+						-moz-transition: opacity 1s ease-in-out;
+						-o-transition: opacity 1s ease-in-out;
+						-webkit-transition: opacity 1s ease-in-out;
+						transition: opacity 1s ease-in-out;
+					}
+
+					&::after {
+						font-family: FontAwesome;
+						content: '\f00d';
+						color: white;
+						font-size: 20px;
+						position: absolute;
+						opacity: 0;
+						-moz-transition: opacity 1s ease-in-out;
+						-o-transition: opacity 1s ease-in-out;
+						-webkit-transition: opacity 1s ease-in-out;
+						transition: opacity 1s ease-in-out;
+					}
+
+					&.loading {
+						opacity: 1;
+
+						& > :first-child {
+							-moz-animation: rotator 1.4s linear infinite;
+							-o-animation: rotator 1.4s linear infinite;
+							-webkit-animation: rotator 1.4s linear infinite;
+							animation: rotator 1.4s linear infinite;
+
+							& > :first-child {
+								-moz-animation: dash 1.4s ease-in-out infinite;
+								-o-animation: dash 1.4s ease-in-out infinite;
+								-webkit-animation: dash 1.4s ease-in-out infinite;
+								animation: dash 1.4s ease-in-out infinite;
+							}
+						}
+					}
+
+					&.failure {
+						opacity: 1;
+
+						&::after {
+							opacity: 1;
+						}
+
+						& > :first-child {
+							& > :first-child {
+								fill: rgb(217, 83, 79);
+								stroke-width: 0;
+							}
+						}
+					}
+
+					&.done {
+						opacity: 1;
+
+						&::before {
+							opacity: 1;
+						}
+
+						& > :first-child {
+							& > :first-child {
+								fill: rgb(92, 184, 92);
+								stroke-width: 0;
+							}
+						}
+					}
+
+					:first-child > :first-child {
+						stroke-dasharray: 124;
+						stroke-dashoffset: 0;
+						transform-origin: center;
+						stroke: #0060CE;
+						fill: transparent;
+						-moz-transition: fill 1s ease-in-out, stroke-width 0.5s ease-in-out;
+						-o-transition: fill 1s ease-in-out, stroke-width 0.5s ease-in-out;
+						-webkit-transition: fill 1s ease-in-out, stroke-width 0.5s ease-in-out;
+						transition: fill 1s ease-in-out, stroke-width 0.5s ease-in-out;
+					}
+				}
+			}
+		}
+    }
+
+	@-moz-keyframes rotator {
+		0% {
+			-moz-transform: rotate(0);
+			-ms-transform: rotate(0);
+			-o-transform: rotate(0);
+			-webkit-transform: rotate(0);
+			transform: rotate(0);
+		}
+
+		100% {
+			-moz-transform: rotate(270deg);
+			-ms-transform: rotate(270deg);
+			-o-transform: rotate(270deg);
+			-webkit-transform: rotate(270deg);
+			transform: rotate(270deg);
+		}
+	}
+
+	@-webkit-keyframes rotator {
+		0% {
+			-moz-transform: rotate(0);
+			-ms-transform: rotate(0);
+			-o-transform: rotate(0);
+			-webkit-transform: rotate(0);
+			transform: rotate(0);
+		}
+
+		100% {
+			-moz-transform: rotate(270deg);
+			-ms-transform: rotate(270deg);
+			-o-transform: rotate(270deg);
+			-webkit-transform: rotate(270deg);
+			transform: rotate(270deg);
+		}
+	}
+
+	@keyframes rotator {
+		0% {
+			-moz-transform: rotate(0);
+			-ms-transform: rotate(0);
+			-o-transform: rotate(0);
+			-webkit-transform: rotate(0);
+			transform: rotate(0);
+		}
+
+		100% {
+			-moz-transform: rotate(270deg);
+			-ms-transform: rotate(270deg);
+			-o-transform: rotate(270deg);
+			-webkit-transform: rotate(270deg);
+			transform: rotate(270deg);
+		}
+	}
+
+	@keyframes dash {
+		0% {
+			stroke-dashoffset: 124;
+		}
+
+		50% {
+			stroke-dashoffset: 30;
+			-moz-transform: rotate(135deg);
+			-ms-transform: rotate(135deg);
+			-o-transform: rotate(135deg);
+			-webkit-transform: rotate(135deg);
+			transform: rotate(135deg);
+		}
+
+		100% {
+			stroke-dashoffset: 124;
+			-moz-transform: rotate(450deg);
+			-ms-transform: rotate(450deg);
+			-o-transform: rotate(450deg);
+			-webkit-transform: rotate(450deg);
+			transform: rotate(450deg);
+		}
+	}
+}
