@@ -1,6 +1,7 @@
 local resourceName, promises, functions, callIdentifier = GetCurrentResourceName(), {}, {}, 0
 
-CRP, CRP.RPC = CRP or {}, {}
+CRP = CRP or {}
+CRP.RPC = {}
 
 function ClearPromise(callId)
     Citizen.SetTimeout(5000, function()

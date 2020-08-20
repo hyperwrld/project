@@ -42,7 +42,6 @@ AddEventHandler('crp-base:spawnPlayer', function(data)
 end)
 
 AddEventHandler('crp-base:spawnSelection', function(spawnPoint)
-    print(spawnPoint, ' llçll')
     CRP.Spawn:InitializeSpawnSelection(spawnPoint)
 end)
 

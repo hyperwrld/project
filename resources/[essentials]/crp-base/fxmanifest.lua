@@ -2,6 +2,8 @@ fx_version 'bodacious'
 
 game 'gta5'
 
+dependency 'crp-ui'
+
 client_scripts {
     'shared.lua',
     'client/modules/*.lua',
