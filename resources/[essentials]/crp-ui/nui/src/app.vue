@@ -1,13 +1,14 @@
 <template>
     <v-app>
         <cash/><hud/><notifications/><taskbar ref='teste'/>
-        <component :is='appData.currentComponent' v-if='appData.isEnabled'/>
+        <keep-alive>
+            <component :is='appData.currentComponent' v-if='appData.isEnabled'></component>
+        </keep-alive>
         <dialogs v-if='appData.isEnabled'/>
     </v-app>
 </template>
 
 <script>
-    import nui from './utils/nui';
     import { mapState } from 'vuex';
 
     import dialogs from './components/dialogs.vue';
@@ -16,6 +17,8 @@
     import spawnSelection from './components/spawnSelection/spawnSelection.vue';
     import inventory from './components/inventory/main/inventory.vue';
     import actionbar from './components/inventory/actionbar/actionbar.vue';
+    import phone from './components/phone/phone.vue';
+    import home from './components/phone/home/home.vue';
     import vehicleshop from './components/vehicleshop/vehicleshop.vue';
 
     import cash from './components/cash/cash.vue';
@@ -26,7 +29,7 @@
     export default {
         name: 'app',
         components: {
-            dialogs, character, spawnSelection, inventory, actionbar, vehicleshop, cash, hud, notifications, taskbar
+            dialogs, character, spawnSelection, inventory, actionbar, phone, vehicleshop, cash, hud, notifications, taskbar
         },
         computed: {
             ...mapState({
@@ -53,7 +56,10 @@
                                     break;
                                 case 'spawnSelection':
                                     this.$store.dispatch('spawnSelection/setSpawnSelection', event.data.menuData);
-                                    break;
+									break;
+								case 'phone':
+									// this.$store.dispatch('phone/')
+									break;
                                 default:
                                     break;
                             }
@@ -106,6 +112,9 @@
                     case 'setSkillbar':
                         this.$store.dispatch('taskbar/setSkillbar', event.data.skillbarData);
                         break;
+					case 'updatePhone':
+						this.$store.dispatch('phone/updatePhone', event.data.phoneData);
+						break;
                     default:
                         break;
                 }
@@ -127,5 +136,40 @@
 
     #app {
         background-color: transparent;
-    }
+	}
+
+	.v-application .error {
+		background-color: transparent !important;
+		border-color: #ff5252 !important;
+	}
+
+	.errors {
+		padding: 0 5% 5%;
+
+		#error {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			span {
+				display: flex;
+				width: 85%;
+				font-size: 0.6rem;
+				align-items: center;
+				color: #fc9403;
+
+				svg {
+					margin-right: 5%;
+					font-size: 0.9rem;
+					width: 10%;
+				}
+			}
+
+			margin-bottom: 2%;
+		}
+
+		& > :last-child {
+			margin-bottom: 0 !important;
+		}
+	}
 </style>
