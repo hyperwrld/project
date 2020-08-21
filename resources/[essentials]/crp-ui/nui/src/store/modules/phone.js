@@ -6,8 +6,8 @@ const state = {
         { code: 'contacts', name: 'Contactos', color: '#fc7b20', icon: 'user', iconType: 'fas' }, { code: 'garage', name: 'Garagem', color: '#ef1443', icon: 'car', iconType: 'fas' },
         { code: 'twitter', name: 'Twitter', color: '#1DA1F2', icon: 'twitter', iconType: 'fab' }
     ],
-	currentApp: 'home', phoneNumber: 966831664,
-	callHistory: [{ number: 967301022, incoming: true, time: 1584110467 }, { number: 967301223, incoming: false, time: 55 }], conversations: [ { sender: 966831664, receiver: 967301023, message: 'éeee', time: 1574110367 }, { sender: 967301223, receiver: 966831664, message: 'ddddd', time: 1597066616 } ], contacts: [ { id: 2, name: "andre32", number: 967301223} ],
+	currentApp: 'twitter', phoneNumber: 966831664,
+	callHistory: [], conversations: [], contacts: [], tweets: [ { id: 1, message: 'pqpqpapq p pviaiiai para o caralho https://i.gyazo.com/ec1f53177ac04477f6a08a93cbfaae67.png?333333333 https://i.gyazo.com/ec1f53177ac04477f6a08a93cb3367.png https://i.gyazo.com/555.png', owner: 'Lewis Hamilton', time: 1584110467}, { id: 2, message: 'lalalqlala', owner: 'Joao Carvalho', time: 1500000 } ],
 	dialogs: { status: false, isLoading: false, currentState: 'loading', currentDialog: '', dialogsData: {}, errorsList: [] }
 }
 
@@ -36,6 +36,9 @@ const getters = {
     },
     getContacts: state => {
         return state.contacts;
+	},
+	getTweets: state => {
+		return state.tweets;
 	},
 	getDialogs: state => {
 		return state.dialogs;

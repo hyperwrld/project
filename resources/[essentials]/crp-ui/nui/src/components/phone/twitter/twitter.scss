@@ -1,0 +1,222 @@
+html, .container {
+    position: absolute;
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    flex-flow: wrap;
+    align-content: flex-start;
+    z-index: 999;
+    padding: 3% 0;
+
+    .top-bar {
+        display: flex;
+        align-items: center;
+        color: black;
+        height: 6%;
+        padding: 0 6%;
+        padding-bottom: 3%;
+        width: 100%;
+
+        .search-wrapper {
+            width: 85%;
+            height: 100%;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            font-size: 0.8rem;
+            margin-right: 5%;
+
+            input {
+                outline: none;
+                width: 90%;
+                padding: 0 1%;
+                color: black;
+
+                &::placeholder, &:focus {
+                    color: black;
+                }
+            }
+        }
+
+        .fa-phone-alt {
+            width: 10%;
+        }
+
+        .fa-search {
+            width: 12%;
+        }
+
+        .fa-phone-alt, .fa-search {
+            padding: 2px;
+            height: 100%;
+        }
+    }
+
+    .tweets-list {
+        height: 94%;
+        width: 100%;
+        overflow-y: scroll;
+        background-color: white;
+        box-shadow: 0px 0px 5px 0px rgba(219, 219, 219, 1);
+        padding: 5%;
+        border-top: solid 1px #d6d6d6;
+        border-bottom: solid 1px #d6d6d6;
+        display: flex;
+        flex-wrap: nowrap;
+        border-radius: 10px;
+        flex-direction: column;
+        flex-flow: column;
+		justify-content: flex-start;
+		position: relative;
+
+        &::-webkit-scrollbar {
+            display: none;
+		}
+
+		.empty-list {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			height: 100%;
+
+			svg {
+				width: 100%;
+    			height: 15%;
+			}
+
+			span {
+				width: 100%;
+				text-align: center;
+				font-size: 0.9rem;
+				margin-top: 5%;
+			}
+		}
+
+		.tweet-square >>> .account-info {
+			display: flex;
+			font-size: 0.7rem;
+			align-items: center;
+		}
+
+		.tweet-square >>> .text {
+			width: 50%;
+		}
+
+        div > .tweet > .tweet-square {
+            height: fit-content;
+            width: 100%;
+
+            position: relative;
+            display: flex;
+
+            align-items: center;
+			padding: 2% 3%;
+            flex: 0 1 auto;
+            flex-direction: column;
+            border-radius: 2px;
+			background: #009bf5;
+			text-align: left;
+			box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
+			color: white;
+			margin-bottom: 5%;
+
+			::v-deep > * {
+				width: 100%;
+			}
+
+			::v-deep .account-info {
+				display: flex;
+				font-size: 0.7rem;
+				align-items: center;
+
+				.name {
+					white-space: nowrap;
+					overflow: hidden;
+					text-overflow: ellipsis;
+					font-weight: bold;
+				}
+
+				.username {
+					margin-left: 3%;
+					font-size: 0.6rem;
+				}
+			}
+
+			::v-deep .content {
+				margin: 3% 0;
+				font-size: 0.7rem;
+
+				.info-container {
+					margin-top: 2%;
+					font-size: 0.6rem;
+					text-align: center;
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					border-top: solid lightgrey 0.5px;
+					padding-top: 5px;
+					pointer-events: all;
+
+					.image-container {
+						width: 90%;
+						overflow: hidden;
+
+						& > * {
+							border: solid 1px;
+							border-radius: 2px;
+						}
+
+						.placeholder {
+							height: 80px;
+							display: flex;
+							flex-direction: column;
+							justify-content: center;
+							align-items: center;
+
+							svg {
+								font-size: 1.5rem;
+							}
+
+							.text {
+								margin: 0;
+								font-size: 0.6rem;
+							}
+						}
+
+						.image {
+							height: 80px;
+							width: 100%;
+							background-size: contain;
+							background-repeat: no-repeat;
+							background-position: center;
+
+							&-with-blur {
+								filter: blur(0.5rem);
+							}
+						}
+					}
+				}
+			}
+
+			::v-deep .bottom-bar {
+				display: flex;
+				font-size: 0.6rem;
+				align-items: center;
+
+				& > :first-child {
+					margin-right: 6%;
+				}
+
+				.time {
+					position: absolute;
+					font-size: 0.5rem;
+					right: 5%;
+					text-align: right;
+				}
+			}
+		}
+	}
+}

@@ -50,7 +50,6 @@
         },
         methods: {
 			getTime: function(time) {
-				console.log(time)
 				return convertTime(time);
 			},
             sendMessage: function() {

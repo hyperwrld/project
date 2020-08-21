@@ -5,12 +5,12 @@ import vuetify from './plugins/vuetify';
 import store from './store';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faAngleUp, faAngleDown, faHeart, faShieldAlt, faHamburger, faTint, faBrain, faLungs, faGasPump, faVolumeUp, faSignal, faPhoneAlt, faUser, faCommentAlt, faAngleLeft, faCar, faAlignJustify, faCamera, faSearch, faClipboard, faUserPlus, faUserEdit, faTrash, faSadTear, faExclamationCircle, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faAngleUp, faAngleDown, faHeart, faShieldAlt, faHamburger, faTint, faBrain, faLungs, faGasPump, faVolumeUp, faSignal, faPhoneAlt, faUser, faCommentAlt, faAngleLeft, faCar, faAlignJustify, faCamera, faSearch, faClipboard, faUserPlus, faUserEdit, faTrash, faSadTear, faExclamationCircle, faEnvelope, faRetweet, faReply, faEye } from '@fortawesome/free-solid-svg-icons';
 import { faCircle } from '@fortawesome/free-regular-svg-icons';
 import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
-library.add(faAngleUp, faAngleDown, faHeart, faShieldAlt, faHamburger, faTint, faLungs, faBrain, faGasPump, faVolumeUp, faSignal, faPhoneAlt, faCommentAlt, faUser, faAngleLeft, faCircle , faCar, faAlignJustify, faTwitter, faCamera, faSearch, faClipboard, faUserPlus, faUserEdit, faTrash, faSadTear, faExclamationCircle, faEnvelope);
+library.add(faAngleUp, faAngleDown, faHeart, faShieldAlt, faHamburger, faTint, faLungs, faBrain, faGasPump, faVolumeUp, faSignal, faPhoneAlt, faCommentAlt, faUser, faAngleLeft, faCircle , faCar, faAlignJustify, faTwitter, faCamera, faSearch, faClipboard, faUserPlus, faUserEdit, faTrash, faSadTear, faExclamationCircle, faEnvelope, faRetweet, faReply, faEye);
 
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 
