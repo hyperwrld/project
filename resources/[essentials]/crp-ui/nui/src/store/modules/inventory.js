@@ -32,31 +32,35 @@ const mutations = {
 			const timeAllowed = 2419200;
 
 			for (let i = 0; i < 40; i++) {
-                state.playerInventory.items.push({});
-            }
+				const item = data.playerInventory.items.find(element => (element.slot - 1) == i);
 
-            for (let i = 0; i < data.playerInventory.items.length; i++) {
-				let timeExtra = timeAllowed * itemsList[data.playerInventory.items[i].name].decayRate;
-				let itemPercentage = itemsList[data.playerInventory.items[i].name].decayRate != 0.0 ?
-					100 - Math.ceil(((Math.floor(Date.now() / 1000) - data.playerInventory.items[i].creationTime) / timeExtra) * 100) : 100;
+				if (item) {
+					const timeExtra = timeAllowed * itemsList[item.name].decayRate;
 
-				if (itemPercentage < 0) itemPercentage = 0;
+					let itemPercentage = itemsList[item.name].decayRate != 0.0 ? 100 - Math.ceil(((Math.floor(Date.now() / 1000) - item.creationTime) / timeExtra) * 100) : 100;
 
-                state.playerInventory.items.splice(data.playerInventory.items[i].slot - 1, 1, { itemId: data.playerInventory.items[i].name, quantity: data.playerInventory.items[i].count, durability: itemPercentage });
+					if (itemPercentage < 0) itemPercentage = 0;
+
+					state.playerInventory.items.push({ itemId: item.name, quantity: item.count, durability: itemPercentage });
+				} else {
+					state.playerInventory.items.push({});
+				}
             }
 
             for (let i = 0; i < data.secondaryInventory.maxSlots; i++) {
-                state.secondaryInventory.items.push({});
-            }
+				const item = data.secondaryInventory.items.find(element => (element.slot - 1) == i);
 
-            for (let i = 0; i < data.secondaryInventory.items.length; i++) {
-				let timeExtra = timeAllowed * itemsList[data.secondaryInventory.items[i].name].decayRate;
-				let itemPercentage = itemsList[data.secondaryInventory.items[i].name].decayRate != 0.0 ?
-					100 - Math.ceil(((Math.floor(Date.now() / 1000) - data.secondaryInventory.items[i].creationTime) / timeExtra) * 100) : 100;
+				if (item) {
+					const timeExtra = timeAllowed * itemsList[item.name].decayRate;
 
-				if (itemPercentage < 0) itemPercentage = 0;
+					let itemPercentage = itemsList[item.name].decayRate != 0.0 ? 100 - Math.ceil(((Math.floor(Date.now() / 1000) - item.creationTime) / timeExtra) * 100) : 100;
 
-                state.secondaryInventory.items.splice(data.secondaryInventory.items[i].slot - 1, 1, { itemId: data.secondaryInventory.items[i].name, quantity: data.secondaryInventory.items[i].count, durability: itemPercentage });
+					if (itemPercentage < 0) itemPercentage = 0;
+
+					state.secondaryInventory.items.push({ itemId: item.name, quantity: item.count, durability: itemPercentage });
+				} else {
+					state.secondaryInventory.items.push({});
+				}
             }
 
             this.commit('inventory/calculateWeight');
