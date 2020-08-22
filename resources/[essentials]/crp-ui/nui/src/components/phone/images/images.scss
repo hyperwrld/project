@@ -12,6 +12,7 @@
 	.image-container {
 		width: 90%;
 		overflow: hidden;
+		position: relative;
 
 		& > * {
 			border: solid 1px;
@@ -20,10 +21,13 @@
 
 		.placeholder {
 			height: 80px;
+			width: 100%;
 			display: flex;
 			flex-direction: column;
 			justify-content: center;
 			align-items: center;
+			position: absolute;
+    		z-index: 99;
 
 			svg {
 				font-size: 1.5rem;
@@ -47,5 +51,9 @@
 				filter: blur(0.5rem);
 			}
 		}
+	}
+
+	.max-height {
+		height: 80px;
 	}
 }

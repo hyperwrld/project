@@ -13,8 +13,7 @@
 			return (
 				<div class='info-container'>
 					Imagens anexadas: {this.imgs.length}
-
-					<div class='image-container'>
+					<div class={`image-container ${this.showImage ? '' : 'max-height'}`}>
 						{!this.showImage && (
 							<div class='placeholder' onClick={() => this.showImage = true}>
 								<font-awesome-icon icon={["fas", "eye"]}></font-awesome-icon>

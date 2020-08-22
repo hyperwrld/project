@@ -34,13 +34,13 @@
 		},
 		props: ['tweet'],
 		render (h) {
-			const { message: message, imgs } = processMessage(this.tweet.message);
+			const {message: message, imgs} = processMessage(this.tweet.message);
 
 			return (
 				<div class='tweet-square'>
 					<div class='account-info'>
-						<div class='name'>{ this.tweet.owner }</div>
-						<div class='username'>{ '@' + (this.tweet.owner).replace(/\s/g, '') }</div>
+						<div class='name'>{this.tweet.owner}</div>
+						<div class='username'>{'@' + (this.tweet.owner).replace(/\s/g, '')}</div>
 					</div>
 					<div class='content'>
 						<div class='text'>{ message }</div>
@@ -51,7 +51,7 @@
 					<div class='bottom-bar'>
 						<font-awesome-icon icon={["fas", "reply"]}></font-awesome-icon>
 						<font-awesome-icon icon={["fas", "retweet"]}></font-awesome-icon>
-						<div class='time'>{ convertTime(this.tweet.time) }</div>
+						<div class='time'>{convertTime(this.tweet.time)}</div>
 					</div>
 				</div>
 			);
@@ -75,7 +75,7 @@
         },
         methods: {
 			filterItems: function() {
-				const search = this.searchInput.toLowerCase().trim()
+				const search = this.searchInput.toLowerCase().trim();
 
 				if (!search) {
 					return this.tweets;
