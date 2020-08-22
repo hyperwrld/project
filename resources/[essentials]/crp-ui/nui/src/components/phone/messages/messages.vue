@@ -19,7 +19,7 @@
 					<div class='message-info' @click='openMessage(call.number)'>
 						<div class='name'>{{ call.name }}</div>
 						<div class='message'>{{ call.message }}</div>
-						<div class='time'>{{ getTime(call.time) }}</div>
+						<div class='time'>{{ convertTime(call.time) }}</div>
 					</div>
 				</div>
 			</div>
@@ -33,7 +33,7 @@
 
 <script>
 	import { mapGetters } from 'vuex';
-	import { convertTime } from './../../../utils/time.js';
+	import { convertTime } from './../../../utils/lib.js';
 	import dialogs from './../dialogs/dialogs.js';
 
     export default {
@@ -49,9 +49,6 @@
             })
         },
         methods: {
-			getTime: function(time) {
-				return convertTime(time);
-			},
             sendMessage: function() {
 				dialogs.createDialog({
 					attach: '.messages-list', title: 'Enviar mensagem',

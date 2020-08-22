@@ -13,7 +13,7 @@
                     <v-expansion-panel-header>
                         <div class='number-info'>
                             <div class='name'>{{ call.name }}</div>
-                            <div class='time'>{{ getTime(call.time) }}</div>
+                            <div class='time'>{{ convertTime(call.time) }}</div>
                         </div>
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
@@ -33,7 +33,7 @@
 
 <script>
 	import { mapGetters } from 'vuex';
-	import { convertTime } from './../../../utils/time.js';
+	import { convertTime } from './../../../utils/lib.js';
 	import dialogs from './../dialogs/dialogs.js';
 
     export default {
@@ -49,9 +49,6 @@
             })
         },
         methods: {
-			getTime: function(time) {
-				return convertTime(time);
-			},
 			sendMessage: function(contactNumber) {
 				dialogs.createDialog({
 					attach: '.history-list', title: 'Enviar Mensagem',

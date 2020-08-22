@@ -24,7 +24,7 @@
     import cash from './components/cash/cash.vue';
     import hud from './components/hud/hud.vue';
     import notifications from './components/notifications/notifications.vue';
-    import taskbar from './components/taskbar/taskbar.vue';
+	import taskbar from './components/taskbar/taskbar.vue';
 
     export default {
         name: 'app',

@@ -95,16 +95,6 @@ html, .container {
 			}
 		}
 
-		.tweet-square >>> .account-info {
-			display: flex;
-			font-size: 0.7rem;
-			align-items: center;
-		}
-
-		.tweet-square >>> .text {
-			width: 50%;
-		}
-
         div > .tweet > .tweet-square {
             height: fit-content;
             width: 100%;
@@ -148,57 +138,6 @@ html, .container {
 			::v-deep .content {
 				margin: 3% 0;
 				font-size: 0.7rem;
-
-				.info-container {
-					margin-top: 2%;
-					font-size: 0.6rem;
-					text-align: center;
-					display: flex;
-					flex-direction: column;
-					align-items: center;
-					border-top: solid lightgrey 0.5px;
-					padding-top: 5px;
-					pointer-events: all;
-
-					.image-container {
-						width: 90%;
-						overflow: hidden;
-
-						& > * {
-							border: solid 1px;
-							border-radius: 2px;
-						}
-
-						.placeholder {
-							height: 80px;
-							display: flex;
-							flex-direction: column;
-							justify-content: center;
-							align-items: center;
-
-							svg {
-								font-size: 1.5rem;
-							}
-
-							.text {
-								margin: 0;
-								font-size: 0.6rem;
-							}
-						}
-
-						.image {
-							height: 80px;
-							width: 100%;
-							background-size: contain;
-							background-repeat: no-repeat;
-							background-position: center;
-
-							&-with-blur {
-								filter: blur(0.5rem);
-							}
-						}
-					}
-				}
 			}
 
 			::v-deep .bottom-bar {

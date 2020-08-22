@@ -10,7 +10,7 @@
         <div class='tweets-list'>
             <div v-if='filterItems().length >= 0'>
 				<div class='tweet' v-for='tweet in filterItems()' :key='tweet.message'>
-					<tweet :tweet='tweet' :getTime='getTime'/>
+					<tweet :tweet='tweet'/>
 				</div>
             </div>
         	<div v-else class='empty-list'>
@@ -23,20 +23,18 @@
 
 <script>
 	import { mapGetters } from 'vuex';
-	import { convertTime } from './../../../utils/time.js';
+	import { processMessage, convertTime } from './../../../utils/lib.js';
+
 	import dialogs from './../dialogs/dialogs.js';
+	import images from './../images/images.vue';
 
 	const tweet = {
 		components: {
-			tweetImages
+			images
 		},
-		props: ['tweet', 'getTime'],
+		props: ['tweet'],
 		render (h) {
-			const matches = this.tweet.message.match(/https:\/\/\S*?(\.png|\.gif)(.*?\s|.*)/g);
-			const images = matches ? matches.map(element => element.trim()) : [];
-
-			let message = this.tweet.message
-			images.forEach(element => message = message.replace(element, ''));
+			const { message: message, imgs } = processMessage(this.tweet.message);
 
 			return (
 				<div class='tweet-square'>
@@ -46,42 +44,14 @@
 					</div>
 					<div class='content'>
 						<div class='text'>{ message }</div>
-						{ images.length > 0 && (
-							<tweetImages images={images}/>
+						{imgs.length > 0 && (
+							<images imgs={imgs}/>
 						)}
 					</div>
 					<div class='bottom-bar'>
 						<font-awesome-icon icon={["fas", "reply"]}></font-awesome-icon>
 						<font-awesome-icon icon={["fas", "retweet"]}></font-awesome-icon>
-						<div class='time'>{ this.getTime(this.tweet.time) }</div>
-					</div>
-				</div>
-			);
-		}
-	};
-
-	const tweetImages = {
-		props: ['images'],
-		data() {
-            return {
-				showImage: false
-            }
-        },
-		render (h) {
-			return (
-				<div class='info-container'>
-					Imagens anexadas: {this.images.length}
-
-					<div class='image-container'>
-						{!this.showImage && (
-							<div class='placeholder' onClick={() => this.showImage = true}>
-								<font-awesome-icon icon={["fas", "eye"]}></font-awesome-icon>
-								<p class='text'>Clica para ver</p>
-							</div>
-						)}
-						{this.images.map((image, i) => (
-							<div key={i} class={`image ${this.showImage ? '' : 'image-with-blur'}`} style={{ backgroundImage: `url(${image})` }}></div>
-						))}
+						<div class='time'>{ convertTime(this.tweet.time) }</div>
 					</div>
 				</div>
 			);
@@ -91,7 +61,7 @@
     export default {
 		name: 'twitter',
 		components: {
-            tweet, tweetImages
+            tweet, images
         },
         data() {
             return {
@@ -104,9 +74,6 @@
             })
         },
         methods: {
-			getTime: function(time) {
-				return convertTime(time);
-			},
 			filterItems: function() {
 				const search = this.searchInput.toLowerCase().trim()
 
@@ -119,15 +86,6 @@
 				} else {
 					return this.tweets.filter(c => c.name.toString().toLowerCase().indexOf(search) > -1);
 				}
-			},
-			getContactColor: function(string) {
-				var hash = 0;
-
-    			for (var i = 0; i < string.length; i++) {
-      				hash = string.charCodeAt(i) + ((hash << 5) - hash);
-				}
-
-    			return 'hsl(' + hash % 360 + ', 30%, 70%)';
 			}
         },
     };

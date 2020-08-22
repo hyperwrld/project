@@ -9,7 +9,7 @@
 		props: {
 			imgs: Array
 		},
-		render () {
+		render (h) {
 			return (
 				<div class='info-container'>
 					Imagens anexadas: {this.imgs.length}
