@@ -1,9 +1,7 @@
 <template>
     <v-app>
         <cash/><hud/><notifications/><taskbar ref='teste'/>
-        <keep-alive>
-            <component :is='appData.currentComponent' v-if='appData.isEnabled'></component>
-        </keep-alive>
+        <component :is='appData.currentComponent' v-if='appData.isEnabled'></component>
         <dialogs v-if='appData.isEnabled'/>
     </v-app>
 </template>

@@ -38,13 +38,17 @@
 	import messages from './messages/messages.vue';
 	import message from './messages/message/message.vue';
 	import twitter from './twitter/twitter.vue';
+	import adverts from './adverts/adverts.vue';
 
 	import dialogs from './dialogs/dialogs.vue';
 
     export default {
         name: 'phone',
         components: {
-            home, history, contacts, dialogs, messages, message, twitter
+			home, history,
+			contacts, dialogs,
+			messages, message,
+			twitter, adverts
         },
         computed: {
             ...mapState({

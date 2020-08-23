@@ -16,7 +16,7 @@
 					<div class={`image-container ${this.showImage ? '' : 'max-height'}`}>
 						{!this.showImage && (
 							<div class='placeholder' onClick={() => this.showImage = true}>
-								<font-awesome-icon icon={["fas", "eye"]}></font-awesome-icon>
+								<font-awesome-icon icon={['fas', 'eye']}></font-awesome-icon>
 								<p class='text'>Clica para ver</p>
 							</div>
 						)}

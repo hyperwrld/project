@@ -5,7 +5,7 @@
 			<span class='brand-name'>Twitter</span>
         </div>
         <div class='tweets-list'>
-            <div v-if='this.tweets.length >= 0'>
+            <div v-if='this.tweets.length > 0'>
 				<font-awesome-icon class='button' :icon='["fas", "feather-alt"]' @click='sendTweet'></font-awesome-icon>
 				<div class='tweet' v-for='tweet in this.tweets'>
 					<tweet :tweet='tweet'/>
@@ -60,7 +60,7 @@
 				<div class='tweet-square'>
 					{this.tweet.retweeter && (
 						<div class='retweet-info'>
-							<font-awesome-icon icon={["fas", "retweet"]}></font-awesome-icon>
+							<font-awesome-icon icon={['fas', 'retweet']}></font-awesome-icon>
 							<span class='name'>{this.tweet.retweeter + ' retweetou'}</span>
 						</div>
 					)}
@@ -75,8 +75,8 @@
 						)}
 					</div>
 					<div class='bottom-bar'>
-						<font-awesome-icon icon={["fas", "reply"]} onClick={(e) => this.sendTweet(this.tweet.name, e)}></font-awesome-icon>
-						<font-awesome-icon icon={["fas", "retweet"]} onClick={(e) => this.sendRetweet(this.tweet.id, e)}></font-awesome-icon>
+						<font-awesome-icon icon={['fas', 'reply']} onClick={(e) => this.sendTweet(this.tweet.name, e)}></font-awesome-icon>
+						<font-awesome-icon icon={['fas', 'retweet']} onClick={(e) => this.sendRetweet(this.tweet.id, e)}></font-awesome-icon>
 						<div class='time'>{convertTime(this.tweet.time)}</div>
 					</div>
 				</div>
