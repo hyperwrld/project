@@ -21,7 +21,7 @@
 							</div>
 						)}
 						{this.imgs.map((image, i) => (
-							<div key={i} class={`image ${this.showImage ? '' : 'image-with-blur'}`} style={{ backgroundImage: `url(${image})` }}></div>
+							<div key={i} class={`image ${this.showImage ? '' : 'image-with-blur'}`} style={{ backgroundImage: `url(${image})` }} onClick={() => this.showImage = false}></div>
 						))}
 					</div>
 				</div>
