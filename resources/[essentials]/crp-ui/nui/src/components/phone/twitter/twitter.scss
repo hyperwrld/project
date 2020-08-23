@@ -18,41 +18,18 @@ html, .container {
         height: 6%;
         padding: 0 6%;
         padding-bottom: 3%;
-        width: 100%;
+		width: 100%;
+		justify-content: center;
 
-        .search-wrapper {
-            width: 85%;
-            height: 100%;
-            border-radius: 2px;
-            display: flex;
-            align-items: center;
-            font-size: 0.8rem;
-            margin-right: 5%;
+		svg {
+			font-size: 0.9rem;
+			color: #1DA1F2;
+		}
 
-            input {
-                outline: none;
-                width: 90%;
-                padding: 0 1%;
-                color: black;
-
-                &::placeholder, &:focus {
-                    color: black;
-                }
-            }
-        }
-
-        .fa-phone-alt {
-            width: 10%;
-        }
-
-        .fa-search {
-            width: 12%;
-        }
-
-        .fa-phone-alt, .fa-search {
-            padding: 2px;
-            height: 100%;
-        }
+		.brand-name {
+			font-size: 0.9rem;
+			margin-left: 2%;
+		}
     }
 
     .tweets-list {
@@ -70,7 +47,14 @@ html, .container {
         flex-direction: column;
         flex-flow: column;
 		justify-content: flex-start;
-		position: relative;
+        position: relative;
+
+        .button {
+			position: absolute;
+			z-index: 99;
+			right: 5%;
+			bottom: 2%;
+        }
 
         &::-webkit-scrollbar {
             display: none;
@@ -95,65 +79,90 @@ html, .container {
 			}
 		}
 
-        div > .tweet > .tweet-square {
-            height: fit-content;
-            width: 100%;
+		& > div {
+			overflow: auto;
 
-            position: relative;
-            display: flex;
-
-            align-items: center;
-			padding: 2% 3%;
-            flex: 0 1 auto;
-            flex-direction: column;
-            border-radius: 2px;
-			background: #009bf5;
-			text-align: left;
-			box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
-			color: white;
-			margin-bottom: 5%;
-
-			::v-deep > * {
-				width: 100%;
+			&::-webkit-scrollbar {
+				display: none;
 			}
 
-			::v-deep .account-info {
-				display: flex;
-				font-size: 0.7rem;
-				align-items: center;
+			.tweet {
+				margin: 2%;
 
-				.name {
-					white-space: nowrap;
-					overflow: hidden;
-					text-overflow: ellipsis;
-					font-weight: bold;
-				}
+				.tweet-square {
+					height: fit-content;
+					width: 100%;
 
-				.username {
-					margin-left: 3%;
-					font-size: 0.6rem;
-				}
-			}
+					position: relative;
+					display: flex;
 
-			::v-deep .content {
-				margin: 3% 0;
-				font-size: 0.7rem;
-			}
+					align-items: center;
+					padding: 2% 3%;
+					flex: 0 1 auto;
+					flex-direction: column;
+					border-radius: 2px;
+					background: #009bf5;
+					text-align: left;
+					box-shadow: 0px 0px 3px 0px rgba(0,0,0,0.75);
+					color: white;
+					margin-bottom: 5%;
 
-			::v-deep .bottom-bar {
-				display: flex;
-				font-size: 0.6rem;
-				align-items: center;
+					::v-deep > * {
+						width: 100%;
+					}
 
-				& > :first-child {
-					margin-right: 6%;
-				}
+					::v-deep .retweet-info {
+						font-size: 0.45rem;
 
-				.time {
-					position: absolute;
-					font-size: 0.5rem;
-					right: 5%;
-					text-align: right;
+						.name {
+							margin-left: 2%;
+							font-size: 0.55rem;
+						}
+					}
+
+					::v-deep .account-info {
+						display: flex;
+						font-size: 0.7rem;
+						align-items: center;
+
+						.name {
+							white-space: nowrap;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							font-weight: bold;
+						}
+
+						.username {
+							margin-left: 2%;
+							font-size: 0.6rem;
+						}
+					}
+
+					::v-deep .content {
+						margin: 3% 0;
+						font-size: 0.7rem;
+
+						.hashtag {
+							color: blueviolet;
+						}
+					}
+
+					::v-deep .bottom-bar {
+						display: flex;
+						font-size: 0.6rem;
+						align-items: center;
+
+						& > :first-child {
+							margin-right: 6%;
+						}
+
+						.time {
+							position: absolute;
+							font-size: 0.5rem;
+							right: 5%;
+							text-align: right;
+						}
+					}
 				}
 			}
 		}

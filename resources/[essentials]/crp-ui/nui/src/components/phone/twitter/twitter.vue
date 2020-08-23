@@ -1,15 +1,13 @@
 <template>
     <v-container fluid>
         <div class='top-bar'>
-            <div class='search-wrapper'>
-                <input type='text' v-model='searchInput' placeholder='Procurar...'/>
-                <font-awesome-icon :icon='["fas", "search"]'></font-awesome-icon>
-            </div>
-            <font-awesome-icon :icon='["fas", "user-plus"]'></font-awesome-icon>
+			<font-awesome-icon :icon='["fab", "twitter"]'></font-awesome-icon>
+			<span class='brand-name'>Twitter</span>
         </div>
         <div class='tweets-list'>
-            <div v-if='filterItems().length >= 0'>
-				<div class='tweet' v-for='tweet in filterItems()' :key='tweet.message'>
+            <div v-if='this.tweets.length >= 0'>
+				<font-awesome-icon class='button' :icon='["fas", "feather-alt"]' @click='sendTweet'></font-awesome-icon>
+				<div class='tweet' v-for='tweet in this.tweets'>
 					<tweet :tweet='tweet'/>
 				</div>
             </div>
@@ -33,24 +31,56 @@
 			images
 		},
 		props: ['tweet'],
+		methods: {
+			sendTweet: function(name) {
+				dialogs.createDialog({
+					attach: '.tweets-list', title: 'Envie um tweet',
+					choices: [
+						{ key: 'message', value: '@' + name + ' ', placeholder: 'Mensagem', errorText: 'Mande um tweet.' }
+					],
+					sendButton: 'Enviar', nuiType: 'sendTweet', additionalData: {}
+				}).then(response => {
+					if (response) this.$store.state.phone.tweets.push(response.data.tweetData);
+      			})
+			},
+			sendRetweet: function(tweetId) {
+				dialogs.createDialog({
+					attach: '.tweets-list', title: 'Tens a certeza que queres retweetar?',
+					sendButton: 'Retweetar', nuiType: 'sendRetweet', additionalData: { tweetId: tweetId }
+				}).then(response => {
+					if (response) this.$store.state.phone.tweets.push(response.data.tweetData);
+      			})
+			}
+		},
 		render (h) {
-			const {message: message, imgs} = processMessage(this.tweet.message);
+			let {message: message, imgs} = processMessage(this.tweet.message);
+			const matches = message.match(/\B#(\d*[A-Za-z_]+\w*)\b(?!;)/g);
+
+			if (matches) {
+				matches.forEach(element => message = message.replace(element, `<span class='hashtag'>${element}</span>`));
+			}
 
 			return (
 				<div class='tweet-square'>
+					{this.tweet.retweeter && (
+						<div class='retweet-info'>
+							<font-awesome-icon icon={["fas", "retweet"]}></font-awesome-icon>
+							<span class='name'>{this.tweet.retweeter + ' retweetou'}</span>
+						</div>
+					)}
 					<div class='account-info'>
-						<div class='name'>{this.tweet.owner}</div>
-						<div class='username'>{'@' + (this.tweet.owner).replace(/\s/g, '')}</div>
+						<div class='name'>{this.tweet.name}</div>
+						<div class='username'>@{(this.tweet.name).replace(/\s/g, '')}</div>
 					</div>
 					<div class='content'>
-						<div class='text'>{ message }</div>
+						<div class='text' domPropsInnerHTML={message}></div>
 						{imgs.length > 0 && (
 							<images imgs={imgs}/>
 						)}
 					</div>
 					<div class='bottom-bar'>
-						<font-awesome-icon icon={["fas", "reply"]}></font-awesome-icon>
-						<font-awesome-icon icon={["fas", "retweet"]}></font-awesome-icon>
+						<font-awesome-icon icon={["fas", "reply"]} onClick={(e) => this.sendTweet(this.tweet.name, e)}></font-awesome-icon>
+						<font-awesome-icon icon={["fas", "retweet"]} onClick={(e) => this.sendRetweet(this.tweet.id, e)}></font-awesome-icon>
 						<div class='time'>{convertTime(this.tweet.time)}</div>
 					</div>
 				</div>
@@ -71,21 +101,19 @@
         computed: {
             ...mapGetters('phone', {
 				tweets: 'getTweets'
-            })
+			})
         },
         methods: {
-			filterItems: function() {
-				const search = this.searchInput.toLowerCase().trim();
-
-				if (!search) {
-					return this.tweets;
-				}
-
-				if (isNaN(this.searchInput)) {
-					return this.tweets.filter(c => c.name.toLowerCase().indexOf(search) > -1);
-				} else {
-					return this.tweets.filter(c => c.name.toString().toLowerCase().indexOf(search) > -1);
-				}
+			sendTweet: function() {
+				dialogs.createDialog({
+					attach: '.tweets-list', title: 'Envie um tweet',
+					choices: [
+						{ key: 'message', placeholder: 'Mensagem', errorText: 'Mande um tweet.' }
+					],
+					sendButton: 'Enviar', nuiType: 'sendTweet', additionalData: {}
+				}).then(response => {
+					if (response) this.tweets.push(response.data.tweetData);
+      			})
 			}
         },
     };

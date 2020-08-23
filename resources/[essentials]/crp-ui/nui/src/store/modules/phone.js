@@ -7,7 +7,7 @@ const state = {
         { code: 'twitter', name: 'Twitter', color: '#1DA1F2', icon: 'twitter', iconType: 'fab' }
     ],
 	currentApp: 'twitter', phoneNumber: 966831664,
-	callHistory: [], conversations: [], contacts: [], tweets: [ { id: 1, message: 'pqpqpapq p pviaiiai para o caralho https://i.gyazo.com/ec1f53177ac04477f6a08a93cbfaae67.png?333333333 https://i.gyazo.com/ec1f53177ac04477f6a08a93cb3367.png https://i.gyazo.com/555.png', owner: 'Lewis Hamilton', time: 1584110467}, { id: 2, message: 'lalalqlala', owner: 'Joao Carvalho', time: 1500000 } ],
+	callHistory: [], conversations: [], contacts: [], tweets: [],
 	dialogs: { status: false, isLoading: false, currentState: 'loading', currentDialog: '', dialogsData: {}, errorsList: [] }
 }
 
@@ -38,7 +38,9 @@ const getters = {
         return state.contacts;
 	},
 	getTweets: state => {
-		return state.tweets;
+		return state.tweets.sort(function(a, b) {
+			return b.id - a.id;
+		});
 	},
 	getDialogs: state => {
 		return state.dialogs;
@@ -68,7 +70,6 @@ const actions = {
 
 const mutations = {
 	updatePhone(state, data) {
-		console.log(data)
 		if (data.phoneNumber != null) {
 			state.phoneNumber = data.phoneNumber;
 		}
@@ -83,6 +84,10 @@ const mutations = {
 
 		if (data.contacts != null) {
 			state.contacts = data.contacts;
+		}
+
+		if (data.tweets != null) {
+			state.tweets = data.tweets;
 		}
 	},
     setCurrentApp(state, appName) {
