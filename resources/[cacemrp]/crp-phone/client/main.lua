@@ -22,8 +22,6 @@ AddEventHandler('crp-phone:updatePhone', function(data)
 		eventName = 'updatePhone',
 		phoneData = data
 	})
-
-	print(json.encode(data.conversations))
 end)
 
 RegisterNetEvent('crp-phone:receiveMessage')
@@ -33,9 +31,4 @@ AddEventHandler('crp-phone:receiveMessage', function(number, message)
 		number = number,
 		message = message
 	})
-end)
-
-RegisterCommand('msg', function(source, args)
-	print('alloooo?')
-	local success = CRP.RPC:execute('crp-phone:getConversations')
 end)

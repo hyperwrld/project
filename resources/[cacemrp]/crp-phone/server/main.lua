@@ -3,7 +3,8 @@ AddEventHandler('crp-base:playerLoaded',function(source, character)
 		phoneNumber = character:getPhoneNumber(),
 		history = getHistory(source),
 		conversations = getConversations(source),
-		contacts = getContacts(source)
+		contacts = getContacts(source),
+		tweets = getTweets()
 	})
 end)
 
@@ -37,6 +38,18 @@ end)
 
 CRP.RPC:register('crp-phone:editContact', function(source, data)
     return editContact(source, data.id, data.name, data.number)
+end)
+
+CRP.RPC:register('crp-phone:getTweets', function(source, data)
+    return getTweets()
+end)
+
+CRP.RPC:register('crp-phone:sendTweet', function(source, data)
+    return sendTweet(source, data.message)
+end)
+
+CRP.RPC:register('crp-phone:sendRetweet', function(source, data)
+    return sendRetweet(source, data.tweetId)
 end)
 
 function generateTime()
