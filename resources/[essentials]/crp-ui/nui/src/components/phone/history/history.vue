@@ -45,7 +45,7 @@
         },
         computed: {
             ...mapGetters('phone', {
-                callHistory: 'getCallHistory'
+                history: 'getHistory'
             })
         },
         methods: {
@@ -86,13 +86,13 @@
 				const search = this.searchInput.toLowerCase().trim();
 
 				if (!search) {
-					return this.callHistory;
+					return this.history;
 				}
 
 				if (isNaN(this.searchInput)) {
-					return this.callHistory.filter(c => c.name.toLowerCase().indexOf(search) > -1);
+					return this.history.filter(c => c.name.toLowerCase().indexOf(search) > -1);
 				} else {
-					return this.callHistory.filter(c => c.name.toString().toLowerCase().indexOf(search) > -1);
+					return this.history.filter(c => c.name.toString().toLowerCase().indexOf(search) > -1);
 				}
 			}
         },

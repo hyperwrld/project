@@ -25,7 +25,7 @@ Citizen.CreateThread(function()
         Citizen.Wait(50)
 
         if isCompassOn or IsVehicleEngineOn(GetVehiclePedIsUsing(playerPed)) then
-            SendNUIMessage({ eventName = 'updateCompassData', direction = GetDirectionHeading() })
+            SendNUIMessage({ eventName = 'hud/setCompassDirection', eventData = GetDirectionHeading() })
         else
             Citizen.Wait(1000)
         end
@@ -50,7 +50,7 @@ Citizen.CreateThread(function()
             if not isOnVehicle then
                 DisplayRadar(true)
 
-                SendNUIMessage({ eventName = 'setVehicleStatus', status = true })
+                SendNUIMessage({ eventName = 'hud/setVehicleStatus', eventData = true })
 
                 isOnVehicle = true
             end
@@ -63,11 +63,11 @@ Citizen.CreateThread(function()
                 streetName = streetName .. ' | [' .. zoneName .. ']'
             end
 
-            SendNUIMessage({ eventName = 'updateVehicleData', vehicleData = { location = streetName, speed = speed, fuel = DecorGetInt(vehicle, 'currentFuel'), time = GetCurrentTime() }})
+            SendNUIMessage({ eventName = 'hud/setVehicleData', eventData = { location = streetName, speed = speed, fuel = DecorGetInt(vehicle, 'currentFuel'), time = GetCurrentTime() }})
         elseif isOnVehicle then
             isOnVehicle = false
 
-            SendNUIMessage({ eventName = 'setVehicleStatus', status = false })
+            SendNUIMessage({ eventName = 'hud/setVehicleStatus', eventData = false })
 
             DisplayRadar(false)
         else
@@ -118,13 +118,13 @@ function GetCurrentTime()
 end
 
 AddEventHandler('crp-ui:setCompassStatus', function(status)
-    SendNUIMessage({ eventName = 'setCompassStatus', status = status })
+    SendNUIMessage({ eventName = 'hud/setCompassStatus', eventData = status })
 end)
 
 AddEventHandler('crp-ui:setHudPosition', function(x, y)
-    SendNUIMessage({ eventName = 'setHudPosition', minimapData = { x = x, y = y }})
+    SendNUIMessage({ eventName = 'hud/setMinimapData', eventData = { x = x, y = y }})
 end)
 
 AddEventHandler('crp-ui:updateCharacterData', function(data)
-    SendNUIMessage({ eventName = 'updateCharacterData', status = data })
+    SendNUIMessage({ eventName = 'hud/setCharacterData', eventData = data })
 end)

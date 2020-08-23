@@ -5,14 +5,14 @@ AddEventHandler('crp-ui:setTaskbar', function(data, callback)
     if not isDoingAction then
         isDoingAction, wasCancelled = true, false
 
-        SendNUIMessage({ eventName = 'setTaskbar', taskbarData = { text = data.text, time = data.time }})
+        SendNUIMessage({ eventName = 'taskbar/setTaskbar', eventData = { text = data.text, time = data.time }})
 
         Citizen.CreateThread(function()
             while isDoingAction do
                 Citizen.Wait(0)
 
                 if IsControlJustPressed(0, 200) and not data.cancel then
-                    SendNUIMessage({ eventName = 'stopTaskbar' })
+                    SendNUIMessage({ eventName = 'taskbar/stopTaskbar' })
                 end
             end
 
