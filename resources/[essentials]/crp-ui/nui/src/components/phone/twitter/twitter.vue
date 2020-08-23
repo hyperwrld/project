@@ -38,18 +38,14 @@
 					choices: [
 						{ key: 'message', value: '@' + name + ' ', placeholder: 'Mensagem', errorText: 'Mande um tweet.' }
 					],
-					sendButton: 'Enviar', nuiType: 'sendTweet', additionalData: {}
-				}).then(response => {
-					if (response) this.$store.state.phone.tweets.push(response.data.tweetData);
-      			})
+					sendButton: 'Enviar', nuiType: 'sendTweet'
+				});
 			},
 			sendRetweet: function(tweetId) {
 				dialogs.createDialog({
 					attach: '.tweets-list', title: 'Tens a certeza que queres retweetar?',
 					sendButton: 'Retweetar', nuiType: 'sendRetweet', additionalData: { tweetId: tweetId }
-				}).then(response => {
-					if (response) this.$store.state.phone.tweets.push(response.data.tweetData);
-      			})
+				});
 			}
 		},
 		render (h) {
@@ -110,10 +106,8 @@
 					choices: [
 						{ key: 'message', placeholder: 'Mensagem', errorText: 'Mande um tweet.' }
 					],
-					sendButton: 'Enviar', nuiType: 'sendTweet', additionalData: {}
-				}).then(response => {
-					if (response) this.tweets.push(response.data.tweetData);
-      			})
+					sendButton: 'Enviar', nuiType: 'sendTweet'
+				});
 			}
         },
     };
