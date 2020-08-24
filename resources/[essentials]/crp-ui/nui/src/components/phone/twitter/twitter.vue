@@ -36,7 +36,7 @@
 				dialogs.createDialog({
 					attach: '.tweets-list', title: 'Envie um tweet',
 					choices: [
-						{ key: 'message', value: '@' + name + ' ', placeholder: 'Mensagem', errorText: 'Mande um tweet.' }
+						{ key: 'message', value: '@' + name + ' ', placeholder: 'Mensagem', errorText: 'Escolha uma mensagem para colocar no seu tweet.' }
 					],
 					sendButton: 'Enviar', nuiType: 'sendTweet'
 				});
@@ -104,7 +104,7 @@
 				dialogs.createDialog({
 					attach: '.tweets-list', title: 'Envie um tweet',
 					choices: [
-						{ key: 'message', placeholder: 'Mensagem', errorText: 'Mande um tweet.' }
+						{ key: 'message', placeholder: 'Mensagem', errorText: 'Escolha uma mensagem para colocar no seu tweet.' }
 					],
 					sendButton: 'Enviar', nuiType: 'sendTweet'
 				});
