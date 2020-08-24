@@ -83,7 +83,7 @@
 					for (let i = 0; i < this.choices.length; i++) {
 						const choice = this.choices[i];
 
-						if (choice.max && choice.value == undefined || (choice.value.length > choice.max || choice.value.length < choice.min)) {
+						if (choice.value == undefined || ((choice.max && choice.value.length > choice.max) || (choice.min && choice.value.length < choice.min))) {
 							this.errorsList.push(choice.errorText);
 						} else {
 							choiceData[choice.key] = choice.value;
