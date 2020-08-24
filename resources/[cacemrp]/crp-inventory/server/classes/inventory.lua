@@ -32,13 +32,14 @@ function CreateInventory(data, items)
 		return false
     end
 
-    self.addInventoryItem = function(name, slot, count, meta)
-        table.insert(self.items, { name = name, count = count, slot = slot, meta = meta })
+    self.addInventoryItem = function(name, slot, count, meta, creationTime)
+        table.insert(self.items, { name = name, count = count, slot = slot, meta = meta, creationTime = creationTime})
 
         self.weight = self.weight + (itemsList[name].weight * count)
 
-        exports.ghmattimysql:execute('INSERT INTO inventory (name, item, count, slot, meta) VALUES (@name, @item, @count, @slot, @meta)',
-        { ['@name'] = self.name, ['@item'] = name, ['@count'] = count, ['@slot'] = slot, ['@meta'] = meta and json.encode(meta) or json.encode({}) })
+        exports.ghmattimysql:execute('INSERT INTO inventory (name, item, count, slot, meta, creation_time) VALUES (@name, @item, @count, @slot, @meta, @creationTime)', {
+			['@name'] = self.name, ['@item'] = name, ['@count'] = count, ['@slot'] = slot, ['@meta'] = meta and json.encode(meta) or json.encode({}), ['@creationTime'] = creationTime
+		})
     end
 
     self.removeInventoryItem = function(name, slot, state)
@@ -81,13 +82,14 @@ function CreateInventory(data, items)
         self.weight = (self.weight - weight) + (itemsList[itemData.name].weight * itemData.count)
 
         if item then
-            self.items[index] = { name = itemData.name, slot = currentSlot, count = itemData.count, meta = itemData.meta }
+            self.items[index] = { name = itemData.name, slot = currentSlot, count = itemData.count, meta = itemData.meta, creationTime = itemData.creationTime }
         else
-            table.insert(self.items, { name = itemData.name, slot = currentSlot, count = itemData.count, meta = itemData.meta })
+            table.insert(self.items, { name = itemData.name, slot = currentSlot, count = itemData.count, meta = itemData.meta, creationTime = itemData.creationTime })
         end
 
-        exports.ghmattimysql:execute('UPDATE inventory SET name = @inventory, slot = @slot WHERE name = @currentInventory AND item = @name AND slot = @currentSlot;',
-        { ['@inventory'] = self.name, ['@slot'] = currentSlot, ['@currentInventory'] = currentInventory, ['@name'] = itemData.name, ['@currentSlot'] = itemData.slot })
+        exports.ghmattimysql:execute('UPDATE inventory SET name = @inventory, slot = @slot WHERE name = @currentInventory AND item = @name AND slot = @currentSlot;', {
+			['@inventory'] = self.name, ['@slot'] = currentSlot, ['@currentInventory'] = currentInventory, ['@name'] = itemData.name, ['@currentSlot'] = itemData.slot
+		})
     end
 
     self.canCarryItem = function(sameInventory, name, count, slot)

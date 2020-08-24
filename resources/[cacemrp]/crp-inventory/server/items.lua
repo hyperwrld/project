@@ -24,3 +24,14 @@ itemsList = {
     ['129942349']   = { name = 'Batatas', weight = 0.75, image = 'crp-batatas.png', canStack = true, isWeapon = false, description = 'Batatas fritas são comumente servidas como petisco ou acompanhamento.' },
     ['119399505']   = { name = 'Gazua', weight = 3, image = 'crp-lockpick.png', canStack = true, isWeapon = false, description = 'Ferramenta utilizada para forçar a abertura de fechaduras.' },
 }
+
+vehicleWeights = {
+    ['stockade'] = 350, ['stockade3'] = 350, ['pounder2'] = 750, ['pounder'] = 750, ['mule4'] = 500, ['mule3'] = 500, ['mule2'] = 500, ['mule'] = 500, ['benson'] = 650, -- Comercial
+    ['rhapsody'] = 150, ['prairie'] = 150, ['panto'] = 100, ['issi3'] = 100, ['issi2'] = 110, ['dilettante2'] = 150, ['dilettante'] = 150, ['brioso'] = 100, ['kanjo'] = 150, ['blista'] = 150, ['asbo'] = 150, -- Compacts
+    ['2020explorer'] = 230, ['2016explorer'] = 230, ['camaroRB'] = 200, ['chgr'] = 200, ['cvpilegg'] = 200, ['jeeppol'] = 230, ['r1200rtp'] = 40, ['policebk'] = 10, ['tarlegg'] = 200, ['dinghyy'] = 200, ['fire3'] = 230,  -- Emergência
+    ['tug'] = 600, ['tropic'] = 400, ['tropic2'] = 400, ['toro'] = 200, ['toro2'] = 200, ['suntrap'] = 200, ['squalo'] = 200, ['speeder'] = 200, ['speeder2'] = 200, ['seashark2'] = 19, ['seashark'] = 19,
+    ['seashark3'] = 19, ['marquis'] = 400, ['jetmax'] = 300, ['dinghy2'] = 180, ['dinghy'] = 180, ['dinghy3'] = 180, ['dinghy4'] = 180, -- Barcos
+    ['zion2'] = 200, ['zion'] = 200, ['windsor2'] = 220, ['windsor'] = 220, ['sentinel'] = 200, ['sentinel2'] = 200, ['oracle'] = 200, ['oracle2'] = 200, ['jackal'] = 200, ['felon2'] = 200,
+    ['felon'] = 200, ['f620'] = 180, ['exemplar'] = 190, ['cogcabrio'] = 200, -- Coupes
+
+}
