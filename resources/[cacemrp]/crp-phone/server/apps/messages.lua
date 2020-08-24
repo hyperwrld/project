@@ -40,7 +40,7 @@ function sendMessage(targetNumber, message)
 			local character = characters[i]
 
 			if character:getPhoneNumber() == targetNumber then
-				TriggerClientEvent('crp-phone:receiveMessage', character.source, characterPhone, message)
+				TriggerClientEvent('crp-phone:receiveMessage', character.source, { characterPhone, message })
 				break
 			end
 		end

@@ -14,7 +14,9 @@ function sendTweet(source, message)
 
 	tweets[#tweets + 1] = tweetData
 
-	return true, tweetData
+	TriggerClientEvent('crp-phone:receiveTweet', -1, tweetData)
+
+	return true
 end
 
 function sendRetweet(source, tweetId)
@@ -27,5 +29,7 @@ function sendRetweet(source, tweetId)
 
 	tweets[#tweets + 1] = tweetData
 
-	return true, tweetData
+	TriggerClientEvent('crp-phone:receiveTweet', -1, tweetData)
+
+	return true
 end

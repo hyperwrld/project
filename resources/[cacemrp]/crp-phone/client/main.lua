@@ -19,16 +19,20 @@ end
 RegisterNetEvent('crp-phone:updatePhone')
 AddEventHandler('crp-phone:updatePhone', function(data)
 	SendUiMessage({
-		eventName = 'updatePhone',
-		phoneData = data
+		eventName = 'phone/setData', eventData = data
 	})
 end)
 
 RegisterNetEvent('crp-phone:receiveMessage')
-AddEventHandler('crp-phone:receiveMessage', function(number, message)
+AddEventHandler('crp-phone:receiveMessage', function(data)
 	SendUiMessage({
-		eventName = 'receiveMessage',
-		number = number,
-		message = message
+		eventName = 'phone/receiveMessage', eventData = data
+	})
+end)
+
+RegisterNetEvent('crp-phone:receiveTweet')
+AddEventHandler('crp-phone:receiveTweet', function(data)
+	SendUiMessage({
+		eventName = 'phone/receiveTweet', eventData = data
 	})
 end)

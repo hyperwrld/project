@@ -5,13 +5,13 @@ RegisterUiCallback('getTweets', function(data, cb)
 end)
 
 RegisterUiCallback('sendTweet', function(data, cb)
-    local success, tweetData = CRP.RPC:execute('crp-phone:sendTweet', data)
+    local success = CRP.RPC:execute('crp-phone:sendTweet', data)
 
-    cb({ state = success, tweetData = tweetData })
+    cb({ state = success })
 end)
 
 RegisterUiCallback('sendRetweet', function(data, cb)
-    local success, tweetData = CRP.RPC:execute('crp-phone:sendRetweet', data)
+    local success = CRP.RPC:execute('crp-phone:sendRetweet', data)
 
-    cb({ state = success, tweetData = tweetData })
+    cb({ state = success })
 end)
