@@ -52,6 +52,18 @@ CRP.RPC:register('crp-phone:sendRetweet', function(source, data)
     return sendRetweet(source, data.tweetId)
 end)
 
+CRP.RPC:register('crp-phone:getAdverts', function(source, data)
+    return getAdverts()
+end)
+
+CRP.RPC:register('crp-phone:postAdvert', function(source, data)
+    return postAdvert(source, data.message)
+end)
+
+CRP.RPC:register('crp-phone:removeAdvert', function(source, data)
+    return removeAdvert(source, data.advertId)
+end)
+
 function generateTime()
 	return os.time(os.date("!*t"))
 end

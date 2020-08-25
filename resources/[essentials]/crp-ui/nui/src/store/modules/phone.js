@@ -4,10 +4,10 @@ const state = {
     apps: [
         { code: 'history', name: 'Telefone', color: '#13b86c', icon: 'phone-alt', iconType: 'fas' }, { code: 'messages', name: 'Mensagens', color: '#0191e7', icon: 'comment-alt', iconType: 'fas' },
         { code: 'contacts', name: 'Contactos', color: '#fc7b20', icon: 'user', iconType: 'fas' }, { code: 'garage', name: 'Garagem', color: '#ef1443', icon: 'car', iconType: 'fas' },
-        { code: 'twitter', name: 'Twitter', color: '#1DA1F2', icon: 'twitter', iconType: 'fab' }
+        { code: 'twitter', name: 'Twitter', color: '#1DA1F2', icon: 'twitter', iconType: 'fab' }, { code: 'adverts', name: 'Páginas amarelas', color: '#fddb3a', icon: 'ad', iconType: 'fas' }
     ],
-	currentApp: 'twitter', phoneNumber: 966831664,
-	history: [], conversations: [], contacts: [], tweets: [],
+	currentApp: 'home', phoneNumber: 966831664,
+	history: [], conversations: [], contacts: [], tweets: [], adverts: [],
 	dialogs: { status: false, isLoading: false, currentState: 'loading', currentDialog: '', dialogsData: {}, errorsList: [] }
 }
 
@@ -39,6 +39,11 @@ const getters = {
 	},
 	getTweets: state => {
 		return state.tweets.sort(function(a, b) {
+			return b.id - a.id;
+		});
+	},
+	getAdverts: state => {
+		return state.adverts.sort(function(a, b) {
 			return b.id - a.id;
 		});
 	},
