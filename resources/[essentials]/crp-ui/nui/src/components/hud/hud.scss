@@ -1,229 +1,273 @@
+@font-face {
+    font-family: pcdown;
+    src: url(pdown.ttf);
+}
+
 html, .container {
     position: absolute;
     overflow: hidden;
     height: 100%;
-    width: 100%;
-}
+	width: 100%;
 
-.minimap {
-    position: absolute;
-    height: fit-content;
-    width: fit-content;
+	.money-container {
+		position: absolute;
+		top: 5vh;
+		right: 3vw;
+		width: fit-content;
 
-    .bar {
-        height: 26.823529411%;
-        left: 2.725%;
-        right: 2.725%;
-        display: flex;
-        flex-wrap: wrap;
-        position: absolute;
-        bottom: -11.570588235%;
-        align-items: center;
-        justify-content: center;
+		font-family: pcdown;
+		text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+		color: white;
+		padding: 12px;
+		margin-right: auto;
+		margin-left: auto;
 
-        .status {
-            margin-right: 0.5%;
-            margin-left: 0.5%;
-            height: 50% !important;
-        }
+		.money {
+			font-size: 30px;
+			padding: 4px;
 
-        div:first-child {
-            margin-left: 0 !important;
-        }
+			span {
+				color: rgb(0, 125, 0);
+			}
+		}
 
-        div:last-child {
-            margin-right: 0 !important;
-        }
+		.changedMney {
+			font-size: 20px;
+			position: absolute;
+			right: 1.3vw;
+			bottom: 0.1vh;
+			white-space: nowrap;
+
+			.add {
+				color: rgb(0, 125, 0);
+			}
+
+			.remove {
+				color: rgb(250, 0, 0);
+			}
+		}
+	}
+
+	.minimap {
+		position: absolute;
+		height: fit-content;
+		width: fit-content;
+
+		.bar {
+			height: 26.823529411%;
+			left: 2.725%;
+			right: 2.725%;
+			display: flex;
+			flex-wrap: wrap;
+			position: absolute;
+			bottom: -11.570588235%;
+			align-items: center;
+			justify-content: center;
+
+			.status {
+				margin-right: 0.5%;
+				margin-left: 0.5%;
+				height: 50% !important;
+			}
+
+			div:first-child {
+				margin-left: 0 !important;
+			}
+
+			div:last-child {
+				margin-right: 0 !important;
+			}
 
 
-        .health, .armour {
-            width: 23.5%;
-            box-sizing: border-box;
-            border: 2px solid rgba(54, 52, 52, 0.8);
-            background-color: #545454;
+			.health, .armour {
+				width: 23.5%;
+				box-sizing: border-box;
+				border: 2px solid rgba(54, 52, 52, 0.8);
+				background-color: #545454;
 
-            :first-child {
-                position: absolute;
-                margin-top: 1.5%;
-                margin-left: 1.5%;
-                color: white;
-                z-index: 999;
-            }
+				:first-child {
+					position: absolute;
+					margin-top: 1.5%;
+					margin-left: 1.5%;
+					color: white;
+					z-index: 999;
+				}
 
-            :last-child {
-                height: 100%;
-                transition: 0.2s ease-in-out;
-            }
+				:last-child {
+					height: 100%;
+					transition: 0.2s ease-in-out;
+				}
 
-            .sub-health {
-                background-color: #73be73;
-            }
+				.sub-health {
+					background-color: #73be73;
+				}
 
-            .sub-armour {
-                background-color: #6a89cc;
-            }
-        }
+				.sub-armour {
+					background-color: #6a89cc;
+				}
+			}
 
-        .hunger, .thirst, .breath, .stress {
-            width: 12%;
-            border: 2px solid rgba(54, 52, 52, 0.8);
-            background-color: #545454;
+			.hunger, .thirst, .breath, .stress {
+				width: 12%;
+				border: 2px solid rgba(54, 52, 52, 0.8);
+				background-color: #545454;
 
-            :first-child {
-                position: absolute;
-                color: rgb(255, 255, 255);
-                z-index: 999;
-                margin-top: 1.5%;
-                margin-left: 1.5%;
-                font-size: 1.5vh;
-            }
+				:first-child {
+					position: absolute;
+					color: rgb(255, 255, 255);
+					z-index: 999;
+					margin-top: 1.5%;
+					margin-left: 1.5%;
+					font-size: 1.5vh;
+				}
 
-            .fa-tint:first-child {
-                margin-top: 1.5% !important;
-                margin-left: 3% !important;
-            }
+				.fa-tint:first-child {
+					margin-top: 1.5% !important;
+					margin-left: 3% !important;
+				}
 
-            div:last-child {
-                position: relative;
-                bottom: 0;
-                transition: 0.2s ease-in-out;
-                max-height: 100%;
-                height: 0%;
-            }
+				div:last-child {
+					position: relative;
+					bottom: 0;
+					transition: 0.2s ease-in-out;
+					max-height: 100%;
+					height: 0%;
+				}
 
-            .sub-hunger {
-                background-color: #f6b93b;
-            }
+				.sub-hunger {
+					background-color: #f6b93b;
+				}
 
-            .sub-thirst {
-                background-color: #4d79ff;
-            }
+				.sub-thirst {
+					background-color: #4d79ff;
+				}
 
-            .sub-breath {
-                background-color: rgba(130, 210, 255, 0.93);
-            }
+				.sub-breath {
+					background-color: rgba(130, 210, 255, 0.93);
+				}
 
-            .sub-stress {
-                background-color: #c70039;
-            }
-        }
-    }
+				.sub-stress {
+					background-color: #c70039;
+				}
+			}
+		}
 
-    .vehicle-info {
-        font-family: 'Quantico', sans-serif;
-        font-size: 17px;
-        color: white;
-        text-shadow: -1px 1px 2px #000, 1px 1px 2px #000, 1px -1px 0 #000, -1px -1px 0 #000;
+		.vehicle-info {
+			font-family: 'Quantico', sans-serif;
+			font-size: 17px;
+			color: white;
+			text-shadow: -1px 1px 2px #000, 1px 1px 2px #000, 1px -1px 0 #000, -1px -1px 0 #000;
 
-        p {
-            margin-bottom: 0;
-        }
+			p {
+				margin-bottom: 0;
+			}
 
-        .top {
-            position: absolute;
-            height: 12.823529411%;
-            width: 20%;
-            left: 105.725%;
-            right: 2.725%;
-            bottom: 34.0706%;
-        }
+			.top {
+				position: absolute;
+				height: 12.823529411%;
+				width: 20%;
+				left: 105.725%;
+				right: 2.725%;
+				bottom: 34.0706%;
+			}
 
-        .compass {
-            bottom: 16.0706% !important;
-        }
+			.compass {
+				bottom: 16.0706% !important;
+			}
 
-        .middle {
-            display: flex;
-            flex-direction: row;
-            position: absolute;
-            height: 12.823529411%;
-            width: 200%;
-            left: 105.725%;
-            right: 2.725%;
-            bottom: 16.0706%;
+			.middle {
+				display: flex;
+				flex-direction: row;
+				position: absolute;
+				height: 12.823529411%;
+				width: 200%;
+				left: 105.725%;
+				right: 2.725%;
+				bottom: 16.0706%;
 
-            .fa-gas-pump {
-                font-size: 11px;
-            }
+				.fa-gas-pump {
+					font-size: 11px;
+				}
 
-            .low {
-                color: #ff4d40;
-            }
+				.low {
+					color: #ff4d40;
+				}
 
-            * {
-                display: flex;
-                flex-direction: row;
-                justify-content: center;
-                align-items: center;
-                margin-left: 1%;
-                margin-right: 1.5%;
+				* {
+					display: flex;
+					flex-direction: row;
+					justify-content: center;
+					align-items: center;
+					margin-left: 1%;
+					margin-right: 1.5%;
 
-                * {
-                    margin-bottom: 0;
-                }
+					* {
+						margin-bottom: 0;
+					}
 
-                :last-child {
-                    font-size: 10px;
-                    margin-left: 10%;
-                }
-            }
+					:last-child {
+						font-size: 10px;
+						margin-left: 10%;
+					}
+				}
 
-            div:first-child {
-                margin-left: 0;
-            }
+				div:first-child {
+					margin-left: 0;
+				}
 
-            div:last-child {
-                margin-right: 0;
-            }
+				div:last-child {
+					margin-right: 0;
+				}
 
-            .fuel, .speed {
-                width: 9%;
-                justify-content: left;
-            }
+				.fuel, .speed {
+					width: 9%;
+					justify-content: left;
+				}
 
-            .speed {
-                width: 15%;
-            }
+				.speed {
+					width: 15%;
+				}
 
-            .seatbelt, .speed-limiter {
-                img {
-                    width: 22px;
-                    height: 80%;
-                }
-            }
-        }
+				.seatbelt, .speed-limiter {
+					img {
+						width: 22px;
+						height: 80%;
+					}
+				}
+			}
 
-        .bottom {
-            display: flex;
-            flex-direction: row;
-            position: absolute;
-            height: 12.823529411%;
-            width: 300%;
-            left: 105.725%;
-            right: 2.725%;
-            bottom: -2.0706%;
-            align-items: center;
+			.bottom {
+				display: flex;
+				flex-direction: row;
+				position: absolute;
+				height: 12.823529411%;
+				width: 300%;
+				left: 105.725%;
+				right: 2.725%;
+				bottom: -2.0706%;
+				align-items: center;
 
-            .direction {
-                width: 100px;
-                height: 23px;
-                overflow: hidden;
-            }
+				.direction {
+					width: 100px;
+					height: 23px;
+					overflow: hidden;
+				}
 
-            .direction > .image {
-                height: 100%;
-                background-position: center center;
-                background-size: 400px;
-                background-repeat: repeat;
-                width: 800%;
-                z-index: 1;
-                background-image: url('../../assets/compass.png');
-            }
+				.direction > .image {
+					height: 100%;
+					background-position: center center;
+					background-size: 400px;
+					background-repeat: repeat;
+					width: 800%;
+					z-index: 1;
+					background-image: url('../../assets/compass.png');
+				}
 
-            p:last-child {
-                margin-left: 3%;
-                margin-bottom: 0;
-            }
-        }
-    }
+				p:last-child {
+					margin-left: 3%;
+					margin-bottom: 0;
+				}
+			}
+		}
+	}
 }
