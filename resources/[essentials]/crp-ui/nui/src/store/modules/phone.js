@@ -1,4 +1,5 @@
 import nui from '../../utils/nui';
+import router from './../../router/index.js';
 
 const state = {
     apps: [
@@ -6,14 +7,14 @@ const state = {
         { code: 'contacts', name: 'Contactos', color: '#fc7b20', icon: 'user', iconType: 'fas' }, { code: 'garage', name: 'Garagem', color: '#ef1443', icon: 'car', iconType: 'fas' },
         { code: 'twitter', name: 'Twitter', color: '#1DA1F2', icon: 'twitter', iconType: 'fab' }, { code: 'adverts', name: 'Páginas amarelas', color: '#fddb3a', icon: 'ad', iconType: 'fas' }
     ],
-	currentApp: 'home', phoneNumber: 966831664,
-	history: [], conversations: [], contacts: [], tweets: [], adverts: [],
+	phoneNumber: 966831664,
+	history: [], conversations: [], contacts: [], tweets: [], adverts: [ {id: 1, name: 'Lewis Hamilton', number: 967301022, message: 'OLA TUDO BEMEMM??'}],
 	dialogs: { status: false, isLoading: false, currentState: 'loading', currentDialog: '', dialogsData: {}, errorsList: [] }
 }
 
 const getters = {
-	getCurrentApp: state => {
-		return state.currentApp;
+	appsData: state => {
+		return state.apps;
 	},
 	getHistory: state => {
 		for (let i = 0; i < state.history.length; i++) {
@@ -79,9 +80,9 @@ const mutations = {
 		state.currentApp = 'home';
 	},
     setCurrentApp(state, appName) {
-		state.currentApp = appName;
+		router.push({ path: appName });
 
-		if (appName == 'home') {
+		if (appName == '/phone') {
 			state.dialogs.status = false;
 		}
 	},

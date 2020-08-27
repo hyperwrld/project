@@ -12,18 +12,22 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
+	import { mapGetters } from 'vuex';
+
+	import { library } from '@fortawesome/fontawesome-svg-core';
+	import { faPhoneAlt, faCommentAlt, faUser, faCar, faAd } from '@fortawesome/free-solid-svg-icons';
+	import { faTwitter } from '@fortawesome/free-brands-svg-icons';
+
+	library.add(faPhoneAlt, faCommentAlt, faUser, faCar, faTwitter, faAd);
 
     export default {
         name: 'home',
         computed: {
-            ...mapState({
-                appsData: state => state.phone.apps
-            })
+            ...mapGetters('phone', ['appsData'])
         },
         methods: {
             handleAppClick: function(appName) {
-                this.$store.dispatch('phone/setCurrentApp', appName);
+                this.$store.dispatch('phone/setCurrentApp', '/phone/' + appName);
             }
         },
     };

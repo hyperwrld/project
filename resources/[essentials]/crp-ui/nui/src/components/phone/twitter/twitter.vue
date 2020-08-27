@@ -23,8 +23,14 @@
 	import { mapGetters } from 'vuex';
 	import { processMessage, convertTime } from './../../../utils/lib.js';
 
+	import { library } from '@fortawesome/fontawesome-svg-core';
+	import { faFeatherAlt, faSadTear, faRetweet, faReply } from '@fortawesome/free-solid-svg-icons';
+	import { faTwitter } from '@fortawesome/free-brands-svg-icons';
+
 	import dialogs from './../dialogs/dialogs.js';
 	import images from './../images/images.vue';
+
+	library.add(faTwitter, faFeatherAlt, faSadTear, faRetweet, faReply);
 
 	const tweet = {
 		components: {

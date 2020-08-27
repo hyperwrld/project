@@ -9,7 +9,7 @@
         </div>
         <div class='adverts-list'>
             <div v-if='filterAdverts().length > 0'>
-				<div class='advert' v-for='advert in filterAdverts()'>
+				<div class='advert' v-for='advert in filterAdverts()' @click='removeAdvert(advert.id)'>
 					<advert :advert='advert'/>
 				</div>
             </div>
@@ -25,16 +25,17 @@
 	import { mapGetters } from 'vuex';
 	import { processMessage, convertTime } from './../../../utils/lib.js';
 
+	import { library } from '@fortawesome/fontawesome-svg-core';
+	import { faSearch, faPlusCircle, faUser, faPhoneAlt, faSadTear } from '@fortawesome/free-solid-svg-icons';
+
 	import dialogs from './../dialogs/dialogs.js';
+
+	library.add(faSearch, faPlusCircle, faUser, faPhoneAlt, faSadTear);
 
 	const advert = {
 		props: ['advert'],
 		methods: {
-			removeAdvert: function(advertId) {
-				dialogs.createDialog({
-					attach: '.adverts-list', title: 'Tens a certeza que queres apagar o anúncio?',
-					sendButton: 'Remover', nuiType: 'removeAdvert', additionalData: { advertId: advertId }
-				});
+			callNumber: function(number) {
 			}
 		},
 		render (h) {
@@ -48,7 +49,7 @@
 							<font-awesome-icon icon={['fas', 'user']}></font-awesome-icon>
 							{this.advert.name}
 						</div>
-						<div class='number'>
+						<div class='number' onClick={(e) => this.callNumber(this.advert.number, e)}>
 							<font-awesome-icon icon={['fas', 'phone-alt']}></font-awesome-icon>
 							{this.advert.number}
 						</div>
@@ -102,6 +103,13 @@
 				} else {
 					return this.adverts.filter(c => c.number.toString().toLowerCase().indexOf(search) > -1);
 				}
+			},
+			removeAdvert: function(advertId) {
+				console.log(advertId)
+				dialogs.createDialog({
+					attach: '.adverts-list', title: 'Queres apagar o anúncio?',
+					sendButton: 'Remover', nuiType: 'removeAdvert', additionalData: { advertId: advertId }
+				});
 			}
         },
     };

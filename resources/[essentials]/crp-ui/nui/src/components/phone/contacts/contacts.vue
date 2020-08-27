@@ -43,7 +43,13 @@
 
 <script>
 	import { mapGetters } from 'vuex';
+
+	import { library } from '@fortawesome/fontawesome-svg-core';
+	import { faSearch, faUserPlus, faPhoneAlt, faCommentAlt, faUserEdit, faTrash, faSadTear } from '@fortawesome/free-solid-svg-icons';
+
 	import dialogs from './../dialogs/dialogs.js';
+
+	library.add(faSearch, faUserPlus, faPhoneAlt, faCommentAlt, faUserEdit, faTrash, faSadTear);
 
     export default {
         name: 'contacts',

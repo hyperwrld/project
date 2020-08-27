@@ -34,7 +34,13 @@
 <script>
 	import { mapGetters } from 'vuex';
 	import { convertTime } from './../../../utils/lib.js';
+
+	import { library } from '@fortawesome/fontawesome-svg-core';
+	import { faSearch, faPhoneAlt, faCommentAlt, faUserPlus, faSadTear } from '@fortawesome/free-solid-svg-icons';
+
 	import dialogs from './../dialogs/dialogs.js';
+
+	library.add(faSearch, faPhoneAlt, faCommentAlt, faUserPlus, faSadTear);
 
     export default {
 		name: 'history',
