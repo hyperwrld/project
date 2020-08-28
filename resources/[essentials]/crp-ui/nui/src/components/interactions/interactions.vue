@@ -17,7 +17,7 @@
     export default {
         name: 'interactions',
         computed: {
-            ...mapGetters('app', ['interactions'])
+            ...mapGetters('interactions', ['interactions'])
 		}
     };
 </script>

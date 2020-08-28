@@ -10,10 +10,12 @@ function CreateInventory(data, items)
         local weight = 0
 
         for i = 1, #self.items, 1 do
-            if self.items[i].slot ~= itemSlot then
-                local item = itemsList[self.items[i].name]
+			if self.items[i].slot ~= itemSlot then
+				local item = itemsList[self.items[i].name]
 
-                weight = weight + (item.weight * self.items[i].count)
+				if (item) then
+					weight = weight + (item.weight * self.items[i].count)
+				end
             end
         end
 
