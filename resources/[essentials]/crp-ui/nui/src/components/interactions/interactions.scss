@@ -1,0 +1,28 @@
+html, .container {
+    position: absolute;
+    overflow: hidden;
+    height: 100%;
+	width: 100%;
+
+	font-family: 'Quantico', sans-serif;
+
+	.interaction {
+		position: absolute;
+		display: inline-block;
+		padding: 4px;
+		bottom: 0;
+		transform: translate(-50%, -50%);
+		margin: 0 auto;
+		left: 50%;
+		box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75) !important;
+		background-color: rgba(0, 0, 0, .5) !important;
+    	border: 1px solid rgba(54, 52, 52, .5) !important;
+    	border-radius: 0px;
+
+		&::v-deep > .v-alert__wrapper > .v-icon {
+			height: 24px;
+			min-width: 24px;
+			font-size: 24px;
+		}
+	}
+}
