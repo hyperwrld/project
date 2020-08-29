@@ -1,7 +1,7 @@
 <template>
 	<v-app>
 		<hud/><notifications/><taskbar/><interactions/>
-		<router-view></router-view>
+		<router-view :closeMenu='closeMenu'></router-view>
     </v-app>
 </template>
 
@@ -20,6 +20,17 @@
 		components: {
 			hud, notifications, taskbar, interactions
 		},
+		methods: {
+			closeMenu: function() {
+				this.$router.push({ path: '/' }).catch(error => {
+					if (error.name !== 'NavigationDuplicated' && !error.message.includes('Avoided redundant navigation to current location')) {
+						console.log(error);
+					}
+				});
+
+                nui.send('closeMenu');
+            },
+		},
         destroyed() {
             window.removeEventListener('message', this.listener);
         },
@@ -28,11 +39,13 @@
 				this.$store.dispatch(event.data.app + '/' + event.data.event, event.data.eventData);
 
 				if (event.data.status != undefined) {
-					if (event.data.status) {
-						this.$router.push({ path: data.component });
-					} else {
-						this.$router.push({ path: '/'});
-					}
+					const data = event.data.status ? { path: event.data.app } : { path: '/' };
+
+					this.$router.push(data).catch(error => {
+    					if (error.name !== 'NavigationDuplicated' && !error.message.includes('Avoided redundant navigation to current location')) {
+      						console.log(error);
+						}
+					});
 
 					if (!event.data.status) {
 						nui.send('closeMenu');
