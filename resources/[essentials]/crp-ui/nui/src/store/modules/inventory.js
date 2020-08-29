@@ -7,6 +7,14 @@ const state = () => ({
     actionItems: []
 })
 
+const getters = {
+	inventories: state => {
+		return {
+			player: state.playerInventory, secondary: state.secondaryInventory
+		};
+	}
+}
+
 const actions = {
     setInventory(state, data) {
         state.commit('setInventory', data);
@@ -125,4 +133,4 @@ const mutations = {
     }
 }
 
-export default { namespaced: true, state, actions, mutations }
+export default { namespaced: true, getters, state, actions, mutations }

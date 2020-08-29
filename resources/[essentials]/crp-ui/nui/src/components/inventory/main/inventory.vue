@@ -3,40 +3,23 @@
         <div class='inventory'>
             <div class='inventory-info'>
                 <div class='player-info'>
-                    <div class='inventory-name'>
-                        <span>{{ playerInventory.name }}</span>
-                    </div>
-                    <div class='inventory-weight'>
-                        <span>Peso: {{ playerInventory.weight.toFixed(2) }} / {{ playerInventory.maxWeight.toFixed(2) }}</span>
-                    </div>
+					<inventoryInfo :info='inventories.player'/>
                 </div>
                 <div class='secondary-info'>
-                    <div class='inventory-name'>
-                        <span>{{ secondaryInventory.name }}</span>
-                    </div>
-                    <div class='inventory-weight'>
-                        <span>Peso: {{ secondaryInventory.weight.toFixed(2) }} / {{ secondaryInventory.maxWeight.toFixed(2) }}</span>
-                    </div>
+					<inventoryInfo :info='inventories.secondary'/>
                 </div>
             </div>
             <div class='inventory-container'>
                 <div class='player-inventory'>
-                    <drop @drop='onDrop($event, "player-inventory", index)' class='slot' :data-slot='index' v-for='(slot, index) in playerInventory.items' :item='slot' :key='index'>
+                    <drop @drop='onDrop($event, "player-inventory", index)' class='slot' :data-slot='index' v-for='(slot, index) in inventories.player.items' :item='slot' :key='index'>
                         <div class='slot-id' v-if='index >= 0 && index <= 3'>{{ index + 1 }}</div>
 
                         <drag class='item' v-if='slot.itemId != undefined'>
                             <template v-slot:drag-image>
-                                <div class='item-info' v-if='itemCount != 0 && itemCount <= slot.quantity '>{{ itemCount }} [{{ itemsList[slot.itemId].weight.toFixed(2) }}]</div>
-                                <div class='item-info' v-else>{{ slot.quantity }} [{{ itemsList[slot.itemId].weight.toFixed(2) }}]</div>
-                                <div class='item-image'><img v-bind:src='require("./../../../assets/" + itemsList[slot.itemId].image)'></div>
-                                <div class='item-durability' v-if='slot.durability >= 5' :style='{ width: slot.durability + "%" }'>{{ slot.durability }}</div><div class='item-durability destroyed' v-else>Destruído</div>
-                                <div class='item-name'>{{ itemsList[slot.itemId].name }}</div>
+                                <item :item='returnData(slot)' :itemsList='itemsList'/>
                             </template>
 
-                            <div class='item-info'>{{ slot.quantity }} [{{ itemsList[slot.itemId].weight.toFixed(2) }}]</div>
-                            <div class='item-image'><img v-bind:src='require("./../../../assets/" + itemsList[slot.itemId].image)'></div>
-                            <div class='item-durability' v-if='slot.durability >= 5' :style='{ width: slot.durability + "%" }'>{{ slot.durability }}</div><div class='item-durability destroyed' v-else>Destruído</div>
-                            <div class='item-name'>{{ itemsList[slot.itemId].name }}</div>
+							<item :item='slot' :itemsList='itemsList'/>
                         </drag>
                     </drop>
                 </div>
@@ -46,20 +29,13 @@
                     <div class='close' @click='closeMenu'>Fechar</div>
                 </div>
                 <div class='secondary-inventory'>
-                    <drop @drop='onDrop($event, "secondary-inventory", index)' class='slot' :data-slot='index' v-for='(slot, index) in secondaryInventory.items' :item='slot' :key='index'>
+                    <drop @drop='onDrop($event, "secondary-inventory", index)' class='slot' :data-slot='index' v-for='(slot, index) in inventories.secondary.items' :item='slot' :key='index'>
                         <drag class='item' v-if='slot.itemId != undefined'>
-                            <template v-slot:drag-image>
-                                <div class='item-info' v-if='itemCount != 0 && itemCount <= slot.quantity '>{{ itemCount }} [{{ itemsList[slot.itemId].weight.toFixed(2) }}]</div>
-                                <div class='item-info' v-else>{{ slot.quantity }} [{{ itemsList[slot.itemId].weight.toFixed(2) }}]</div>
-                                <div class='item-image'><img v-bind:src='require("./../../../assets/" + itemsList[slot.itemId].image)'></div>
-                                <div class='item-durability' v-if='slot.durability >= 5' :style='{ width: slot.durability + "%" }'>{{ slot.durability }}</div><div class='item-durability destroyed' v-else>Destruído</div>
-                                <div class='item-name'>{{ itemsList[slot.itemId].name }}</div>
-                            </template>
+							<template v-slot:drag-image>
+								<item :item='returnData(slot)' :itemsList='itemsList'/>
+							</template>
 
-                            <div class='item-info'>{{ slot.quantity }} [{{ itemsList[slot.itemId].weight.toFixed(2) }}]</div>
-                            <div class='item-image'><img v-bind:src='require("./../../../assets/" + itemsList[slot.itemId].image)'></div>
-                            <div class='item-durability' v-if='slot.durability >= 5' :style='{ width: slot.durability + "%" }'>{{ slot.durability }}</div><div class='item-durability destroyed' v-else>Destruído</div>
-                            <div class='item-name'><span v-if='slot.price'>{{ slot.price + '€'}}</span> - {{ itemsList[slot.itemId].name }}</div>
+							<item :item='slot' :itemsList='itemsList'/>
                         </drag>
                     </drop>
                 </div>
@@ -70,16 +46,53 @@
 
 <script>
     import { Drag, Drop } from 'vue-easy-dnd';
-    import { mapState } from 'vuex';
+    import { mapGetters } from 'vuex';
 
     import nui from '../../../utils/nui';
-    import items from '../items';
+	import items from '../items';
+
+	const inventoryInfo = {
+		props: ['info'],
+		render (h) {
+			return (
+				<div>
+					<div class='inventory-name'>
+                        <span>{ this.info.name }</span>
+                    </div>
+                    <div class='inventory-weight'>
+                        <span>Peso: { this.info.weight.toFixed(2) } / { this.info.maxWeight.toFixed(2) }</span>
+                    </div>
+				</div>
+			);
+		}
+	};
+
+	const item = {
+		props: ['item', 'itemsList'],
+		render (h) {
+			let itemDurabilityLabel = this.item.durability >= 10 ? this.item.durability : (this.item.durability <= 0 ? 'Destruído' : 'Quase destruído');
+			let itemLabel = this.item.price ? `<span>${ this.item.price }€</span> - ${ this.itemsList[this.item.itemId].name }` : this.itemsList[this.item.itemId].name;
+
+			return (
+				<div>
+					<div class='item-info'>{ this.item.quantity } [{ this.itemsList[this.item.itemId].weight.toFixed(2) }]</div>
+					<div class='item-image'>
+						<img src={ require('./../../../assets/' + this.itemsList[this.item.itemId].image) }></img>
+					</div>
+					<div class='item-durability' style={ this.item.durability >= 10 ? { width: this.item.durability + '%' } : { width: '100%', backgroundColor: '#a60505' }}>
+						{ itemDurabilityLabel }
+					</div>
+					<div class='item-name' domPropsInnerHTML={ itemLabel }></div>
+				</div>
+			);
+		}
+	}
 
     export default {
 		name: 'inventory',
 		props: ['closeMenu'],
         components: {
-            Drag, Drop
+            Drag, Drop, inventoryInfo, item
         },
         data() {
             return {
@@ -88,10 +101,7 @@
             }
         },
         computed: {
-            ...mapState({
-                playerInventory: state => state.inventory.playerInventory,
-                secondaryInventory: state => state.inventory.secondaryInventory
-            })
+            ...mapGetters('inventory', ['inventories'])
         },
         methods: {
             onDrop(event, futureInventory, futureIndex) {
@@ -111,7 +121,13 @@
                 else {
                     event.preventDefault();
                 }
-            }
+			},
+			returnData: function(data) {
+				return {
+					itemId: data.itemId, quantity: Number((this.itemCount != 0 && this.itemCount <= data.quantity) ? this.itemCount : data.quantity),
+					durability: data.durability, price: data.price
+				};
+			}
         },
         destroyed() {
             window.removeEventListener('message', this.listener);

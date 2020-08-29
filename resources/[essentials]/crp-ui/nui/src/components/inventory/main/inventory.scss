@@ -89,44 +89,46 @@ html, .container {
         .inventory-info {
             width: 100%;
             height: 5%;
-            display: flex;
+			display: flex;
 
-            .player-info {
-                display: flex;
-                width: 60%;
-                height: 100%;
-                flex-direction: column;
-            }
+			.player-info {
+				display: flex;
+				width: 60%;
+				height: 100%;
+				flex-direction: column;
+			}
 
-            .secondary-info {
-                display: flex;
-                width: 40%;
-                height: 100%;
-                flex-direction: column;
-            }
+			.secondary-info {
+				display: flex;
+				width: 40%;
+				height: 100%;
+				flex-direction: column;
+			}
 
-            .player-info, .secondary-info {
-                .inventory-name, .inventory-weight {
-                    display: flex;
-                    flex-direction: row;
-                    height: 100%;
-                    margin-left: 2px;
+			.player-info::v-deep > div, .secondary-info::v-deep > div {
+				position: absolute;
 
-                    color: white;
-                    text-shadow: -1px 1px 2px #000, 1px 1px 2px #000, 1px -1px 0 #000, -1px -1px 0 #000;
-                }
+				.inventory-name, .inventory-weight {
+					display: flex;
+					flex-direction: row;
+					height: 100%;
+					margin-left: 2px;
 
-                .inventory-name > span {
-                    font-size: 1.4vh;
-                    font-weight: bold;
-                    height: 100%;
-                }
+					color: white;
+					text-shadow: -1px 1px 2px #000, 1px 1px 2px #000, 1px -1px 0 #000, -1px -1px 0 #000;
+				}
 
-                .inventory-weight > span {
-                    font-size: 1vh;
-                    height: 100%;
-                }
-            }
+				.inventory-name > span {
+					font-size: 1.4vh;
+					font-weight: bold;
+					height: 100%;
+				}
+
+				.inventory-weight > span {
+					font-size: 1vh;
+					height: 100%;
+				}
+			}
         }
 
         .inventory-container {
@@ -176,53 +178,57 @@ html, .container {
 
                         &[aria-grabbed='true'] {
                             outline: transparent;
-                        }
+						}
 
-                        .item-info {
-                            position: absolute;
-                            top: 0px;
-                            right: 2px;
-                            font-size: 0.6rem;
-                            color: white;
-                        }
+						&::v-deep > div {
+							width: 100%;
+							height: 100%;
 
-                        .item-image {
-                            width: 95px;
-                            height: 117px;
+							max-width: 115px;
+							max-height: 140px;
 
-                            img {
-                                width: 100%;
-                                height: 100%;
-                            }
-                        }
-
-                        .item-durability {
-                            width: 100%;
-                            font-size: 0.45rem;
-                            height: 7%;
-                            text-align: center;
-                            color: white;
-                            background-color: green;
-                            align-self: start;
-                        }
-
-                        .destroyed {
-                            width: 100%;
-                            background-color: #a60505;
-                        }
-
-                        .item-name {
-                            width: 100%;
-                            font-size: 0.5rem;
-                            height: 9%;
-                            color: white;
-                            text-align: center;
-							background-color: rgba(0, 0, 0, 0.6);
-
-							span {
-								color: green;
+							.item-info {
+								position: absolute;
+								top: 0px;
+								right: 2px;
+								font-size: 0.6rem;
+								color: white;
 							}
-                        }
+
+							.item-image {
+								width: 95px;
+								height: 117px;
+								margin: auto;
+
+								img {
+									width: 100%;
+									height: 100%;
+								}
+							}
+
+							.item-durability {
+								width: 100%;
+								font-size: 0.45rem;
+								height: 7%;
+								text-align: center;
+								color: white;
+								background-color: green;
+								align-self: start;
+							}
+
+							.item-name {
+								width: 100%;
+								font-size: 0.5rem;
+								height: 9%;
+								color: white;
+								text-align: center;
+								background-color: rgba(0, 0, 0, 0.6);
+
+								span {
+									color: green;
+								}
+							}
+						}
                     }
                 }
             }
