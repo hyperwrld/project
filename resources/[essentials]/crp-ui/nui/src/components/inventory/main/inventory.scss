@@ -217,7 +217,11 @@ html, .container {
                             height: 9%;
                             color: white;
                             text-align: center;
-                            background-color: rgba(0, 0, 0, 0.6)
+							background-color: rgba(0, 0, 0, 0.6);
+
+							span {
+								color: green;
+							}
                         }
                     }
                 }

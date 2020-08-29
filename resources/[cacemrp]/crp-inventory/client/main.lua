@@ -94,7 +94,7 @@ Citizen.CreateThread(function()
 end)
 
 function openInventory()
-    local playerPed = PlayerPedId()
+	local playerPed = PlayerPedId()
 
     if IsPedInAnyVehicle(playerPed, false) then
         local vehicle = GetVehiclePedIsIn(playerPed, false)
@@ -119,8 +119,11 @@ function openInventory()
         end
 
         if inventoryName ~= nil then
-            TriggerInventoryAnimation(playerPed)
-            TriggerEvent('crp-ui:openMenu', 'inventory', { type = 1, name = inventoryName, coords = inventoryCoords })
+			TriggerInventoryAnimation(playerPed)
+
+			SendUiMessage({
+				app = 'inventory', status = true, event = 'setInventory', eventData = { type = 1, name = inventoryName, coords = inventoryCoords }
+			})
         else
             local vehicle = GetVehicleInFront(playerPed)
 
@@ -154,7 +157,9 @@ function openInventory()
 
                         Citizen.Wait(1000)
 
-                        TriggerEvent('crp-ui:openMenu', 'inventory', { type = 2, name = 'trunk-' .. GetVehicleNumberPlateText(vehicle) })
+						SendUiMessage({
+							app = 'inventory', status = true, event = 'setInventory', eventData = { type = 2, name = 'trunk-' .. GetVehicleNumberPlateText(vehicle) }
+						})
 
                         while true do
                             if not IsEntityPlayingAnim(playerPed, 'mini@repair', 'fixing_a_player', 3) then
@@ -180,8 +185,11 @@ function openInventory()
 
                 inventoryCoords = { x = coords.x, y = coords.y, z = coords.z }
 
-                TriggerInventoryAnimation(playerPed)
-                TriggerEvent('crp-ui:openMenu', 'inventory', { type = 1, name = inventoryName, coords = inventoryCoords })
+				TriggerInventoryAnimation(playerPed)
+
+				SendUiMessage({
+					app = 'inventory', status = true, event = 'setInventory', eventData = { type = 1, name = inventoryName, coords = inventoryCoords }
+				})
             end
         end
     end

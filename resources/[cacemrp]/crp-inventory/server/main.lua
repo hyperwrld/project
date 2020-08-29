@@ -6,20 +6,43 @@ function GetInventories(source, data)
     local user = exports['crp-base']:GetCharacter(source)
     local inventoryName = 'character-' .. user.getCharacterID()
 
-    if isInventoryLoaded(inventoryName) and isInventoryLoaded(data.name, data) then
-        local items, maxWeight, maxSlots = {}, 1000, 40
+	if isInventoryLoaded(inventoryName) then
+		local items, maxWeight, maxSlots = {}, 1000, 40
 
-        if Inventories[data.name] then
-            items, maxWeight, maxSlots = Inventories[data.name].items, Inventories[data.name].maxWeight, Inventories[data.name].maxSlots
-        end
+		if data.type == 5 then
+			items = getShopItems(data.shopType)
+		else
+			if not isInventoryLoaded(data.name, data) then
+				return
+			end
 
-        return { playerInventory = {
+			if Inventories[data.name] then
+				items, maxWeight, maxSlots = Inventories[data.name].items, Inventories[data.name].maxWeight, Inventories[data.name].maxSlots
+			end
+		end
+
+		return { playerInventory = {
             name = Inventories[inventoryName].name, items = Inventories[inventoryName].items
         }, secondaryInventory = {
             name = data.name, items = items,
             maxWeight = maxWeight, maxSlots = maxSlots, type = data.type, coords = data.coords
         }}
-    end
+	end
+
+    -- if isInventoryLoaded(inventoryName) and isInventoryLoaded(data.name, data) then
+    --     local items, maxWeight, maxSlots = {}, 1000, 40
+
+    --     if Inventories[data.name] then
+    --         items, maxWeight, maxSlots = Inventories[data.name].items, Inventories[data.name].maxWeight, Inventories[data.name].maxSlots
+    --     end
+
+    --     return { playerInventory = {
+    --         name = Inventories[inventoryName].name, items = Inventories[inventoryName].items
+    --     }, secondaryInventory = {
+    --         name = data.name, items = items,
+    --         maxWeight = maxWeight, maxSlots = maxSlots, type = data.type, coords = data.coords
+    --     }}
+    -- end
 end
 
 function MoveProcess(source, data)
@@ -161,13 +184,19 @@ function isInventoryLoaded(name, data)
         return true
     end
 
-    local maxWeight, maxSlots = 100, 40
+	local maxWeight, maxSlots = 100, 40
+
+	-- Type: 1 (drop) - 2 (trunk) - 3 (glove) - 4 (...) - 5(shop)
 
     if data then
         if data.type == 1 then
             return true
         elseif data.type == 3 then
-            maxWeight, maxSlots = 40, 3
+			maxWeight, maxSlots = 40, 3
+		elseif data.type == 5 then
+			maxWeight = 1000
+
+			return CreateInventory(data, getShopItems(data.shopType))
         end
     end
 

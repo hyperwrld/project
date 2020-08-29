@@ -3,7 +3,7 @@ import itemsList from '../../components/inventory/items';
 
 const state = () => ({
     playerInventory: { name: 'undefined', weight: 0, maxWeight: 325, items: [] },
-    secondaryInventory: { name: 'undefined', type: 0, weight: 0, maxWeight: 1000, items: [], coords: {} },
+    secondaryInventory: { name: 'undefined', type: 0, shopType: 0, weight: 0, maxWeight: 1000, items: [], coords: {} },
     actionItems: []
 })
 
@@ -24,10 +24,15 @@ const actions = {
 
 const mutations = {
     setInventory(state, data) {
-        nui.send('getInventories', data).then(data => {
-            state.playerInventory.name = data.playerInventory.name, state.secondaryInventory.name = data.secondaryInventory.name;
-            state.secondaryInventory.maxWeight = data.secondaryInventory.maxWeight, state.playerInventory.items = [], state.secondaryInventory.items = [];
-            state.secondaryInventory.type = data.secondaryInventory.type, state.secondaryInventory.coords = data.secondaryInventory.coords ? data.secondaryInventory.coords : {};
+		nui.send('getInventories', data).then(data => {
+			state.playerInventory.name = data.playerInventory.name;
+			state.secondaryInventory.items = [], state.playerInventory.items = [];
+
+			for (var name in data.secondaryInventory) {
+				if (name != 'items') {
+					state.secondaryInventory[name] = data.secondaryInventory[name];
+				}
+			}
 
 			const timeAllowed = 2419200;
 
@@ -45,10 +50,12 @@ const mutations = {
 				} else {
 					state.playerInventory.items.push({});
 				}
-            }
+			}
 
-            for (let i = 0; i < data.secondaryInventory.maxSlots; i++) {
+			for (let i = 0; i < state.secondaryInventory.maxSlots; i++) {
 				const item = data.secondaryInventory.items.find(element => (element.slot - 1) == i);
+
+				let itemData = {};
 
 				if (item) {
 					const timeExtra = timeAllowed * itemsList[item.name].decayRate;
@@ -57,14 +64,16 @@ const mutations = {
 
 					if (itemPercentage < 0) itemPercentage = 0;
 
-					state.secondaryInventory.items.push({ itemId: item.name, quantity: item.count, durability: itemPercentage });
-				} else {
-					state.secondaryInventory.items.push({});
-				}
-            }
+					itemData = { itemId: item.name, quantity: item.count, durability: itemPercentage };
 
-            this.commit('inventory/calculateWeight');
-        });
+					if (state.secondaryInventory.type == 5) itemData.price = item.price;
+				}
+
+				state.secondaryInventory.items[i] = itemData;
+			}
+
+			this.commit('inventory/calculateWeight');
+		});
     },
     moveItem(state, data) {
         const from = data.currentInventory == 'player-inventory' ? true : false, to = data.futureInventory == 'player-inventory' ? true : false;

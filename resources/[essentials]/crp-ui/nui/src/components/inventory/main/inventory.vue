@@ -59,7 +59,7 @@
                             <div class='item-info'>{{ slot.quantity }} [{{ itemsList[slot.itemId].weight.toFixed(2) }}]</div>
                             <div class='item-image'><img v-bind:src='require("./../../../assets/" + itemsList[slot.itemId].image)'></div>
                             <div class='item-durability' v-if='slot.durability >= 5' :style='{ width: slot.durability + "%" }'>{{ slot.durability }}</div><div class='item-durability destroyed' v-else>Destruído</div>
-                            <div class='item-name'>{{ itemsList[slot.itemId].name }}</div>
+                            <div class='item-name'><span v-if='slot.price'>{{ slot.price + '€'}}</span> - {{ itemsList[slot.itemId].name }}</div>
                         </drag>
                     </drop>
                 </div>
@@ -76,7 +76,8 @@
     import items from '../items';
 
     export default {
-        name: 'inventory',
+		name: 'inventory',
+		props: ['closeMenu'],
         components: {
             Drag, Drop
         },
@@ -110,9 +111,6 @@
                 else {
                     event.preventDefault();
                 }
-            },
-            closeMenu() {
-                this.$store.dispatch('app/setAppData', { status: false });
             }
         },
         destroyed() {
