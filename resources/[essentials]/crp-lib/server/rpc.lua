@@ -1,4 +1,4 @@
-local resourceName, promises, functions = GetCurrentResourceName(), {}, {}
+local resourceName, promises, functions, callIdentifier = GetCurrentResourceName(), {}, {}
 
 RPC = {}
 
@@ -9,7 +9,9 @@ function ClearPromise(callId)
 end
 
 function RPC:execute(name, target, ...)
-    local callId, isSolved = GetRandomString(12), false
+	local callId, isSolved = callIdentifier, false
+
+	callIdentifier = callIdentifier + 1
 
     promises[callId] = promise:new()
 
@@ -33,7 +35,9 @@ function RPC:execute(name, target, ...)
 end
 
 function RPC:executeLatent(name, target, ...)
-    local callId, isSolved = GetRandomString(12), false
+    local callId, isSolved = callIdentifier, false
+
+    callIdentifier = callIdentifier + 1
 
     promises[callId] = promise:new()
 
@@ -116,17 +120,3 @@ AddEventHandler('rpc:latent:request', function(origin, name, callId, params)
 
     TriggerLatentClientEvent('rpc:response', serverId, callId, response)
 end)
-
-function GetRandomString(length)
-    local chars, randomString, stringLength, charTable = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', '', length or 10, {}
-
-    for char in chars:gmatch'.' do
-        charTable[#charTable + 1] = char
-    end
-
-    for i = 1, stringLength do
-        randomString = randomString .. charTable[math.random(1, #charTable)]
-    end
-
-    return randomString
-end
