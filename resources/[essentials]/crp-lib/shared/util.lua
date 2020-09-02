@@ -4,6 +4,16 @@ function Debug(string)
 	print('[' .. resourceName .. '] ' .. string)
 end
 
+function GetRandomNumber(firstNumber, secondNumber)
+    math.randomseed(GetGameTimer())
+
+    if secondNumber then
+        return math.random(firstNumber, secondNumber)
+    else
+        return math.random(firstNumber)
+    end
+end
+
 AddEventHandler('onResourceStart', function(resource)
 	if (GetCurrentResourceName() ~= resource) then
 	  	return

@@ -1,3 +1,5 @@
+DB = {}
+
 function DB:Execute(query, ...)
     local executePromise = promise:new()
 
