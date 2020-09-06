@@ -1,7 +1,7 @@
 local resourceName = GetCurrentResourceName()
 
 function Debug(string)
-	print('[' .. resourceName .. '] ' .. string)
+	print('^4[' .. resourceName .. ']^0 ' .. string)
 end
 
 function GetRandomNumber(firstNumber, secondNumber)
