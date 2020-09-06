@@ -1,18 +1,8 @@
 <template>
     <v-container fluid>
-		<div class='money-container'>
-			<transition name='fade' v-if='moneyData.canShow'>
-            	<div class='money'><span>€ </span>{{ formatNumber(moneyData.currentMoney) }}</div>
-			</transition>
-			<transition name='fade'>
-				<div class='changedMney' v-if='moneyData.canShow && moneyData.changedMoney.status'>
-					<span :class='moneyData.changedMoney.type == "add" ? "add" : "remove"'>{{ (moneyData.changedMoney.type == 'add' ? '+' : '-') +  ' €' }}</span>
-
-					{{ formatNumber(moneyData.changedMoney.quantity) }}
-				</div>
-			</transition>
-		</div>
+		<money/>
         <div class='minimap' :style='{ top: minimapData.top, left: minimapData.left, width: minimapData.width, height: minimapData.height }'>
+			<interactions/>
     		<div class='bar'>
     			<div class='health status'>
                     <font-awesome-icon icon='heart'></font-awesome-icon>
@@ -75,10 +65,19 @@
 
 	library.add(faHeart, faShieldAlt, faHamburger, faTint, faLungs, faBrain, faGasPump);
 
+	import interactions from './interactions/interactions.vue';
+	import money from './money/money.vue';
+
     export default {
-        name: 'hud',
+		name: 'hud',
+		components: {
+			interactions, money
+		},
         computed: {
-			...mapGetters('hud', ['moneyData', 'minimapData', 'vehicleData'])
+			...mapGetters('hud', {
+				minimapData: 'GET_MINIMAP_DATA',
+				vehicleData: 'GET_VEHICLE_DATA'
+			})
 		},
 		methods: {
 			formatNumber: function(number) {

@@ -1,23 +1,24 @@
 <template>
-    <v-container fluid>
+	<div class='interaction-container'>
 		<transition name='fade' :duration='1000'>
-			<v-alert v-if='interactions.status' class='interaction' dark prominent icon='fa-info-circle'>
-				{{ interactions.message }}
+			<v-alert v-if='data.status' class='interaction' dark prominent icon='fa-info-circle'>
+				{{ data.message }}
 			</v-alert>
 		</transition>
-    </v-container>
+	</div>
 </template>
 
 <script>
 	import { mapGetters } from 'vuex';
-
 	import { library } from '@fortawesome/fontawesome-svg-core';
 	import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 
     export default {
         name: 'interactions',
         computed: {
-            ...mapGetters('interactions', ['interactions'])
+            ...mapGetters('hud', {
+				data: 'GET_INTERACTIONS_DATA'
+			})
 		}
     };
 </script>

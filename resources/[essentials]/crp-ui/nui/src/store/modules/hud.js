@@ -10,18 +10,24 @@ const state = () => ({
     vehicleData: {
 		isOnVehicle: false, isCompassOn: false, time: '00:00', fuel: 0,
 		speed: 0, hasSeatBelt: false, location: '', direction: 0
-    }
+	},
+	interactions: {
+		status: false, message: ''
+	}
 })
 
 const getters = {
-	moneyData: state => {
-		return state.moneyData;
-	},
-	minimapData: state => {
+	GET_MINIMAP_DATA: state => {
 		return state.minimapData;
 	},
-	vehicleData: state => {
+	GET_VEHICLE_DATA: state => {
 		return state.vehicleData;
+	},
+	GET_INTERACTIONS_DATA: state => {
+		return state.interactions;
+	},
+	GET_MONEY_DATA: state => {
+		return state.moneyData;
 	}
 }
 
@@ -55,7 +61,10 @@ const actions = {
     },
     setCompassDirection(state, data) {
         state.commit('setCompassDirection', data);
-    }
+	},
+	setInteractionData(state, data) {
+		state.commit('setInteractionData', data);
+	}
 }
 
 const mutations = {
@@ -115,7 +124,10 @@ const mutations = {
     },
     setCompassDirection(state, data) {
         state.vehicleData.direction = data;
-    }
+	},
+	setInteractionData(state, data) {
+		state.interactions.status = data.status, state.interactions.message = data.message;
+	}
 }
 
 export default { namespaced: true, getters, state, actions, mutations }

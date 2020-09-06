@@ -1,0 +1,43 @@
+@font-face {
+    font-family: pcdown;
+    src: url(pdown.ttf);
+}
+
+.money-container {
+	position: absolute;
+	top: 5vh;
+	right: 3vw;
+	width: fit-content;
+
+	font-family: pcdown;
+	text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+	color: white;
+	padding: 12px;
+	margin-right: auto;
+	margin-left: auto;
+
+	.money {
+		font-size: 30px;
+		padding: 4px;
+
+		span {
+			color: rgb(0, 125, 0);
+		}
+	}
+
+	.changedMney {
+		font-size: 20px;
+		position: absolute;
+		right: 1.3vw;
+		bottom: 0.1vh;
+		white-space: nowrap;
+
+		.add {
+			color: rgb(0, 125, 0);
+		}
+
+		.remove {
+			color: rgb(250, 0, 0);
+		}
+	}
+}
