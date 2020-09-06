@@ -78,16 +78,20 @@ html, .container {
 				margin-right: 0 !important;
 			}
 
+			.low {
+				background-color: rgba(189, 43, 43, 1) !important;
+			}
 
 			.health, .armour {
 				width: 23.5%;
 				box-sizing: border-box;
 				border: 2px solid rgba(54, 52, 52, 0.8);
 				background-color: #545454;
+				display: flex;
+    			align-items: center;
 
 				:first-child {
 					position: absolute;
-					margin-top: 1.5%;
 					margin-left: 1.5%;
 					color: white;
 					z-index: 999;
@@ -111,19 +115,15 @@ html, .container {
 				width: 12%;
 				border: 2px solid rgba(54, 52, 52, 0.8);
 				background-color: #545454;
+				display: flex;
+				justify-content: center;
+				align-items: center;
 
 				:first-child {
 					position: absolute;
 					color: rgb(255, 255, 255);
 					z-index: 999;
-					margin-top: 1.5%;
-					margin-left: 1.5%;
 					font-size: 1.5vh;
-				}
-
-				.fa-tint:first-child {
-					margin-top: 1.5% !important;
-					margin-left: 3% !important;
 				}
 
 				div:last-child {
