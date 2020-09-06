@@ -8,16 +8,17 @@ const state = () => ({
 })
 
 const getters = {
-	inventories: state => {
-		return {
-			player: state.playerInventory, secondary: state.secondaryInventory
-		};
+	GET_PLAYER_INVENTORY: state => {
+		return state.playerInventory
+	},
+	GET_SECONDARY_INVENTORY: state => {
+		return state.secondaryInventory
 	}
 }
 
 const actions = {
-    setInventory(state, data) {
-        state.commit('setInventory', data);
+    setData(state, data) {
+        state.commit('setData', data);
     },
     moveItem(state, data) {
         state.commit('moveItem', data);
@@ -31,57 +32,43 @@ const actions = {
 }
 
 const mutations = {
-    setInventory(state, data) {
-		nui.send('getInventories', data).then(data => {
-			state.playerInventory.name = data.playerInventory.name;
-			state.secondaryInventory.items = [], state.playerInventory.items = [];
+    setData(state, data) {
+		state.playerInventory.name = data.player.name;
+		state.playerInventory.items = [], state.secondaryInventory.items = [];
 
-			for (var name in data.secondaryInventory) {
-				if (name != 'items') {
-					state.secondaryInventory[name] = data.secondaryInventory[name];
-				}
+		for (var name in data.secondary) {
+			if (name != 'items') {
+				state.secondaryInventory[name] = data.secondary[name];
+			}
+		}
+
+		for (let i = 0; i < 40; i++) {
+			const itemData = data.player.items.find(element => (element.slot - 1) == i);
+
+			let slotData = {};
+
+			if (itemData) {
+				slotData = { itemId: itemData.item, quantity: itemData.count, meta: itemData.meta, durability: itemData.creation_time };
 			}
 
-			const timeAllowed = 2419200;
+			state.playerInventory.items[i] = slotData;
+		}
 
-			for (let i = 0; i < 40; i++) {
-				const item = data.playerInventory.items.find(element => (element.slot - 1) == i);
+		for (let i = 0; i < state.secondaryInventory.maxSlots; i++) {
+			const itemData = data.secondary.items.find(element => (element.slot - 1) == i);
 
-				if (item) {
-					const timeExtra = timeAllowed * itemsList[item.name].decayRate;
+			let slotData = {};
 
-					let itemPercentage = itemsList[item.name].decayRate != 0.0 ? 100 - Math.ceil(((Math.floor(Date.now() / 1000) - item.creationTime) / timeExtra) * 100) : 100;
+			if (itemData) {
+				slotData = { itemId: itemData.item, quantity: itemData.count, meta: itemData.meta, durability: itemData.creation_time };
 
-					if (itemPercentage < 0) itemPercentage = 0;
-
-					state.playerInventory.items.push({ itemId: item.name, quantity: item.count, durability: itemPercentage });
-				} else {
-					state.playerInventory.items.push({});
-				}
+				if (state.secondaryInventory.type == 5) slotData.price = itemData.price;
 			}
 
-			for (let i = 0; i < state.secondaryInventory.maxSlots; i++) {
-				const item = data.secondaryInventory.items.find(element => (element.slot - 1) == i);
+			state.secondaryInventory.items[i] = slotData;
+		}
 
-				let itemData = {};
-
-				if (item) {
-					const timeExtra = timeAllowed * itemsList[item.name].decayRate;
-
-					let itemPercentage = itemsList[item.name].decayRate != 0.0 ? 100 - Math.ceil(((Math.floor(Date.now() / 1000) - item.creationTime) / timeExtra) * 100) : 100;
-
-					if (itemPercentage < 0) itemPercentage = 0;
-
-					itemData = { itemId: item.name, quantity: item.count, durability: itemPercentage };
-
-					if (state.secondaryInventory.type == 5) itemData.price = item.price;
-				}
-
-				state.secondaryInventory.items[i] = itemData;
-			}
-
-			this.commit('inventory/calculateWeight');
-		});
+		this.commit('inventory/calculateWeight');
     },
     moveItem(state, data) {
         const from = data.currentInventory == 'player-inventory' ? true : false, to = data.futureInventory == 'player-inventory' ? true : false;
@@ -89,14 +76,14 @@ const mutations = {
 
         if ((Number(data.currentIndex) != Number(data.futureIndex)) || (from != to)) {
             nui.send('moveItem', {
-                currentInventory: from ? state.playerInventory.name : state.secondaryInventory.name, futureInventory: to ? state.playerInventory.name : state.secondaryInventory.name,
-                currentIndex: Number(data.currentIndex) + 1, futureIndex: Number(data.futureIndex) + 1, itemCount: Number(data.itemCount), type: Number(state.secondaryInventory.type), coords: state.secondaryInventory.coords
+                current: from ? state.playerInventory.name : state.secondaryInventory.name, future: to ? state.playerInventory.name : state.secondaryInventory.name,
+                currentIndex: Number(data.currentIndex) + 1, futureIndex: Number(data.futureIndex) + 1, count: Number(data.itemCount), type: Number(state.secondaryInventory.type)
             }).then(moveData => {
                 if (moveData.status) {
-                    const currentSlotData = moveData.currentSlot ? { itemId: moveData.currentSlot.name, quantity: moveData.currentSlot.count, durability: moveData.currentSlot.durability } : {};
-                    const futureSlotData = moveData.futureSlot ? { itemId: moveData.futureSlot.name, quantity: moveData.futureSlot.count, durability: moveData.futureSlot.durability } : {};
+                    const currentData = moveData.current ? { itemId: moveData.current.item, quantity: moveData.current.count, durability: moveData.current.creation_time } : {};
+                    const futureData = moveData.future ? { itemId: moveData.future.item, quantity: moveData.future.count, durability: moveData.future.creation_time } : {};
 
-                    fromArray.splice(data.currentIndex, 1, currentSlotData), toArray.splice(data.futureIndex, 1, futureSlotData);
+					fromArray.splice(data.currentIndex, 1, currentData), toArray.splice(data.futureIndex, 1, futureData);
 
                     this.commit('inventory/calculateWeight');
                 }
