@@ -85,7 +85,7 @@
                 return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
 			},
 			convertNumber: function(number) {
-				return (100 - Number(number) + '%');
+				return ((100 - Number(number)) + '%');
 			}
 		}
     };
