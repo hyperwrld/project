@@ -1,223 +1,229 @@
-dropInventories, isShowingTaskbar = {}, false
+dropInventories = {}
+isDoingAnimation, isUsingItem, isWeaponEquiped, weaponSlot = false, false, false, nil
+isShowingAction = false
 
 Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(0)
-
-        if IsControlJustReleased(0, 289) and IsInputDisabled(0) and not isUsingItem then
-            openInventory()
-        end
-
-        if not isShowingTaskbar and (IsDisabledControlJustPressed(0, 37)) then
-            isShowingTaskbar = true
-
-            SendUiMessage({ eventName = 'toggleMenu', status = true, component = 'actionbar', menuData = CRP.RPC:execute('GetActionBarData') })
-        end
-
-        if isShowingTaskbar and (IsDisabledControlReleased(0, 37)) then
-            SendUiMessage({ eventName = 'toggleMenu', status = false, component = 'actionbar' })
-
-            isShowingTaskbar = false
-        end
-
-        if IsControlJustPressed(0, 157) and not isUsingItem then
-            if not isWeaponEquiped or (isWeaponEquiped and weaponSlot ~= 1) then
-                UseItem(1)
-            elseif isWeaponEquiped then
-                Holster()
-            end
-        end
-
-        if IsControlJustPressed(0, 158) and not isUsingItem then
-            if not isWeaponEquiped or (isWeaponEquiped and weaponSlot ~= 2) then
-                UseItem(2)
-            elseif isWeaponEquiped then
-                Holster()
-            end
-        end
-
-        if IsControlJustPressed(0, 160) and not isUsingItem then
-            if not isWeaponEquiped or (isWeaponEquiped and weaponSlot ~= 3) then
-                UseItem(3)
-            elseif isWeaponEquiped then
-                Holster()
-            end
-        end
-
-        if IsControlJustPressed(0, 164) and not isUsingItem then
-            if not isWeaponEquiped or (isWeaponEquiped and weaponSlot ~= 4) then
-                UseItem(4)
-            elseif isWeaponEquiped then
-                Holster()
-            end
-        end
-    end
-end)
-
-Citizen.CreateThread(function()
-	while true do
 		Citizen.Wait(0)
 
-		local coords, letSleep = GetEntityCoords(PlayerPedId()), true
+		DisableControlAction(0, 14, true)
+		DisableControlAction(0, 15, true)
+		DisableControlAction(0, 16, true)
+		DisableControlAction(0, 17, true)
+		DisableControlAction(0, 99, true)
 
-        for i = 1, #dropInventories, 1 do
-            local distance = #(vector3(dropInventories[i].coords.x, dropInventories[i].coords.y, dropInventories[i].coords.z) - coords)
+		DisableControlAction(0, 100, true)
+		DisableControlAction(0, 115, true)
+		DisableControlAction(0, 116, true)
 
-            if distance < 20.0 then
-				DrawMarker(20, dropInventories[i].coords.x, dropInventories[i].coords.y, dropInventories[i].coords.z - 0.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.25, 0.25, 0.25, 255, 255, 255, 100, false, true, 2, false, false, false, false)
-
-				letSleep = false
-			end
+		if IsControlJustPressed(0, 157) or IsDisabledControlJustReleased(0, 157) then
+			useItem(1)
         end
 
-        if letSleep then
-			Citizen.Wait(1500)
-		end
-	end
-end)
+        if IsControlJustPressed(0, 158) or IsDisabledControlJustReleased(0, 158) then
+            useItem(2)
+        end
 
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(0)
+        if IsControlJustPressed(0, 160) or IsDisabledControlJustReleased(0, 160) then
+            useItem(3)
+        end
 
-        DisableControlAction(0, 14, true)
-        DisableControlAction(0, 15, true)
-        DisableControlAction(0, 16, true)
-        DisableControlAction(0, 17, true)
-        DisableControlAction(0, 37, true)
-        DisableControlAction(0, 99, true)
-
-        DisableControlAction(0, 100, true)
-        DisableControlAction(0, 115, true)
-        DisableControlAction(0, 116, true)
+        if IsControlJustPressed(0, 164) or IsDisabledControlJustReleased(0, 164) then
+            useItem(4)
+        end
     end
 end)
 
 function openInventory()
 	local playerPed = PlayerPedId()
 
-    if IsPedInAnyVehicle(playerPed, false) then
-        local vehicle = GetVehiclePedIsIn(playerPed, false)
+	if IsPedInAnyVehicle(playerPed, false) then
+		local vehicle = GetVehiclePedIsIn(playerPed, false)
 
-        if vehicle ~= 0 then
-            TriggerInventoryAnimation(playerPed)
-            TriggerEvent('crp-ui:openMenu', 'inventory', { type = 3, name = 'glovebox-' .. GetVehicleNumberPlateText(vehicle) })
-        end
-    else
-        local coords = GetEntityCoords(playerPed)
-        local inventoryName, inventoryDistance, inventoryCoords
+		if vehicle ~= 0 then
+			Debug('[Main] Opened glovebox inventory.')
 
-        for i = 1, #dropInventories, 1 do
-            local distance = #(coords - vector3(dropInventories[i].coords.x, dropInventories[i].coords.y, dropInventories[i].coords.z))
+			TriggerEvent('crp-inventory:openInventory', 3, 'glovebox-' .. GetVehicleNumberPlateText(vehicle))
+		end
+	else
+		local coords = GetEntityCoords(playerPed)
+		local found, container = searchContainers(playerPed, coords)
 
-            if distance <= 2.0 then
-                if inventoryName == nil or inventoryDistance < distance then
-                    inventoryName, inventoryDistance = dropInventories[i].name
-                    inventoryCoords = { x = dropInventories[i].coords.x, y = dropInventories[i].coords.y, z = dropInventories[i].coords.z }
-                end
-            end
-        end
+		if found then
+			Debug('[Main] Opened container inventory.')
 
-        if inventoryName ~= nil then
-			TriggerInventoryAnimation(playerPed)
+			TriggerEvent('crp-inventory:openInventory', 4, 'container | ' .. container.x .. ' - ' .. container.y)
+		else
+			local vehicle = GetVehicleInFront(playerPed, coords)
 
-			SendUiMessage({
-				app = 'inventory', status = true, event = 'setInventory', eventData = { type = 1, name = inventoryName, coords = inventoryCoords }
-			})
-        else
-            local vehicle = GetVehicleInFront(playerPed)
+			if vehicle ~= 0 and not IsThisModelABicycle(GetEntityModel(vehicle)) then
+				local minimum, maximum = GetModelDimensions(vehicle)
+				local position = GetOffsetFromEntityInWorldCoords(vehicle, 0.0, minimum - 0.5, 0.0)
 
-            if vehicle ~= 0 then
-                if IsThisModelABicycle(GetEntityModel(vehicle)) then
-                    return
-                end
+				if #(position - coords) < 3.5 then
+					local vehicleStatus = GetVehicleDoorLockStatus(vehicle)
 
-                local minimum, maximum = GetModelDimensions(vehicle)
-                local position = GetOffsetFromEntityInWorldCoords(vehicle, 0.0, minimum - 0.5, 0.0)
+					if vehicleStatus == 0 or vehicleStatus == 1 then
+						SetVehicleDoorOpen(vehicle, 5, 0, 0)
+						TaskTurnPedToFaceEntity(playerPed, vehicle, 1.0)
 
-                if #(position - GetEntityCoords(playerPed)) < 3.5 then
-                    local vehicleStatus = GetVehicleDoorLockStatus(vehicle)
+						-- TODO: Trigger trunk animation.
 
-                    if vehicleStatus == 0 or vehicleStatus == 1 then
-                        SetVehicleDoorOpen(vehicle, 5, 0, 0)
+						Citizen.Wait(1000)
 
-                        RequestAnimDict('mini@repair')
+						Debug('[Main] Checking vehicle trunk.')
 
-                        while not HasAnimDictLoaded('mini@repair') do
-                            Citizen.Wait(0)
-                        end
+						TriggerEvent('crp-inventory:openInventory', 2, 'trunk-' .. GetVehicleNumberPlateText(vehicle))
+					else
+						Debug('[Main] The vehicle trunk is closed.')
 
-                        -- RequestAnimDict('amb@prop_human_bum_bin@idle_b')
+						-- TODO: Send alert (O veículo está trancado)
+					end
+				end
+			else
+				local name, coords = searchDropInventories(coords)
 
-                        -- while not HasAnimDictLoaded('amb@prop_human_bum_bin@idle_b') do
-                        --     Citizen.Wait(0)
-                        -- end
+				Debug('[Main] Opened drop inventory.')
 
-                        TaskTurnPedToFaceEntity(playerPed, vehicle, 1.0)
-
-                        Citizen.Wait(1000)
-
-						SendUiMessage({
-							app = 'inventory', status = true, event = 'setInventory', eventData = { type = 2, name = 'trunk-' .. GetVehicleNumberPlateText(vehicle) }
-						})
-
-                        while true do
-                            if not IsEntityPlayingAnim(playerPed, 'mini@repair', 'fixing_a_player', 3) then
-                                TaskPlayAnim(playerPed, 'mini@repair', 'fixing_a_player', 8.0, -8, -1, 16, 0, 0, 0, 0)
-                            end
-
-                            -- if not IsEntityPlayingAnim(playerPed, 'amb@prop_human_bum_bin@idle_b', 'idle_d', 3) then
-                            --     TaskPlayAnim(playerPed, 'amb@prop_human_bum_bin@idle_b', 'idle_d', 8.0, -8, -1, 16, 0, 0, 0, 0)
-                            -- end
-
-                            Citizen.Wait(0)
-                        end
-                    else
-                        TriggerEvent('crp-ui:setAlert', { text = 'O veículo está trancado', type = 'inform' })
-                    end
-                end
-            else
-                local inventoryName = 'drop-' .. math.random(0, 100000)
-
-                while DoesDropInventoryExist(inventoryName) do
-                    inventoryName = 'drop-' .. math.random(0, 100000)
-                end
-
-                inventoryCoords = { x = coords.x, y = coords.y, z = coords.z }
-
-				TriggerInventoryAnimation(playerPed)
-
-				SendUiMessage({
-					app = 'inventory', status = true, event = 'setInventory', eventData = { type = 1, name = inventoryName, coords = inventoryCoords }
-				})
-            end
-        end
-    end
+				TriggerEvent('crp-inventory:openInventory', 1, name, coords)
+			end
+		end
+	end
 end
 
-RegisterUiCallback('getInventories', function(data, cb)
-    cb(CRP.RPC:execute('GetInventories', data))
-end)
+function closeInventory()
+	isOnTrunk = false
 
-RegisterUiCallback('moveItem', function(moveData, cb)
-    local data = CRP.RPC:execute('MoveItem', moveData)
 
-    if not data.status then
-        PlaySoundFrontend(-1, 'ERROR', 'HUD_FRONTEND_DEFAULT_SOUNDSET', false)
-    else
-        PlaySoundFrontend(-1, 'ERROR', 'HUD_LIQUOR_STORE_SOUNDSET', false)
-    end
+end
 
-    cb(data)
-end)
+function useItem(slot)
+	if isUsingItem then
+		return
+	end
 
-RegisterNetEvent('crp-inventory:updateDropInventories')
-AddEventHandler('crp-inventory:updateDropInventories', function(newInventories)
-	dropInventories = newInventories
-end)
+	if isWeaponEquiped and weaponSlot == slot then
+		holsterWeapon()
+		return
+	end
+
+	local success, data = RPC:execute('getItem', slot)
+
+	print(success, data)
+
+	if not data then
+		return
+	end
+
+	if IsWeaponValid(data.item) then
+		if isWeaponEquiped then
+			holsterWeapon()
+		end
+
+		Citizen.Wait(200)
+
+		isWeaponEquiped, weaponSlot = true, slot
+
+		equipWeapon(data)
+	else
+		TriggerEvent('crp-inventory:useItem', data)
+	end
+end
+
+RegisterCommand('ola', function(source, args)
+	local playerPed = PlayerPedId()
+	local coords = vector3(120.3941, -1063.078, -34.75819) --  GetEntityCoords(playerPed)
+
+
+	local coords2 = vector3(120.3941, -1063.078, 34.75819)
+
+	print(coords.x - coords2.x, coords.y - coords2.y, coords.z - coords2.z)
+	SetEntityCoords(playerPed, coords.x, coords.y, coords.z)
+
+	building = CreateObjectNoOffset(GetHashKey('v_49_motelmp_shell'), coords.x, coords.y, coords.z, true, false, true)
+
+	FreezeEntityPosition(building, true)
+
+	-- 2.0509948730469	-2.073974609375	0.35182952880859
+
+	stuff = CreateObjectNoOffset(GetHashKey('v_49_motelmp_stuff'), coords.x - 0.0013961791992188, coords.y - 0.0059814453125, coords.z - 0.10515975952148, false, false, false)
+	clothes = CreateObjectNoOffset(GetHashKey('v_49_motelmp_clothes'), coords.x - 2.0509948730469, coords.y + 2.073974609375, coords.z - 0.35182952880859, false, false, false)
+	-- reflect = CreateObjectNoOffset(GetHashKey('v_49_motelmp_reflect'), coords.x, coords.y, coords.z, false, false, false)
+	print(GetEntityCoords(reflect))
+end, false)
 
 AddEventHandler('onResourceStop', function(resourceName)
-    if resourceName == 'crp-inventory' then
-        TriggerEvent('crp-ui:closeMenu')
+	print('alo?')
+	if resourceName == 'crp-inventory-new' then
+		print('12333')
+		DeleteEntity(building)
+		DeleteEntity(stuff)
+		DeleteEntity(bed)
+		DeleteEntity(clothes)
+		DeleteEntity(reflect)
     end
 end)
+
+function toggleAction()
+	local data = {}
+
+	isShowingAction = not isShowingAction
+
+	if isShowingAction then
+		data = RPC:execute('getActionBarItems')
+	end
+
+	exports['crp-ui']:toggleAction(isShowingAction, data)
+end
+
+RegisterUiCallback('moveItem', function(data, cb)
+	local success, current, future = RPC:execute('moveItem', data.current, data.future, data.currentIndex, data.futureIndex, data.count)
+
+    cb({ status = success, current = current, future = future })
+end)
+
+AddEventHandler('crp-inventory:useItem', function(data)
+	if isUsingItem then
+		return
+	end
+
+	isUsingItem = true
+
+	Citizen.Wait(600)
+
+	isUsingItem = false
+end)
+
+AddEventHandler('crp-inventory:openInventory', function(type, name, data)
+	local success, data = RPC:execute('openInventory', type, name, data)
+
+	if success then
+		exports['crp-ui']:openApp('inventory', data)
+	end
+end)
+
+AddEventHandler('crp-inventory:openShop', function(type, name)
+	local success, data = RPC:execute('openShop', type, name)
+
+	if success then
+		exports['crp-ui']:openApp('inventory', data)
+	end
+end)
+
+AddEventHandler('crp-ui:closedMenu', function(name)
+	if name ~= 'inventory' then
+		return
+	end
+
+	Debug('[Main] Inventory closed.')
+
+	closeInventory()
+end)
+
+RegisterCommand('+openInventory', openInventory, false)
+RegisterCommand('-openInventory', closeInventory, false)
+RegisterKeyMapping('+openInventory', 'Abrir o inventário', 'keyboard', 'i')
+
+RegisterCommand('+showAction', toggleAction, false)
+RegisterCommand('-showAction', toggleAction, false)
+RegisterKeyMapping('+showAction', 'Mostrar a actionbar', 'keyboard', 'tab')

@@ -2,19 +2,22 @@ fx_version 'bodacious'
 
 game 'gta5'
 
-client_scripts {
-	'@crp-lib/client/main.lua',
-    '@crp-base/shared.lua',
-    '@crp-base/client/modules/rpc.lua',
-    'client/functions.lua',
-    'client/main.lua',
+dependecies {
+	'crp-ui',
+	'crp-lib'
 }
 
+client_scripts {
+	'@crp-lib/client/main.lua',
+	'@crp-lib/client/rpc.lua',
+    'client/*.lua'
+}
+
+shared_script '@crp-lib/shared/util.lua'
+
 server_scripts {
-    '@crp-base/shared.lua',
-	'@crp-base/server/modules/rpc.lua',
-	'server/items.lua',
+	'@crp-lib/server/database.lua',
+	'@crp-lib/server/rpc.lua',
 	'server/classes/inventory.lua',
-	'server/shops.lua',
-    'server/main.lua'
+	'server/*.lua'
 }
