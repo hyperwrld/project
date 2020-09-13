@@ -1,19 +1,20 @@
 <script>
-	import items from './../items.js';
+	import { mapGetters } from 'vuex';
 
 	export default {
 		props: {
 			item: Object
 		},
-		data() {
-			return {
-				itemsList: items
-			}
-		},
+		computed: {
+			...mapGetters('inventory', {
+				itemsList: 'getItemsList'
+    		})
+        },
 		render (h) {
-			let itemLabel = this.item.price ? `<span>${ this.item.price }€</span> - ${ this.itemsList[this.item.itemId].name }` : this.itemsList[this.item.itemId].name;
-			let itemPercentage = this.itemsList[this.item.itemId].decayRate != 0.0 ?
-				100 - Math.ceil(((Math.floor(Date.now() / 1000) - this.item.durability) / (2419200 * this.itemsList[this.item.itemId].decayRate)) * 100) : 100;
+			let itemData = this.itemsList.find(element => element.identifier == this.item.itemId)
+			let itemLabel = this.item.price ? `<span>${ this.item.price }€</span> - ${ itemData.name }` : itemData.name;
+			let itemPercentage = itemData.decayRate != 0.0 ?
+				100 - Math.ceil((((Date.now() - new Date(this.item.durability * 1000).getTime()) / (2419200000 * itemData.decayRate)) * 100)) : 100;
 
 			if (itemPercentage < 0) itemPercentage = 0;
 
@@ -21,9 +22,9 @@
 
 			return (
 				<div class='item'>
-					<div class='item-info'>{ this.item.quantity } [{ this.itemsList[this.item.itemId].weight.toFixed(2) }]</div>
+					<div class='item-info'>{ this.item.quantity } [{ itemData.weight.toFixed(2) }]</div>
 					<div class='item-image'>
-						<img src={ require('./../../../assets/' + this.itemsList[this.item.itemId].image) }></img>
+						<img src={ require('./../../../assets/' + itemData.image) }></img>
 					</div>
 					<div class='item-durability' style={ itemPercentage >= 10 ? { width: itemPercentage + '%' } : { width: '100%', backgroundColor: '#a60505' }}>
 						{ durabilityLabel }

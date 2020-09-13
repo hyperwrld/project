@@ -1,35 +1,45 @@
 <template>
-    <div class='action-bar'>
-        <div class='slot' v-for='(slot, index) in actionItems' :item='slot' :key='index'>
-            <div class='slot-id'>{{ index + 1 }}</div>
+	<v-container fluid id='actionbar'>
+		<div class='item-status'>
+			<transition name='fade' v-for='item in ITEMS_QUEUE'>
+				<div class='slot'>
+					<div class='type'>USOU 1X</div>
+					<div class='item'>
+						<div class='item-image status'><img v-bind:src='require("./../../../assets/" + itemsList[item.itemId].image)'></div>
+						<div class='item-name status'>{{ itemsList[item.itemId].name }}</div>
+					</div>
+				</div>
+			</transition>
+		</div>
+		<transition name='fade'>
+			<div class='action-bar' v-if='actionData.status'>
+				<div class='slot' v-for='(slot, index) in actionData.items' :item='slot' :key='index'>
+					<div class='slot-id'>{{ index + 1 }}</div>
 
-            <div class='item' v-if='slot.itemId != undefined'>
-                <div class='item-info'>{{ slot.quantity }} [{{ itemsList[slot.itemId].weight.toFixed(2) }}]</div>
-                <div class='item-image'><img v-bind:src='require("./../../../assets/" + itemsList[slot.itemId].image)'></div>
-                <div class='item-durability' v-if='slot.durability >= 5' :style='{ width: slot.durability + "%" }'>{{ slot.durability }}</div><div class='item-durability destroyed' v-else>Destruído</div>
-                <div class='item-name'>{{ itemsList[slot.itemId].name }}</div>
-            </div>
-        </div>
-    </div>
+					<div class='item' v-if='slot.itemId != undefined'>
+						<item :item='slot'/>
+					</div>
+				</div>
+			</div>
+		</transition>
+	</v-container>
 </template>
 
 <script>
-    import { mapState } from 'vuex';
+    import { mapGetters } from 'vuex';
 
-    import items from '../items';
+	import item from './../item/item.vue';
 
     export default {
-        name: 'inventory',
+		name: 'inventory',
+		components: {
+			item
+		},
         computed: {
-            ...mapState({
-                actionItems: state => state.inventory.actionItems
-            })
-        },
-        data() {
-            return {
-                itemsList: items
-            }
-        },
+			...mapGetters('inventory', {
+				actionData: 'getActionData', queueData: 'getQueueData', itemsList: 'getItemsList'
+			})
+        }
     };
 </script>
 

@@ -1,91 +1,125 @@
-.action-bar {
-    position: absolute;
-    width: fit-content;
+.container {
+	font-family: 'Quantico', sans-serif;
+
+	width: fit-content;
     height: fit-content;
-
+    bottom: 0;
+    position: absolute;
     left: 50%;
-    transform: translate(-50%);
-    bottom: 7%;
+	transform: translate(-50%);
+	margin: 0;
 
-    .slot {
-        position: relative;
-        width: 90px;
-        height: 110px;
-        float: left;
-        margin-left: 1px;
-        margin-top: 1px;
+	.action-bar, .item-status {
+		height: 110px;
+	}
 
-        background-color: rgba(0, 0, 0, 0.5);
-        border: 1px solid rgba(54, 52, 52, 0.5);
-        transition: background-color 0.2s;
+	& > :first-child {
+		margin-bottom: 5%;
+	}
 
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+	.action-bar > .slot, .item-status > .slot {
+		position: relative;
+		width: 90px;
+		height: 110px;
+		float: left;
 
-        .slot-id {
-            position: absolute;
-            top: 0px;
-            left: 0px;
-            font-size: 0.6rem;
-            padding-right: 4px;
-            padding-left: 2px;
-            background-color: white;
-            color: black;
-        }
+		background-color: rgba(0, 0, 0, 0.5);
+		border: 1px solid rgba(54, 52, 52, 0.5);
+		transition: background-color 0.2s;
 
-        .item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100% !important;
-            height: 100% !important;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 
-            &[aria-grabbed='true'] {
-                outline: transparent;
-            }
+		margin-right: 1px;
 
-            .item-info {
-                position: absolute;
-                top: 0px;
-                right: 2px;
-                font-size: 0.5rem;
-                color: white;
-            }
+		.slot-id {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			font-size: 0.6rem;
+			padding-right: 4px;
+			padding-left: 2px;
+			background-color: white;
+			color: black;
+		}
 
-            .item-image {
-                width: 74px;
-                height: 90px;
+		.type {
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			font-size: 0.5rem;
+			padding-right: 4px;
+			padding-left: 2px;
+			background-color: white;
+			color: black;
+			z-index: 99;
+		}
 
-                img {
-                    width: 100%;
-                    height: 100%;
-                }
-            }
+		.item {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			width: 100% !important;
+			height: 100% !important;
 
-            .item-durability {
-                width: 100%;
-                font-size: 0.35rem;
-                height: 7%;
-                text-align: center;
-                color: white;
-                background-color: green;
-                align-self: start;
-            }
+			&[aria-grabbed='true'] {
+				outline: transparent;
+			}
 
-            .destroyed {
-                width: 100%;
-                background-color: #a60505;
-            }
+			&::v-deep {
+				.item-info {
+					position: absolute;
+					top: 0px;
+					right: 2px;
+					font-size: 0.5rem;
+					color: white;
+				}
 
-            .item-name {
-                width: 100%;
-                font-size: 0.5rem;
-                height: 9%;
-                color: white;
-                text-align: center;
-                background-color: rgba(0, 0, 0, 0.6)
-            }
-        }
-    }
+				.item-image {
+					width: 74px;
+					height: 90px;
+
+					&.status {
+						width: 81px;
+						height: 98.28px;
+					}
+
+					img {
+						width: 100%;
+						height: 100%;
+					}
+				}
+
+				.item-durability {
+					width: 100%;
+					font-size: 0.35rem;
+					height: 7%;
+					text-align: center;
+					color: white;
+					background-color: green;
+					align-self: start;
+				}
+
+				.destroyed {
+					width: 100%;
+					background-color: #a60505;
+				}
+
+				.item-name {
+					width: 100%;
+					font-size: 0.46rem;
+					height: 9%;
+					color: white;
+					text-align: center;
+					background-color: rgba(0, 0, 0, 0.6);
+					bottom: 0;
+
+					&.status {
+						position: absolute;
+					}
+				}
+			}
+		}
+	}
 }
