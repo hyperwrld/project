@@ -1,16 +1,18 @@
-function createInventory(name, slots, weight, type, items)
+function createInventory(name, slots, weight, type, items, coords)
 	local self = {}
 
 	self.name, self.maxSlots = name, slots
 	self.maxWeight, self.type = weight, type
-	self.items = items or {}
+	self.items, self.coords = items or {}, coords
 
 	self.returnData = function()
 		return {
 			name = self.name,
 			maxSlots = self.maxSlots,
 			maxWeight = self.maxWeight,
-			items = self.items
+			items = self.items,
+			type = self.type,
+			coords = self.coords
 		}
 	end
 
@@ -19,7 +21,7 @@ function createInventory(name, slots, weight, type, items)
 
         for i = 1, #self.items, 1 do
 			if self.items[i].slot ~= itemSlot then
-				local item = itemsList[self.items[i].name]
+				local item = getItemData(self.items[i].name)
 
 				if (item) then
 					weight = weight + (item.weight * self.items[i].count)
@@ -53,9 +55,11 @@ function createInventory(name, slots, weight, type, items)
 	end
 
 	self.addItem = function(name, slot, count, meta, creationTime)
+		local item = getItemData(name)
+
         table.insert(self.items, { item = name, count = count, slot = slot, meta = meta, creation_time = creationTime })
 
-		self.currentWeight = self.currentWeight + (itemsList[name].weight * count)
+		self.currentWeight = self.currentWeight + (item.weight * count)
 
 		local query = [[INSERT INTO inventory (name, item, count, slot, meta, creation_time) VALUES (?, ?, ?, ?, ?, ?);]]
 
@@ -65,8 +69,10 @@ function createInventory(name, slots, weight, type, items)
 	self.removeItem = function(name, slot, state)
         local data, index = self.getSlotData(slot)
 
-        if data then
-            self.currentWeight = self.currentWeight - (itemsList[data.item].weight * data.count)
+		if data then
+			local item = getItemData(data.item)
+
+            self.currentWeight = self.currentWeight - (item.weight * data.count)
 
             table.remove(self.items, index)
 
@@ -82,7 +88,9 @@ function createInventory(name, slots, weight, type, items)
 		local data, index = self.getSlotData(slot)
 
 		if data then
-			self.currentWeight = (self.currentWeight - (itemsList[data.item].weight * data.count)) + (itemsList[name].weight * count)
+			local item = getItemData(name)
+
+			self.currentWeight = (self.currentWeight - (item.weight * data.count)) + (item.weight * count)
 
 			self.items[index].count = count
 
@@ -97,14 +105,18 @@ function createInventory(name, slots, weight, type, items)
 		local weight = 0
 
 		if data then
-			weight = itemsList[data.item].weight * data.count
+			local itemData = getItemData(data.item)
+
+			weight = itemData.weight * data.count
 
 			self.items[index] = { item = item.item, slot = slot, count = item.count, meta = item.meta, creation_time = item.creation_time }
 		else
 			table.insert(self.items, { item = item.item, slot = slot, count = item.count, meta = item.meta, creation_time = item.creation_time })
 		end
 
-		self.currentWeight = (self.currentWeight - weight) + (itemsList[item.item].weight * item.count)
+		local itemData = getItemData(item.item)
+
+		self.currentWeight = (self.currentWeight - weight) + (itemData.weight * item.count)
 
 		local query = [[UPDATE inventory SET name = ?, slot = ? WHERE name = ? AND item = ? AND slot = ?;]]
 
@@ -116,12 +128,15 @@ function createInventory(name, slots, weight, type, items)
 			return true
 		end
 
+		local item = getItemData(name)
+
 		if slot then
 			local data, index = self.getSlotData(slot)
+			local itemData = getItemData(data.item)
 
-            return (self.currentWeight - (itemsList[data.item].weight * data.count) + (itemsList[name].weight * count)) <= self.maxWeight
+            return (self.currentWeight - (itemData.weight * data.count) + (item.weight * count)) <= self.maxWeight
 		else
-            return (self.currentWeight + (itemsList[name].weight * count)) <= self.maxWeight
+            return (self.currentWeight + (item.weight * count)) <= self.maxWeight
         end
 	end
 
@@ -138,7 +153,7 @@ function createInventory(name, slots, weight, type, items)
 
         for i = 1, #self.items, 1 do
             if self.items[i].slot >= 1 and self.items[i].slot <= 4 then
-                items[self.items[i].slot] = { name = self.items[i].item, count = self.items[i].count, durability = self.items[i].durability }
+                items[self.items[i].slot] = { name = self.items[i].item, count = self.items[i].count, creation_time = self.items[i].creation_time }
             end
         end
 

@@ -1,9 +1,9 @@
 local containers = {
-	684586828, 218085040, 666561306, 4236481708, 4088277111, 1511880420, 682791951, 577432224, 364445978
+	684586828, 218085040, 666561306, -58485588, -206690185, 1511880420, 682791951, 577432224, 364445978
 }
 
 function searchContainers(playerPed, coords)
-	local rayHandle = StartShapeTestRay(coords, GetOffsetFromEntityInWorldCoords(playerPed, 0, 1.8, -0.4), 16, playerPed, 0)
+	local rayHandle = StartShapeTestRay(coords, GetOffsetFromEntityInWorldCoords(playerPed, 0, 2.5, -0.4), 16, playerPed, 0)
 	local retval, hit, endCoords, surfaceNormal, entityHit = GetShapeTestResult(rayHandle)
 	local entityModel = GetEntityModel(entityHit)
 
@@ -83,7 +83,7 @@ function holsterWeapon()
     isDoingAnimation, isWeaponEquiped = false, false
 end
 
-function equipWeapon(weaponInfo)
+function equipWeapon(weaponHash, weaponAmmo)
 	local playerPed = PlayerPedId()
 	local dictionary, animation = 'reaction@intimidation@1h', 'intro'
 	-- local job = exports['crp-userinfo']:isPed('job')
@@ -97,20 +97,20 @@ function equipWeapon(weaponInfo)
 
 	Citizen.Wait(900)
 
-	GiveWeaponToPed(playerPed, weaponInfo.item, weaponInfo.meta.ammo, 0, 1)
-	SetCurrentPedWeapon(playerPed, weaponInfo.item, 1)
+	GiveWeaponToPed(playerPed, weaponHash, weaponAmmo, 0, 1)
+	SetCurrentPedWeapon(playerPed, weaponHash, 1)
 
-	if weaponInfo.item == GetHashKey('WEAPON_CARBINERIFLE_MK2') then
-		GiveWeaponComponentToPed(playerPed, weaponInfo.item, GetHashKey('COMPONENT_AT_AR_AFGRIP_02'))
-		GiveWeaponComponentToPed(playerPed, weaponInfo.item, GetHashKey('COMPONENT_AT_AR_FLSH'))
-		GiveWeaponComponentToPed(playerPed, weaponInfo.item, GetHashKey('COMPONENT_AT_CR_BARREL_02'))
-		GiveWeaponComponentToPed(playerPed, weaponInfo.item, GetHashKey('COMPONENT_AT_MUZZLE_06'))
-		GiveWeaponComponentToPed(playerPed, weaponInfo.item, GetHashKey('COMPONENT_AT_SIGHTS'))
-		GiveWeaponComponentToPed(playerPed, weaponInfo.item, GetHashKey('COMPONENT_CARBINERIFLE_MK2_CLIP_TRACER'))
+	if weaponHash == GetHashKey('WEAPON_CARBINERIFLE_MK2') then
+		GiveWeaponComponentToPed(playerPed, weaponHash, GetHashKey('COMPONENT_AT_AR_AFGRIP_02'))
+		GiveWeaponComponentToPed(playerPed, weaponHash, GetHashKey('COMPONENT_AT_AR_FLSH'))
+		GiveWeaponComponentToPed(playerPed, weaponHash, GetHashKey('COMPONENT_AT_CR_BARREL_02'))
+		GiveWeaponComponentToPed(playerPed, weaponHash, GetHashKey('COMPONENT_AT_MUZZLE_06'))
+		GiveWeaponComponentToPed(playerPed, weaponHash, GetHashKey('COMPONENT_AT_SIGHTS'))
+		GiveWeaponComponentToPed(playerPed, weaponHash, GetHashKey('COMPONENT_CARBINERIFLE_MK2_CLIP_TRACER'))
 	end
 
-	if weaponInfo.item == GetHashKey('WEAPON_COMBATPISTOL') then
-		GiveWeaponComponentToPed(playerPed, weaponInfo.item, GetHashKey('COMPONENT_AT_PI_FLSH'))
+	if weaponHash == GetHashKey('WEAPON_COMBATPISTOL') then
+		GiveWeaponComponentToPed(playerPed, weaponHash, GetHashKey('COMPONENT_AT_PI_FLSH'))
 	end
 
     Citizen.Wait(300)

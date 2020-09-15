@@ -1,4 +1,4 @@
-inventories, dropInventories = {}, {}
+inventories, dropInventories, openInventories = {}, {}, {}
 
 AddEventHandler('onResourceStart', function(resourceName)
 	if (GetCurrentResourceName() ~= resourceName) then
@@ -14,8 +14,8 @@ RPC:register('openInventory', function(source, type, name, data)
     return openInventory(source, type, name, data)
 end)
 
-RPC:register('moveItem', function(source, current, future, currentSlot, futureSlot, count)
-	return moveProcess(source, current, future, currentSlot, futureSlot, count)
+RPC:register('moveItem', function(source, current, future, currentSlot, futureSlot, count, data)
+	return moveProcess(source, current, future, currentSlot, futureSlot, count, data)
 end)
 
 RPC:register('getActionBarItems', function(source)
@@ -49,10 +49,15 @@ function loadInventories(source, type, name, data)
 	Debug('[Main] Loading inventories...')
 
 	local character = exports['crp-base']:GetCharacter(source)
-	local firstInventory = loadInventory('character-' .. character.getCharacterID(), 40, 100)
+	local characterName = 'character-' .. character.getCharacterID()
+	local firstInventory = loadInventory(characterName, 40, 100)
 
 	if type == 2 then
-		maxWeight = vehicleWeights[data.vehicleName]
+		maxWeight = 100
+
+		if vehicleWeights[data.vehicleName] then
+			maxWeight = vehicleWeights[data.vehicleName]
+		end
 	else
 		maxSlots, maxWeight = inventoryTypes[type].slots, inventoryTypes[type].weight
 	end
@@ -63,8 +68,61 @@ function loadInventories(source, type, name, data)
 		return false
 	end
 
+	if not canOpenInventories(source, characterName, name) then
+		return
+	end
+
 	return true, firstInventory, secondInventory
 end
+
+function canOpenInventories(source, firstName, secondName)
+	local first, second = openInventories[firstName], openInventories[secondName]
+
+	if (first ~= nil and first.status and first.source ~= source) then
+		return false
+	end
+
+	if (second ~= nil and second.status and second.source ~= source) then
+		return false
+	end
+
+	local data = { status = true, source = source }
+
+	openInventories[firstName] = data
+
+	if openInventories[secondName] then
+		openInventories[secondName] = data
+	end
+
+	return true
+end
+
+RegisterNetEvent('crp-inventory:closedInventory')
+AddEventHandler('crp-inventory:closedInventory', function(firstName, secondName)
+	local _source, first, second = source, openInventories[firstName], openInventories[secondName]
+
+	if (not first or not first.status) or (not second or second.status) then
+		return
+	end
+
+	if first.source ~= source or second.source ~= source then
+		return
+	end
+
+	local data = { status = false, source = nil }
+
+	openInventories[firstName], openInventories[secondName] = data, data
+end)
+
+AddEventHandler('playerDropped', function(reason)
+	for key, value in pairs(openInventories) do
+		if value.source == source then
+			openInventories[key] = { status = false, source = nil }
+
+			Debug('Closed the inventory ' .. key)
+		end
+	end
+end)
 
 function loadInventory(name, slots, weight, _type, data)
 	if not name or type(name) ~= 'string' then return false end
@@ -76,7 +134,7 @@ function loadInventory(name, slots, weight, _type, data)
 	local query = [[SELECT item, count, slot, meta, creation_time FROM inventory WHERE name = ?;]]
 	local result = Citizen.Await(DB:Execute(query, name))
 
-	inventories[name] = createInventory(name, slots, weight, _type, result)
+	inventories[name] = createInventory(name, slots, weight, _type, result, data)
 
 	if _type == 1 then
 		addDropInventory(name, data)
@@ -85,9 +143,13 @@ function loadInventory(name, slots, weight, _type, data)
 	return inventories[name]:returnData()
 end
 
-function moveProcess(source, current, future, currentSlot, futureSlot, count)
-	if not inventories[current] or not inventories[future] then
+function moveProcess(source, current, future, currentSlot, futureSlot, count, data)
+	if not inventories[current] or (not inventories[future] and data.type ~= 1) then
 		return false
+	end
+
+	if not inventories[future] and data.type == 1 then
+		loadInventory(future, 40, 1000, 1, data)
 	end
 
 	if inventories[current].type == 5 or inventories[future].type == 5 then
@@ -114,7 +176,7 @@ function moveProcess(source, current, future, currentSlot, futureSlot, count)
 end
 
 function swapItems(data, _data, current, future, currentSlot, futureSlot, count)
-	if data.item == _data.item and itemsList[data.item].canStack then
+	if data.item == _data.item and getItemData(data.item).canStack then
 		local itemCount = count
 
 		if data.count - count <= 0 then
@@ -171,7 +233,13 @@ function moveItem(data, current, future, currentSlot, futureSlot, count)
 		end
 	end
 
-	return true, inventories[current].getItemData(currentSlot), inventories[future].getItemData(futureSlot)
+	local currentSlotData = false
+
+	if inventories[current] then
+		currentSlotData = inventories[current].getItemData(currentSlot)
+	end
+
+	return true, currentSlotData, inventories[future].getItemData(futureSlot)
 end
 
 function addDropInventory(name, coords)
@@ -219,12 +287,11 @@ function getItem(source, slot)
 	end
 
 	local currentTime, percentagem = os.time(os.date("!*t")), 100
+	local item = getItemData(data.item)
 
-	if itemsList[data.item].decayRate ~= 0.0 then
-		percentagem = 100 - math.ceil(((currentTime - data.creation_time) / (2419200000 * itemsList[data.item].decayRate)) * 100)
+	if item and item.decayRate ~= 0.0 then
+		percentagem = 100 - math.ceil(((((currentTime * 1000) - (data.creation_time * 1000)) / (2419200000 * item.decayRate)) * 100))
 	end
-
-	print(percentagem)
 
 	if percentagem <= 0 then
 		return false, 'Este item já não pode ser usado.'

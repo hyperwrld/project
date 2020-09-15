@@ -1,4 +1,4 @@
-fx_version 'bodacious'
+fx_version 'cerulean'
 
 game 'gta5'
 
@@ -7,13 +7,16 @@ dependecies {
 	'crp-lib'
 }
 
+shared_scripts {
+	'@crp-lib/shared/util.lua',
+	'shared/items.lua'
+}
+
 client_scripts {
 	'@crp-lib/client/main.lua',
 	'@crp-lib/client/rpc.lua',
     'client/*.lua'
 }
-
-shared_script '@crp-lib/shared/util.lua'
 
 server_scripts {
 	'@crp-lib/server/database.lua',
