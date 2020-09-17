@@ -89,8 +89,6 @@ function openInventory()
 						SetVehicleDoorOpen(vehicle, 5, 0, 0)
 						TaskTurnPedToFaceEntity(playerPed, vehicle, 1.0)
 
-						-- TODO: Trigger trunk animation.
-
 						Citizen.Wait(1000)
 
 						Debug('[Main] Checking vehicle trunk.')
@@ -144,72 +142,6 @@ function useItem(slot)
 	end
 end
 
-RegisterCommand('ola', function(source, args)
-	local playerPed = PlayerPedId()
-	local coords = vector3(-1152.702, 94.16498, 65.67848) --  GetEntityCoords(playerPed)
-	local coords2 = vector3(-1148.981, 103.6431, 68.07878)
-
-	print(coords.x - coords2.x, coords.y - coords2.y, coords.z - coords2.z)
-	SetEntityCoords(playerPed, coords.x, coords.y, coords.z)
-
-	building = CreateObjectNoOffset(GetHashKey('hei_int_high2_newshell'), coords.x, coords.y, coords.z, true, false, true)
-	print(GetEntityCoords(building))
-
-	SetEntityHeading(building, GetEntityHeading(building) + 90)
-
-	FreezeEntityPosition(building, true)
-
-	sofa = CreateObjectNoOffset(GetHashKey('hei_heist_str_avunitl_03'), coords.x - 3.2239990234375, coords.y + 9.9609222412109, coords.z - 1.9998435974121, false, false, false)
-	light1 = CreateObjectNoOffset(GetHashKey('hei_heist_lit_lightpendant_02'), coords.x + 3.7210693359375, coords.y + 3.4781646728516, coords.z + 2.4002990722656, false, false, false)
-	light2 = CreateObjectNoOffset(GetHashKey('hei_heist_lit_lightpendant_02'), coords.x + 3.7210693359375, coords.y + 5.4781646728516, coords.z + 2.4002990722656, false, false, false)
-	light3 = CreateObjectNoOffset(GetHashKey('hei_heist_lit_lightpendant_02'), coords.x + 3.7210693359375, coords.y + 7.4781188964844, coords.z + 2.4002990722656, false, false, false)
-	light4 = CreateObjectNoOffset(GetHashKey('hei_heist_lit_lightpendant_02'), coords.x + 3.7210693359375, coords.y + 9.4781188964844, coords.z + 2.4002990722656, false, false, false)
-end, false)
-
-AddEventHandler('onResourceStop', function(resourceName)
-	if resourceName == 'crp-inventory' then
-		DeleteEntity(building)
-		DeleteEntity(sofa)
-		DeleteEntity(light1)
-		DeleteEntity(light2)
-		DeleteEntity(light3)
-		DeleteEntity(light4)
-    end
-end)
-
--- RegisterCommand('ola', function(source, args)
--- 	local playerPed = PlayerPedId()
--- 	local coords = vector3(120.3941, -1063.078, -34.75819) --  GetEntityCoords(playerPed)
-
-
--- 	local coords2 = vector3(120.3941, -1063.078, 34.75819)
-
--- 	print(coords.x - coords2.x, coords.y - coords2.y, coords.z - coords2.z)
--- 	SetEntityCoords(playerPed, coords.x, coords.y, coords.z)
-
--- 	building = CreateObjectNoOffset(GetHashKey('v_49_motelmp_shell'), coords.x, coords.y, coords.z, true, false, true)
-
--- 	FreezeEntityPosition(building, true)
-
--- 	-- 2.0509948730469	-2.073974609375	0.35182952880859
-
--- 	stuff = CreateObjectNoOffset(GetHashKey('v_49_motelmp_stuff'), coords.x - 0.0013961791992188, coords.y - 0.0059814453125, coords.z - 0.10515975952148, false, false, false)
--- 	clothes = CreateObjectNoOffset(GetHashKey('v_49_motelmp_clothes'), coords.x - 2.0509948730469, coords.y + 2.073974609375, coords.z - 0.35182952880859, false, false, false)
--- 	-- reflect = CreateObjectNoOffset(GetHashKey('v_49_motelmp_reflect'), coords.x, coords.y, coords.z, false, false, false)
--- 	print(GetEntityCoords(reflect))
--- end, false)
-
--- AddEventHandler('onResourceStop', function(resourceName)
--- 	if resourceName == 'crp-inventory' then
--- 		print('12333')
--- 		DeleteEntity(building)
--- 		DeleteEntity(stuff)
--- 		DeleteEntity(bed)
--- 		DeleteEntity(clothes)
--- 		DeleteEntity(reflect)
---     end
--- end)
-
 function toggleAction()
 	local data = {}
 
@@ -251,7 +183,11 @@ AddEventHandler('crp-inventory:openInventory', function(type, name, data)
 
 	if success then
 		if type == 2 or type == 4 then
-			TaskStartScenarioInPlace(GetPlayerPed(-1), 'PROP_HUMAN_BUM_BIN', 0, true)
+			TaskStartScenarioInPlace(PlayerPedId(), 'PROP_HUMAN_BUM_BIN', 0, true)
+		else
+			LoadDictionary('pickup_object')
+
+			TaskPlayAnim(PlayerPedId(), 'pickup_object', 'putdown_low', 5.0, 1.5, 1.0, 48, 0.0, 0, 0, 0)
 		end
 
 		exports['crp-ui']:openApp('inventory', data)
@@ -304,7 +240,6 @@ AddEventHandler('onClientResourceStart', function(resourceName)
 end)
 
 RegisterCommand('+openInventory', openInventory, false)
--- RegisterCommand('-openInventory', closeInventory, false)
 RegisterKeyMapping('+openInventory', 'Abrir o inventário', 'keyboard', 'i')
 
 RegisterCommand('+showAction', toggleAction, false)

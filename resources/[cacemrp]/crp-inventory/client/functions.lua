@@ -127,11 +127,7 @@ end
 function PlayAnimation(dictionary, animation, inSpeed, outSpeed)
 	local playerPed = PlayerPedId()
 
-    while (not HasAnimDictLoaded(dictionary)) do
-        RequestAnimDict(dictionary)
-
-        Citizen.Wait(0)
-	end
+    LoadDictionary(dictionary)
 
 	isDoingAnimation = true
 
@@ -146,4 +142,12 @@ function PlayAnimation(dictionary, animation, inSpeed, outSpeed)
 	end)
 
 	TaskPlayAnim(playerPed, dictionary, animation, inSpeed, outSpeed, -1, 50, 0, 0, 0, 0)
+end
+
+function LoadDictionary(dictionary)
+    while (not HasAnimDictLoaded(dictionary)) do
+        RequestAnimDict(dictionary)
+
+        Citizen.Wait(0)
+	end
 end
