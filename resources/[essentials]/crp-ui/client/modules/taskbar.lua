@@ -1,31 +1,34 @@
 local isDoingAction, wasCancelled, percentage = false, false, 0
 
-RegisterNetEvent('crp-ui:setTaskbar')
-AddEventHandler('crp-ui:setTaskbar', function(data, callback)
-    if not isDoingAction then
-        isDoingAction, wasCancelled = true, false
+function setTaskbar(text, type, time, canCancel)
+	if isDoingAction then
+		setAlert('Não é possível fazer duas ações ao mesmo tempo.', 'error')
 
-        SendNUIMessage({ eventName = 'taskbar/setTaskbar', eventData = { text = data.text, time = data.time }})
+		return false
+	end
 
-        Citizen.CreateThread(function()
-            while isDoingAction do
-                Citizen.Wait(0)
+	isDoingAction, wasCancelled = true, false
 
-                if IsControlJustPressed(0, 200) and not data.cancel then
-                    SendNUIMessage({ eventName = 'taskbar/stopTaskbar' })
-                end
-            end
+	SendNUIMessage({
+		app = 'taskbar', event = 'setTaskbar', eventData = { text = text, type = type, time = time }
+	})
 
-            if wasCancelled then
-                callback({ status = false, percentage = percentage })
-            else callback({ status = true }) end
-        end)
-    else
-        callback({ status = false })
+	while isDoingAction do
+		Citizen.Wait(0)
 
-        TriggerEvent('crp-ui:setAlert', { text = 'Não é possível fazer duas ações ao mesmo tempo.', type = 'error' })
-    end
-end)
+		if IsControlJustPressed(0, 200) and canCancel then
+			SendNUIMessage({
+				app = 'taskbar', event = 'stopTaskbar'
+			})
+		end
+	end
+
+	if wasCancelled then
+		return false, percentage
+	end
+
+	return true
+end
 
 RegisterNUICallback('finishedTask', function(data, cb)
     isDoingAction, wasCancelled = false, false
@@ -38,3 +41,5 @@ RegisterNUICallback('canceledTask', function(data, cb)
 
     cb(true)
 end)
+
+exports('setTaskbar', setTaskbar)

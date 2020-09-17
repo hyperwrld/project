@@ -1,13 +1,10 @@
-fx_version 'bodacious'
+fx_version 'cerulean'
 
 game 'gta5'
 
 ui_page 'nui/dist/index.html'
 
 client_scripts {
-    '@crp-base/shared.lua',
-    -- '@crp-base/client/modules/rpc.lua',
-    '@crp-base/client/modules/error.lua',
     'client/main.lua',
     'client/modules/*.lua',
 }
