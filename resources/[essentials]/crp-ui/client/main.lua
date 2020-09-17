@@ -1,62 +1,82 @@
-local isMenuOpen, isReady = false, false
+local isAppOpen, events = false, {}
 
-AddEventHandler('crp-ui:openMenu', function(menuType, data)
-    isMenuOpen = true
+function openApp(appName, data)
+	isAppOpen = true
 
-    SendNUIMessage({ eventName = 'toggleMenu', status = true, component = menuType, menuData = data })
-    SetNuiFocus(true, true)
+	SetNuiFocus(true, true)
+	-- SetNuiFocusKeepInput(true)
 
-    Citizen.CreateThread(function()
-        while isMenuOpen do
+	Citizen.CreateThread(function()
+        while isAppOpen do
 			Citizen.Wait(0)
 
-			HideHudAndRadarThisFrame()
 			DisableAllControlActions(0)
 		end
-    end)
-end)
+	end)
 
-AddEventHandler('crp-ui:closeMenu', function()
-    closeMenu(true)
-end)
-
-function closeMenu(state)
-    isMenuOpen = false
-
-    if state then
-        SendNUIMessage({ eventName = 'toggleMenu', status = false })
-    end
-
-	EnableAllControlActions(0)
-	SetNuiFocus(false, false)
+	SendNUIMessage({
+		app = appName, event = 'setData', status = true, eventData = data
+	})
 end
 
-RegisterNUICallback('closeMenu', function(moveData, cb)
-    closeMenu(false)
+function closeApp(appName)
+	isAppOpen = false
+
+	SetNuiFocus(false, false)
+	SetNuiFocusKeepInput(false)
+
+	SendNUIMessage({
+		app = appName, status = false
+	})
+end
+
+function setAppData(appName, data)
+	SendNUIMessage({
+		app = appName, event = 'setAppData', eventData = data
+	})
+end
+
+RegisterNUICallback('closeMenu', function(data, cb)
+	SetNuiFocus(false, false)
+	SetNuiFocusKeepInput(false)
+
+	TriggerEvent('crp-ui:closedMenu', data.appName, data)
+
+	Citizen.Wait(300)
+
+	isAppOpen = false
 
     cb(true)
 end)
 
-exports('isNuiCallbackReady', function()
-    return isReady
-end)
+function RegisterUIEvent(name)
+	if not events[name] then
+		events[name] = true
 
-function RegisterNuiCallback()
-    AddEventHandler('crp-ui:registerNuiCallback', function(name, func)
-        RegisterNUICallback(name, func)
-    end)
-
-    isReady = true
+		RegisterNUICallback(name, function(...)
+			TriggerEvent(('crp-ui:%s'):format(name), ...)
+		end)
+	end
 end
 
-RegisterNuiCallback()
-
-AddEventHandler('crp-ui:sendNuiMessage', function(data)
-    SendNUIMessage(data)
+Citizen.CreateThread(function()
+	TriggerEvent('crp-ui:isReady')
 end)
 
 AddEventHandler('onResourceStop', function(resourceName)
-    if resourceName == 'crp-ui' then
-        SetNuiFocus(false, false)
-    end
+	if (GetCurrentResourceName() ~= resourceName) then
+	  	return
+	end
+
+	isAppOpen = false
+
+	SetNuiFocus(false, false)
+	SetNuiFocusKeepInput(false)
 end)
+
+exports('openApp', openApp)
+exports('closeApp', closeApp)
+exports('setAppData', setAppData)
+
+exports('RegisterUIEvent', RegisterUIEvent)
+exports('SendUIMessage', SendNUIMessage)
