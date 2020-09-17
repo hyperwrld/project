@@ -14,6 +14,12 @@ function GetRandomNumber(firstNumber, secondNumber)
     end
 end
 
+function RoundNumber(number, decimalPlaces)
+	local multiplier = 10 ^ (decimalPlaces or 0)
+
+	return math.floor(number * multiplier + 0.5) / multiplier
+end
+
 AddEventHandler('onResourceStart', function(resource)
 	if (GetCurrentResourceName() ~= resource) then
 	  	return
