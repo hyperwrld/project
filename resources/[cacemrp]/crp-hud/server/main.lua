@@ -12,12 +12,9 @@ AddEventHandler('crp-base:playerLoaded', function(source, character)
 	TriggerClientEvent('crp-hud:setMeta', source, status)
 end)
 
-RegisterNetEvent('crp-hud:updateData')
-AddEventHandler('crp-hud:updateData', function(health, armour, hunger, thirst, stress)
-    local _source, status = source, {}
-	local character = exports['crp-base']:GetCharacter(_source)
+RegisterNetEvent('crp-hud:updateMeta')
+AddEventHandler('crp-hud:updateMeta', function(health, armour, hunger, thirst, stress)
+	local character = exports['crp-base']:GetCharacter(source)
 
-	status = { health = health, armour = armour, hunger = hunger, thirst = thirst, stress = stress }
-
-	character.setStatus(status)
+	character.setStatus({ health = health, armour = armour, hunger = hunger, thirst = thirst, stress = stress })
 end)

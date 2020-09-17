@@ -1,11 +1,20 @@
-fx_version 'bodacious'
+fx_version 'cerulean'
 
 game 'gta5'
 
-client_scripts {
-	'client/main.lua'
+dependecies {
+	'crp-base',
+	'crp-ui',
+	'crp-lib'
 }
 
+client_scripts {
+	'@crp-lib/client/main.lua',
+    'client/*.lua'
+}
+
+shared_script '@crp-lib/shared/util.lua'
+
 server_scripts {
-	'server/main.lua'
+	'server/*.lua'
 }
