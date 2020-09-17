@@ -36,7 +36,6 @@ RPC:register('openShop', function(source, type)
 end)
 
 RPC:register('buyItem', function(source, current, future, currentSlot, futureSlot, count, data)
-	print('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa???')
 	return buyItem(source, current, future, currentSlot, futureSlot, count, data)
 end)
 
@@ -50,13 +49,13 @@ function openShop(source, type)
 	end
 
 	if not canOpenInventories(source, characterName) then
-		return
+		return false
 	end
 
 	return true, { player = firstInventory, secondary = shopInventory }
 end
 
-function loadShop(type)
+function loadShop(source, type)
 	if not shopsData[type] or not hasPermission(source, type) then
 		return false
 	end

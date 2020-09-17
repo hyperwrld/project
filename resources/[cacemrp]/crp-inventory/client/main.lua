@@ -236,7 +236,6 @@ RegisterUICallback('moveItem', function(data, cb)
 end)
 
 RegisterUICallback('buyItem', function(data, cb)
-	print('bom diaaaaaaaaaaaaaaaaaaa')
 	local success, current, future = RPC:execute('buyItem', data.current, data.future, data.currentIndex, data.futureIndex, data.count, data.data)
 
     cb({ status = success, current = current, future = future })
