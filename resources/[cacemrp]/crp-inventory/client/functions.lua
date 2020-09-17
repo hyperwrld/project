@@ -60,7 +60,7 @@ function doesInventoryExist(name)
     return false
 end
 
-function holsterWeapon()
+function holsterWeapon(weaponName)
 	local playerPed = PlayerPedId()
 	local dictionary, animation, inSpeed, outSpeed = 'reaction@intimidation@1h', 'outro', 1.0, 1.0
 	-- local job = exports['crp-userinfo']:isPed('job')
@@ -75,6 +75,8 @@ function holsterWeapon()
 
 	SetCurrentPedWeapon(playerPed, GetHashKey('weapon_unarmed'), 1)
 
+	exports['crp-ui']:addQueue(weaponName, 1, false)
+
     Citizen.Wait(300)
 
 	RemoveAllPedWeapons(playerPed)
@@ -83,7 +85,7 @@ function holsterWeapon()
     isDoingAnimation, isWeaponEquiped = false, false
 end
 
-function equipWeapon(weaponHash, weaponAmmo)
+function equipWeapon(weaponData, weaponAmmo)
 	local playerPed = PlayerPedId()
 	local dictionary, animation = 'reaction@intimidation@1h', 'intro'
 	-- local job = exports['crp-userinfo']:isPed('job')
@@ -97,21 +99,23 @@ function equipWeapon(weaponHash, weaponAmmo)
 
 	Citizen.Wait(900)
 
-	GiveWeaponToPed(playerPed, weaponHash, weaponAmmo, 0, 1)
-	SetCurrentPedWeapon(playerPed, weaponHash, 1)
+	GiveWeaponToPed(playerPed, weaponData.hash, weaponAmmo, 0, 1)
+	SetCurrentPedWeapon(playerPed, weaponData.hash, 1)
 
-	if weaponHash == GetHashKey('WEAPON_CARBINERIFLE_MK2') then
-		GiveWeaponComponentToPed(playerPed, weaponHash, GetHashKey('COMPONENT_AT_AR_AFGRIP_02'))
-		GiveWeaponComponentToPed(playerPed, weaponHash, GetHashKey('COMPONENT_AT_AR_FLSH'))
-		GiveWeaponComponentToPed(playerPed, weaponHash, GetHashKey('COMPONENT_AT_CR_BARREL_02'))
-		GiveWeaponComponentToPed(playerPed, weaponHash, GetHashKey('COMPONENT_AT_MUZZLE_06'))
-		GiveWeaponComponentToPed(playerPed, weaponHash, GetHashKey('COMPONENT_AT_SIGHTS'))
-		GiveWeaponComponentToPed(playerPed, weaponHash, GetHashKey('COMPONENT_CARBINERIFLE_MK2_CLIP_TRACER'))
+	if weaponData.hash == GetHashKey('WEAPON_CARBINERIFLE_MK2') then
+		GiveWeaponComponentToPed(playerPed, weaponData.hash, GetHashKey('COMPONENT_AT_AR_AFGRIP_02'))
+		GiveWeaponComponentToPed(playerPed, weaponData.hash, GetHashKey('COMPONENT_AT_AR_FLSH'))
+		GiveWeaponComponentToPed(playerPed, weaponData.hash, GetHashKey('COMPONENT_AT_CR_BARREL_02'))
+		GiveWeaponComponentToPed(playerPed, weaponData.hash, GetHashKey('COMPONENT_AT_MUZZLE_06'))
+		GiveWeaponComponentToPed(playerPed, weaponData.hash, GetHashKey('COMPONENT_AT_SIGHTS'))
+		GiveWeaponComponentToPed(playerPed, weaponData.hash, GetHashKey('COMPONENT_CARBINERIFLE_MK2_CLIP_TRACER'))
 	end
 
-	if weaponHash == GetHashKey('WEAPON_COMBATPISTOL') then
-		GiveWeaponComponentToPed(playerPed, weaponHash, GetHashKey('COMPONENT_AT_PI_FLSH'))
+	if weaponData.hash == GetHashKey('WEAPON_COMBATPISTOL') then
+		GiveWeaponComponentToPed(playerPed, weaponData.hash, GetHashKey('COMPONENT_AT_PI_FLSH'))
 	end
+
+	exports['crp-ui']:addQueue(weaponData.identifier, 1, true)
 
     Citizen.Wait(300)
 

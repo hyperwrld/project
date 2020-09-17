@@ -118,15 +118,9 @@ function useItem(slot)
 		return
 	end
 
-	if isWeaponEquiped and weaponSlot == slot then
-		holsterWeapon()
-		return
-	end
-
 	local success, data = RPC:execute('getItem', slot)
 
 	print(success, data)
-	print(json.encode(data))
 
 	if not data then
 		return
@@ -134,18 +128,17 @@ function useItem(slot)
 
 	local itemData = getItemData(data.item)
 
-	print(json.encode(itemData))
-
 	if IsWeaponValid(itemData.hash) then
 		if isWeaponEquiped then
-			holsterWeapon()
+			holsterWeapon(itemData.identifier)
+			return
 		end
 
 		Citizen.Wait(200)
 
 		isWeaponEquiped, weaponSlot = true, slot
 
-		equipWeapon(itemData.hash, data.meta.ammo)
+		equipWeapon(itemData, data.meta.ammo)
 	else
 		TriggerEvent('crp-inventory:useItem', data)
 	end
