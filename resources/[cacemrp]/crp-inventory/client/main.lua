@@ -97,7 +97,7 @@ function openInventory()
 					else
 						Debug('[Main] The vehicle trunk is closed.')
 
-						-- TODO: Send alert (O veículo está trancado)
+						exports['crp-ui']:setAlert('O veículo está trancado', 'inform')
 					end
 				end
 			else
