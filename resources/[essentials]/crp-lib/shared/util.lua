@@ -5,11 +5,11 @@ function Debug(string)
 end
 
 function GetRandomNumber(firstNumber, secondNumber)
-    math.randomseed(GetGameTimer())
+	math.randomseed(os.time())
 
-    if secondNumber then
-        return math.random(firstNumber, secondNumber)
-    else
+	if secondNumber then
+		return math.random(firstNumber, secondNumber)
+	else
         return math.random(firstNumber)
     end
 end
