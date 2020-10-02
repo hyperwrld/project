@@ -139,7 +139,7 @@
                             </label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" id="frmFXServer-commandLine" value="{{it.fxserver.commandLine|undef}}"
-                                    placeholder="+set onesync_enableInfinity 1" {{it.readOnly|isDisabled}}>
+                                    placeholder="+set onesync_population false" {{it.readOnly|isDisabled}}>
                                 <span class="form-text text-muted">
                                     Additional command-line arguments to pass to the FXServer instance. <br>
                                     For example, you can add <code>+set</code> and <code>+exec</code> commands.
@@ -150,13 +150,14 @@
                         <div class="form-group row">
                             <label for="frmFXServer-onesync" class="col-sm-3 col-form-label">OneSync</label>
                             <div class="col-sm-9">
-                                <label class="c-switch c-switch-label c-switch-pill c-switch-success fix-pill-form">
-                                    <input class="c-switch-input" type="checkbox" id="frmFXServer-onesync"
-                                        {{it.fxserver.onesync|undef}} {{it.readOnly|isDisabled}}>
-                                    <span class="c-switch-slider" data-checked="On" data-unchecked="Off"></span>
-                                </label>
+                                <select class="form-control" id="frmFXServer-onesync" {{it.readOnly|isDisabled}}>
+                                    <option value="off" {{it.fxserver.onesync=='off'|isSelected}}>Off (default)</option>
+                                    <option value="legacy" {{it.fxserver.onesync=='legacy'|isSelected}}>Legacy (without infinity)</option>
+                                    <option value="on" {{it.fxserver.onesync=='on'|isSelected}}>On (with infinity)</option>
+                                </select>
                                 <span class="form-text text-muted">
-                                    Required if your server has more than 32 slots.
+                                    Required if your server has more than 32 slots. <br>
+                                    <b>Note:</b> Setting to <code>on</code> will override <code>onesync_enableInfinity</code> if set as an Additional Argument above.
                                 </span>
                             </div>
                         </div>
@@ -184,8 +185,8 @@
                                     <span class="c-switch-slider" data-checked="On" data-unchecked="Off"></span>
                                 </label>
                                 <span class="form-text text-muted">
-                                    Do not print FXServer's output to the terminal. You will still be able to use the
-                                    Live Console.
+                                    Do not print FXServer's output to the terminal. <br>
+                                    You will still be able to use the Live Console.
                                 </span>
                             </div>
                         </div>
@@ -311,6 +312,22 @@
                             </div>
                         </div>
 
+                        <div class="form-group row">
+                            <label for="frmMonitor-chatMessages" class="col-sm-3 col-form-label">
+                                Disable Chat Warnings
+                            </label>
+                            <div class="col-sm-9">
+                                <label class="c-switch c-switch-label c-switch-pill c-switch-success fix-pill-form">
+                                    <input class="c-switch-input" type="checkbox" id="frmMonitor-chatMessages"
+                                        {{it.monitor.disableChatWarnings|undef}} {{it.readOnly|isDisabled}}>
+                                    <span class="c-switch-slider" data-checked="On" data-unchecked="Off"></span>
+                                </label>
+                                <span class="form-text text-muted">
+                                    Check this if you want to disable broadcast chat warning messages in game before each scheduled restart.
+                                </span>
+                            </div>
+                        </div>
+
                         <div class="text-center mt-4">
                             <button class="btn btn-sm btn-primary" type="submit" id="frmMonitor-save" {{it.readOnly|isDisabled}}>
                                 <i class="icon-check"></i> Save Monitor/Restarter Settings
@@ -341,6 +358,7 @@
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" id="frmDiscord-token" 
                                     value="{{@if(!it.readOnly)}}{{it.discord.token|undef}}{{#else}}[redacted]{{/if}}"
+                                    placeholder="CXPcWbxKOHpwlUBaYKznIfkz.ExpTAB.NX-3YxfmVIGUJLGbPamViXGAEiY"
                                     maxlength="96" {{it.readOnly|isDisabled}}>
                                 <span class="form-text text-muted">
                                     To get a token and the bot to join your server, follow these two guides:
@@ -356,7 +374,8 @@
                             <label for="frmDiscord-announceChannel" class="col-sm-3 col-form-label">Announcements <br>Channel ID</label>
                             <div class="col-sm-9">
                                 <input type="number" class="form-control" id="frmDiscord-announceChannel"
-                                    value="{{it.discord.announceChannel|undef}}" {{it.readOnly|isDisabled}}>
+                                    value="{{it.discord.announceChannel|undef}}" 
+                                    placeholder="578045190955335691" {{it.readOnly|isDisabled}}>
                                 <span class="form-text text-muted">
                                     The ID of the channel to send Announcements (eg server restarts). <br>
                                     Leave it blank to disable this feature. <br>
@@ -469,7 +488,7 @@
             serverDataPath: $('#frmFXServer-serverDataPath').val().trim(),
             cfgPath: $('#frmFXServer-cfgPath').val().trim(),
             commandLine: $('#frmFXServer-commandLine').val().trim(),
-            onesync: $('#frmFXServer-onesync').is(':checked'),
+            onesync: $('#frmFXServer-onesync').val(),
             autostart: $('#frmFXServer-autostart').is(':checked'),
             quiet: $('#frmFXServer-quiet').is(':checked')
         }
@@ -537,7 +556,8 @@
     //============================================== Monitor Settings
     $('#frmMonitor-save').click(function () {
         let data = {
-            schedule: $('#frmMonitor-schedule').val().trim()
+            schedule: $('#frmMonitor-schedule').val().trim(),
+            disableChatWarnings: ($('#frmMonitor-chatMessages').is(':checked') === true)
         }
         var notify = $.notify({ message: '<p class="text-center">Saving...</p>' }, {});
 

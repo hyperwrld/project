@@ -1,55 +1,44 @@
 ## TODO v2
-> v2.5.1
-- [x] validate that min session time is valid
-- [x] fix revoke button always visible
-- [x] add player/action search feature
-- [x] add search button for player modal
-- [x] adapt all modal actions to offline players
-- [x] change Server Log page to use the new modal
-- [x] upgrade to Discord.js v12
-- [x] upgrade to squirrelly 8 (omg why sooo hard???)
-- [x] convert cl_logger.js to lua
-- [x] set autostart as default, but only call spawnfunc if the cfg/data paths are set
-- [x] improve input readability in low-contrast monitors (css tweak)
-- [x] action revoking based on permission
-- [x] give `manage.admins` permission to edit their social IDs
-- [x] convert discordBot to use a commands folder
-- [x] discord bot: add /addwl command
-- [x] discord bot: change settings to accept prefix
-- [x] remove html tags from kick messages (hopefully temporarily)
-- [x] update dependencies
-- [x] add stats endpoint
-- [x] replace timestamp function in update checking
-- [x] build test + version bump
-> v2.6.0
-- [ ] xxx
+> v2.6.1
+- [x] update packages
+- [x] discord bot: set new api url
+- [x] reset /auth url after message or error
+- [x] discord bot: fixed /help spam on reconnection
+- [x] updated dutch, german, danish and czech languages
+- [x] added option to disable in game restart warning chat messages (thanks @is-sam)
+- [x] check why scheduled restarts are not kicking players (no issue found, still replaced `txaKickAll` eith `quit`)
+- [x] use the new fd3 stream (added on 2427, ask ferrum before dropping support for older fxserver)
+- [x] fix login page centralization on mobile screens
+- [x] add placeholders to discord bot settings tab
+- [x] update onesync setting values to reflect fxserver's change
+- [x] if clean install and on windows, open the listening URL on the browser
+> v2.7.0
+- [x] fix player manager settigns page not saving
+- [x] fix squirrelly filters not working on v8.0.4
+> v2.7.1
+- [ ] xxxxx
 
-TODO: Bot commands:
-/ban <mention> <time> <reason>
-/unban <ban-id>
-/info - shows your info like join date and play time
-/info <mention> - shows someone else's info
+TODO: Bot commands (in dev order):
 /addwl <wl req id>
 /addwl <license>
+
+/kick <mention>
+/log <mention> - shows the last 5 log entries for an discord identifier (make it clear its only looking for the ID)
+/ban <mention> <time> <reason>
+/unban <ban-id>
+
+/info - shows your info like join date and play time
+/info <mention> - shows someone else's info
 /addwl <mention>
 /removewl <mention>
-/log <mention> - shows the last 5 log entries for an discord identifier
-/kick <mention>
 
 > Soon™ (hopefully the next update)
-- [ ] discord bot: re-add spam limiter
-- [ ] adapt kick messages to use some basic HTML formatting and 🆃🆇🅰🅳🅼🅸🅽
-- [ ] check why scheduled restarts are not kicking players
-- [ ] add sv endpoint to say the whitelist/banlist usage
-- [ ] use the new fd3 stream (added on 2427, ask ferrum before dropping support for older fxserver)
+- [ ] replace `clone` with `lodash/clonedeep` and check the places where I'm doing `Object.assign()` for shallow clones
 - [ ] break player page into `Players` and `Player Access`
         - `Player Access` will only contain the whitelist and band ids cards
         - `Players` will have a central search and will show players and actions at the same time
-- [ ] monitor checks for duplicate active users every 10 minutes, then reports in diagnostics page
 - [ ] check everything done for xss
 - [ ] apply the new action log html to the modal
-- [ ] make `fxRunner.srvCmd()` itself perform the escaping
-- [ ] replace `clone` with `lodash/clonedeep` and check the places where I'm doing `Object.assign()` for shallow clones
 - [ ] add `<fivem://connect/xxxxx>` to `/status` by getting `web_baseUrl` maybe from the heartbeat
 - [ ] add ban server-side ban cache (last 500 bans?), updated on every ban change 
 - [ ] add a commend system?
@@ -60,13 +49,13 @@ TODO: Bot commands:
 > Soon™® (hopefully in two months or so)
 - [ ] get all functions from `web\public\js\txadmin\players.js` and wrap in some object.
 - [ ] add some chart to the players page?
-- [ ] the weekly playtime counter per user?
 - [ ] tweak dashboard update checker behavior
 - [ ] add an fxserver changelog page
 - [ ] Social auth provider setup retry every 15 seconds
 - [ ] show error when saving discord settings with wrong token
 - [ ] break down playerController into separate files!
 - [ ] rename playerController to playerManager?
+- [ ] make heartbeats go through FD3?
 
 ## "in the roadmap"
 - [ ] Check config management libraries (specially 'convict' by Mozilla and nconf)
@@ -79,10 +68,10 @@ TODO: Bot commands:
 ```bash
 # run
 cd /e/FiveM/builds
-nodemon --watch "2627/citizen/system_resources/monitor/src/*" --exec "2627/FXServer.exe +set txAdmin1337 IKnowWhatImDoing +set txAdminVerbose truex +set txAdminFakePlayerlist yesplzx"
+nodemon --watch "2786/citizen/system_resources/monitor/src/*" --exec "2786/FXServer.exe +set txAdmin1337 IKnowWhatImDoing +set txAdminVerbose truex +set txAdminFakePlayerlist yesplzx"
 
 # build
-cd /e/FiveM/builds/2627/citizen/system_resources/monitor
+cd /e/FiveM/builds/2786/citizen/system_resources/monitor
 rm -rf dist
 npm run build
 
@@ -112,6 +101,12 @@ https://github.com/citizenfx/fivem/commit/fd3fae946163e8af472b7f739aed6f29eae810
 
 Grafana query for the `/perf/` endpoint data: 
 `histogram_quantile(0.95, sum(rate(tickTime_bucket[5m])) by (le))`
+
+### CoreUI Stuff
+https://simplelineicons.github.io
+https://coreui.io/demo/3.1.0/#icons/coreui-icons-free.html
+https://coreui.io/demo/3.0.0/#colors.html
+https://coreui.io/docs/content/typography/
 
 
 ### Global vs Individual Modules
