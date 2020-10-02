@@ -5,7 +5,7 @@ function Debug(string)
 end
 
 function GetRandomNumber(firstNumber, secondNumber)
-	math.randomseed(os.time())
+	math.randomseed(GetGameTimer())
 
 	if secondNumber then
 		return math.random(firstNumber, secondNumber)
