@@ -5,9 +5,9 @@ AddEventHandler('onResourceStart', function(resourceName)
 	  	return
 	end
 
-	Debug('[Main] Resource started | Cleaning drop inventories | Cleaning old items.')
+	Debug('[Main] Resource started | Cleaning drop/container inventories | Cleaning old items.')
 
-	DB:Execute([[DELETE FROM inventory WHERE name LIKE 'drop-%';]])
+	DB:Execute([[DELETE FROM inventory WHERE name LIKE 'drop%' OR name LIKE 'container%';]])
 end)
 
 RPC:register('openInventory', function(source, type, name, data)

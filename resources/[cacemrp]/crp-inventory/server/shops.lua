@@ -26,6 +26,12 @@ local shopsData = {
 				count = 50,
 				slot = 4,
 				price = 30
+			},
+			{
+				item = 'CRP_GAZUA',
+				count = 50,
+				slot = 5,
+				price = 1
 			}
 		}
 	}
