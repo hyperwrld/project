@@ -1,11 +1,10 @@
 .interaction-container {
 	position: absolute;
-	top: -13.570588235%;
 	right: 2.75%;
 	left: 2.75%;
 	width: auto;
     height: auto;
-	max-height: 34px;
+	bottom: 98%;
 
 	.interaction {
 		display: inline-block;
@@ -26,6 +25,7 @@
 				height: 24px;
 				min-width: 24px;
 				font-size: 24px;
+				margin-right: 8px;
 			}
 
 			.v-alert__content {

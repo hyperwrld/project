@@ -18,7 +18,7 @@
                 </div>
                 <div class='thirst status'>
                     <font-awesome-icon icon='tint'></font-awesome-icon>
-                    <div class='sub-thirst' :class='{ low: parseInt(minimapData.thrist) <= 15 }' :style='{ height: minimapData.thrist, top: convertNumber(minimapData.thrist) }'></div>
+                    <div class='sub-thirst' :class='{ low: parseInt(minimapData.thirst) <= 15 }' :style='{ height: minimapData.thirst, top: convertNumber(minimapData.thirst) }'></div>
                 </div>
                 <div class='breath status'>
                     <font-awesome-icon icon='lungs'></font-awesome-icon>
