@@ -1,6 +1,6 @@
 <template>
 	<v-app>
-		<hud/><notifications/><taskbar/><interactions/>
+		<hud/><notifications/><taskbar/><actionbar/>
 		<router-view :closeMenu='closeMenu'></router-view>
     </v-app>
 </template>
@@ -11,24 +11,24 @@
     import hud from './components/hud/hud.vue';
     import notifications from './components/notifications/notifications.vue';
 	import taskbar from './components/taskbar/taskbar.vue';
-	import interactions from './components/interactions/interactions.vue';
+	import actionbar from './components/inventory/actionbar/actionbar.vue';
 
 	import nui from './utils/nui.js';
 
     export default {
 		name: 'app',
 		components: {
-			hud, notifications, taskbar, interactions
+			hud, notifications, taskbar, actionbar
 		},
 		methods: {
-			closeMenu: function() {
+			closeMenu: function(appName) {
 				this.$router.push({ path: '/' }).catch(error => {
 					if (error.name !== 'NavigationDuplicated' && !error.message.includes('Avoided redundant navigation to current location')) {
 						console.log(error);
 					}
 				});
 
-                nui.send('closeMenu');
+                nui.send('closeMenu', appName);
             },
 		},
         destroyed() {
@@ -36,7 +36,9 @@
         },
         mounted() {
             this.listener = window.addEventListener('message', (event) => {
-				this.$store.dispatch(event.data.app + '/' + event.data.event, event.data.eventData);
+				if (event.data.event != undefined) {
+					this.$store.dispatch(event.data.app + '/' + event.data.event, event.data.eventData);
+				}
 
 				if (event.data.status != undefined) {
 					const data = event.data.status ? { path: event.data.app } : { path: '/' };
@@ -48,7 +50,7 @@
 					});
 
 					if (!event.data.status) {
-						nui.send('closeMenu');
+						nui.send('closeMenu', event.data.app);
 					}
 				}
 			});
