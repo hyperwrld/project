@@ -1,0 +1,243 @@
+
+--
+Name: shop | 08/25/20 12:38 PM
+
+CircleZone:Create(vector3(-48.55, -1757.73, 29.42), 0.6, {
+  name="shop1",
+  useZ=false,
+  --debugPoly=true
+})
+
+--
+Name: shop2 | 08/25/20 12:39 PM
+
+CircleZone:Create(vector3(25.99, -1347.76, 29.5), 0.6, {
+  name="shop2",
+  useZ=false,
+  --debugPoly=true
+})
+
+--
+Name: SHOP3 | 08/25/20 12:40 PM
+
+CircleZone:Create(vector3(1136.1, -982.85, 46.42), 0.6, {
+  name="SHOP3",
+  useZ=false,
+  --debugPoly=true
+})
+
+--
+Name: shop4 | 08/25/20 12:41 PM
+
+CircleZone:Create(vector3(-707.64, -914.59, 19.22), 0.6, {
+  name="shop4",
+  useZ=false,
+  --debugPoly=true
+})
+
+--
+Name: SHOP5 | 08/25/20 12:42 PM
+
+CircleZone:Create(vector3(-1222.42, -906.44, 12.33), 0.6, {
+  name="SHOP5",
+  useZ=false,
+  --debugPoly=true
+})
+
+--
+Name: shop6 | 08/25/20 12:42 PM
+
+CircleZone:Create(vector3(-1488.01, -378.85, 40.16), 0.6, {
+  name="shop6",
+  useZ=false,
+  --debugPoly=true
+})
+
+--
+Name: SHOP7 | 08/25/20 12:43 PM
+
+CircleZone:Create(vector3(1163.39, -323.95, 69.21), 0.6, {
+  name="SHOP7",
+  useZ=false,
+  --debugPoly=true
+})
+
+--
+Name: shop8 | 08/25/20 12:44 PM
+
+CircleZone:Create(vector3(373.93, 325.72, 103.57), 0.6, {
+  name="shop8",
+  useZ=false,
+  --debugPoly=true
+})
+
+--
+Name: SHOP9 | 08/25/20 12:45 PM
+
+CircleZone:Create(vector3(2557.69, 382.3, 108.62), 0.6, {
+  name="SHOP9",
+  useZ=false,
+  --debugPoly=true
+})
+
+--
+Name: SHOP10 | 08/25/20 12:46 PM
+
+CircleZone:Create(vector3(-2968.18, 391.66, 15.04), 0.6, {
+  name="SHOP10",
+  useZ=false,
+  --debugPoly=true
+})
+
+--
+Name: shop11 | 08/25/20 12:46 PM
+
+CircleZone:Create(vector3(-3038.98, 586.11, 7.91), 0.6, {
+  name="shop11",
+  useZ=false,
+  --debugPoly=true
+})
+
+--
+Name: SHOP12 | 08/25/20 12:47 PM
+
+CircleZone:Create(vector3(-1820.6, 792.41, 138.17), 0.6, {
+  name="SHOP12",
+  useZ=false,
+  --debugPoly=true
+})
+
+--
+Name: shop13 | 08/25/20 12:48 PM
+
+CircleZone:Create(vector3(-3241.65, 1001.47, 12.83), 0.6, {
+  name="shop13",
+  useZ=false,
+  --debugPoly=true
+})
+
+--
+Name: SHOP14 | 08/25/20 12:48 PM
+
+CircleZone:Create(vector3(547.51, 2671.59, 42.16), 0.6, {
+  name="SHOP14",
+  useZ=false,
+  --debugPoly=true
+})
+
+--
+Name: shop15 | 08/25/20 12:49 PM
+
+CircleZone:Create(vector3(1165.4, 2708.99, 38.16), 0.6, {
+  name="shop15",
+  useZ=false,
+  --debugPoly=true
+})
+
+--
+Name: shop16 | 08/25/20 12:50 PM
+
+CircleZone:Create(vector3(2679.12, 3280.53, 55.24), 0.6, {
+  name="shop16",
+  useZ=false,
+  --debugPoly=true
+})
+
+--
+Name: SHOP17 | 08/25/20 12:50 PM
+
+CircleZone:Create(vector3(1961.59, 3740.43, 32.34), 0.6, {
+  name="SHOP17",
+  useZ=false,
+  --debugPoly=true
+})
+
+--
+Name: shop18 | 08/25/20 12:51 PM
+
+CircleZone:Create(vector3(1393.79, 3605.06, 34.98), 0.6, {
+  name="shop18",
+  useZ=false,
+  --debugPoly=true
+})
+
+--
+Name: shop19 | 08/25/20 12:51 PM
+
+CircleZone:Create(vector3(1698.14, 4924.74, 42.06), 0.6, {
+  name="shop19",
+  useZ=false,
+  --debugPoly=true
+})
+
+--
+Name: SHOP20 | 08/25/20 12:52 PM
+
+CircleZone:Create(vector3(1729.04, 6414.23, 35.04), 0.6, {
+  name="SHOP20",
+  useZ=false,
+  --debugPoly=true
+})
+
+--
+Name: ddd | 09/18/20 12:00 AM
+
+PolyZone:Create({
+  vector2(-531.06256103516, -1198.8846435547),
+  vector2(-512.42059326172, -1207.6065673828),
+  vector2(-519.85943603516, -1223.4495849609),
+  vector2(-538.45318603516, -1214.7589111328),
+  vector2(-601.51257324219, -1222.8530273438)
+}, {
+  name="ddd",
+  --minZ = -19.07541847229,
+  --maxZ = 36.345081329346
+})
+
+--
+Name: ola | 09/18/20 05:28 AM
+
+CircleZone:Create(vector3(-56.68, -1098.51, 26.42), 0.5, {
+  name="ola",
+  useZ=true,
+  --debugPoly=true
+})
+
+--
+Name: pdm | 09/18/20 06:19 AM
+
+PolyZone:Create({
+  vector2(-28.996013641357, -1120.9464111328),
+  vector2(-16.873163223267, -1088.3033447266),
+  vector2(-39.322212219238, -1079.9064941406),
+  vector2(-41.605495452881, -1086.4208984375),
+  vector2(-57.265384674072, -1080.7691650391),
+  vector2(-64.350067138672, -1100.3919677734),
+  vector2(-68.586959838867, -1111.564453125),
+  vector2(-70.186782836914, -1117.7371826172),
+  vector2(-64.780853271484, -1122.5010986328),
+  vector2(-64.169982910156, -1128.4681396484)
+}, {
+  name="pdm",
+  --minZ = 26.502340316772,
+  --maxZ = 69.468338012695
+})
+
+--
+Name: pdm2 | 09/18/20 07:17 AM
+
+PolyZone:Create({
+  vector2(-64.798728942871, -1122.4739990234),
+  vector2(-27.940155029297, -1120.7590332031),
+  vector2(-14.809164047241, -1084.0832519531),
+  vector2(-38.260643005371, -1075.4542236328),
+  vector2(-41.981540679932, -1085.9420166016),
+  vector2(-64.935203552246, -1076.7016601563),
+  vector2(-77.544822692871, -1111.4145507813),
+  vector2(-85.940925598145, -1118.4431152344)
+}, {
+  name="pdm2",
+  --minZ = 29.243906021118,
+  --maxZ = 29.243906021118
+})
+
