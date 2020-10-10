@@ -138,7 +138,7 @@ function useItem(slot)
 
 		equipWeapon(itemData, data.meta.ammo)
 	else
-		TriggerEvent('crp-inventory:useItem', data)
+		TriggerEvent('crp-inventory:useItem', data.item)
 	end
 end
 
