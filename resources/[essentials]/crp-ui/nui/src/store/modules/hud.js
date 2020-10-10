@@ -5,7 +5,7 @@ const state = () => ({
 	},
     minimapData: {
 		top: '0px', left: '0px', width: '0px', height: '0px', health: '0%', armour: '0%',
-		hunger: '0%', thrist: '0%', breath: '0%', stress: '0%'
+		hunger: '0%', thirst: '0%', breath: '0%', stress: '0%'
     },
     vehicleData: {
 		isOnVehicle: false, isCompassOn: false, time: '00:00', fuel: 0,
@@ -44,8 +44,8 @@ const actions = {
     addMoney(state, quantity) {
         state.commit('addMoney', quantity);
 	},
-	setMinimapData(state, data) {
-        state.commit('setMinimapData', data);
+	setMinimap(state, data) {
+        state.commit('setMinimap', data);
     },
     setCharacterData(state, data) {
         state.commit('setCharacterData', data);
@@ -100,7 +100,7 @@ const mutations = {
             setTimeout(() => { state.moneyData.canShow = false }, 1000);
         }, 5000);
 	},
-	setMinimapData(state, data) {
+	setMinimap(state, data) {
         const width = window.innerWidth, height = window.innerHeight;
 
         state.minimapData.top = (data.y * height) + 'px', state.minimapData.left = (data.x * width) + 'px';

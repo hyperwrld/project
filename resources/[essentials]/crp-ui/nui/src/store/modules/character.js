@@ -3,7 +3,7 @@ import nui from '../../utils/nui';
 const state = () => ({
     userCharacters: [],
     currentItem: 0,
-    loading: { status: true, message: 'Aguarde...' }
+    loading: { status: false, message: 'Aguarde...' }
 })
 
 const getters = {
@@ -18,8 +18,8 @@ const actions = {
             state.commit('setLoading', data);
         }, data.time);
     },
-    setUserCharacters(state) {
-        state.commit('setUserCharacters');
+    setData(state, data) {
+        state.commit('setData', data);
     },
     setCurrentItem(state, data) {
         state.commit('setCurrentItem', data);
@@ -39,20 +39,12 @@ const mutations = {
     setLoading(state, data) {
         state.loading = { status: data.status, message: data.message };
     },
-    setUserCharacters(state) {
-        state.loading = { status: true, message: 'Aguarde enquanto carregamos os seus personagens...' };
+    setData(state, data) {
+		state.userCharacters = data
 
-        nui.send('fetchCharacters').then(data => {
-            state.userCharacters = data
-
-            for (var i = state.userCharacters.length; i < 5; i++) {
-                state.userCharacters.push({ option: 'create', name: '...' });
-            }
-
-            setTimeout(() => {
-                state.loading = { status: false };
-            }, 5000);
-        });
+		for (var i = state.userCharacters.length; i < 5; i++) {
+			state.userCharacters.push({ option: 'create', name: '...' });
+		}
     },
     setCurrentItem(state, data) {
         state.currentItem = data;

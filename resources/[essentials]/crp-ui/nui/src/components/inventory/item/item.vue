@@ -13,7 +13,7 @@
 		render (h) {
 			let itemData = this.itemsList.find(element => element.identifier == this.item.itemId)
 			let itemLabel = this.item.price ? `<span>${ this.item.price }€</span> - ${ itemData.name }` : itemData.name;
-			let itemPercentage = itemData.decayRate != 0.0 ?
+			let itemPercentage = itemData.decayRate != 0.0 && this.item.durability ?
 				100 - Math.ceil((((Date.now() - new Date(this.item.durability * 1000).getTime()) / (2419200000 * itemData.decayRate)) * 100)) : 100;
 
 			if (itemPercentage < 0) itemPercentage = 0;

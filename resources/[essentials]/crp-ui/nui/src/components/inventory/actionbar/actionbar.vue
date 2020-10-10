@@ -1,12 +1,12 @@
 <template>
 	<v-container fluid id='actionbar'>
 		<div class='item-status'>
-			<transition name='fade' v-for='item in ITEMS_QUEUE'>
+			<transition name='fade' v-for='(item, index) in queueData' :item='item' :key='index'>
 				<div class='slot'>
-					<div class='type'>USOU 1X</div>
+					<div class='type'>{{ item.message }}</div>
 					<div class='item'>
-						<div class='item-image status'><img v-bind:src='require("./../../../assets/" + itemsList[item.itemId].image)'></div>
-						<div class='item-name status'>{{ itemsList[item.itemId].name }}</div>
+						<div class='item-image status'><img v-bind:src='require("./../../../assets/" + item.image)'></div>
+						<div class='item-name status'>{{ item.name }}</div>
 					</div>
 				</div>
 			</transition>

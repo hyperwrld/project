@@ -26,7 +26,7 @@
                 <div class='inventory-controls'>
                     <input v-model='itemCount' class='count' @keypress='checkInput($event)'>
                     <drop @drop='onDrop($event, "use", index)' class='use'>Usar</drop>
-                    <div class='close' @click='closeMenu'>Fechar</div>
+                    <div class='close' @click='closeInventory'>Fechar</div>
                 </div>
                 <div class='secondary-inventory'>
                     <drop @drop='onDrop($event, "secondary-inventory", index)' class='slot' :data-slot='index' v-for='(slot, index) in SECONDARY_INVENTORY.items' :item='slot' :key='index'>
@@ -108,6 +108,9 @@
 					itemId: data.itemId, quantity: Number((this.itemCount != 0 && this.itemCount <= data.quantity) ? this.itemCount : data.quantity),
 					durability: data.durability, price: data.price
 				};
+			},
+			closeInventory: function() {
+				this.closeMenu({ appName: 'inventory', first: this.PLAYER_INVENTORY.name, second: this.SECONDARY_INVENTORY.name });
 			}
         },
         destroyed() {
@@ -116,7 +119,7 @@
         mounted() {
             this.listener = window.addEventListener('keydown', (event) => {
                 if (event.keyCode == 27) {
-                    this.closeMenu();
+                    this.closeInventory();
                 }
             }, false);
         }

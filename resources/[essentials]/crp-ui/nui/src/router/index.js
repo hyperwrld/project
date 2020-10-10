@@ -2,6 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import character from './../components/character/character.vue';
+import dialogs from './../components/character/dialogs/dialogs.vue';
 import spawn from './../components/spawn/spawn.vue';
 import inventory from './../components/inventory/main/inventory.vue';
 import actionbar from './../components/inventory/actionbar/actionbar.vue';
@@ -24,7 +25,10 @@ export default new VueRouter({
 		{
 			path: '/character',
 			name: 'character',
-			component: character
+			component: character,
+			children: [
+				{ path: 'dialogs', name: 'dialogs', component: dialogs }
+			]
 		},
 		{
 			path: '/spawn',

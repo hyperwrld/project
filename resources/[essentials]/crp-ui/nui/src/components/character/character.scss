@@ -1,256 +1,108 @@
-.row {
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-}
+.container {
+	font-family: 'Quantico', sans-serif;
+	position: absolute;
 
-.mainMenu {
-    border-radius: 0% !important;
-    height: 100%;
-    width: 40%;
-    font-family: 'Quantico', sans-serif;
+    width: 100%;
+	height: 100%;
 
-    .mainDiv {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-        height: 22vh;
-        background-color: rgb(12, 12, 12);
-        bottom: 2%;
+	.menu {
+		position: absolute;
+		right: 1.5%;
+		width: 15%;
+		height: 75%;
+		display: grid;
+		grid-template-rows: 8fr 1.5fr;
+		gap: 10px;
+		top: 50%;
+		transform: translateY(-50%);
+		text-transform: uppercase;
 
-        .characterList {
-            display: flex;
-            flex-direction: row;
-            width: 100%;
-            height: 100%;
-            background-color: rgb(12, 12, 12);
-            bottom: 2%;
-            overflow-x: auto;
-            overflow-y: hidden;
+		.character-list {
+			display: flex;
+			justify-content: center;
+			flex-direction: column;
 
-            .character {
-                height: 98% !important;
-                width: 22%;
-                padding: 1% !important;
-                margin-left: 2%;
-                border: 1px solid #272727 !important;
-                border-radius: 2px !important;
-                box-shadow: 0px 0px 5px 0px black;
-                color: white !important;
-                background: transparent;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                background-color: transparent !important;
+			.character {
+				height: 19.4%;
+				width: 100%;
+				padding: 5%;
+				background-color: rgba(22, 25, 35, 0.4);
+				box-shadow: inset 0 2px 0 rgba(22, 25, 35, 0.1), inset 0 -2px 0 rgba(22, 25, 35, 0.1);
+				margin-bottom: 5px;
+				backdrop-filter: blur(5px);
+				color: ivory;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-evenly;
 
-                .v-card__actions {
-                    width: 100%;
-                    bottom: 0;
-                    padding: 0;
-                    height: 15%;
-                    position: absolute;
+				&::-webkit-scrollbar {
+					width: 2px;
+				}
 
-                    .v-btn:before, .v-btn:after {
-                        background-color: transparent;
-                    }
+				&::-webkit-scrollbar-thumb {
+					background-color: rgba(255, 255, 240, 0.5)
+				}
 
-                    button > span > i {
-                        font-size: 20px;
-                    }
-                }
+				&::-webkit-scrollbar-button {
+					display: none;
+				}
 
-                & > *, & > .v-card__actions > button {
-                    color: rgb(166, 166, 166) !important;
-                }
+				& >>> div {
+					h3 > span {
+						color: rgba(255, 255, 240, 0.5);
+						margin-left: 2.5%;
+						font-size: 1vh;
+					}
 
-                &:first-child {
-                    margin-left: 0%;
-                }
+					& > span {
+						margin-top: 1%;
+						font-size: 1vh;
+						color: rgba(255, 255, 240, 0.5);
+					}
+				}
 
-                .characterName {
-                    text-align: center;
-                    word-spacing: 100vw;
-                }
-            }
+				&:hover {
+					box-shadow: inset 0 2px 0 rgba(239, 0, 0, 0.7), inset 0 -2px 0 rgba(239, 0, 0, 0.7);
+				}
 
-            .not-hover {
-                border-color: #272727 !important;
-            }
+				&.active {
+					box-shadow: inset 0 2px 0 rgba(255, 255, 255, 0.7), inset 0 -2px 0 rgba(255, 255, 255, 0.7);
+				}
 
-            .active {
-                border-color: white !important;
-            }
+				&:last-child {
+					margin-bottom: 0;
+				}
+			}
+		}
 
-            .on-hover {
-                border-color: #2577fa !important;
-            }
+		& >>> .buttons > button {
+			box-shadow: rgb(255, 255, 255) 0px 0px 0px 2px inset;
+			background-color: rgba(22, 25, 35, 0.4);
+			color: ivory;
+			width: 100%;
+			height: 30%;
+			backdrop-filter: blur(5px);
+			margin-bottom: 10px;
+			font-size: 1.3vh;
+			outline: none;
 
-            &::-webkit-scrollbar {
-                height: 2%
-            }
+			&:hover {
+				background-color: #fff;
+				box-shadow: inset 0 0 0 2px rgba(22, 25, 35, 0.4);
+				color: #0c0c0c;
+			}
 
-            &::-webkit-scrollbar-thumb {
-                background-color: rgb(27, 27, 27);
-                border-radius: 1px;
-            }
+			&:last-child {
+				margin-bottom: 0;
+				box-shadow: rgb(239, 0, 0) 0px 0px 0px 2px inset;
+				background-color: rgba(22, 25, 35, 0.4);
 
-            &::-webkit-scrollbar-button {
-                display: none
-            }
-        }
-
-        .loading {
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-
-            p {
-                color: white;
-            }
-
-            .multi-ripple {
-                width: 2.6rem;
-                height: 2.6rem;
-                margin: 2rem;
-
-                div {
-                    position: absolute;
-                    width: 2rem;
-                    height: 2rem;
-                    border-radius: 50%;
-                    border: 0.3rem solid #979fd0;
-                    animation: 1.5s ripple infinite;
-
-                    &:nth-child(2) {
-                        animation-delay: 0.5s;
-                    }
-                }
-            }
-
-            @keyframes ripple {
-                from {
-                    transform: scale(0);
-                    opacity: 1;
-                }
-
-                to {
-                    transform: scale(1);
-                    opacity: 0;
-                }
-            }
-        }
-    }
-
-    .characterInfo {
-        flex-shrink: 0;
-        width: 100%;
-        overflow-y: hidden;
-        background-color: rgb(166, 166, 166);
-        padding: 1.5%;
-        border-radius: 2px;
-        height: 22vh;
-
-        .textBox {
-            overflow: auto;
-            max-height: 100%;
-            height: 100%;
-            color: rgb(12, 12, 12);
-
-            &::-webkit-scrollbar {
-                width: 0.5%
-            }
-
-            &::-webkit-scrollbar-thumb {
-                background-color: rgb(12, 12, 12);
-                border-radius: 1px;
-            }
-
-            &::-webkit-scrollbar-button {
-                display: none
-            }
-        }
-    }
-
-    .buttons {
-        background-color: rgb(27, 27, 27);
-        height: fit-content;
-
-        button {
-            border-radius: 2px;
-            background-color: rgb(12, 12, 12) !important;
-            color: rgb(166, 166, 166) !important;
-            height: 28px !important;
-            margin-left: 5px;
-
-            &:hover {
-                color: white !important;
-            }
-        }
-
-        .disconnect {
-            color: white !important;
-            background-color: #B71C1C !important;
-            margin-left: 0;
-
-            &:hover {
-                color: rgb(166, 166, 166) !important;
-            }
-        }
-    }
-}
-
-.serverInfo {
-    border-radius: 0% !important;
-    width: 20%;
-    margin-left: 1%;
-    font-family: 'Quantico', sans-serif;
-    background-color: rgb(12, 12, 12) !important;
-    color: #a6a6a6 !important;
-    height: 26.073518518518515vh;
-
-    .v-card__text {
-        overflow-y: auto;
-        height: 100%;
-
-        .post {
-            color: #a6a6a6;
-
-            h3 {
-                text-align: center;
-            }
-
-            p {
-                font-size: 0.575rem;
-            }
-
-            .v-divider {
-                background-color: #a6a6a6 !important;
-                margin-bottom: 1px;
-            }
-        }
-
-        &::-webkit-scrollbar {
-            width: 1%
-        }
-
-        &::-webkit-scrollbar-thumb {
-            background-color: #a6a6a6;
-            border-radius: 1px;
-        }
-
-        &:-webkit-scrollbar-button {
-            display: none
-        }
-    }
-}
-
-.normal {
-    height: 26.073518518518515vh;
-}
-
-.bigger {
-    height: 48.073518518518515vh;
+				&:hover {
+					box-shadow: rgba(22, 25, 35, 0.7) 0px 0px 0px 2px inset;
+					background-color: rgb(239, 0, 0);
+					color: ivory;
+				}
+			}
+		}
+	}
 }

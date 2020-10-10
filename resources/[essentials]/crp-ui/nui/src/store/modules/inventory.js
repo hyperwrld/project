@@ -17,7 +17,7 @@ const getters = {
 	getActionData: state => {
 		return state.actionData;
 	},
-	GET_ITEMS_QUEUE: state => {
+	getQueueData: state => {
 		return state.itemsQueue;
 	},
 	getItemsList: state =>  {
@@ -40,7 +40,10 @@ const actions = {
     },
     setActionData(state, data) {
         state.commit('setActionData', data);
-    }
+	},
+	addQueue(state, data) {
+		state.commit('addQueue', data);
+	}
 }
 
 const mutations = {
@@ -87,23 +90,43 @@ const mutations = {
 	},
     moveItem(state, data) {
         const from = data.currentInventory == 'player-inventory' ? true : false, to = data.futureInventory == 'player-inventory' ? true : false;
-        var fromArray = from ? state.playerInventory.items : state.secondaryInventory.items, toArray = to ? state.playerInventory.items : state.secondaryInventory.items;
+		var fromArray = from ? state.playerInventory.items : state.secondaryInventory.items, toArray = to ? state.playerInventory.items : state.secondaryInventory.items;
 
-        if ((Number(data.currentIndex) != Number(data.futureIndex)) || (from != to)) {
-            nui.send('moveItem', {
-                current: from ? state.playerInventory.name : state.secondaryInventory.name, future: to ? state.playerInventory.name : state.secondaryInventory.name,
-                currentIndex: Number(data.currentIndex) + 1, futureIndex: Number(data.futureIndex) + 1, count: Number(data.itemCount), type: Number(state.secondaryInventory.type)
-            }).then(moveData => {
-                if (moveData.status) {
-                    const currentData = moveData.current ? { itemId: moveData.current.item, quantity: moveData.current.count, durability: moveData.current.creation_time } : {};
-                    const futureData = moveData.future ? { itemId: moveData.future.item, quantity: moveData.future.count, durability: moveData.future.creation_time } : {};
+		if ((Number(data.currentIndex) != Number(data.futureIndex)) || (from != to)) {
+			if (state.secondaryInventory.type != 5) {
+				nui.send('moveItem', {
+					current: from ? state.playerInventory.name : state.secondaryInventory.name, future: to ? state.playerInventory.name : state.secondaryInventory.name,
+					currentIndex: Number(data.currentIndex) + 1, futureIndex: Number(data.futureIndex) + 1, count: Number(data.itemCount), data: {
+						type: Number(state.secondaryInventory.type), coords: state.secondaryInventory.coords
+					}
+				}).then(moveData => {
+					if (moveData.status) {
+						const currentData = moveData.current ? { itemId: moveData.current.item, quantity: moveData.current.count, durability: moveData.current.creation_time } : {};
+						const futureData = moveData.future ? { itemId: moveData.future.item, quantity: moveData.future.count, durability: moveData.future.creation_time } : {};
 
-					fromArray.splice(data.currentIndex, 1, currentData), toArray.splice(data.futureIndex, 1, futureData);
+						fromArray.splice(data.currentIndex, 1, currentData), toArray.splice(data.futureIndex, 1, futureData);
 
-                    this.commit('inventory/calculateWeight');
-                }
-            });
-        }
+						this.commit('inventory/calculateWeight');
+					}
+				});
+			} else if (to) {
+				nui.send('buyItem', {
+					current: from ? state.playerInventory.name : state.secondaryInventory.name, future: state.playerInventory.name,
+					currentIndex: Number(data.currentIndex) + 1, futureIndex: Number(data.futureIndex) + 1, count: Number(data.itemCount), data: {
+						type: Number(state.secondaryInventory.type), shopType: Number(state.secondaryInventory.shopType)
+					}
+				}).then(moveData => {
+					if (moveData.status) {
+						const currentData = moveData.current ? { itemId: moveData.current.item, quantity: moveData.current.count, durability: moveData.current.creation_time } : {};
+						const futureData = moveData.future ? { itemId: moveData.future.item, quantity: moveData.future.count, durability: moveData.future.creation_time } : {};
+
+						fromArray.splice(data.currentIndex, 1, currentData), toArray.splice(data.futureIndex, 1, futureData);
+
+						this.commit('inventory/calculateWeight');
+					}
+				});
+			}
+		}
     },
     calculateWeight(state) {
         var playerWeight = 0, secondaryWeight = 0;
@@ -140,7 +163,17 @@ const mutations = {
 		}
 
 		state.actionData.status = data.status;
-    }
+	},
+	addQueue(state, data) {
+		const item = state.itemsList.find(element => element.identifier == data.itemId);
+		const message = item.hash ? (data.state ? 'EQUIPADO' : 'DESEQUIPADO') : (data.state ? 'USADO ' : 'REMOVIDO ') + data.quantity + 'X';
+
+		state.itemsQueue.push({ message: message, image: item.image, name: item.name });
+
+        setTimeout(() => {
+            state.itemsQueue.splice(0, 1);
+        }, 3000);
+	}
 }
 
 export default { namespaced: true, getters, state, actions, mutations }
