@@ -1,271 +1,86 @@
 CRP.Player, CRP.Characters = {}, {}
 
 function CRP.Player:LoadCharacter(source, data)
-    CRP.Characters[source] = CRP.Player:CreateCharacter(source, data)
+	CRP.Characters[source] = CRP.Player:CreateCharacter(source, data)
 
-    TriggerEvent('crp-base:playerLoaded', source, CRP.Characters[source])
+	TriggerEvent('crp-base:characterLoaded', source, CRP.Characters[source])
 
-    for i = 1, #CRP.Commands do
+	for i = 1, #CRP.Commands do
         TriggerClientEvent('chat:addSuggestion', source, '/' .. CRP.Commands[i][1], CRP.Commands[i][2], CRP.Commands[i][3])
     end
 
-    return CRP.Characters[source]
+	return CRP.Characters[source]
 end
 
 function CRP.Player:CreateCharacter(source, data)
 	local self = {}
 
-    -- Initialize all initial variables for a user
-
 	self.source         = source
 	self.id             = data.id
 	self.identifier     = data.identifier
-	self.license        = data.license
+	self.firstname      = data.firstname
+	self.lastname       = data.lastname
 	self.money          = data.money
 	self.bank           = data.bank
 	self.job            = data.job
-	self.firstname      = data.firstname
-	self.lastname       = data.lastname
-	self.dateofbirth    = data.dateofbirth
-    self.sex            = data.sex
-    self.phone          = data.phone
-    self.position       = data.position
+	self.phone          = data.phone
+	self.dateofbirth    = data.dob
+    self.gender         = data.gender
+	self.position       = data.position
 
-	if data.status == nil then
-		self.status = data.status
-	else
-		self.status = json.decode(data.status)
+	self.getCharacterId = function()
+		return self.id
 	end
 
-	if data.job == nil then
-		self.job = data.job
-	else
-        self.job = json.decode(data.job)
-
-        TriggerClientEvent('crp-base:updateJob', source, self.job.name, CRP.JobsList[self.job.name].label, true)
-    end
-
-    if data.skin == nil then
-        self.skin = data.skin
-    else
-        self.skin = json.decode(data.skin)
-    end
-
-    TriggerClientEvent('crp-ui:setMoney', self.source, self.money)
-
-	-- Sets money for the user
-
-	self.setMoney = function(money)
-		if type(money) == 'number' then
-			local prevMoney, newMoney = self.money, money
-
-			self.money = money
-
-			-- Performs some math to see if money was added or removed, mainly for the UI component
-
-            if ((prevMoney - newMoney) < 0) then
-                TriggerClientEvent('crp-ui:addMoney', self.source, math.abs(prevMoney - newMoney))
-            else
-                TriggerClientEvent('crp-ui:removeMoney', self.source, math.abs(prevMoney - newMoney))
-			end
-		else
-			print('ERROR: There seems to be an issue while setting money, something else then a number was entered.')
-		end
+	self.getPhone = function()
+		return self.phone
 	end
 
-	-- Returns money for the player
+	self.getGender = function()
+		return self.gender
+	end
 
 	self.getMoney = function()
 		return self.money
 	end
 
-	-- Sets a players bank balance
+	self.addMoney = function(quantity)
+		if type(quantity) == 'number' then
+			local newQuantity = self.money + quantity
 
-	self.setBankBalance = function(money)
-		if type(money) == 'number' then
-			-- Triggers an event to save it to the database
+			self.money = math.floor(newQuantity)
 
-			TriggerEvent('crp-base:setPlayerData', self.source, 'bank', money, function(response, success)
-				self.bank = money
-			end)
-		else
-			print('ERROR: There seems to be an issue while setting bank, something else then a number was entered.')
+			TriggerClientEvent('crp-ui:addMoney', self.source, quantity)
 		end
 	end
 
-	-- Returns the players bank
+	self.removeMoney = function(quantity)
+		if type(quantity) == 'number' then
+			local newQuantity = self.money - quantity
+
+			self.money = math.floor(newQuantity)
+
+			TriggerClientEvent('crp-ui:removeMoney', self.source, quantity)
+		end
+	end
 
 	self.getBank = function()
 		return self.bank
 	end
 
-	-- Returns the player job
+	self.addBank = function(quantity)
+		if type(quantity) == 'number' then
+			local newQuantity = self.bank + quantity
 
-	self.getJob = function()
-		return self.job
-	end
-
-	-- Sets the player job
-
-	self.setJob = function(job, grade)
-		local lastJob = json.decode(json.encode(self.job))
-
-		grade = tonumber(grade)
-
-		if DoesJobExist(job, grade) then
-			local jobObject = jobs[job]
-
-            self.job.name, self.job.grade = job, grade
-
-			TriggerClientEvent('crp-base:updateJob', self.source, self.job.name, CRP.JobsList[self.job.name], true)
-		else
-			print('ERROR: There seems to be an issue while setting a job, due to not founding the job.')
+			self.bank = math.floor(newQuantity)
 		end
 	end
 
-	-- Returns the player firstname
+	self.removeBank = function(quantity)
+		if type(quantity) == 'number' then
+			local newQuantity = self.bank - quantity
 
-	self.getFirstName = function()
-		return self.firstname
-	end
-
-	-- Returns the player lastname
-
-	self.getLastName = function()
-		return self.lastname
-	end
-
-	-- Returns the player fullname
-
-	self.getFullName = function()
-		return self.firstname .. ' ' .. self.lastname
-	end
-
-	-- Returns the player dateofbirth
-
-	self.getDateOfBirth = function()
-		return self.dateofbirth
-	end
-
-	-- Returns the player sex
-
-	self.getSex = function()
-		return self.sex
-    end
-
-    -- Returns the player phone number
-
-    self.getPhoneNumber = function()
-        return self.phone
-    end
-
-	self.getStatus = function()
-		return self.status
-	end
-
-	self.setStatus = function(status)
-		if self.status == nil then
-			self.status = {}
-		end
-
-		self.status = status
-	end
-
-	-- Kicks the player with the specified reason
-
-	self.kick = function(reason)
-		DropPlayer(self.source, reason)
-	end
-
-	-- Adds money to the user
-
-	self.addMoney = function(money)
-		if type(money) == 'number' then
-			local newMoney = self.money + money
-
-			self.money = math.floor(newMoney)
-
-            -- This is used for every UI component to tell them money was just added
-
-            TriggerClientEvent('crp-ui:addMoney', self.source, math.floor(money))
-		else
-			print('ERROR: There seems to be an issue while adding money, a different type then number was trying to be added.')
+			self.bank = math.floor(newQuantity)
 		end
 	end
-
-	-- Removes money from the user
-
-	self.removeMoney = function(money)
-		if type(money) == 'number' then
-			local newMoney = self.money - money
-
-            self.money = math.floor(newMoney)
-
-			-- This is used for every UI component to tell them money was just removed
-
-			TriggerClientEvent('crp-ui:removeMoney', self.source, math.floor(money))
-		else
-			print('ERROR: There seems to be an issue while removing money, a different type then number was trying to be removed.')
-		end
-	end
-
-	-- Adds money to a users bank
-
-	self.addBank = function(money)
-		if type(money) == 'number' then
-			local newBank = self.bank + money
-
-			self.bank = math.floor(newBank)
-		else
-			print('ERROR: There seems to be an issue while adding to bank, a different type then number was trying to be added.')
-		end
-	end
-
-	-- Removes money from a users bank
-
-	self.removeBank = function(money)
-		if type(money) == 'number' then
-			local newBank = self.bank - money
-
-			self.bank = math.floor(newBank)
-		else
-			print('ERROR: There seems to be an issue while removing from bank, a different type then number was trying to be removed.')
-		end
-	end
-
-	-- Returns the players identifier used in EssentialMode
-
-	self.getIdentifier = function()
-		return self.identifier
-    end
-
-    self.getSource = function()
-        return self.source
-    end
-
-	-- Returns the character id
-
-	self.getCharacterID = function()
-		return self.id
-    end
-
-	return self
 end
-
-exports('GetAllCharacters', function(source)
-	return CRP.Characters
-end)
-
-exports('GetCharacter', function(source)
-	return CRP.Characters[source]
-end)
-
-exports('GetCharacterByPhone', function(number)
-    for i = 1, #CRP.Characters do
-        if tonumber(CRP.Characters[i].getPhoneNumber()) == tonumber(number) then
-            return CRP.Characters[i]
-        end
-    end
-
-	return false
-end)
