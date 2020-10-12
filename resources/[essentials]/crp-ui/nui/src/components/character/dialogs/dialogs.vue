@@ -17,16 +17,6 @@
 			this.type = true;
 			this.title = 'Criação de Personagem'
 
-			function LoadingComponent() {
-				return (
-					<div v-if='loader.state' class='loader'>
-						<svg class='spinner' width='43px' height='43px' viewBox='0 0 44 44' xmlns='http://www.w3.org/2000/svg'>
-							<circle class='path' fill='none' stroke-width='4' stroke-linecap='round' cx='22' cy='22' r='20'></circle>
-						</svg>
-					</div>
-				)
-			}
-
 			return (
 				<div class='dialog'>
 					{ isLoading ? LoadingComponent() :
