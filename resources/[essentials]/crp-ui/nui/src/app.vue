@@ -37,7 +37,17 @@
         mounted() {
             this.listener = window.addEventListener('message', (event) => {
 				if (event.data.event != undefined) {
-					this.$store.dispatch(event.data.app + '/' + event.data.event, event.data.eventData);
+					var module = event.data.app;
+
+					switch (event.data.app) {
+						case 'selection':
+							module = 'character';
+							break;
+						default:
+							break;
+					}
+
+					this.$store.dispatch(module + '/' + event.data.event, event.data.eventData);
 				}
 
 				if (event.data.status != undefined) {

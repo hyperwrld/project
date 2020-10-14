@@ -1,7 +1,13 @@
 <script>
 	import { mapGetters } from 'vuex';
 
+	import modals from './../dialogs/dialogs.js';
+	import dialogs from './../dialogs/dialogs.vue';
+
 	export default {
+		component: {
+			dialogs
+		},
   		data () {
     		return {
       			currentItem: 0
@@ -20,16 +26,37 @@
                 this.$store.dispatch('character/selectCharacter', this.charactersData[this.currentItem].id);
 			},
 			deleteCharacter: function() {
-				this.$store.dispatch('character/deleteCharacter', this.charactersData[this.currentItem].id);
+				modals.createDialog({
+					title: 'Apagar o personagem', sendButton: 'Apagar', nuiType: 'deleteCharacter',
+				}).then(response => {
+					if (response) {
+						this.contacts.push({ id: response.data.id, name: response.choiceData.name, number: Number(response.choiceData.number) });
+					}
+				})
+				// this.$store.dispatch('character/deleteCharacter', this.charactersData[this.currentItem].id);
 			},
 			createCharacter: function() {
-
+				modals.createDialog({
+					title: 'Criação de personagem', sendButton: 'Enviar', nuiType: 'createCharacter',
+					choices: [
+						{ key: 'firstName', type: 'text', min: 1, max: 10, placeholder: 'Primeiro nome', errorText: 'Escolha um primeiro nome com no máximo 10 caracteres.' },
+						{ key: 'lastName', type: 'text', min: 1, max: 10, placeholder: 'Último nome', errorText: 'Escolha um último nome com no máximo 10 caracteres.' },
+						{ key: 'dateOfBirth', type: 'date', placeholder: 'Data de nascimento', errorText: 'Selecione uma data de nascimento para o seu personagem.' },
+						{ key: 'gender', type: 'select', placeholder: 'Sexo', options: [ { text: 'Masculino', value: false }, { text: 'Feminino', value: true } ], errorText: 'Selecione o sexo do seu personagem.' },
+						{ key: 'history', type: 'textarea', placeholder: 'História', min: 100, max: 500, errorText: 'A história do seu personagem pode ter no mínimo 100 caracteres e no máximo 500 caracteres.' }
+					]
+				}).then(response => {
+					if (response) {
+						this.contacts.push({ id: response.data.id, name: response.choiceData.name, number: Number(response.choiceData.number) });
+					}
+				})
 			},
             handleDisconnect: function() {
                 nui.send('disconnect');
             }
         },
 		render (h) {
+			console.log(this.charactersData)
 			return (
 				<div class='container container--fluid' id='character'>
 					<div class='menu animate__animated animate__fadeIn'>
@@ -54,7 +81,7 @@
 							})}
 						</div>
 						<div class='buttons'>
-							{ this.charactersData[this.currentItem].firstname ?
+							{ this.charactersData[this.currentItem] && this.charactersData[this.currentItem].firstname ?
 								<div class='buttons-container'>
 									<button onClick={ () => this.selectCharacter(this.currentItem) }>Selecionar</button>
 									<button onClick={ () => this.deleteCharacter(this.currentItem) }>Apagar</button>
@@ -70,5 +97,5 @@
 </script>
 
 <style scoped lang='scss'>
-    @import './character.scss';
+    @import './selection.scss';
 </style>

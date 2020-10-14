@@ -3,8 +3,34 @@
 
 	export default {
 		props: {
-			title: String,
-			type: Boolean
+			title: {
+				type: String,
+				default: () => ''
+			},
+			type: {
+				type: Boolean,
+				default: () => false
+			},
+			choices: {
+				type: Array,
+				default: () => []
+			},
+			sendButton: {
+				type: String,
+				default: () => ''
+			},
+			nuiType: {
+				type: String,
+				default: () => ''
+			}
+		},
+		methods: {
+			closeDialog: function() {
+				this.$emit('close');
+			},
+			submitDialog: function() {
+
+			}
 		},
 		data() {
 			return {
@@ -12,48 +38,34 @@
 			}
 		},
 		render (h) {
-			let isLoading = false;
-			// this.choices = [ 'olaaa'];
-			this.type = true;
-			this.title = 'Criação de Personagem'
-
 			return (
-				<div class='dialog'>
-					{ isLoading ? LoadingComponent() :
-						<div class='container'>
-							<h3>{ this.title }</h3>
-							{ this.type &&
-								<div class='inputs-container'>
-									<div class='firstName'>
-										<span>Primeiro nome:</span>
-										<input type='text' maxlength='10'/>
-									</div>
-									<div class='lastName'>
-										<span>Último nome:</span>
-										<input type='text' maxlength='10'/>
-									</div>
-									<div class='dateOfBirth'>
-										<span>Data de nascimento:</span>
-										<input type='date' name='dob'/>
-									</div>
-									<div class='gender'>
-										<span>Sexo:</span>
-										<select name='gender'>
-											<option value='true'>Masculino</option>
-											<option value='false'>Feminino</option>
-										</select>
-									</div>
-									<div class='history'>
-										<span>História:</span>
-										<textarea name='history' rows='4' cols='50' maxlength='500'/>
-									</div>
-								</div>
-							}
-							<div class='bottom'>
-								<button>Cancelar</button><button>Enviar</button>
+				<div class='dialog animate__animated animate__fadeIn'>
+					<div class='container'>
+						<h3>{ this.title }</h3>
+						{ this.choices.length > 0 &&
+							<div class='inputs-container'>
+								{ this.choices.map((choice, index) => {
+									return (
+										<div class={ choice.key }>
+											<span>{ choice.placeholder }</span>
+											{ choice.type == 'select' ?
+												<select name={ choice.key }>
+													{ choice.options.map((option, index) => {
+														return <option>{ option.text }</option>
+													})}
+												</select>
+												: choice.type == 'textarea' ? <textarea name={ choice.key } rows='4' cols='50' maxlength={ choice.max }/>
+												: <input type={ choice.type } maxlength={ choice.max }/>
+											}
+										</div>
+									)
+								})}
 							</div>
+						}
+						<div class='bottom'>
+							<button>Voltar</button><button>{ this.sendButton }</button>
 						</div>
-					}
+					</div>
 				</div>
 			);
 		}

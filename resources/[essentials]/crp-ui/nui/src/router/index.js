@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import character from './../components/character/character.vue';
+import selection from './../components/character/selection/selection.vue';
 import dialogs from './../components/character/dialogs/dialogs.vue';
 import spawn from './../components/spawn/spawn.vue';
 import inventory from './../components/inventory/main/inventory.vue';
@@ -23,9 +23,9 @@ Vue.use(VueRouter);
 export default new VueRouter({
 	routes: [
 		{
-			path: '/character',
-			name: 'character',
-			component: character,
+			path: '/selection',
+			name: 'selection',
+			component: selection,
 			children: [
 				{ path: 'dialogs', name: 'dialogs', component: dialogs }
 			]
