@@ -39,11 +39,10 @@
 				modals.createDialog({
 					title: 'Criação de personagem', sendButton: 'Enviar', nuiType: 'createCharacter',
 					choices: [
-						{ key: 'firstName', type: 'text', min: 1, max: 10, placeholder: 'Primeiro nome', errorText: 'Escolha um primeiro nome com no máximo 10 caracteres.' },
-						{ key: 'lastName', type: 'text', min: 1, max: 10, placeholder: 'Último nome', errorText: 'Escolha um último nome com no máximo 10 caracteres.' },
-						{ key: 'dateOfBirth', type: 'date', placeholder: 'Data de nascimento', errorText: 'Selecione uma data de nascimento para o seu personagem.' },
-						{ key: 'gender', type: 'select', placeholder: 'Sexo', options: [ { text: 'Masculino', value: false }, { text: 'Feminino', value: true } ], errorText: 'Selecione o sexo do seu personagem.' },
-						{ key: 'history', type: 'textarea', placeholder: 'História', min: 100, max: 500, errorText: 'A história do seu personagem pode ter no mínimo 100 caracteres e no máximo 500 caracteres.' }
+						{ key: 'firstName', type: 'text', min: 1, max: 10, placeholder: 'Primeiro nome' }, { key: 'lastName', type: 'text', min: 1, max: 10, placeholder: 'Último nome' },
+						{ key: 'dateOfBirth', type: 'date', placeholder: 'Data de nascimento' },
+						{ key: 'gender', type: 'select', placeholder: 'Sexo', options: [ { text: 'Masculino', value: false }, { text: 'Feminino', value: true } ] },
+						{ key: 'history', type: 'textarea', placeholder: 'História', min: 100, max: 500 }
 					]
 				}).then(response => {
 					if (response) {
@@ -56,7 +55,6 @@
             }
         },
 		render (h) {
-			console.log(this.charactersData)
 			return (
 				<div class='container container--fluid' id='character'>
 					<div class='menu animate__animated animate__fadeIn'>

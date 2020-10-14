@@ -26,15 +26,47 @@
 		},
 		methods: {
 			closeDialog: function() {
-				this.$emit('close');
+				this.$emit('cancel');
 			},
 			submitDialog: function() {
+				if (this.isLoading) return;
 
+				let choicesData = {}, errorCount = 0;
+
+				if (this.choices && this.choices.length > 0) {
+					for (let i = 0; i < this.choices.length; i++) {
+						let choice = this.choices[i];
+
+						if (choice.value == undefined || ((choice.max && choice.value.length > choice.max) || (choice.min && choice.value.length < choice.min))) {
+							this.$set(choice, 'error', true);
+
+							errorCount = errorCount + 1;
+						} else {
+							this.$set(choice, 'error', false);
+
+							choicesData[choice.key] = choice.value;
+						}
+					}
+				}
+
+				if (errorCount == 0) {
+					this.isLoading = true;
+
+					nui.send(this.nuiType, choicesData).then(data => {
+						setTimeout(() => {
+							if (data.status) {
+								this.$emit('submit', { choicesData: choicesData, data: data });
+							}
+
+							this.isLoading = false;
+						}, 1000);
+					});
+				}
 			}
 		},
 		data() {
 			return {
-				firstName: '', lastName: ''
+				isLoading: false
 			}
 		},
 		render (h) {
@@ -46,16 +78,16 @@
 							<div class='inputs-container'>
 								{ this.choices.map((choice, index) => {
 									return (
-										<div class={ choice.key }>
-											<span>{ choice.placeholder }</span>
+										<div class={ choice.key + (choice.error ? ' error' : '') }>
+											<span>{ choice.placeholder + ':' }</span>
 											{ choice.type == 'select' ?
-												<select name={ choice.key }>
+												<select name={ choice.key } v-model={ choice.value }>
 													{ choice.options.map((option, index) => {
 														return <option>{ option.text }</option>
 													})}
 												</select>
-												: choice.type == 'textarea' ? <textarea name={ choice.key } rows='4' cols='50' maxlength={ choice.max }/>
-												: <input type={ choice.type } maxlength={ choice.max }/>
+												: choice.type == 'textarea' ? <textarea v-model={ choice.value } name={ choice.key } rows='4' cols='50' maxlength={ choice.max }/>
+												: <input v-model={ choice.value } type={ choice.type } maxlength={ choice.max }/>
 											}
 										</div>
 									)
@@ -63,7 +95,12 @@
 							</div>
 						}
 						<div class='bottom'>
-							<button>Voltar</button><button>{ this.sendButton }</button>
+							<button onClick={ () => this.closeDialog() }>Voltar</button>
+							<button class={ this.isLoading ? 'loading' : '' } onClick={ () => this.submitDialog() }>
+								{ this.sendButton } { this.isLoading &&
+									<i class='fa fa-circle-o-notch fa-spin'/>
+								}
+							</button>
 						</div>
 					</div>
 				</div>

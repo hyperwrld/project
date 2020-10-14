@@ -49,6 +49,15 @@
 					text-transform: uppercase;
 				}
 
+				&.error {
+					background-color: transparent !important;
+					border: none !important;
+
+					& > input, select, textarea {
+						box-shadow: rgba(255, 0, 0, 0.4) 0px 0px 0px 2px inset;
+					}
+				}
+
 				input, select, textarea {
 					box-shadow: rgba(255, 255, 255, 0.8) 0px 0px 0px 2px inset;
 					background-color: rgba(22, 25, 35, 0.4);
@@ -142,10 +151,19 @@
 					}
 				}
 
-				&:hover {
+				&:not(.loading):hover {
 					background-color: #fff;
 					box-shadow: inset 0 0 0 2px rgba(22, 25, 35, 0.4);
 					color: #0c0c0c;
+				}
+
+				&.loading {
+					background-color: rgb(60, 60, 60, 0.9);
+					box-shadow: inset 0 0 0 2px rgba(22, 25, 35, 0.4);
+
+					i {
+						margin-left: 2.5px;
+					}
 				}
 			}
 		}
