@@ -13,6 +13,16 @@ AddEventHandler('crp-base:onPlayerJoined', function()
     CRP.Spawn:InitializeMenu()
 end)
 
+AddEventHandler('crp-ui:closedMenu', function(name, data)
+	if name ~= 'selection' then
+		return
+	end
+
+	Debug('[Main]: Character Selection closed.')
+
+	CRP.Spawn:SpawnCharacter(data)
+end)
+
 RegisterUICallback('disconnectUser', function(data, cb)
 	TriggerServerEvent('crp-base:disconnectUser')
 
@@ -22,7 +32,7 @@ end)
 RegisterUICallback('selectCharacter', function(data, cb)
 	local success, characterData = RPC:execute('selectCharacter', data)
 
-	cb({ status = success })
+	cb({ status = success, characterData = characterData })
 end)
 
 RegisterUICallback('deleteCharacter', function(data, cb)

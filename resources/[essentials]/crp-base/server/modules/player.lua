@@ -7,7 +7,7 @@ function CRP.Player:LoadCharacter(source, data)
 
 	for i = 1, #CRP.Commands do
         TriggerClientEvent('chat:addSuggestion', source, '/' .. CRP.Commands[i][1], CRP.Commands[i][2], CRP.Commands[i][3])
-    end
+	end
 
 	return CRP.Characters[source]
 end
@@ -24,9 +24,8 @@ function CRP.Player:CreateCharacter(source, data)
 	self.bank           = data.bank
 	self.job            = data.job
 	self.phone          = data.phone
-	self.dateofbirth    = data.dob
-    self.gender         = data.gender
-	self.position       = data.position
+	self.dateofbirth    = data.dateofbirth
+	self.gender         = data.gender
 
 	self.getCharacterId = function()
 		return self.id
@@ -83,4 +82,6 @@ function CRP.Player:CreateCharacter(source, data)
 			self.bank = math.floor(newQuantity)
 		end
 	end
+
+	return self
 end

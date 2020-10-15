@@ -6,6 +6,7 @@
 	import dialogs from './../dialogs/dialogs.vue';
 
 	export default {
+		props: ['closeMenu'],
 		component: {
 			dialogs
 		},
@@ -31,7 +32,7 @@
 				this.isLoading = true;
 
 				send('selectCharacter', this.charactersData[this.currentItem].id).then(data => {
-					if (data.status) this.closeMenu('selection');
+					if (data.status) this.closeMenu({ appName: 'selection', characterData: data.characterData });
 
 					setTimeout(() => {
 						this.isLoading = false;
