@@ -5,8 +5,29 @@ function CRP.Player:LoadCharacter(source, data)
 
 	TriggerEvent('crp-base:characterLoaded', source, CRP.Characters[source])
 
-	for i = 1, #CRP.Commands do
-        TriggerClientEvent('chat:addSuggestion', source, '/' .. CRP.Commands[i][1], CRP.Commands[i][2], CRP.Commands[i][3])
+	local characterJob = CRP.Characters[source].job
+
+	for i = 1, #CRP.CommandsList do
+		local necessaryPerms = CRP.Commands[i][3]
+
+		if necessaryPerms then
+			local foundPerm = false
+
+			for i = 1, #necessaryPerms do
+				if not necessaryPerms[i] == characterJob then
+					return
+				end
+
+				foundPerm = true
+				break
+			end
+
+			if not foundPerm then
+				return
+			end
+		end
+
+        TriggerClientEvent('chat:addSuggestion', source, '/' .. CRP.Commands[i][1], CRP.Commands[i][2], CRP.Commands[i][5])
 	end
 
 	return CRP.Characters[source]
