@@ -21,6 +21,13 @@
 			})
 		},
 		methods: {
+			formatDate: function(date) {
+                if (!date) return null
+
+                const [year, month, day] = date.split('-')
+
+                return `${day}/${month}/${year}`
+            },
 			changeCurrentItem: function(futureIndex) {
 				if (this.isLoading || this.isUsingMenu) return;
 
@@ -72,7 +79,7 @@
 						let characterData = response.choicesData;
 
 						this.$set(this.charactersData, this.currentItem, {
-							id: response.data.characterData.id, firstname: characterData.firstName, lastname: characterData.lastName, dateofbirth: characterData.dateOfBirth,
+							id: response.data.characterData.id, firstname: characterData.firstName, lastname: characterData.lastName, dateofbirth: this.formatDate(characterData.dateOfBirth),
 							gender: characterData.gender, job: 'unemployed', money: response.data.characterData.money, bank: response.data.characterData.bank
 						});
 					}

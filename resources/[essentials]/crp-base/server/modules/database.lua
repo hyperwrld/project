@@ -47,7 +47,7 @@ function CRP.DB:CreateCharacter(source, data)
 		return false, 'Já tens o máximo de personagens possível.'
 	end
 
-	local query, phoneNumber = [[INSERT INTO users (identifier, firstname, lastname, dateofbirth, gender, story, phone) VALUES (?, ?, ?, ?, ?, ?, ?);]], CRP.Util:GeneratePhoneNumber()
+	local query, phoneNumber = [[INSERT INTO users (identifier, firstname, lastname, dateofbirth, gender, story, phone) VALUES (?, ?, ?, date_format(?, '%d/%m/%Y'), ?, ?, ?);]], CRP.Util:GeneratePhoneNumber()
     local result = Citizen.Await(DB:Execute(query, identifier, data.firstName, data.lastName, data.dateOfBirth, data.gender, data.history, phoneNumber))
 
 	if not result.changedRows then
