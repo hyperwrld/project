@@ -74,7 +74,7 @@
 													<span>// { character.dateofbirth }</span>
 												</h3>
 												<span>
-													Sexo: { character.gender } // Trabalho: { character.job }<br/>
+													Sexo: { character.gender ? 'Feminino' : 'Masculino' } // Trabalho: { character.job }<br/>
 													Dinheiro: { character.money + '€' } // Banco: { character.bank + '€' }<br/>
 												</span>
 											</div> : <h3>Slot Vazio</h3>
