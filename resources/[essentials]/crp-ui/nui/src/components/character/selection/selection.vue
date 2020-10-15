@@ -11,7 +11,7 @@
 		},
   		data () {
     		return {
-      			currentItem: 0
+				currentItem: 0, isLoading: false
     		}
   		},
 		computed: {
@@ -21,12 +21,26 @@
 		},
 		methods: {
 			changeCurrentItem: function(futureIndex) {
+				if (this.isLoading) return;
+
 				this.currentItem = futureIndex;
 			},
-            selectCharacter: function() {
-                this.$store.dispatch('character/selectCharacter', this.charactersData[this.currentItem].id);
+			selectCharacter: function() {
+				if (this.isLoading) return;
+
+				this.isLoading = true;
+
+				send('selectCharacter', this.charactersData[this.currentItem].id).then(data => {
+					if (data.status) this.closeMenu('selection');
+
+					setTimeout(() => {
+						this.isLoading = false;
+					}, 5000);
+				});
 			},
 			deleteCharacter: function() {
+				if (this.isLoading) return;
+
 				modals.createDialog({
 					title: 'Apagar o personagem', sendButton: 'Apagar', nuiType: 'deleteCharacter', additionalData: { characterId: this.charactersData[this.currentItem].id }
 				}).then(response => {
@@ -36,6 +50,8 @@
 				})
 			},
 			createCharacter: function() {
+				if (this.isLoading) return;
+
 				modals.createDialog({
 					title: 'Criação de personagem', sendButton: 'Enviar', nuiType: 'createCharacter',
 					choices: [
@@ -56,6 +72,8 @@
 				})
 			},
             handleDisconnect: function() {
+				if (this.isLoading) return;
+
                 send('disconnectUser');
             }
         },
@@ -86,7 +104,11 @@
 						<div class='buttons'>
 							{ this.charactersData[this.currentItem] && this.charactersData[this.currentItem].firstname ?
 								<div class='buttons-container'>
-									<button onClick={ () => this.selectCharacter() }>Selecionar</button>
+									<button class={ this.isLoading ? 'loading' : '' } onClick={ () => this.selectCharacter() }>
+										Selecionar { this.isLoading &&
+											<i class='fa fa-circle-o-notch fa-spin'/>
+										}
+									</button>
 									<button onClick={ () => this.deleteCharacter() }>Apagar</button>
 								</div> : <button onClick={ () => this.createCharacter() }>Criar</button>
 							}

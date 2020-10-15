@@ -11,15 +11,11 @@ client_scripts {
 
 files {
     'nui/dist/index.html',
-    'nui/dist/js/app.js',
-    'nui/dist/js/chunk-vendors.js',
-    'nui/dist/fonts/pdown.ttf',
+	'nui/dist/fonts/pdown.ttf',
+
+	'nui/dist/js/*.js',
+    'nui/dist/css/*.css',
 
 	'nui/dist/img/*.png',
-
-    'nui/dist/img/seatbelt.svg',
-    'nui/dist/img/speed-limiter.svg',
-
-    'nui/dist/css/app.css',
-    'nui/dist/css/chunk-vendors.css'
+    'nui/dist/img/*.svg'
 }
