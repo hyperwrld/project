@@ -1,5 +1,6 @@
 <script>
 	import { mapGetters } from 'vuex';
+	import { send } from './../../../utils/lib';
 
 	export default {
 		props: {
@@ -22,6 +23,10 @@
 			nuiType: {
 				type: String,
 				default: () => ''
+			},
+			additionalData: {
+				type: Object,
+				default: () => {}
 			}
 		},
 		methods: {
@@ -31,7 +36,7 @@
 			submitDialog: function() {
 				if (this.isLoading) return;
 
-				let choicesData = {}, errorCount = 0;
+				let choicesData = typeof(this.additionalData) == 'object' ? this.additionalData : {}, errorCount = 0;
 
 				if (this.choices && this.choices.length > 0) {
 					for (let i = 0; i < this.choices.length; i++) {
@@ -52,7 +57,7 @@
 				if (errorCount == 0) {
 					this.isLoading = true;
 
-					nui.send(this.nuiType, choicesData).then(data => {
+					send(this.nuiType, choicesData).then(data => {
 						setTimeout(() => {
 							if (data.status) {
 								this.$emit('submit', { choicesData: choicesData, data: data });
@@ -83,7 +88,7 @@
 											{ choice.type == 'select' ?
 												<select name={ choice.key } v-model={ choice.value }>
 													{ choice.options.map((option, index) => {
-														return <option>{ option.text }</option>
+														return <option value={ option.value }>{ option.text }</option>
 													})}
 												</select>
 												: choice.type == 'textarea' ? <textarea v-model={ choice.value } name={ choice.key } rows='4' cols='50' maxlength={ choice.max }/>

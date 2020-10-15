@@ -1,5 +1,6 @@
 <script>
 	import { mapGetters } from 'vuex';
+	import { send } from './../../../utils/lib';
 
 	import modals from './../dialogs/dialogs.js';
 	import dialogs from './../dialogs/dialogs.vue';
@@ -27,13 +28,12 @@
 			},
 			deleteCharacter: function() {
 				modals.createDialog({
-					title: 'Apagar o personagem', sendButton: 'Apagar', nuiType: 'deleteCharacter',
+					title: 'Apagar o personagem', sendButton: 'Apagar', nuiType: 'deleteCharacter', additionalData: { characterId: this.charactersData[this.currentItem].id }
 				}).then(response => {
 					if (response) {
-						this.contacts.push({ id: response.data.id, name: response.choiceData.name, number: Number(response.choiceData.number) });
+						this.$set(this.charactersData, this.currentItem, {});
 					}
 				})
-				// this.$store.dispatch('character/deleteCharacter', this.charactersData[this.currentItem].id);
 			},
 			createCharacter: function() {
 				modals.createDialog({
@@ -46,12 +46,17 @@
 					]
 				}).then(response => {
 					if (response) {
-						this.contacts.push({ id: response.data.id, name: response.choiceData.name, number: Number(response.choiceData.number) });
+						let characterData = response.choicesData;
+
+						this.$set(this.charactersData, this.currentItem, {
+							id: response.data.characterData.id, firstname: characterData.firstName, lastname: characterData.lastName, dateofbirth: characterData.dateOfBirth,
+							gender: characterData.gender, job: 'unemployed', money: response.data.characterData.money, bank: response.data.characterData.bank
+						});
 					}
 				})
 			},
             handleDisconnect: function() {
-                nui.send('disconnect');
+                send('disconnectUser');
             }
         },
 		render (h) {
@@ -66,7 +71,7 @@
 											<div class='info-container'>
 												<h3>
 													{ character.firstname + ' ' + character.lastname }
-													<span>// { character.dob }</span>
+													<span>// { character.dateofbirth }</span>
 												</h3>
 												<span>
 													Sexo: { character.gender } // Trabalho: { character.job }<br/>
@@ -81,8 +86,8 @@
 						<div class='buttons'>
 							{ this.charactersData[this.currentItem] && this.charactersData[this.currentItem].firstname ?
 								<div class='buttons-container'>
-									<button onClick={ () => this.selectCharacter(this.currentItem) }>Selecionar</button>
-									<button onClick={ () => this.deleteCharacter(this.currentItem) }>Apagar</button>
+									<button onClick={ () => this.selectCharacter() }>Selecionar</button>
+									<button onClick={ () => this.deleteCharacter() }>Apagar</button>
 								</div> : <button onClick={ () => this.createCharacter() }>Criar</button>
 							}
 							<button onClick={ () => this.handleDisconnect() }>Disconectar</button>
