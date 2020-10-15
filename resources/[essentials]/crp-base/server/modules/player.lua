@@ -23,6 +23,7 @@ function CRP.Player:CreateCharacter(source, data)
 	self.money          = data.money
 	self.bank           = data.bank
 	self.job            = data.job
+	self.grade          = data.grade
 	self.phone          = data.phone
 	self.dateofbirth    = data.dateofbirth
 	self.gender         = data.gender
@@ -80,6 +81,20 @@ function CRP.Player:CreateCharacter(source, data)
 			local newQuantity = self.bank - quantity
 
 			self.bank = math.floor(newQuantity)
+		end
+	end
+
+	self.getJob = function()
+		return {
+			name = self.job, grade = self.grade
+		}
+	end
+
+	self.setJob = function(jobName, grade)
+		if isJobValid(jobName, grade) then
+			self.job, self.grade = jobName, grade
+
+			TriggerClientEvent('crp-base:updateJob', self.source, self.job, CRP.JobsList[self.job])
 		end
 	end
 

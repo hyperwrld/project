@@ -1,84 +1,86 @@
-CRP.Jobs, CRP.JobsList, CRP.InService = {}, {}, {}
+CRP.JobManager, CRP.JobsList, CRP.JobService = {}, {}, {}
 
-function CRP.Jobs:GetJobsList()
-    exports.ghmattimysql:execute('SELECT * FROM jobs;', {}, function(result)
-        for i = 1, #result do
-            CRP.JobsList[result[i].name] = { label = result[i].label, minGrade = result[i].min_grade, maxGrade = result[i].max_grade, salary = result[i].salary }
+function CRP.JobManager:GetJobsList()
+	local result = Citizen.Await(DB:Execute([[SELECT * FROM jobs;]]))
 
-            if result[i].has_service then
-                CRP.InService[result[i].name] = {}
-            end
-        end
-    end)
+	for i = 1, #result do
+		local jobData = result[i]
+
+		CRP.JobsList[jobData.name] = { label = jobData.label, maxgrade = jobData.maxgrade, salary = jobData.salary }
+
+		if jobData.service then
+			CRP.JobService[jobData.name] = {}
+		end
+	end
 end
 
-CRP.Jobs:GetJobsList()
+function CRP.JobManager:DeliverPayChecks()
+	for i = 1, #CRP.Characters do
+		local character = CRP.Characters[i]
+		local currentJob = character.getJob()
 
-function CRP.Jobs:DeliverPaychecks()
-    local characters = CRP.Characters or {}
+		if CRP.JobService and not CRP.JobService[currentJob.name][character.source] then
+			return
+		end
 
-    for i = 1, #characters, 1 do
-        local character = characters[i]
-        local characterJob = character.getJob()
+		local salary = math.floor((CRP.JobsList[currentJob.name].salary) + (CRP.JobsList[currentJob.name].salary * (tonumber(currentJob.grade) / 10)))
 
-        local salary = math.floor((CRP.JobsList[characterJob.name].salary) + (CRP.JobsList[characterJob.name].salary * (tonumber(characterJob.grade) / 10)))
+		character.addBank(salary)
+	end
 
-        character.addBank(salary)
-
-        TriggerClientEvent('crp-ui:setAlert', character.source, { type = 'inform', text = 'Acabaste de receber o teu salario de ' .. salary .. '€.' })
-    end
-
-    SetTimeout(5 * 60000, CRP.Jobs.DeliverPaychecks)
+	SetTimeout(5 * 60000, CRP.JobManager:DeliverPayChecks)
 end
 
-CRP.Jobs:DeliverPaychecks()
+CRP.JobManager:GetJobsList()
+CRP.JobManager:DeliverPayChecks()
 
-function CheckIfHigherRank(name, grade)
-    if not job or type(job) ~= 'string' then return false end
-    if not grade or type(grade) ~= 'number' then return false end
+RegisterServerEvent('crp-base:updateServiceStatus')
+AddEventHandler('crp-base:updateServiceStatus', function(jobName, status)
+	if not CRP.JobService[jobName] then
+		return
+	end
 
-    if CRP.JobsList[name] and grade == CRP.JobsList[name].maxGrade then
-        return true
-    end
+	CRP.JobService[name][source] = status
 
-    return false
-end
+	Citizen.Wait(1000)
 
-function DoesJobExist(job, grade)
-    if not job or type(job) ~= 'string' then return false end
-    if not grade or type(grade) ~= 'number' then return false end
-
-    if CRP.JobsList[job] and grade >= CRP.JobsList[job].minGrade and grade <= CRP.JobsList[job].maxGrade then
-        return true
-    end
-
-    return false
-end
+    TriggerClientEvent('crp-base:updateJobService', source, name, status)
+end)
 
 AddEventHandler('crp-base:playerDropped', function(source, character)
-    if CRP.InService[character.getJob()] then
-        CRP.InService[character.getJob()][source] = false
-    end
+	local characterJob = character.getJob()
+
+	if not CRP.JobService[characterJob] then
+		return
+	end
+
+	CRP.JobService[characterJob][source] = false
 end)
 
-RegisterServerEvent('crp-base:leaveJobService')
-AddEventHandler('crp-base:leaveJobService', function(name)
-    if CRP.InService[name] then
-        CRP.InService[name][source] = false
-    end
+function isJobValid(jobName, grade)
+	local jobData = CRP.JobsList[jobName]
 
-    Citizen.Wait(1000)
+	if not jobData then
+		return false
+	end
 
-    TriggerClientEvent('crp-base:updateJobService', source, name, false)
-end)
+	if grade >= 0 and grade <= jobData.maxgrade then
+		return true
+	end
 
-RegisterServerEvent('crp-base:joinJobService')
-AddEventHandler('crp-base:joinJobService', function(name)
-    if CRP.InService[name] then
-        CRP.InService[name][source] = true
-    end
+	return false
+end
 
-    Citizen.Wait(1000)
+function canPromote(jobName, grade)
+	local jobData = CRP.JobsList[jobName]
 
-    TriggerClientEvent('crp-base:updateJobService', source, name, true)
-end)
+	if not jobData or jobData.maxgrade ~= 0 then
+		return false
+	end
+
+	if jobData.maxgrade == grade then
+		return true
+	end
+
+	return false
+end

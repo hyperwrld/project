@@ -38,20 +38,20 @@ function CRP.DB:CreateCharacter(source, data)
 	local characterExist = CRP.DB:DoesCharacterExist(data.firstName, data.lastName)
 
 	if characterExist then
-		return false, 'O nome que escolheu já está a ser utilizado.'
+		return false
 	end
 
 	local numCharacters = CRP.DB:GetCharactersTotal(identifier)
 
 	if numCharacters >= 5 then
-		return false, 'Já tens o máximo de personagens possível.'
+		return false
 	end
 
 	local query, phoneNumber = [[INSERT INTO users (identifier, firstname, lastname, dateofbirth, gender, story, phone) VALUES (?, ?, ?, date_format(?, '%d/%m/%Y'), ?, ?, ?);]], CRP.Util:GeneratePhoneNumber()
     local result = Citizen.Await(DB:Execute(query, identifier, data.firstName, data.lastName, data.dateOfBirth, data.gender, data.history, phoneNumber))
 
 	if not result.changedRows then
-		return false, 'Ocorreu um erro ao criar a sua personagem, contacte um administrador, caso o problema continue.'
+		return false
 	end
 
 	return true, {
@@ -82,7 +82,7 @@ function CRP.DB:RetrieveCharacter(source, characterId)
     if not identifier or identifier == '' then return false end
 	if not characterId or type(characterId) ~= 'number' then return false end
 
-    local query = [[SELECT id, identifier, firstname, lastname, money, bank, job, phone, dateofbirth, gender, skin FROM users WHERE identifier = ? AND id = ?;]]
+    local query = [[SELECT id, identifier, firstname, lastname, money, bank, job, grade, phone, dateofbirth, gender, skin FROM users WHERE identifier = ? AND id = ?;]]
     local result = Citizen.Await(DB:Execute(query, identifier, characterId))
 
 	if #result == 0 then
