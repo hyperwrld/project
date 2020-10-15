@@ -29,13 +29,13 @@ function CRP.DB:CreateCharacter(source, data)
 
 	if not identifier or identifier == '' then return false end
 
-    if not data.firstname or type(data.firstname) ~= 'string' then return false end
-    if not data.lastname or type(data.lastname) ~= 'string' then return false end
-    if not data.dob or type(data.dob) ~= 'string' then return false end
-    if not data.story or type(data.story) ~= 'string' then return false end
-	if not data.gender or type(data.gender) ~= 'string' then return false end
+	if not data.firstName or type(data.firstName) ~= 'string' then return false end
+	if not data.lastName or type(data.lastName) ~= 'string' then return false end
+	if not data.dateOfBirth or type(data.dateOfBirth) ~= 'string' then return false end
+	if not data.history or type(data.history) ~= 'string' then return false end
+	if data.gender == nil or type(data.gender) ~= 'boolean' then return false end
 
-	local characterExist = CRP.DB:DoesCharacterExist(data.firstname, data.lastname)
+	local characterExist = CRP.DB:DoesCharacterExist(data.firstName, data.lastName)
 
 	if characterExist then
 		return false, 'O nome que escolheu já está a ser utilizado.'
@@ -45,10 +45,10 @@ function CRP.DB:CreateCharacter(source, data)
 
 	if numCharacters >= 5 then
 		return false, 'Já tens o máximo de personagens possível.'
-    end
+	end
 
-	local query, phoneNumber = [[INSERT INTO users (identifier, firstname, lastname, dob, gender, story, phone) VALUES (?, ?, ?, ?, ?, ?, ?);]], CRP.Util:GeneratePhoneNumber()
-    local result = Citizen.Await(DB:Execute(query, identifier, data.firstname, data.lastname, data.dob, data.gender, data.story, phoneNumber))
+	local query, phoneNumber = [[INSERT INTO users (identifier, firstname, lastname, dateofbirth, gender, story, phone) VALUES (?, ?, ?, ?, ?, ?, ?);]], CRP.Util:GeneratePhoneNumber()
+    local result = Citizen.Await(DB:Execute(query, identifier, data.firstName, data.lastName, data.dateOfBirth, data.gender, data.history, phoneNumber))
 
 	if not result.changedRows then
 		return false, 'Ocorreu um erro ao criar a sua personagem, contacte um administrador, caso o problema continue.'
@@ -56,23 +56,18 @@ function CRP.DB:CreateCharacter(source, data)
 
 	return true, {
 		id = result.insertId,
-		firstname = data.firstname,
-		lastname = data.lastname,
-		dob = data.dob,
-		gender = data.gender,
-		story = data.story,
-		phone = phoneNumber
+		money = 500, bank = 5000
 	}
 end
 
-function CRP.DB:DeleteCharacter(source, characterId)
+function CRP.DB:DeleteCharacter(source, data)
 	local identifier = CRP.Util:GetPlayerIdentifier(source)
 
     if not identifier or identifier == '' then return false end
-    if not characterId or type(characterId) ~= 'number' then return false end
+    if not data.characterId or type(data.characterId) ~= 'number' then return false end
 
     local query = [[DELETE FROM users WHERE identifier = ? AND id = ?;]]
-    local result = Citizen.Await(DB:Execute(query, identifier, characterId))
+    local result = Citizen.Await(DB:Execute(query, identifier, data.characterId))
 
     if not result.changedRows then
         return false
