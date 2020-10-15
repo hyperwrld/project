@@ -11,7 +11,7 @@
 		},
   		data () {
     		return {
-				currentItem: 0, isLoading: false
+				currentItem: 0, isLoading: false, isUsingMenu: false
     		}
   		},
 		computed: {
@@ -21,12 +21,12 @@
 		},
 		methods: {
 			changeCurrentItem: function(futureIndex) {
-				if (this.isLoading) return;
+				if (this.isLoading || this.isUsingMenu) return;
 
 				this.currentItem = futureIndex;
 			},
 			selectCharacter: function() {
-				if (this.isLoading) return;
+				if (this.isLoading || this.isUsingMenu) return;
 
 				this.isLoading = true;
 
@@ -39,7 +39,9 @@
 				});
 			},
 			deleteCharacter: function() {
-				if (this.isLoading) return;
+				if (this.isLoading || this.isUsingMenu) return;
+
+				this.isUsingMenu = true;
 
 				modals.createDialog({
 					title: 'Apagar o personagem', sendButton: 'Apagar', nuiType: 'deleteCharacter', additionalData: { characterId: this.charactersData[this.currentItem].id }
@@ -47,10 +49,14 @@
 					if (response) {
 						this.$set(this.charactersData, this.currentItem, {});
 					}
+
+					this.isUsingMenu = false;
 				})
 			},
 			createCharacter: function() {
-				if (this.isLoading) return;
+				if (this.isLoading || this.isUsingMenu) return;
+
+				this.isUsingMenu = true;
 
 				modals.createDialog({
 					title: 'Criação de personagem', sendButton: 'Enviar', nuiType: 'createCharacter',
@@ -69,10 +75,12 @@
 							gender: characterData.gender, job: 'unemployed', money: response.data.characterData.money, bank: response.data.characterData.bank
 						});
 					}
+
+					this.isUsingMenu = false;
 				})
 			},
             handleDisconnect: function() {
-				if (this.isLoading) return;
+				if (this.isLoading || this.isUsingMenu) return;
 
                 send('disconnectUser');
             }
