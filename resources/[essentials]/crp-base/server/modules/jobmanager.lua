@@ -1,7 +1,7 @@
 CRP.JobManager, CRP.JobsList, CRP.JobService = {}, {}, {}
 
 function CRP.JobManager:GetJobsList()
-	local result = Citizen.Await(DB:Execute([[SELECT * FROM jobs;]]))
+	local result = DB:Execute([[SELECT * FROM jobs;]])
 
 	for i = 1, #result do
 		local jobData = result[i]
@@ -15,9 +15,10 @@ function CRP.JobManager:GetJobsList()
 end
 
 function CRP.JobManager:DeliverPayChecks()
-	for i = 1, #CRP.Characters do
-		local character = CRP.Characters[i]
-		local currentJob = character.getJob()
+	local characters = CRP.Characters or {}
+
+	for i = 1, #characters do
+		local character, currentJob = characters[i], characters.getJob()
 
 		if CRP.JobService and not CRP.JobService[currentJob.name][character.source] then
 			return
@@ -28,7 +29,7 @@ function CRP.JobManager:DeliverPayChecks()
 		character.addBank(salary)
 	end
 
-	SetTimeout(5 * 60000, CRP.JobManager:DeliverPayChecks)
+	SetTimeout(5 * 60000, CRP.JobManager.DeliverPayChecks)
 end
 
 CRP.JobManager:GetJobsList()
