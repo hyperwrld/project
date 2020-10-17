@@ -1,5 +1,5 @@
 const state = () => ({
-    userCharacters: [{ firstname: 'Lewis', lastname: 'Hamilton', dob: '08/03/1999', gender: 'Masculino', job: 'Polícia'}, {}] //  { firstname: 'Lewis', lastname: 'Hamilton', dob: '08/03/1999', gender: 'Masculino', job: 'Polícia'}
+    userCharacters: []
 })
 
 const getters = {
