@@ -16,6 +16,8 @@ import message from './../components/phone/messages/message/message.vue';
 import twitter from './../components/phone/twitter/twitter.vue';
 import adverts from './../components/phone/adverts/adverts.vue';
 
+import menu from './../components/menu/menu.vue';
+
 import vehicleshop from './../components/vehicleshop/vehicleshop.vue';
 
 Vue.use(VueRouter);
@@ -55,6 +57,11 @@ export default new VueRouter({
 				{ path: 'message',  name: 'message',  component: message  }, { path: 'twitter',  name: 'twitter',  component: twitter  },
 				{ path: 'adverts',  name: 'adverts',  component: adverts  }
 			]
+		},
+		{
+			path: '/menu',
+			name: 'menu',
+			component: menu,
 		},
 		{
 			path: '/vehicleshop',
