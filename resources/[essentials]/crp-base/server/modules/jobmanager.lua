@@ -35,8 +35,8 @@ end
 CRP.JobManager:GetJobsList()
 CRP.JobManager:DeliverPayChecks()
 
-RegisterServerEvent('crp-base:updateServiceStatus')
-AddEventHandler('crp-base:updateServiceStatus', function(jobName, status)
+RegisterServerEvent('crp-base:updateService')
+AddEventHandler('crp-base:updateService', function(jobName, status)
 	if not CRP.JobService[jobName] then
 		return
 	end
@@ -45,7 +45,7 @@ AddEventHandler('crp-base:updateServiceStatus', function(jobName, status)
 
 	Citizen.Wait(1000)
 
-    TriggerClientEvent('crp-base:updateJobService', source, name, status)
+    TriggerClientEvent('crp-base:updateJobService', source, status)
 end)
 
 AddEventHandler('crp-base:playerDropped', function(source, character)

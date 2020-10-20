@@ -1,74 +1,42 @@
-local currentJob, isInService, isHandcuffed, isPrimeTime, isNightTime = 'unemployed', false, false, false, false
+local currentJob, isInService = 'unemployed', false
 
-exports('GetPedData', function(type)
-    local data = false
+local jobsRelationshipGroups = {
+	['police'] = 'COP', ['medic'] = 'MEDIC'
+}
 
-    if type == 'currentJob' then
-        data = currentJob
-    end
+RegisterNetEvent('crp-base:updateJob')
+AddEventHandler('crp-base:updateJob', function(job, jobLabel)
+	local playerPed, alertText = PlayerPedId(), 'Foste contratado, para o seguinte trabalho: ' .. jobLabel
 
-    if type == 'isInService' then
-        data = isInService
-    end
+	if job == 'unemployed' then
+		alertText = 'Foste despedido e agora estás desempregado'
+	end
 
-    if type == 'isHandcuffed' then
-        data = isHandcuffed
-    end
+	exports['crp-ui']:setAlert(alertText, 'inform')
 
-    if type == 'isPrimeTime' then
-        data = isPrimeTime
-    end
-
-    if type == 'isNightTime' then
-        data = isNightTime
-    end
-
-    if type == 'isPolice' then
-        if job == 'police' and IsInService then
-            data = true
-        else
-            data = false
-        end
-    end
-
-    if type == 'isWhitelisted' then
-        if (job == 'police' or job == 'medic') and IsInService then
-            data = true
-        else
-            data = false
-        end
-    end
+	if jobsRelationshipGroups[job] then
+		SetPedRelationshipGroupDefaultHash(playerPed, GetHashKey(jobsRelationshipGroups[job]))
+	else
+		SetPedRelationshipGroupDefaultHash(playerPed, GetHashKey('PLAYER'))
+	end
 end)
 
 RegisterNetEvent('crp-base:updateJobService')
-AddEventHandler('crp-base:updateJobService', function(jobName, status)
-    isInService = status
+AddEventHandler('crp-base:updateJobService', function(status)
+	isInService = status
 end)
 
-AddEventHandler('crp-base:updateCurrentJob', function(newJob)
-    currentJob = newJob
-end)
+function getJob()
+	return currentJob
+end
 
-AddEventHandler('crp-base:setTimeData', function(type, state)
-    if type == 'primeTime' then
-        isPrimeTime = state
-    elseif type == 'nightTime' then
-        isNightTime = state
-    end
-end)
+function isInService(job)
+	if currentJob ~= job or not isInService then
+		return false
+	end
 
-AddEventHandler('crp-base:isPolice', function(callback)
-    if job == 'police' and isInService then
-        callback(true)
-    else
-        callback(false)
-    end
-end)
+	return true
+end
 
-AddEventHandler('crp-base:isMedic', function(callback)
-    if job == 'medic' and isInService then
-        callback(true)
-    else
-        callback(false)
-    end
-end)
+exports('getJob', getJob)
+exports('isInService', isInService)
