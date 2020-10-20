@@ -53,7 +53,7 @@ function ListenForKeys(type)
 			Citizen.Wait(0)
 
 			if IsControlJustReleased(0, 38) then
-				TriggerEvent('crp-inventory:openShop', 1)
+				TriggerEvent('crp-inventory:openShop', type)
 			end
 		end
 	end)
