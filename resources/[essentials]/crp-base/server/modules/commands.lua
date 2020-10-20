@@ -33,4 +33,27 @@ function CRP.Commands:RegisterCommands()
 	end
 end
 
+function CRP.Commands:AddSugestion(source, commandData, characterJob)
+	local necessaryPerms = commandData[3]
+
+	if necessaryPerms then
+		local foundPerm = false
+
+		for i = 1, #necessaryPerms do
+			if not necessaryPerms[i] == characterJob then
+				return
+			end
+
+			foundPerm = true
+			break
+		end
+
+		if not foundPerm then
+			return
+		end
+	end
+
+	TriggerClientEvent('chat:addSuggestion', source, '/' .. commandData[1], commandData[2], commandData[5])
+end
+
 CRP.Commands:RegisterCommands()
