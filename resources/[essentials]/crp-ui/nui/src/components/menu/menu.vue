@@ -36,7 +36,8 @@
 	library.add(faTimes, faUndo, faGlobeEurope, faShieldAlt, faWalking, faTheaterMasks, faLink);
 
     export default {
-        name: 'menu',
+		name: 'menu',
+		props: ['closeMenu'],
 		data () {
     		return {
 				isOpen: true, openMenuList: []
@@ -50,8 +51,6 @@
 			let layerInfo = this.createMenuLayer(this.menuItems, 0);
 
 			this.openMenuList.push(layerInfo);
-
-			console.log(this.openMenuList)
 
 			nextTick(function () {
 				layerInfo.inner = false;
@@ -151,7 +150,7 @@
 
                 	childMenu.inner = true, parentMenu.outer = false;
 				} else {
-					this.close();
+					this.closeMenu({ appName: 'menu' });
 				}
 			},
 			getCurrentMenu: function() {
@@ -192,7 +191,7 @@
 					this.$emit('clicked', item);
 
 					if (this.closeOnClick) {
-						this.close();
+						this.closeMenu({ appName: 'menu' });
 					}
 				}
 			},
