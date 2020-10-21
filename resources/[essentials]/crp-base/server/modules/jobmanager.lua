@@ -41,6 +41,10 @@ AddEventHandler('crp-base:updateService', function(jobName, status)
 		return
 	end
 
+	if CRP.Characters[source].job ~= jobName then
+		return
+	end
+
 	CRP.JobService[name][source] = status
 
 	Citizen.Wait(1000)
