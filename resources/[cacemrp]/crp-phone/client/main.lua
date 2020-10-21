@@ -8,31 +8,31 @@ Citizen.CreateThread(function()
     end
 end)
 
-function RegisterUiCallback(name, func)
+function RegisterUICallback(name, func)
     TriggerEvent('crp-ui:registerNuiCallback', name, func)
 end
 
-function SendUiMessage(data)
+function SendUIMessage(data)
     TriggerEvent('crp-ui:sendNuiMessage', data)
 end
 
 RegisterNetEvent('crp-phone:updatePhone')
 AddEventHandler('crp-phone:updatePhone', function(data)
-	SendUiMessage({
+	SendUIMessage({
 		eventName = 'phone/setData', eventData = data
 	})
 end)
 
 RegisterNetEvent('crp-phone:receiveMessage')
 AddEventHandler('crp-phone:receiveMessage', function(data)
-	SendUiMessage({
+	SendUIMessage({
 		eventName = 'phone/receiveMessage', eventData = data
 	})
 end)
 
 RegisterNetEvent('crp-phone:receiveTweet')
 AddEventHandler('crp-phone:receiveTweet', function(data)
-	SendUiMessage({
-		eventName = 'phone/receiveTweet', eventData = data
+	SendUIMessage({
+		app = 'phone', event = 'receiveTweet', eventData = data
 	})
 end)
