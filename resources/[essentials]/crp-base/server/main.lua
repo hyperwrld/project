@@ -1,46 +1,31 @@
-RegisterServerEvent('crp-base:disconnect')
-AddEventHandler('crp-base:disconnect', function()
+RegisterNetEvent('crp-base:disconnectUser')
+AddEventHandler('crp-base:disconnectUser', function()
 	DropPlayer(source, 'Foste desconectado do servidor.')
 end)
 
-RegisterServerEvent('crp-base:clientError')
-AddEventHandler('crp-base:clientError', function(resourceName, ...)
-    CRP.Util:Print('Error in resource: ' .. resourceName .. ' (' .. CRP.Util:GetPlayerIdentifier(source) .. ')', 'error')
-    print(...)
-    CRP.Util:Print('End of the error', 'error')
-end)
+function getAllCharacters(source)
+	return CRP.Characters
+end
 
-exports('GetModule', function(module)
-    if not CRP[module] then
-        CRP.Util:Print("Couldn't find the module " .. tostring(module))
-        return false
-    end
+function getCharacter(source)
+	return CRP.Characters[source]
+end
 
-	return CRP[module]
-end)
+function getCharacterByPhone(number)
+	for i = 1, #CRP.Characters do
+		if tonumber(CRP.Characters[i].getPhone()) == tonumber(number) then
+			return CRP.Characters[i]
+		end
+	end
 
-exports('AddModule', function(module, table)
-    if CRP[module] then
-        CRP.Util:Print('Module (' .. tostring(module) .. ') is being overridden')
-    else
-        CRP.Util:Print('Successfully added the module ' .. tostring(module))
-    end
+	return false
+end
 
-	CRP[module] = table
-end)
+RPC:register('fetchCharacters', function(source) return CRP.DB:FetchCharacters(source) end)
+RPC:register('createCharacter', function(source, data) return CRP.DB:CreateCharacter(source, data) end)
+RPC:register('deleteCharacter', function(source, data) return CRP.DB:DeleteCharacter(source, data) end)
+RPC:register('selectCharacter', function(source, characterId) return CRP.DB:RetrieveCharacter(source, characterId) end)
 
-CRP.RPC:register('FetchCharacters', function(source)
-    return CRP.DB:FetchCharacters(CRP.Util:GetPlayerIdentifier(source))
-end)
-
-CRP.RPC:register('CreateCharacter', function(source, data)
-    return CRP.DB:CreateCharacter(CRP.Util:GetPlayerIdentifier(source), data)
-end)
-
-CRP.RPC:register('DeleteCharacter', function(source, data)
-    return CRP.DB:DeleteCharacter(CRP.Util:GetPlayerIdentifier(source), data)
-end)
-
-CRP.RPC:register('SelectCharacter', function(source, data)
-    return CRP.DB:RetrieveCharacter(CRP.Util:GetPlayerIdentifier(source), { source = source, characterId = data })
-end)
+exports('getAllCharacters', getAllCharacters)
+exports('getCharacter', getCharacter)
+exports('getCharacterByPhone', getCharacterByPhone)
