@@ -118,8 +118,6 @@ function useItem(slot)
 
 	local success, data = RPC:execute('getItem', slot)
 
-	print(success, data)
-
 	if not data then
 		return
 	end
