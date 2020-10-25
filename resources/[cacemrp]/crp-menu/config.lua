@@ -1,4 +1,4 @@
-local menuItems = {
+menuItems = {
 	{
 		id = 'general',
 		label = 'Geral',
@@ -7,7 +7,17 @@ local menuItems = {
 	{
 		id = 'police-actions',
 		label = 'Funções da polícia',
-		icon = 'shield-alt'
+		icon = 'shield-alt',
+		enableFunction = function()
+			return true
+		end,
+		subMenus = {
+			{
+				id = 'test',
+				label = 'test',
+				icon = 'test'
+			}
+		}
 	},
 	{
 		id = 'animations',
