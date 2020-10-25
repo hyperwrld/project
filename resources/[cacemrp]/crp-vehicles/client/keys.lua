@@ -1,4 +1,4 @@
-local lastVehicle, isDoingAction = 0, false
+local lastVehicle, isShowingAction, isDoingAction = 0, false, false
 local vehiclesKeys, hotwiredVehicles = {}, {}
 
 Citizen.CreateThread(function()
@@ -11,14 +11,17 @@ Citizen.CreateThread(function()
 			local vehicle = GetVehiclePedIsUsing(playerPed)
 
 			if GetPedInVehicleSeat(vehicle, -1) == playerPed then
-				-- print(lastVehicle, vehicle)
-				-- print(hasVehicleKey(vehicle), hasHotwiredVehicle(vehicle))
-				if (not hasVehicleKey(vehicle) or not hasHotwiredVehicle(vehicle)) and lastVehicle ~= vehicle then
-					print('aaaaaaa?')
+				if not hasVehicleKey(vehicle) or not hasHotwiredVehicle(vehicle) and lastVehicle ~= vehicle then
+					isShowingAction = true
+
 					SetVehicleNeedsToBeHotwired(vehicle, false)
 					SetVehicleEngineOn(vehicle, false, true, true)
 
 					exports['crp-ui']:showInteraction('[G] Procurar / [H] Ligação direta')
+				elseif isShowingAction then
+					isShowingAction = false
+
+					exports['crp-ui']:hideInteraction()
 				end
 
 				if not isDoingAction then
@@ -54,12 +57,17 @@ function searchVehicle(vehicle)
 		return
 	end
 
+	if vehiclesKeys[vehiclePlate] == false then
+		exports['crp-ui']:setAlert('Já procuraste neste veículo e não encontraste nada.', 'inform')
+		return
+	end
+
 	local randomNumber = GetRandomNumber(100)
 
 	if randomNumber > 90 then
         SetVehicleEngineOn(vehicle, true, false, false)
 
-        vehiclesKeys[vehiclePlate] = true
+        setVehicleKey(vehiclePlate, true)
 
         exports['crp-ui']:setAlert('Encontraste a chave no veículo.', 'inform')
 		return
@@ -77,11 +85,11 @@ function searchVehicle(vehicle)
 	if randomNumber > 95 then
         SetVehicleEngineOn(vehicle, true, false, false)
 
-        vehiclesKeys[vehiclePlate] = true
+		setVehicleKey(vehiclePlate, true)
 
 		exports['crp-ui']:setAlert('Encontraste a chave no veículo.', 'inform')
 	else
-        vehiclesKeys[vehiclePlate] = false
+		setVehicleKey(vehiclePlate, false)
 
 		exports['crp-ui']:setAlert('Não conseguiste achar a chave.', 'inform')
 	end
@@ -109,18 +117,23 @@ function hotwireVehicle(vehicle)
 		return
 	end
 
+	if hotwiredVehicles[vehiclePlate] == false then
+		exports['crp-ui']:setAlert('Já tentaste fazer direção direta e não conseguiste.', 'inform')
+		return
+	end
+
 	local randomNumber = GetRandomNumber(100)
 
 	if randomNumber > 65 then
+		SetVehicleEngineOn(vehicle, true, false, false)
+
 		exports['crp-ui']:setAlert('Ligação direta feita com sucesso.', 'inform')
 
-        SetVehicleEngineOn(vehicle, true, false, false)
-
-        hotwiredVehicles[vehiclePlate] = true
+        setHotwiredVehicle(vehiclePlate, true)
     else
         exports['crp-ui']:setAlert('Não conseguiste fazer ligação direta.', 'inform')
 
-        hotwiredVehicles[vehiclePlate] = false
+        setHotwiredVehicle(vehiclePlate, false)
 	end
 
 	isDoingAction = false
@@ -136,6 +149,14 @@ function hasVehicleKey(vehicle)
     return true
 end
 
+function setVehicleKey(vehiclePlate, status)
+	local success = RPC.execute('setVehicleKey', vehiclePlate, status)
+
+	if success then
+		vehiclesKeys[vehiclePlate] = status
+	end
+end
+
 function hasHotwiredVehicle(vehicle)
     local vehiclePlate = GetVehicleNumberPlateText(vehicle)
 
@@ -146,6 +167,31 @@ function hasHotwiredVehicle(vehicle)
     return true
 end
 
-function shutDownVehicle(vehicle)
+function setHotwiredVehicle(vehiclePlate, status)
+	local success = RPC.execute('setHotwiredVehicle', vehiclePlate, status)
 
+	if success then
+		hotwiredVehicles[vehiclePlate] = status
+	end
 end
+
+function toggleVehicleEngine()
+	local playerPed = PlayerPedId()
+	local vehicle = GetVehiclePedIsIn(playerPed, false)
+
+	if vehicle ~= 0 then
+		if GetIsVehicleEngineRunning(vehicle) then
+			SetVehicleEngineOn(vehicle, true, false, false)
+		else
+			SetVehicleEngineOn(vehicle, false, false, false)
+		end
+	end
+end
+
+RegisterNetEvent('crp-vehicles:setKeys')
+AddEventHandler('crp-vehicles:setKeys', function(vehicleKeys, hotwireVehicles)
+	vehiclesKeys, hotwiredVehicles = vehicleKeys or {}, hotwireVehicles or {}
+end)
+
+RegisterCommand('+toggleVehicleEngine', toggleVehicleEngine, false)
+RegisterKeyMapping('+toggleVehicleEngine', 'Ligar o motor', 'keyboard', 'M')
