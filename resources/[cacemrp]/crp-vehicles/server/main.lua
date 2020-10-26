@@ -6,7 +6,7 @@ RegisterNetEvent('crp-base:characterLoaded', function(source, character)
 	TriggerEvent('crp-vehicles:setKeys', source, vehiclesKeys[characterId], hotwiredVehicles[characterId])
 end)
 
-function setVehicleKey(source, vehiclePlate, status)
+function setKey(source, vehiclePlate, status, updateOnClient)
 	local characterId = exports['crp-base']:getCharacter(source).getCharacterId()
 
 	if not vehiclesKeys[characterId] then
@@ -19,10 +19,14 @@ function setVehicleKey(source, vehiclePlate, status)
 
 	vehiclesKeys[characterId][vehiclePlate] = status
 
+	if updateOnClient then
+		TriggerEvent('crp-vehicles:addKey', source, vehiclePlate, status)
+	end
+
 	return true
 end
 
-function setHotwiredVehicle(source, vehiclePlate, status)
+function setHotwire(source, vehiclePlate, status)
 	local characterId = exports['crp-base']:getCharacter(source).getCharacterId()
 
 	if not hotwiredVehicles[characterId] then
@@ -38,5 +42,22 @@ function setHotwiredVehicle(source, vehiclePlate, status)
 	return true
 end
 
-RPC:register('setVehicleKey', function(source, vehiclePlate, status) return setVehicleKey(source, vehiclePlate, status) end)
-RPC:register('setHotwiredVehicle', function(source, vehiclePlate, status) return setHotwiredVehicle(source, vehiclePlate, status) end)
+function giveKey(source, targetPlayer, vehiclePlate)
+	local characterId = exports['crp-base']:getCharacter(source).getCharacterId()
+
+	if not vehiclesKeys[characterId] or not vehiclesKeys[characterId][vehiclePlate] then
+		return false
+	end
+
+	local success = setKey(targetPlayer, vehiclePlate, true, true)
+
+	if not success then
+		return false
+	end
+
+	return true
+end
+
+RPC:register('setKey', function(source, vehiclePlate, status) return setKey(source, vehiclePlate, status) end)
+RPC:register('setHotwire', function(source, vehiclePlate, status) return setHotwire(source, vehiclePlate, status) end)
+RPC:register('giveKey', function(source, targetPlayer, vehiclePlate) return giveKey(source, targetPlayer, vehiclePlate) end)

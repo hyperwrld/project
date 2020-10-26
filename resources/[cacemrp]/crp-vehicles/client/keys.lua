@@ -67,7 +67,7 @@ function searchVehicle(vehicle)
 	if randomNumber > 90 then
         SetVehicleEngineOn(vehicle, true, false, false)
 
-        setVehicleKey(vehiclePlate, true)
+        setKey(vehiclePlate, true)
 
         exports['crp-ui']:setAlert('Encontraste a chave no veículo.', 'inform')
 		return
@@ -85,11 +85,11 @@ function searchVehicle(vehicle)
 	if randomNumber > 95 then
         SetVehicleEngineOn(vehicle, true, false, false)
 
-		setVehicleKey(vehiclePlate, true)
+		setKey(vehiclePlate, true)
 
 		exports['crp-ui']:setAlert('Encontraste a chave no veículo.', 'inform')
 	else
-		setVehicleKey(vehiclePlate, false)
+		setKey(vehiclePlate, false)
 
 		exports['crp-ui']:setAlert('Não conseguiste achar a chave.', 'inform')
 	end
@@ -129,11 +129,11 @@ function hotwireVehicle(vehicle)
 
 		exports['crp-ui']:setAlert('Ligação direta feita com sucesso.', 'inform')
 
-        setHotwiredVehicle(vehiclePlate, true)
+        setHotwire(vehiclePlate, true)
     else
         exports['crp-ui']:setAlert('Não conseguiste fazer ligação direta.', 'inform')
 
-        setHotwiredVehicle(vehiclePlate, false)
+        setHotwire(vehiclePlate, false)
 	end
 
 	isDoingAction = false
@@ -149,8 +149,8 @@ function hasVehicleKey(vehicle)
     return true
 end
 
-function setVehicleKey(vehiclePlate, status)
-	local success = RPC.execute('setVehicleKey', vehiclePlate, status)
+function setKey(vehiclePlate, status)
+	local success = RPC.execute('setKey', vehiclePlate, status)
 
 	if success then
 		vehiclesKeys[vehiclePlate] = status
@@ -167,8 +167,8 @@ function hasHotwiredVehicle(vehicle)
     return true
 end
 
-function setHotwiredVehicle(vehiclePlate, status)
-	local success = RPC.execute('setHotwiredVehicle', vehiclePlate, status)
+function setHotwire(vehiclePlate, status)
+	local success = RPC.execute('setHotwire', vehiclePlate, status)
 
 	if success then
 		hotwiredVehicles[vehiclePlate] = status
@@ -192,6 +192,44 @@ RegisterNetEvent('crp-vehicles:setKeys')
 AddEventHandler('crp-vehicles:setKeys', function(vehicleKeys, hotwireVehicles)
 	vehiclesKeys, hotwiredVehicles = vehicleKeys or {}, hotwireVehicles or {}
 end)
+
+RegisterNetEvent('crp-vehicles:giveKeys')
+AddEventHandler('crp-vehicles:giveKeys', function()
+	local playerPed = PlayerPedId()
+	local coords, vehicle = GetEntityCoords(playerPed), 0
+
+	if IsPedInAnyVehicle(playerPed, false) then
+		vehicle = GetVehiclePedIsIn(playerPed, false)
+	else
+		vehicle = GetVehicleInDirection(playerPed, coords, GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 5.0, 0.0))
+	end
+
+	if not DoesEntityExist(vehicle) then
+		exports['crp-ui']:setAlert('Não foi encontrado nenhum veículo.', 'error')
+		return
+	end
+
+	if not hasVehicleKey(vehicle) then
+		exports['crp-ui']:setAlert('Não tens as chaves deste veículo.', 'error')
+		return
+	end
+
+	local targetPed, distance = GetClosestPlayer()
+
+	if targetPed == -1 or distance > 2.0 then
+		exports['crp-ui']:setAlert('Nenhum jogador por perto.', 'error')
+		return
+	end
+
+	local success = RPC.execute('giveKey', GetPlayerServerId(targetPed), GetVehicleNumberPlateText(vehicle))
+
+	if success then
+		exports['crp-ui']:setAlert('Deste a chave do veículo ao jogador.', 'success')
+	end
+end)
+
+RegisterNetEvent('crp-vehicles:addKey')
+AddEventHandler('crp-vehicles:addKey', setKey)
 
 RegisterCommand('+toggleVehicleEngine', toggleVehicleEngine, false)
 RegisterKeyMapping('+toggleVehicleEngine', 'Ligar o motor', 'keyboard', 'M')
