@@ -20,14 +20,6 @@ function RoundNumber(number, decimalPlaces)
 	return math.floor(number * multiplier + 0.5) / multiplier
 end
 
-function LoadDictionary(dictionary)
-	RequestAnimDict(dictionary)
-
-    while not HasAnimDictLoaded(dictionary) do
-        Citizen.Wait(0)
-	end
-end
-
 AddEventHandler('onResourceStart', function(resource)
 	if (GetCurrentResourceName() ~= resource) then
 	  	return
