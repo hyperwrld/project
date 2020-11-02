@@ -24,6 +24,14 @@ function LoadDictionary(dictionary)
 	end
 end
 
+function LoadModel(modelHash)
+	RequestModel(modelHash)
+
+	while not HasModelLoaded(modelHash) do
+		Citizen.Wait(0)
+	end
+end
+
 function GetVehicleInDirection(fromEntity, fromCoords, toCoords)
 	local rayHandle = StartShapeTestCapsule(fromEntity.x, fromEntity.y, fromEntity.z, toCoords.x, toCoords.y, toCoords.z, 5.0, 10, fromEntity, 7)
 	local retval, hit, endCoords, surfaceNormal, entityHit = GetShapeTestResult(rayHandle)
