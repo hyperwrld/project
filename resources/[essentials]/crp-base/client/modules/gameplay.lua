@@ -10,6 +10,7 @@ function CRP.Gameplay:InitializeNatives()
         NetworkSetFriendlyFireOption(true)
 		SetCanAttackFriendly(PlayerId(), true, true)
 		SetMaxWantedLevel(0)
+		SetFlyThroughWindScreenParams(100.0, 105.0, 17.0, 50.0)
 
 		while true do
 			Citizen.Wait(0)
