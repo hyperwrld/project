@@ -10,7 +10,7 @@ Citizen.CreateThread(function()
 end)
 
 AddEventHandler('crp-base:onPlayerJoined', function()
-    CRP.Spawn:InitializeMenu()
+    CRP.Spawn:InitializeIntro()
 end)
 
 AddEventHandler('crp-ui:closedMenu', function(name, data)

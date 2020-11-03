@@ -24,7 +24,10 @@ CRP.Commands, CRP.CommandsList = {}, {
     end, {}},
     {'recrutar', 'Recrute uma pessoa para a sua organização.', nil, function(source, args)
         --- TODO: COMMAND
-    end, {{ name = 'id do jogador' }, { name = 'cargo' }}}
+	end, {{ name = 'id do jogador' }, { name = 'cargo' }},
+	{'darchave', '', nil, function(source, args)
+		TriggerClientEvent('crp-vehicles:giveKey', source)
+	end, {}}}
 }
 
 function CRP.Commands:RegisterCommands()
