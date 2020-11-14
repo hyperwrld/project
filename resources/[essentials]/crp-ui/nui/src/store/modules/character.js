@@ -1,11 +1,11 @@
 const state = () => ({
-    userCharacters: []
+	userCharacters: []
 })
 
 const getters = {
     getCharactersData: state => {
         return state.userCharacters;
-    }
+	}
 }
 
 const actions = {

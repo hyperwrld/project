@@ -43,7 +43,8 @@
 
 				switch(event.data.app) {
 					case 'selection':
-						module = 'character', path = 'character/selection';
+					case 'intro':
+						module = 'character', path = 'character/' + event.data.app;
 						break;
 					default:
 						break;
