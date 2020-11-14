@@ -1,9 +1,9 @@
 local isAppOpen, events = false, {}
 
-function openApp(appName, data)
+function openApp(appName, data, hasCursor)
 	isAppOpen = true
 
-	SetNuiFocus(true, true)
+	SetNuiFocus(true, hasCursor or false)
 	-- SetNuiFocusKeepInput(true)
 
 	Citizen.CreateThread(function()
@@ -32,7 +32,7 @@ end
 
 function setAppData(appName, data)
 	SendNUIMessage({
-		app = appName, event = 'setAppData', eventData = data
+		app = appName, event = 'setData', eventData = data
 	})
 end
 
