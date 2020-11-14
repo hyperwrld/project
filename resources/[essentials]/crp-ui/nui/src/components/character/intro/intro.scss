@@ -1,0 +1,34 @@
+.intro {
+	font-family: 'Quantico', sans-serif;
+	position: absolute;
+
+    width: fit-content;
+	height: fit-content;
+
+	padding: 12px;
+    margin-right: auto;
+	margin-left: auto;
+
+	left: 50%;
+    top: 50%;
+	transform: translate(-50%, -50%);
+
+	font-size: 5vh;
+    font-weight: bold;
+	color: white;
+	line-height: 3vh;
+
+	animation-duration: 3s;
+	animation-fill-mode: both;
+	animation-name: fadeIn;
+
+	span {
+		color: rgba(255, 255, 255, 0.7);
+		font-size: 3vh;
+	}
+
+	p {
+		text-align: right;
+		font-size: 2vh;
+	}
+}

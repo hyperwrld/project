@@ -95,41 +95,39 @@
         },
 		render (h) {
 			return (
-				<div class='container container--fluid' id='character'>
-					<div class='menu animate__animated animate__fadeIn'>
-						<div class='character-list'>
-							{ this.charactersData.map((character, index) => {
-								return (
-									<div class={'character ' + (this.currentItem == index ? 'active' : '')} onClick={ () => this.changeCurrentItem(index) }>
-										{ character.firstname ?
-											<div class='info-container'>
-												<h3>
-													{ character.firstname + ' ' + character.lastname }
-													<span>// { character.dateofbirth }</span>
-												</h3>
-												<span>
-													Sexo: { character.gender ? 'Feminino' : 'Masculino' } // Trabalho: { character.job }<br/>
-													Dinheiro: { character.money + '€' } // Banco: { character.bank + '€' }<br/>
-												</span>
-											</div> : <h3>Slot Vazio</h3>
-										}
-									</div>
-								)
-							})}
-						</div>
-						<div class='buttons'>
-							{ this.charactersData[this.currentItem] && this.charactersData[this.currentItem].firstname ?
-								<div class='buttons-container'>
-									<button class={ this.isLoading ? 'loading' : '' } onClick={ () => this.selectCharacter() }>
-										Selecionar { this.isLoading &&
-											<i class='fa fa-circle-o-notch fa-spin'/>
-										}
-									</button>
-									<button onClick={ () => this.deleteCharacter() }>Apagar</button>
-								</div> : <button onClick={ () => this.createCharacter() }>Criar</button>
-							}
-							<button onClick={ () => this.handleDisconnect() }>Disconectar</button>
-						</div>
+				<div class='selection'>
+					<div class='character-list'>
+						{ this.charactersData.map((character, index) => {
+							return (
+								<div class={'character ' + (this.currentItem == index ? 'active' : '')} onClick={ () => this.changeCurrentItem(index) }>
+									{ character.firstname ?
+										<div class='info-container'>
+											<h3>
+												{ character.firstname + ' ' + character.lastname }
+												<span>// { character.dateofbirth }</span>
+											</h3>
+											<span>
+												Sexo: { character.gender ? 'Feminino' : 'Masculino' } // Trabalho: { character.job }<br/>
+												Dinheiro: { character.money + '€' } // Banco: { character.bank + '€' }<br/>
+											</span>
+										</div> : <h3>Slot Vazio</h3>
+									}
+								</div>
+							)
+						})}
+					</div>
+					<div class='buttons'>
+						{ this.charactersData[this.currentItem] && this.charactersData[this.currentItem].firstname ?
+							<div class='buttons-container'>
+								<button class={ this.isLoading ? 'loading' : '' } onClick={ () => this.selectCharacter() }>
+									Selecionar { this.isLoading &&
+										<i class='fa fa-circle-o-notch fa-spin'/>
+									}
+								</button>
+								<button onClick={ () => this.deleteCharacter() }>Apagar</button>
+							</div> : <button onClick={ () => this.createCharacter() }>Criar</button>
+						}
+						<button onClick={ () => this.handleDisconnect() }>Disconectar</button>
 					</div>
 				</div>
 			);

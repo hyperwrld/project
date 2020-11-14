@@ -17,7 +17,7 @@
                     </div>
                 </div>
                 <div class='screen'>
-					<router-view></router-view>
+					<router-view/>
                 </div>
                 <div class='footer'>
                     <font-awesome-icon icon='camera' size='xs'></font-awesome-icon>

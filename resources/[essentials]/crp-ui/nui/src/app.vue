@@ -1,7 +1,7 @@
 <template>
 	<v-app>
 		<hud/><notifications/><taskbar/><actionbar/>
-		<router-view :closeMenu='closeMenu'></router-view>
+		<router-view :closeMenu='closeMenu'/>
     </v-app>
 </template>
 
@@ -69,7 +69,7 @@
 </script>
 
 <style lang='scss'>
-    @import 'https://unpkg.com/vue2-animate/dist/vue2-animate.min.css';
+    @import 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css';
     @import 'https://fonts.googleapis.com/css2?family=Quantico&display=swap';
 
     html, body {

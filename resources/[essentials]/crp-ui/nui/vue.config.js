@@ -2,7 +2,7 @@ module.exports = {
     'filenameHashing': false,
 	'productionSourceMap': false,
 	'runtimeCompiler': true,
-    'publicPath': './',
+    'publicPath': '/',
     'transpileDependencies': [
         'vuetify'
     ]

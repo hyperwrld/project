@@ -1,8 +1,9 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
+import character from './../components/character/character.vue';
+import intro from './../components/character/intro/intro.vue';
 import selection from './../components/character/selection/selection.vue';
-import dialogs from './../components/character/dialogs/dialogs.vue';
 import spawn from './../components/spawn/spawn.vue';
 import inventory from './../components/inventory/main/inventory.vue';
 import actionbar from './../components/inventory/actionbar/actionbar.vue';
@@ -25,11 +26,11 @@ Vue.use(VueRouter);
 export default new VueRouter({
 	routes: [
 		{
-			path: '/selection',
-			name: 'selection',
-			component: selection,
+			path: '/character',
+			name: 'character',
+			component: character,
 			children: [
-				{ path: 'dialogs', name: 'dialogs', component: dialogs }
+				{ path: 'intro', name: 'intro', component: intro }, { path: 'selection', name: 'selection', component: selection }
 			]
 		},
 		{
