@@ -1,5 +1,6 @@
 <script>
 	export default {
+		name: 'intro',
 		props: ['closeMenu'],
 		render (h) {
 			return (

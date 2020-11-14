@@ -3,6 +3,7 @@
 	import { send } from './../../../utils/lib';
 
 	export default {
+		name: 'dialogs',
 		props: {
 			title: {
 				type: String,
@@ -76,37 +77,35 @@
 		},
 		render (h) {
 			return (
-				<div class='dialog animate__animated animate__fadeIn'>
-					<div class='container'>
-						<h3>{ this.title }</h3>
-						{ this.choices.length > 0 &&
-							<div class='inputs-container'>
-								{ this.choices.map((choice, index) => {
-									return (
-										<div class={ choice.key + (choice.error ? ' error' : '') }>
-											<span>{ choice.placeholder + ':' }</span>
-											{ choice.type == 'select' ?
-												<select name={ choice.key } v-model={ choice.value }>
-													{ choice.options.map((option, index) => {
-														return <option value={ option.value }>{ option.text }</option>
-													})}
-												</select>
-												: choice.type == 'textarea' ? <textarea v-model={ choice.value } name={ choice.key } rows='4' cols='50' maxlength={ choice.max }/>
-												: <input v-model={ choice.value } type={ choice.type } maxlength={ choice.max }/>
-											}
-										</div>
-									)
-								})}
-							</div>
-						}
-						<div class='bottom'>
-							<button onClick={ () => this.closeDialog() }>Voltar</button>
-							<button class={ this.isLoading ? 'loading' : '' } onClick={ () => this.submitDialog() }>
-								{ this.sendButton } { this.isLoading &&
-									<i class='fa fa-circle-o-notch fa-spin'/>
-								}
-							</button>
+				<div class='dialogs'>
+					<h3>{ this.title }</h3>
+					{ this.choices.length > 0 &&
+						<div class='inputs-container'>
+							{ this.choices.map((choice, index) => {
+								return (
+									<div class={ choice.key + (choice.error ? ' error' : '') }>
+										<span>{ choice.placeholder + ':' }</span>
+										{ choice.type == 'select' ?
+											<select name={ choice.key } v-model={ choice.value }>
+												{ choice.options.map((option, index) => {
+													return <option value={ option.value }>{ option.text }</option>
+												})}
+											</select>
+											: choice.type == 'textarea' ? <textarea v-model={ choice.value } name={ choice.key } rows='4' cols='50' maxlength={ choice.max }/>
+											: <input v-model={ choice.value } type={ choice.type } maxlength={ choice.max }/>
+										}
+									</div>
+								)
+							})}
 						</div>
+					}
+					<div class='bottom'>
+						<button onClick={ () => this.closeDialog() }>Voltar</button>
+						<button class={ this.isLoading ? 'loading' : '' } onClick={ () => this.submitDialog() }>
+							{ this.sendButton } { this.isLoading &&
+								<i class='fa fa-circle-o-notch fa-spin'/>
+							}
+						</button>
 					</div>
 				</div>
 			);

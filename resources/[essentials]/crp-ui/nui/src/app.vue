@@ -42,7 +42,7 @@
 				var module = event.data.app, path = event.data.app;
 
 				switch(event.data.app) {
-					case selection:
+					case 'selection':
 						module = 'character', path = 'character/selection';
 						break;
 					default:

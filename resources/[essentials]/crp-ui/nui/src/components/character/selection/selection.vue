@@ -6,6 +6,7 @@
 	import dialogs from './../dialogs/dialogs.vue';
 
 	export default {
+		name: 'selection',
 		props: ['closeMenu'],
 		component: {
 			dialogs
