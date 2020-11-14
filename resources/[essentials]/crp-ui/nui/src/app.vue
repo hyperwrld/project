@@ -22,45 +22,42 @@
 		},
 		methods: {
 			closeMenu: function(appName) {
-				this.$router.push({ path: '/' }).catch(error => {
+				this.changeRouter({ path: '/' });
+
+                nui.send('closeMenu', appName);
+			},
+			changeRouter: function(data) {
+				this.$router.push(data).catch(error => {
 					if (error.name !== 'NavigationDuplicated' && !error.message.includes('Avoided redundant navigation to current location')) {
 						console.log(error);
 					}
 				});
-
-                nui.send('closeMenu', appName);
-            },
+			}
 		},
         destroyed() {
             window.removeEventListener('message', this.listener);
         },
         mounted() {
             this.listener = window.addEventListener('message', (event) => {
+				var module = event.data.app, path = event.data.app;
+
+				switch(event.data.app) {
+					case selection:
+						module = 'character', path = 'character/selection';
+						break;
+					default:
+						break;
+				}
+
 				if (event.data.event != undefined) {
-					var module = event.data.app;
-
-					switch (event.data.app) {
-						case 'selection':
-							module = 'character';
-							break;
-						default:
-							break;
-					}
-
 					this.$store.dispatch(module + '/' + event.data.event, event.data.eventData);
 				}
 
 				if (event.data.status != undefined) {
-					const data = event.data.status ? { path: event.data.app } : { path: '/' };
-
-					this.$router.push(data).catch(error => {
-    					if (error.name !== 'NavigationDuplicated' && !error.message.includes('Avoided redundant navigation to current location')) {
-      						console.log(error);
-						}
-					});
-
 					if (!event.data.status) {
-						nui.send('closeMenu', event.data.app);
+						closeMenu(event.data.app);
+					} else {
+						changeRouter({ path: path });
 					}
 				}
 			});
