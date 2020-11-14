@@ -1,7 +1,5 @@
 <script>
 	import { mapGetters } from 'vuex';
-	import { send } from './../../../utils/lib';
-
 	import { library } from '@fortawesome/fontawesome-svg-core';
 	import { faHeart, faShieldAlt, faHamburger, faTint, faLungs, faBrain, faGasPump } from '@fortawesome/free-solid-svg-icons';
 
@@ -15,20 +13,17 @@
 			})
 		},
 		render (h) {
-			this.characterData.map((data, index) => {
-							console.log(data)
-			})
 			return (
 				<div class='hud' style={{ top: this.minimapData.top, left: this.minimapData.left, width: this.minimapData.width, height: this.minimapData.height }}>
 					<div class='character-data'>
 						{ this.characterData.map((data, index) => {
 							return (
-								<div class={ data.name + '-container' }>
-									<font-awesome-icon icon={ data.icon }/>
-									{ data.name == 'health' || data.name == 'armour' ?
-										<div class={ data.name + (data.value <= 15 ? ' low' : '') } style={{ width: (data.value + '%') }}/>
+								<div class={ data[1] + '-container' }>
+									<font-awesome-icon icon={ data[2] }/>
+									{ data[1] == 'health' || data[1] == 'armour' ?
+										<div class={ data[1] + (data[3] <= 15 ? ' low' : '') } style={{ width: (data[3] + '%') }}/>
 									:
-										<div class={ data.name + (data.value <= 15 ? ' low' : '') } style={{ height: data.value, top: (100 - data.value) + '%' }}/>
+										<div class={ data[1] + (data[3] <= 15 ? ' low' : '') } style={{ height: data[3], top: (100 - data[3]) + '%' }}/>
 									}
 								</div>
 							)
