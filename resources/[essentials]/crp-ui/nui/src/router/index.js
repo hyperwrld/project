@@ -6,6 +6,8 @@ import intro from './../components/character/intro/intro.vue';
 import selection from './../components/character/selection/selection.vue';
 import skincreator from './../components/character/skincreator/skincreator.vue';
 
+import userInterface from './../components/interface/interface.vue';
+
 import inventory from './../components/inventory/main/inventory.vue';
 import actionbar from './../components/inventory/actionbar/actionbar.vue';
 
@@ -33,6 +35,13 @@ export default new VueRouter({
 			children: [
 				{ path: 'intro', name: 'intro', component: intro }, { path: 'selection', name: 'selection', component: selection },
 				{ path: 'skincreator', name: 'skincreator', component: skincreator }
+			]
+		},
+		{
+			path: '/interface',
+			name: 'interface',
+			component: userInterface,
+			children: [
 			]
 		},
 		{

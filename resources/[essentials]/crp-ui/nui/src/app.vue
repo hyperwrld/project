@@ -8,7 +8,7 @@
 <script>
 	import { mapState } from 'vuex';
 
-    import hud from './components/hud/hud.vue';
+    import hud from './components/interface/hud/hud.vue';
     import notifications from './components/notifications/notifications.vue';
 	import taskbar from './components/taskbar/taskbar.vue';
 	import actionbar from './components/inventory/actionbar/actionbar.vue';

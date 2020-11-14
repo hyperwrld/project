@@ -6,7 +6,11 @@ const state = () => ({
     minimapData: {
 		top: '0px', left: '0px', width: '0px', height: '0px', health: '0%', armour: '0%',
 		hunger: '0%', thirst: '0%', breath: '0%', stress: '0%'
-    },
+	},
+	characterData: [
+		[ 'health', 'heart', 0 ], [ 'armour', 'shield-alt', 0 ], [ 'hunger', 'hamburger', 0 ],
+		[ 'thirst', 'tint', 0 ], [ 'breath', 'lungs', 0 ], [ 'stress', 'brain', 0 ]
+	],
     vehicleData: {
 		isOnVehicle: false, isCompassOn: false, time: '00:00', fuel: 0,
 		speed: 0, hasSeatBelt: false, location: '', direction: 0
@@ -17,17 +21,11 @@ const state = () => ({
 })
 
 const getters = {
-	GET_MINIMAP_DATA: state => {
+	getMinimapData: state => {
 		return state.minimapData;
 	},
-	GET_VEHICLE_DATA: state => {
-		return state.vehicleData;
-	},
-	GET_INTERACTIONS_DATA: state => {
-		return state.interactions;
-	},
-	GET_MONEY_DATA: state => {
-		return state.moneyData;
+	getCharacterData: state => {
+		return state.characterData;
 	}
 }
 

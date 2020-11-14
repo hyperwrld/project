@@ -1,0 +1,219 @@
+.hud {
+	font-family: 'Quantico', sans-serif;
+
+	position: absolute;
+	height: fit-content;
+	width: fit-content;
+
+	color: white;
+
+	.character-data {
+		height: 26.823529411%;
+		left: 2.725%;
+		right: 2.725%;
+		display: flex;
+		flex-wrap: wrap;
+		position: absolute;
+		bottom: -11.570588235%;
+		align-items: center;
+		justify-content: center;
+
+		&-container {
+			margin-right: 0.5%;
+			margin-left: 0.5%;
+			height: 50% !important;
+
+			border: 2px solid rgba(54, 52, 52, 0.8);
+			background-color: #545454;
+			display: flex;
+			align-items: center;
+
+			&:first-child {
+				margin-left: 0 !important;
+			}
+
+			&:last-child {
+				margin-right: 0 !important;
+			}
+
+			svg {
+				position: absolute;
+				z-index: 999;
+			}
+
+			.health {
+				background-color: rgba(115, 190, 115, 1.0);
+			}
+
+			.armour {
+				background-color: rgba(106, 137, 204, 1.0);
+			}
+
+			.hunger {
+				background-color: rgba(246, 185, 59, 1.0);
+			}
+
+			.thirst {
+				background-color: rgba(77, 121, 255, 1.0);
+			}
+
+			.breath {
+				background-color: rgba(130, 210, 255, 0.9);
+			}
+
+			.stress {
+				background-color: rgba(199, 0, 57, 1.0);
+			}
+		}
+
+		.health-container, .armour-container {
+			width: 23.5%;
+			box-sizing: border-box;
+
+			svg {
+				margin-left: 1.5%;
+			}
+
+			&:last-child {
+				height: 100%;
+			}
+		}
+
+		.hunger-container, .thirst-container, .breath-container, .stress-container {
+			width: 12%;
+
+			position: relative;
+			overflow: hidden;
+			justify-content: center;
+
+			svg {
+				font-size: 1.5vh;
+			}
+
+			&:last-child {
+				position: absolute;
+				bottom: 0;
+				transition: 0.2s ease-in-out;
+				max-height: 100%;
+				height: 0%;
+				width: 100%;
+			}
+		}
+	}
+
+	.vehicle-data {
+		font-size: 17px;
+		text-shadow: -1px 1px 2px #000, 1px 1px 2px #000, 1px -1px 0 #000, -1px -1px 0 #000;
+
+		span {
+			margin-bottom: 0;
+		}
+
+		.top {
+			position: absolute;
+			height: 12.823529411%;
+			width: 20%;
+			left: 105.725%;
+			right: 2.725%;
+			bottom: 34.0706%;
+
+			&.compass {
+				bottom: 16.0706% !important;
+			}
+		}
+
+		.middle {
+			display: flex;
+			flex-direction: row;
+			position: absolute;
+			height: 12.823529411%;
+			width: 200%;
+			left: 105.725%;
+			right: 2.725%;
+			bottom: 16.0706%;
+
+			.fa-gas-pump {
+				font-size: 11px;
+			}
+
+			.low {
+				color: rgba(255, 77, 64, 1.0);
+			}
+
+			* {
+				display: flex;
+				flex-direction: row;
+				justify-content: center;
+				align-items: center;
+				margin-left: 1%;
+				margin-right: 1.5%;
+
+				* {
+					margin-bottom: 0;
+				}
+
+				&:last-child {
+					font-size: 10px;
+					margin-left: 10%;
+				}
+			}
+
+			div:first-child {
+				margin-left: 0;
+			}
+
+			div:last-child {
+				margin-right: 0;
+			}
+
+			.fuel, .speed {
+				width: 9%;
+				justify-content: left;
+			}
+
+			.speed {
+				width: 15%;
+			}
+
+			.seatbelt, .speed-limiter {
+				img {
+					width: 22px;
+					height: 80%;
+				}
+			}
+		}
+
+		.bottom {
+			display: flex;
+			flex-direction: row;
+			position: absolute;
+			height: 12.823529411%;
+			width: 300%;
+			left: 105.725%;
+			right: 2.725%;
+			bottom: -2.0706%;
+			align-items: center;
+
+			.direction {
+				width: 100px;
+				height: 23px;
+				overflow: hidden;
+			}
+
+			.direction > .image {
+				height: 100%;
+				background-position: center center;
+				background-size: 400px;
+				background-repeat: repeat;
+				width: 800%;
+				z-index: 1;
+				background-image: url('./../../../assets/compass.png');
+			}
+
+			span:last-child {
+				margin-left: 3%;
+				margin-bottom: 0;
+			}
+		}
+	}
+}

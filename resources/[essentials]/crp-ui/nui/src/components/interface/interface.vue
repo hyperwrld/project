@@ -1,9 +1,9 @@
 <script>
 	export default {
-		name: 'character',
+		name: 'interface',
 		render (h) {
 			return (
-				<div class='character'>
+				<div class='interface'>
 					<router-view/>
 				</div>
 			);
@@ -12,7 +12,7 @@
 </script>
 
 <style scoped lang='scss'>
-	.character {
+	.interface {
 		font-family: 'Quantico', sans-serif;
 		position: absolute;
 
