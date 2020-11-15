@@ -46,15 +46,9 @@ function removeMoney(quantity)
 	})
 end
 
-function showInteraction(message)
+function toggleInteraction(status, message)
 	SendNUIMessage({
-		app = 'hud', event = 'setInteractionData', eventData = { status = true, message = message }
-	})
-end
-
-function hideInteraction()
-	SendNUIMessage({
-		app = 'hud', event = 'setInteractionData', eventData = { status = false }
+		app = 'hud', event = 'setInteractionData', eventData = { status = status, message = message }
 	})
 end
 
@@ -76,5 +70,4 @@ AddEventHandler('crp-ui:addMoney', addMoney)
 RegisterNetEvent('crp-ui:removeMoney')
 AddEventHandler('crp-ui:removeMoney', removeMoney)
 
-exports('showInteraction', showInteraction)
-exports('hideInteraction', hideInteraction)
+exports('toggleInteraction', toggleInteraction)
