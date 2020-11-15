@@ -16,34 +16,53 @@
 	margin-right: auto;
 	margin-left: auto;
 
-	.money, .inner-container {
-		animation-duration: 2s;
-		animation-fill-mode: both;
-		animation-name: fadeIn;
+	.fadeInOut-enter-active {
+		animation: fadeInRight 1s;
 	}
 
-	.money {
-		font-size: 30px;
-		padding: 4px;
+	.fadeInOut-leave-active {
+		animation: fadeOutRight 1s;
+	}
 
-		span {
-			color: rgba(0, 125, 0, 1.0);
-		}
+	.fadeInOut-enter, .fadeInOut-leave-to, .fade-enter, .fade-leave-to {
+		opacity: 0;
 	}
 
 	.inner-container {
-		font-size: 20px;
-		position: absolute;
-		right: 1.3vw;
-		bottom: 0.1vh;
-		white-space: nowrap;
+		width: 100%;
+		height: 100%;
 
-		.add {
-			color: rgba(195, 211, 195, 1.0);
+		.fade-enter-active {
+			animation: fadeIn 1s;
 		}
 
-		.remove {
-			color: rgba(250, 0, 0, 1.0);
+		.fade-leave-active {
+			animation: fadeOut 1s;
+		}
+
+		.money {
+			font-size: 30px;
+			padding: 4px;
+
+			span {
+				color: rgba(0, 125, 0, 1.0);
+			}
+		}
+
+		.transaction {
+			font-size: 20px;
+			position: absolute;
+			right: 1.3vw;
+			bottom: 0.1vh;
+			white-space: nowrap;
+
+			.add {
+				color: rgba(70, 187, 70, 1.0);
+			}
+
+			.remove {
+				color: rgba(250, 0, 0, 1.0);
+			}
 		}
 	}
 }
