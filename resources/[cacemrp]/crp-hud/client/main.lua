@@ -40,7 +40,7 @@ Citizen.CreateThread(function()
         Citizen.Wait(50)
 
 		if isCompassOn or IsVehicleEngineOn(vehicle) then
-			exports['crp-ui']:setCompassDirection(GetDirectionHeading())
+			exports['crp-ui']:setHudData('direction', GetDirectionHeading())
         else
             Citizen.Wait(1000)
         end
@@ -65,7 +65,7 @@ Citizen.CreateThread(function()
 
 				isOnVehicle = true
 
-				exports['crp-ui']:setVehicleStatus(true)
+				exports['crp-ui']:setHudData('isOnVehicle', true)
 			end
 
             if crossingRoadName ~= '' then
@@ -76,14 +76,14 @@ Citizen.CreateThread(function()
                 streetName = streetName .. ' | [' .. zoneName .. ']'
 			end
 
-			exports['crp-ui']:setVehicleData(streetName, speed, DecorGetInt(vehicle, 'currentFuel'), GetCurrentTime())
+			exports['crp-ui']:setVehicleHudData(streetName, speed, DecorGetInt(vehicle, 'currentFuel'), GetCurrentTime())
 		else
 			if isOnVehicle then
 				DisplayRadar(false)
 
 				isOnVehicle = false
 
-				exports['crp-ui']:setVehicleStatus(false)
+				exports['crp-ui']:setHudData('isOnVehicle', false)
 			end
 
 			Citizen.Wait(1000)
