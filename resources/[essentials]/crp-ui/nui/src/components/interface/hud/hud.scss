@@ -105,6 +105,18 @@
 		font-size: 17px;
 		text-shadow: -1px 1px 2px #000, 1px 1px 2px #000, 1px -1px 0 #000, -1px -1px 0 #000;
 
+		.fade-enter-active {
+			animation: fadeIn 1s;
+		}
+
+		.fade-leave-active {
+			animation: fadeOut 1s;
+		}
+
+		.fade-enter, .fade-leave-to {
+			opacity: 0;
+		}
+
 		span {
 			margin-bottom: 0;
 		}

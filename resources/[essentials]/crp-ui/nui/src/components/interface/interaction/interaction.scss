@@ -1,37 +1,43 @@
 .interaction {
 	position: absolute;
-
-	right: 2.75%;
-	left: 2.75%;
 	width: auto;
-    height: auto;
-	bottom: 98%;
+	height: auto;
+
+	bottom: 1%;
+    left: 50%;
+	transform: translateX(50%);
+
+	font-family: 'Quantico', sans-serif;
+
+	.fade-enter-active {
+		animation: fadeIn 1s;
+	}
+
+	.fade-leave-active {
+		animation: fadeOut 1s;
+	}
+
+	.fade-enter, .fade-leave-to {
+		opacity: 0;
+	}
 
 	.inner-container {
-		display: inline-block;
+		display: flex;
 		padding: 4px;
 		box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75) !important;
-		background-color: rgba(0, 0, 0, .5) !important;
-		border: 1px solid rgba(54, 52, 52, .5) !important;
+		background-color: rgba(0, 0, 0, 0.5) !important;
+		border: 1px solid rgba(54, 52, 52, 0.5) !important;
 		border-radius: 0px;
 		width: 100%;
-    	margin-bottom: 0px;
+		margin-bottom: 0px;
 
-		font-family: 'Quantico', sans-serif;
+		text-align: center;
+		align-items: center;
+		justify-content: center;
 
-		&::v-deep > .v-alert__wrapper {
-			justify-content: center;
-
-			.v-icon {
-				height: 24px;
-				min-width: 24px;
-				font-size: 24px;
-				margin-right: 8px;
-			}
-
-			.v-alert__content {
-				flex: 0 1 auto;
-			}
+		svg {
+			margin-right: 0.5vw;
+    		font-size: 2vh;
 		}
 	}
 }

@@ -1,5 +1,9 @@
 <script>
 	import { mapGetters } from 'vuex';
+	import { library } from '@fortawesome/fontawesome-svg-core';
+	import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+
+	library.add(faInfoCircle);
 
 	export default {
 		name: 'interaction',
@@ -11,10 +15,13 @@
 		render (h) {
 			return (
 				<div class='interaction'>
-					{ interactionData.status &&
-						<v-alert class='inner-container' dark prominent icon='fa-info-circle'>
-							{ interactionData.message }
-						</v-alert>
+					{ this.interactionData.status &&
+						<transition name='fade' appear>
+							<div class='inner-container'>
+								<font-awesome-icon icon='info-circle'/>
+								<span class='text'>{ this.interactionData.message }</span>
+							</div>
+						</transition>
 					}
 				</div>
 			);
@@ -23,5 +30,5 @@
 </script>
 
 <style scoped lang='scss'>
-    @import './currency.scss';
+    @import './interaction.scss';
 </style>

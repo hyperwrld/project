@@ -1,9 +1,17 @@
 <script>
+	import currency from './currency/currency.vue';
+	import hud from './hud/hud.vue';
+	import interaction from './interaction/interaction.vue';
+
 	export default {
 		name: 'interface',
+		components: {
+			currency, hud, interaction
+		},
 		render (h) {
 			return (
 				<div class='interface'>
+					<currency/><hud/><interaction/>
 					<router-view/>
 				</div>
 			);

@@ -32,40 +32,42 @@
 						})}
 					</div>
 					{ this.hudData.isOnVehicle || this.hudData.isCompassOn &&
-						<div class='vehicle-data'>
-							<div class={ 'top' + (this.hudData.isOnVehicle ? '' : 'compass') }>
-								<span>{ this.hudData.time }</span>
-							</div>
-							{ this.hudData.isOnVehicle &&
-								<div class='middle'>
-									<div class='fuel'>
-										<span class={ this.hudData.fuel <= 15 ? 'low' : '' }>{ this.hudData.fuel }</span>
-										<font-awesome-icon icon='gas-pump'/>
-									</div>
-									<div class='speed'>
-										<span>{ this.hudData.speed } <p>km/h</p></span>
-									</div>
-									{ !this.hudData.hasSeatBelt &&
-										<div class='seatbelt'>
-											<img src='./../../../assets/seatbelt.svg'/>
-										</div>
-									}
-									{ this.hudData.isSpeedLimiterOn &&
-										<div class='speed-limiter'>
-											<img src='./../../../assets/speed-limiter.svg'/>
-										</div>
-									}
-								</div>
-							}
-							<div class='bottom'>
-								<div class='direction'>
-									<div class='image' style={{ transform: 'translate3d(' + this.hudData.direction + 'px, 0px, 0px)' }}/>
+						<transition name='fade' appear>
+							<div class='vehicle-data'>
+								<div class={ 'top' + (this.hudData.isOnVehicle ? '' : 'compass') }>
+									<span>{ this.hudData.time }</span>
 								</div>
 								{ this.hudData.isOnVehicle &&
-									<span>{ this.hudData.location }</span>
+									<div class='middle'>
+										<div class='fuel'>
+											<span class={ this.hudData.fuel <= 15 ? 'low' : '' }>{ this.hudData.fuel }</span>
+											<font-awesome-icon icon='gas-pump'/>
+										</div>
+										<div class='speed'>
+											<span>{ this.hudData.speed } <p>km/h</p></span>
+										</div>
+										{ !this.hudData.hasSeatBelt &&
+											<div class='seatbelt'>
+												<img src='./../../../assets/seatbelt.svg'/>
+											</div>
+										}
+										{ this.hudData.isSpeedLimiterOn &&
+											<div class='speed-limiter'>
+												<img src='./../../../assets/speed-limiter.svg'/>
+											</div>
+										}
+									</div>
 								}
+								<div class='bottom'>
+									<div class='direction'>
+										<div class='image' style={{ transform: 'translate3d(' + this.hudData.direction + 'px, 0px, 0px)' }}/>
+									</div>
+									{ this.hudData.isOnVehicle &&
+										<span>{ this.hudData.location }</span>
+									}
+								</div>
 							</div>
-						</div>
+						</transition>
 					}
 				</div>
 			);

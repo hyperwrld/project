@@ -35,11 +35,11 @@ const mutations = {
 	setCurrentMoney(state, data) {
 		state.currentMoney = data, state.canShow = true;
 
-        setTimeout(() => { state.canShow = false; }, 15000);
+        setTimeout(() => { state.canShow = false; }, 3000);
 	},
 	addMoney(state, data) {
 		state.currentMoney = (state.currentMoney + data), state.canShow = true;
-		state.transactionStatus = true, state.transactionType = 'add', transactionQuantity = data;
+		state.transactionStatus = true, state.transactionType = 'add', state.transactionQuantity = data;
 
 		setTimeout(() => {
 			state.transactionStatus = false;
@@ -49,7 +49,7 @@ const mutations = {
 	},
 	removeMoney(state, data) {
 		state.currentMoney = (state.currentMoney - data), state.canShow = true;
-		state.transactionStatus = true, state.transactionType = 'remove', transactionQuantity = data;
+		state.transactionStatus = true, state.transactionType = 'remove', state.transactionQuantity = data;
 
 		setTimeout(() => {
 			state.transactionStatus = false;
