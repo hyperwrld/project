@@ -16,6 +16,12 @@
 	margin-right: auto;
 	margin-left: auto;
 
+	.money, .inner-container {
+		animation-duration: 2s;
+		animation-fill-mode: both;
+		animation-name: fadeIn;
+	}
+
 	.money {
 		font-size: 30px;
 		padding: 4px;

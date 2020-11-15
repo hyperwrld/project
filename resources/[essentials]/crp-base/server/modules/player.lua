@@ -30,6 +30,8 @@ function CRP.Player:CreateCharacter(source, data)
 	self.dateofbirth    = data.dateofbirth
 	self.gender         = data.gender
 
+	TriggerClientEvent('crp-ui:setCurrentMoney', self.source, self.money)
+
 	self.getCharacterId = function()
 		return self.id
 	end

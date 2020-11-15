@@ -4,14 +4,14 @@
 	export default {
 		name: 'currency',
 		computed: {
-			...mapGetters('interface', {
+			...mapGetters('currency', {
 				currencyData: 'getCurrencyData'
 			})
 		},
 		methods: {
 			formatNumber: function(number) {
                 return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
-			},
+			}
 		},
 		render (h) {
 			return (
@@ -19,9 +19,9 @@
 					<div class='money'>
 						<span>€ </span>{ formatNumber(currencyData.currentMoney) }
 					</div>
-					{ currencyData.canShow && currencyData.status &&
+					{ currencyData.canShow && currencyData.transactionStatus &&
 						<div class='inner-container'>
-							<span class={ currencyData.type }>{ (currencyData.type == 'add' ? '+' : '-') + ' €'}</span> { currencyData.quantity }
+							<span class={ currencyData.transactionType }>{ (currencyData.transactionType == 'add' ? '+' : '-') + ' €'}</span> { currencyData.transactionQuantity }
 						</div>
 					}
 				</div>
