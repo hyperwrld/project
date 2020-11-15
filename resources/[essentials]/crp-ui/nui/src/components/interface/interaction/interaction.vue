@@ -19,7 +19,7 @@
 						<transition name='fade' appear>
 							<div class='inner-container'>
 								<font-awesome-icon icon='info-circle'/>
-								<span class='text'>{ this.interactionData.message }</span>
+								<span>{ this.interactionData.message }</span>
 							</div>
 						</transition>
 					}

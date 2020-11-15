@@ -1,6 +1,6 @@
 <template>
 	<v-app>
-		<hud/><notifications/><taskbar/><actionbar/>
+		<userInterface/><taskbar/><actionbar/>
 		<router-view :closeMenu='closeMenu'/>
     </v-app>
 </template>
@@ -8,8 +8,7 @@
 <script>
 	import { mapState } from 'vuex';
 
-    import hud from './components/interface/hud/hud.vue';
-    import notifications from './components/notifications/notifications.vue';
+    import userInterface from './components/interface/interface.vue';
 	import taskbar from './components/taskbar/taskbar.vue';
 	import actionbar from './components/inventory/actionbar/actionbar.vue';
 
@@ -18,7 +17,7 @@
     export default {
 		name: 'app',
 		components: {
-			hud, notifications, taskbar, actionbar
+			userInterface, taskbar, actionbar
 		},
 		methods: {
 			closeMenu: function(appName) {
