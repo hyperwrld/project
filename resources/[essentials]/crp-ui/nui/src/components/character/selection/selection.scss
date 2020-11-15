@@ -17,9 +17,17 @@
 	gap: 10px;
 	text-transform: uppercase;
 
-	animation-duration: 2s;
-	animation-fill-mode: both;
-	animation-name: fadeIn;
+	.fade-enter-active {
+		animation: fadeIn 1s;
+	}
+
+	.fade-leave-active {
+		animation: fadeOut 1s;
+	}
+
+	.fade-enter, .fade-leave-to {
+		opacity: 0;
+	}
 
 	.character-list {
 		display: flex;

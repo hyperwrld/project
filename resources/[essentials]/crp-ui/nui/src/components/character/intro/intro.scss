@@ -18,9 +18,17 @@
 	color: white;
 	line-height: 3vh;
 
-	animation-duration: 3s;
-	animation-fill-mode: both;
-	animation-name: fadeIn;
+	.fade-enter-active {
+		animation: fadeIn 1s;
+	}
+
+	.fade-leave-active {
+		animation: fadeOut 1s;
+	}
+
+	.fade-enter, .fade-leave-to {
+		opacity: 0;
+	}
 
 	span {
 		color: rgba(255, 255, 255, 0.7);
