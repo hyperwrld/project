@@ -52,6 +52,18 @@ function toggleInteraction(status, message)
 	})
 end
 
+function setAlert(text, type, time)
+	SendNUIMessage({
+		app = 'notifications', event = 'setAlert', eventData = { text = text, type = type, time = time }
+	})
+end
+
+function setCustomAlert(action, id, text, type)
+	SendNUIMessage({
+		app = 'notifications', event = 'setCustomAlert', eventData = { action = action, id = id, text = text, type = type }
+	})
+end
+
 exports('updateMinimap', updateMinimap)
 exports('setCharacterData', setCharacterData)
 
@@ -71,3 +83,6 @@ RegisterNetEvent('crp-ui:removeMoney')
 AddEventHandler('crp-ui:removeMoney', removeMoney)
 
 exports('toggleInteraction', toggleInteraction)
+
+exports('setAlert', setAlert)
+exports('setCustomAlert', setCustomAlert)
