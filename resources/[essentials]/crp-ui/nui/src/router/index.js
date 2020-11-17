@@ -1,12 +1,9 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import character from './../components/character/character.vue';
 import intro from './../components/character/intro/intro.vue';
 import selection from './../components/character/selection/selection.vue';
 import skincreator from './../components/character/skincreator/skincreator.vue';
-
-import userInterface from './../components/interface/interface.vue';
 
 import inventory from './../components/inventory/main/inventory.vue';
 import actionbar from './../components/inventory/actionbar/actionbar.vue';
@@ -29,20 +26,13 @@ Vue.use(VueRouter);
 export default new VueRouter({
 	routes: [
 		{
-			path: '/character',
-			name: 'character',
-			component: character,
-			children: [
-				{ path: 'intro', name: 'intro', component: intro }, { path: 'selection', name: 'selection', component: selection },
-				{ path: 'skincreator', name: 'skincreator', component: skincreator }
-			]
+			path: '/intro', component: intro
 		},
 		{
-			path: '/interface',
-			name: 'interface',
-			component: userInterface,
-			children: [
-			]
+			path: '/selection', component: selection
+		},
+		{
+			path: '/skincreator', component: skincreator
 		},
 		{
 			path: '/inventory',

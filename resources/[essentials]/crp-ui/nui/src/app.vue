@@ -12,12 +12,14 @@
 	import taskbar from './components/taskbar/taskbar.vue';
 	import actionbar from './components/inventory/actionbar/actionbar.vue';
 
+	import test from './components/character/skincreator/skincreator.vue';
+
 	import nui from './utils/nui.js';
 
     export default {
 		name: 'app',
 		components: {
-			userInterface, taskbar, actionbar
+			userInterface, taskbar, actionbar, test
 		},
 		methods: {
 			closeMenu: function(appName) {
@@ -38,26 +40,15 @@
         },
         mounted() {
             this.listener = window.addEventListener('message', (event) => {
-				var module = event.data.app, path = event.data.app;
-
-				switch(event.data.app) {
-					case 'selection':
-					case 'intro':
-						module = 'character', path = 'character/' + event.data.app;
-						break;
-					default:
-						break;
-				}
-
 				if (event.data.event != undefined) {
-					this.$store.dispatch(module + '/' + event.data.event, event.data.eventData);
+					this.$store.dispatch(event.data.app + '/' + event.data.event, event.data.eventData);
 				}
 
 				if (event.data.status != undefined) {
 					if (!event.data.status) {
-						closeMenu(event.data.app);
+						this.closeMenu(event.data.app);
 					} else {
-						changeRouter({ path: path });
+						this.changeRouter({ path: event.data.app });
 					}
 				}
 			});

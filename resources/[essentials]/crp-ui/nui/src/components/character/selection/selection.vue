@@ -17,7 +17,7 @@
     		}
   		},
 		computed: {
-			...mapGetters('character', {
+			...mapGetters('selection', {
 				charactersData: 'getCharactersData'
 			})
 		},

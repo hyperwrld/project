@@ -3,8 +3,8 @@ const state = () => ({
 })
 
 const getters = {
-    getCharactersData: state => {
-        return state.userCharacters;
+	getCharactersData: state => {
+		return state.userCharacters;
 	}
 }
 
@@ -15,7 +15,7 @@ const actions = {
 }
 
 const mutations = {
-    setData(state, data) {
+	setData(state, data) {
 		state.userCharacters = data
 
 		for (var i = state.userCharacters.length; i < 5; i++) {
@@ -24,4 +24,4 @@ const mutations = {
     }
 }
 
-export default { namespaced: true, state, getters, actions, mutations }
+export default { namespaced: true, getters, state, actions, mutations }
