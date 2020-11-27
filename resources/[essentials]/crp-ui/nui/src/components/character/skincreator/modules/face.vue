@@ -15,12 +15,8 @@
 			})
 		},
 		methods: {
-			modifyFaceFeature: function(title) {
-				this.faceFeatures.map(function(feature, index) {
-					if (feature.title === title) {
-						send('modifyFaceFeature', { index: index, scale: feature.value });
-					}
-				});
+			modifyFaceFeature: function(index) {
+				send('modifyFaceFeature', { index: index, scale: this.faceFeatures[index].value });
             }
         },
 		render (h) {

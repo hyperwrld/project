@@ -13,7 +13,7 @@
 			changeValue: function(event) {
 				this.data.value = event.target.value;
 
-				this.click(this.data.title);
+				this.click(this.data.id);
 			}
 		},
 		render (h) {
