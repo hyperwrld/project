@@ -2,13 +2,12 @@
 	import { mapGetters } from 'vuex';
 	import { send } from './../../../../utils/lib.js';
 
-	import optionInput from './../utils/input.vue';
 	import optionRange from './../utils/range.vue';
 
 	export default {
 		name: 'face',
 		components: {
-			optionInput, optionRange
+			optionRange
 		},
 		computed: {
 			...mapGetters('skincreator', {
@@ -16,29 +15,23 @@
 			})
 		},
 		methods: {
-			modifyHeadBlend: function() {
-				let data = [];
-
-				for (let i = 0; i < this.headBlend.length; i++) {
-					const value = this.headBlend[i].value;
-
-					data.push(value);
-				}
-
-                send('modifyHeadBlend', data);
+			modifyFaceFeature: function(title) {
+				this.faceFeatures.map(function(feature, index) {
+					if (feature.title === title) {
+						send('modifyFaceFeature', { index: index, scale: feature.value });
+					}
+				});
             }
         },
 		render (h) {
 			let ranges = [], faceFeatures = this.faceFeatures;
 
-			for (let i = 0; i < faceFeatures.length; i++) {
-				if (i % 2) {
-					let data = <div class='container'>
-						<optionRange data={faceFeatures[i-1]} click={this.modifyHeadBlend}/><optionRange data={faceFeatures[i]} click={this.modifyHeadBlend}/>
-					</div>;
+			for (let i = 1; i < faceFeatures.length; i += 2) {
+				let data = <div class='container'>
+					<optionRange data={faceFeatures[i-1]} click={this.modifyFaceFeature}/><optionRange data={faceFeatures[i]} click={this.modifyFaceFeature}/>
+				</div>;
 
-					ranges.push(data);
-				}
+				ranges.push(data);
 			}
 
 			return (
