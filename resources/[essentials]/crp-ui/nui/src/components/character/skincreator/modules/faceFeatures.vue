@@ -5,7 +5,7 @@
 	import optionRange from './../utils/range.vue';
 
 	export default {
-		name: 'face',
+		name: 'faceFeatures',
 		components: {
 			optionRange
 		},

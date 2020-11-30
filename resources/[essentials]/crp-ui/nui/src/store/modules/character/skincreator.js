@@ -1,7 +1,7 @@
-import { faceFeatures, headBlend, skinFeatures } from './../../../utils/data.js';
+import { bodyHair, faceFeatures, headBlend, headOverlays } from './../../../utils/data.js';
 
 const state = () => ({
-	headBlend: headBlend, faceFeatures: faceFeatures, skinFeatures: skinFeatures
+	headBlend: headBlend, faceFeatures: faceFeatures, headOverlays: headOverlays, bodyHair: bodyHair
 })
 
 const getters = {
@@ -11,8 +11,8 @@ const getters = {
 	getFaceFeatures: state => {
 		return state.faceFeatures;
 	},
-	getSkinFeatures: state => {
-		return state.skinFeatures;
+	getHeadOverlays: state => {
+		return state.headOverlays;
 	}
 }
 
@@ -24,21 +24,25 @@ const actions = {
 
 const mutations = {
 	setData(state, data) {
-		state.headBlend = headBlend, state.faceFeatures = faceFeatures, state.skinFeatures = skinFeatures;
+		state.headBlend = headBlend, state.faceFeatures = faceFeatures, state.headOverlays = headOverlays;
 
-		for (let i = 0; i < data.headBlend.length; i++) {
+		for (let i = 0; i < state.headBlend.length; i++) {
 			state.headBlend[i].value = data.headBlend[i];
 		}
 
-		for (let i = 0; i < data.faceFeatures.length; i++) {
+		for (let i = 0; i < state.faceFeatures.length; i++) {
 			state.faceFeatures[i].value = data.faceFeatures[i];
 		}
 
-		for (let i = 0; i < data.skinFeatures.length; i++) {
-			state.skinFeatures[i].value = data.skinFeatures[i];
-		}
+		for (let i = 0; i < state.headOverlays.length; i += 2) {
+			const id = state.headOverlays[i].id;
 
-		console.log(data)
+			if (data.headOverlays[id]) {
+				let value = data.headOverlays[id].overlayValue == 255 ? 0 : data.headOverlays[id].overlayValue;
+
+				state.headOverlays[i].value = value, state.headOverlays[i + 1].value = data.headOverlays[id].opacity;
+			}
+		}
     }
 }
 

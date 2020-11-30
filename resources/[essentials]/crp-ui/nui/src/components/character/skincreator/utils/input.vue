@@ -39,7 +39,7 @@
 				if (!this.canChange(newValue)) {
 					this.data.value = oldValue;
 				} else {
-					this.click();
+					this.click(this.data.id);
 				}
 			}
     	},

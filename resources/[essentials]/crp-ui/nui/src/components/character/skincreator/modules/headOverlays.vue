@@ -6,28 +6,28 @@
 	import optionRange from './../utils/range.vue';
 
 	export default {
-		name: 'face',
+		name: 'headOverlays',
 		components: {
 			optionInput, optionRange
 		},
 		computed: {
 			...mapGetters('skincreator', {
-				skinFeatures: 'getSkinFeatures'
+				headOverlays: 'getHeadOverlays'
 			})
 		},
 		methods: {
 			modifyHeadOverlay: function(index) {
-				const option = (option.title == 'Opacidade') ? this.skinFeatures[index - 1] : this.skinFeatures[index];
+				const arrayIndex = this.headOverlays.findIndex(element => element.id == index), data = this.headOverlays;
 
-				send('modifyHeadOverlay', { index: option.id, value: option.value, opacity: this.skinFeatures[option.id + 1].value });
+				send('modifyHeadOverlay', { index: index, value: data[arrayIndex].value, opacity: data[arrayIndex + 1].value });
             }
         },
 		render (h) {
-			let options = [], skinFeatures = this.skinFeatures;
+			let options = [], headOverlays = this.headOverlays;
 
-			for (let i = 1; i < skinFeatures.length; i += 2) {
+			for (let i = 0; i < headOverlays.length; i += 2) {
 				let data = <div class='container'>
-					<optionInput data={skinFeatures[i-1]} click={this.modifyHeadOverlay}/><optionRange data={skinFeatures[i]} click={this.modifyHeadOverlay}/>
+					<optionInput data={headOverlays[i]} click={this.modifyHeadOverlay}/><optionRange data={headOverlays[i + 1]} click={this.modifyHeadOverlay}/>
 				</div>;
 
 				options.push(data);

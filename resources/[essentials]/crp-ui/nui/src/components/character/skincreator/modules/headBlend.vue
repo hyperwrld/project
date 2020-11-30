@@ -6,7 +6,7 @@
 	import optionRange from './../utils/range.vue';
 
 	export default {
-		name: 'parents',
+		name: 'headBlend',
 		components: {
 			optionInput, optionRange
 		},
@@ -16,7 +16,7 @@
 			})
 		},
 		methods: {
-			modifyHeadBlend: function() {
+			modifyHeadBlend: function(index) {
 				let data = [];
 
 				for (let i = 0; i < this.headBlend.length; i++) {
