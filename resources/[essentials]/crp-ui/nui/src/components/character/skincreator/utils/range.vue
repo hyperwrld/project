@@ -1,11 +1,6 @@
 <script>
-	import { library } from '@fortawesome/fontawesome-svg-core';
-	import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
-
-	library.add(faAngleLeft, faAngleRight);
-
 	export default {
-		name: 'inputOption',
+		name: 'rangeOption',
 		props: {
 			data: Object, click: Function
 		},
@@ -20,7 +15,7 @@
 			const data = this.data;
 
 			return (
-				<div class='option'>
+				<div class='option range'>
 					<div class='label-container'>
 						<span class='label'>{ data.title }</span>
 						<span>{ parseFloat(data.value).toFixed(1) + ' | ' + parseFloat(data.maxValue).toFixed(1) }</span>

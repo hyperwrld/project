@@ -73,12 +73,15 @@
 				display: none;
 			}
 
-			&::v-deep .container {
+			&::v-deep .container, &::v-deep .container-three, &::v-deep .container-four {
 				display: grid;
 				grid-template-columns: 1fr 1fr;
 				margin-bottom: 5px;
-				padding: 0;
+				padding: 5px;
 				gap: 5px;
+
+				background-color: rgba(0, 0, 0, 0.5);
+				border-radius: 3px;
 
 				&:last-child {
 					margin-bottom: 0;
@@ -99,6 +102,26 @@
 				}
 			}
 
+			&::v-deep .container-four {
+				grid-template: [row1-start] 'a a' 1fr [row1-end] [row2-start] 'b b' auto [row2-end] [row3-start] 'c c' auto [row3-end] / 1fr 1fr;
+
+				.color {
+					grid-area: b;
+
+					&:last-child {
+						grid-area: c;
+					}
+				}
+			}
+
+			&::v-deep .container-three {
+				grid-template: [row1-start] "a a" 1fr [row1-end] [row2-start] "b b" auto [row2-end] / 1fr 1fr;
+
+				.color {
+					grid-area: b;
+				}
+			}
+
 			&::v-deep .option {
 				display: block;
 				width: 100%;
@@ -108,7 +131,7 @@
 				padding: 12px;
 
 				border-radius: 3px;
-				background-color: rgba(0, 0, 0, 0.5);
+				background-color: #232323;
 
 				&:last-child {
 					margin-bottom: 0;
@@ -235,6 +258,23 @@
 					button {
 						font-weight: normal;
 						margin: 0;
+					}
+				}
+
+				.color-controls {
+					display: grid;
+					grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+					gap: 10px;
+					width: 100%;
+
+					input {
+						appearance: none;
+
+						width: 20px;
+						height: 20px;
+
+						outline: 2.25px solid #232323;
+						background-color: green;
 					}
 				}
 			}

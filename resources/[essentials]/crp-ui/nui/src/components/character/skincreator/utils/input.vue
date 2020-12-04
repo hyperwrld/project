@@ -1,9 +1,4 @@
 <script>
-	import { library } from '@fortawesome/fontawesome-svg-core';
-	import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
-
-	library.add(faAngleLeft, faAngleRight);
-
 	export default {
 		name: 'inputOption',
 		props: {
@@ -47,7 +42,7 @@
 			const data = this.data;
 
 			return (
-				<div class='option'>
+				<div class='option input'>
 					<div class='label-container'>
 						<span class='label'>{ data.title }</span>
 						<span>{ data.value + ' | ' + data.maxValue }</span>
