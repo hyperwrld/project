@@ -6722,6 +6722,13 @@
             This native gets an entity's population type.
             </summary>
         </member>
+        <member name="F:CitizenFX.Core.Native.Hash.GET_ENTITY_ROUTING_BUCKET">
+            <summary>
+            Gets the routing bucket for the specified entity.
+            
+            Routing buckets are also known as 'dimensions' or 'virtual worlds' in past echoes, however they are population-aware.
+            </summary>
+        </member>
         <member name="F:CitizenFX.Core.Native.Hash.GET_GAME_TIMER">
             <summary>
             Gets the current game timer in milliseconds.
@@ -6740,7 +6747,14 @@
         </member>
         <member name="F:CitizenFX.Core.Native.Hash.GET_PLAYER_MELEE_WEAPON_DAMAGE_MODIFIER">
             <summary>
-            A getter for [SET_PLAYER_MELEE_WEAPON_DAMAGE_MODIFIER](#_0x4A3DC7ECCC321032).
+            A getter for [SET_PLAYER_MELEE_WEAPON_DAMAGE_MODIFIER](#\_0x4A3DC7ECCC321032).
+            </summary>
+        </member>
+        <member name="F:CitizenFX.Core.Native.Hash.GET_PLAYER_ROUTING_BUCKET">
+            <summary>
+            Gets the routing bucket for the specified player.
+            
+            Routing buckets are also known as 'dimensions' or 'virtual worlds' in past echoes, however they are population-aware.
             </summary>
         </member>
         <member name="F:CitizenFX.Core.Native.Hash.GET_PLAYER_TIME_IN_PURSUIT">
@@ -6757,17 +6771,17 @@
         </member>
         <member name="F:CitizenFX.Core.Native.Hash.GET_PLAYER_WEAPON_DAMAGE_MODIFIER">
             <summary>
-            A getter for [SET_PLAYER_WEAPON_DAMAGE_MODIFIER](#_0xCE07B9F7817AADA3).
+            A getter for [SET_PLAYER_WEAPON_DAMAGE_MODIFIER](#\_0xCE07B9F7817AADA3).
             </summary>
         </member>
         <member name="F:CitizenFX.Core.Native.Hash.GET_PLAYER_WEAPON_DEFENSE_MODIFIER">
             <summary>
-            A getter for [SET_PLAYER_WEAPON_DEFENSE_MODIFIER](#_0x2D83BC011CA14A3C).
+            A getter for [SET_PLAYER_WEAPON_DEFENSE_MODIFIER](#\_0x2D83BC011CA14A3C).
             </summary>
         </member>
         <member name="F:CitizenFX.Core.Native.Hash.GET_PLAYER_WEAPON_DEFENSE_MODIFIER_2">
             <summary>
-            A getter for [\_SET_PLAYER_WEAPON_DEFENSE_MODIFIER_2](#_0xBCFDE9EDE4CF27DC).
+            A getter for [\_SET_PLAYER_WEAPON_DEFENSE_MODIFIER\_2](#\_0xBCFDE9EDE4CF27DC).
             </summary>
         </member>
         <member name="F:CitizenFX.Core.Native.Hash.GET_REGISTERED_COMMANDS">
@@ -6937,7 +6951,7 @@
             <summary>
             Registered commands can be executed by entering them in the client console (this works for client side and server side registered commands). Or by entering them in the server console/through an RCON client (only works for server side registered commands). Or if you use a supported chat resource, like the default one provided in the cfx-server-data repository, then you can enter the command in chat by prefixing it with a `/`.
             
-            Commands registered using this function can also be executed by resources, using the [`ExecuteCommand` native](#_0x561C060B).
+            Commands registered using this function can also be executed by resources, using the [`ExecuteCommand` native](#\_0x561C060B).
             
             The restricted bool is not used on the client side. Permissions can only be checked on the server side, so if you want to limit your command with an ace permission automatically, make it a server command (by registering it in a server script).
             
@@ -7075,6 +7089,13 @@
             rotationOrder refers to the order yaw pitch roll is applied, see [GET_ENTITY_ROTATION](#_0xAFBD61CC738D9EB9)
             
             p5 is usually set as true
+            </summary>
+        </member>
+        <member name="F:CitizenFX.Core.Native.Hash.SET_ENTITY_ROUTING_BUCKET">
+            <summary>
+            Sets the routing bucket for the specified entity.
+            
+            Routing buckets are also known as 'dimensions' or 'virtual worlds' in past echoes, however they are population-aware.
             </summary>
         </member>
         <member name="F:CitizenFX.Core.Native.Hash.SET_ENTITY_VELOCITY">
@@ -7316,6 +7337,13 @@
             ```
             Make sure to request the model first and wait until it has loaded.  
             ```
+            </summary>
+        </member>
+        <member name="F:CitizenFX.Core.Native.Hash.SET_PLAYER_ROUTING_BUCKET">
+            <summary>
+            Sets the routing bucket for the specified player.
+            
+            Routing buckets are also known as 'dimensions' or 'virtual worlds' in past echoes, however they are population-aware.
             </summary>
         </member>
         <member name="F:CitizenFX.Core.Native.Hash.SET_PLAYER_WANTED_LEVEL">
@@ -8070,6 +8098,18 @@
             ```
             </returns>
         </member>
+        <member name="M:CitizenFX.Core.Native.API.GetEntityRoutingBucket(System.Int32)">
+            <summary>
+            Gets the routing bucket for the specified entity.
+            Routing buckets are also known as 'dimensions' or 'virtual worlds' in past echoes, however they are population-aware.
+            </summary>
+            <param name="entity">
+            The entity to get the routing bucket for.
+            </param>
+            <returns>
+            The routing bucket ID.
+            </returns>
+        </member>
         <member name="M:CitizenFX.Core.Native.API.GetGameTimer">
             <summary>
             Gets the current game timer in milliseconds.
@@ -8095,12 +8135,27 @@
             The key to look up in the resource manifest.
             </param>
         </member>
-        <member name="M:CitizenFX.Core.Native.API.GetPlayerMeleeWeaponDamageModifier">
+        <member name="M:CitizenFX.Core.Native.API.GetPlayerMeleeWeaponDamageModifier(System.Int32)">
             <summary>
-            A getter for [SET_PLAYER_MELEE_WEAPON_DAMAGE_MODIFIER](#_0x4A3DC7ECCC321032).
+            A getter for [SET_PLAYER_MELEE_WEAPON_DAMAGE_MODIFIER](#\_0x4A3DC7ECCC321032).
             </summary>
+            <param name="playerId">
+            The player index.
+            </param>
             <returns>
             Returns player melee weapon damage modifier value.
+            </returns>
+        </member>
+        <member name="M:CitizenFX.Core.Native.API.GetPlayerRoutingBucket(System.String)">
+            <summary>
+            Gets the routing bucket for the specified player.
+            Routing buckets are also known as 'dimensions' or 'virtual worlds' in past echoes, however they are population-aware.
+            </summary>
+            <param name="playerSrc">
+            The player to get the routing bucket for.
+            </param>
+            <returns>
+            The routing bucket ID.
             </returns>
         </member>
         <member name="M:CitizenFX.Core.Native.API.GetPlayerTimeInPursuit(System.String,System.Boolean)">
@@ -8134,7 +8189,7 @@
         </member>
         <member name="M:CitizenFX.Core.Native.API.GetPlayerWeaponDamageModifier(System.Int32)">
             <summary>
-            A getter for [SET_PLAYER_WEAPON_DAMAGE_MODIFIER](#_0xCE07B9F7817AADA3).
+            A getter for [SET_PLAYER_WEAPON_DAMAGE_MODIFIER](#\_0xCE07B9F7817AADA3).
             </summary>
             <param name="playerId">
             The player index.
@@ -8145,7 +8200,7 @@
         </member>
         <member name="M:CitizenFX.Core.Native.API.GetPlayerWeaponDefenseModifier(System.Int32)">
             <summary>
-            A getter for [SET_PLAYER_WEAPON_DEFENSE_MODIFIER](#_0x2D83BC011CA14A3C).
+            A getter for [SET_PLAYER_WEAPON_DEFENSE_MODIFIER](#\_0x2D83BC011CA14A3C).
             </summary>
             <param name="playerId">
             The player index.
@@ -8156,7 +8211,7 @@
         </member>
         <member name="M:CitizenFX.Core.Native.API.GetPlayerWeaponDefenseModifier_2(System.Int32)">
             <summary>
-            A getter for [\_SET_PLAYER_WEAPON_DEFENSE_MODIFIER_2](#_0xBCFDE9EDE4CF27DC).
+            A getter for [\_SET_PLAYER_WEAPON_DEFENSE_MODIFIER\_2](#\_0xBCFDE9EDE4CF27DC).
             </summary>
             <param name="playerId">
             The player index.
@@ -8196,7 +8251,7 @@
             The key in the resource manifest.
             </param>
             <param name="index">
-            The value index, in a range from [0..GET_NUM_RESOURCE_METDATA-1].
+            The value index, in a range from \[0..GET_NUM_RESOURCE_METDATA-1].
             </param>
         </member>
         <member name="M:CitizenFX.Core.Native.API.GetResourcePath(System.String)">
@@ -8425,7 +8480,7 @@
         <member name="M:CitizenFX.Core.Native.API.RegisterCommand(System.String,CitizenFX.Core.Native.InputArgument,System.Boolean)">
             <summary>
             Registered commands can be executed by entering them in the client console (this works for client side and server side registered commands). Or by entering them in the server console/through an RCON client (only works for server side registered commands). Or if you use a supported chat resource, like the default one provided in the cfx-server-data repository, then you can enter the command in chat by prefixing it with a `/`.
-            Commands registered using this function can also be executed by resources, using the [`ExecuteCommand` native](#_0x561C060B).
+            Commands registered using this function can also be executed by resources, using the [`ExecuteCommand` native](#\_0x561C060B).
             The restricted bool is not used on the client side. Permissions can only be checked on the server side, so if you want to limit your command with an ace permission automatically, make it a server command (by registering it in a server script).
             **Example result**:
             ![](https://i.imgur.com/TaCnG09.png)
@@ -8650,6 +8705,18 @@
             rotationOrder refers to the order yaw pitch roll is applied, see [GET_ENTITY_ROTATION](#_0xAFBD61CC738D9EB9)
             p5 is usually set as true
             </summary>
+        </member>
+        <member name="M:CitizenFX.Core.Native.API.SetEntityRoutingBucket(System.Int32,System.Int32)">
+            <summary>
+            Sets the routing bucket for the specified entity.
+            Routing buckets are also known as 'dimensions' or 'virtual worlds' in past echoes, however they are population-aware.
+            </summary>
+            <param name="entity">
+            The entity to set the routing bucket for.
+            </param>
+            <param name="bucket">
+            The bucket ID, from 0-63.
+            </param>
         </member>
         <member name="M:CitizenFX.Core.Native.API.SetEntityVelocity(System.Int32,System.Single,System.Single,System.Single)">
             <summary>
@@ -8984,6 +9051,18 @@
             ```
             </summary>
         </member>
+        <member name="M:CitizenFX.Core.Native.API.SetPlayerRoutingBucket(System.String,System.Int32)">
+            <summary>
+            Sets the routing bucket for the specified player.
+            Routing buckets are also known as 'dimensions' or 'virtual worlds' in past echoes, however they are population-aware.
+            </summary>
+            <param name="playerSrc">
+            The player to set the routing bucket for.
+            </param>
+            <param name="bucket">
+            The bucket ID, from 0-63.
+            </param>
+        </member>
         <member name="M:CitizenFX.Core.Native.API.SetPlayerWantedLevel(System.Int32,System.Int32,System.Boolean)">
             <summary>
             Call SET_PLAYER_WANTED_LEVEL_NOW for immediate effect
@@ -8995,9 +9074,6 @@
             <summary>
             Internal function for setting a state bag value.
             </summary>
-            <param name="replicated">
-            :
-            </param>
         </member>
         <member name="M:CitizenFX.Core.Native.API.SetVehicleBodyHealth(System.Int32,System.Single)">
             <summary>
