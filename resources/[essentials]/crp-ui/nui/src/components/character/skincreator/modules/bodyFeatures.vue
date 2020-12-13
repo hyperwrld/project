@@ -1,10 +1,11 @@
 <script>
 	import { mapGetters } from 'vuex';
-	import { send } from './../../../../utils/lib.js';
 
 	import optionRange from './../utils/range.vue';
 	import optionInput from './../utils/input.vue';
 	import optionColor from './../utils/color.vue';
+
+	import { send } from './../../../../utils/lib.js';
 
 	export default {
 		name: 'bodyFeatures',
@@ -13,12 +14,12 @@
 		},
 		computed: {
 			...mapGetters('skincreator', {
-				bodyFeatures: 'getBodyFeatures', getTextureTotal: 'getTextureTotal'
+				bodyFeatures: 'getBodyFeatures'
 			})
 		},
 		methods: {
 			modifyBodyFeature: function(index, isMain) {
-				let bodyFeature = this.bodyFeatures[index];
+				let bodyFeature = this.bodyFeatures.find(element => element.id == index);
 
 				send('modifyBodyFeature', {
 					index: Number(index), value: Number(bodyFeature.value), secondValue: Number(bodyFeature.subOptions[0].value), isMain: isMain
@@ -29,7 +30,7 @@
 				});
 			},
 			modifyFeatureColor: function(index) {
-				const bodyFeature = this.bodyFeatures[index];
+				const bodyFeature = this.bodyFeatures.find(element => element.id == index);
 
 				let data = { index: index, firstColor: bodyFeature.subOptions[1].value };
 
