@@ -329,7 +329,7 @@ export const bodyFeatures = [
 	{
 		id: 1,
 		title: 'Barba',
-		value: 0,
+		value: -1,
 		minValue: -1,
 		maxValue: 0,
 		isMain: true,
@@ -353,7 +353,7 @@ export const bodyFeatures = [
 	{
 		id: 2,
 		title: 'Sobrancelhas',
-		value: 0,
+		value: -1,
 		minValue: -1,
 		maxValue: 33,
 		isMain: true,
@@ -377,7 +377,7 @@ export const bodyFeatures = [
 	{
 		id: 4,
 		title: 'Maquilhagem',
-		value: 0,
+		value: -1,
 		minValue: -1,
 		maxValue: 74,
 		isMain: true,
@@ -408,7 +408,7 @@ export const bodyFeatures = [
 	{
 		id: 5,
 		title: 'Blush',
-		value: 0,
+		value: -1,
 		minValue: -1,
 		maxValue: 6,
 		isMain: true,
@@ -432,7 +432,7 @@ export const bodyFeatures = [
 	{
 		id: 8,
 		title: 'Batom',
-		value: 0,
+		value: -1,
 		minValue: -1,
 		maxValue: 9,
 		isMain: true,
@@ -456,7 +456,7 @@ export const bodyFeatures = [
 	{
 		id: 10,
 		title: 'Pelo do peito',
-		value: 0,
+		value: -1,
 		minValue: -1,
 		maxValue: 16,
 		isMain: true,
@@ -483,7 +483,7 @@ export const clothing = [
 	{
 		id: 0,
 		title: 'Chapéus',
-		value: 0,
+		value: -1,
 		minValue: -1,
 		maxValue: 0,
 		isMain: true,
@@ -592,6 +592,153 @@ export const clothing = [
 		subOptions: [
 			{
 				id: 10,
+				title: 'Texturas',
+				value: 0,
+				minValue: 0,
+				maxValue: 0
+			}
+		]
+	}
+];
+
+export const accessories = [
+	{
+		id: 1,
+		title: 'Máscaras',
+		value: 0,
+		minValue: 0,
+		maxValue: 0,
+		isMain: true,
+		subOptions: [
+			{
+				id: 1,
+				title: 'Texturas',
+				value: 0,
+				minValue: 0,
+				maxValue: 0
+			}
+		]
+	},
+	{
+		id: 1,
+		title: 'Óculos',
+		value: -1,
+		minValue: -1,
+		maxValue: 0,
+		isMain: true,
+		isProp: true,
+		subOptions: [
+			{
+				id: 1,
+				isProp: true,
+				title: 'Texturas',
+				value: 0,
+				minValue: 0,
+				maxValue: 0
+			}
+		]
+	},
+	{
+		id: 2,
+		title: 'Brincos',
+		value: -1,
+		minValue: -1,
+		maxValue: 0,
+		isMain: true,
+		isProp: true,
+		subOptions: [
+			{
+				id: 2,
+				isProp: true,
+				title: 'Texturas',
+				value: 0,
+				minValue: 0,
+				maxValue: 0
+			}
+		]
+	},
+	{
+		id: 7,
+		title: 'Lenços e Colares',
+		value: 0,
+		minValue: 0,
+		maxValue: 0,
+		isMain: true,
+		subOptions: [
+			{
+				id: 7,
+				title: 'Texturas',
+				value: 0,
+				minValue: 0,
+				maxValue: 0
+			}
+		]
+	},
+	{
+		id: 6,
+		title: 'Relógios',
+		value: -1,
+		minValue: -1,
+		maxValue: 0,
+		isMain: true,
+		isProp: true,
+		subOptions: [
+			{
+				id: 6,
+				isProp: true,
+				title: 'Texturas',
+				value: 0,
+				minValue: 0,
+				maxValue: 0
+			}
+		]
+	},
+	{
+		id: 7,
+		title: 'Pulseiras',
+		value: -1,
+		minValue: -1,
+		maxValue: 0,
+		isMain: true,
+		isProp: true,
+		subOptions: [
+			{
+				id: 7,
+				isProp: true,
+				title: 'Texturas',
+				value: 0,
+				minValue: 0,
+				maxValue: 0
+			}
+		]
+	},
+	{
+		id: 9,
+		title: 'Coletes',
+		value: 0,
+		minValue: 0,
+		maxValue: 0,
+		isMain: true,
+		subOptions: [
+			{
+				id: 9,
+				title: 'Texturas',
+				value: 0,
+				minValue: 0,
+				maxValue: 0
+			}
+		]
+	},
+	{
+		id: 5,
+		title: 'Bolsas',
+		value: 0,
+		minValue: 0,
+		maxValue: 0,
+		isMain: true,
+		subOptions: [
+			{
+				id: 5,
 				title: 'Texturas',
 				value: 0,
 				minValue: 0,

@@ -1,8 +1,8 @@
-import { bodyFeatures, clothing, faceFeatures, headBlend, headOverlays } from './../../../utils/data.js';
+import { accessories, bodyFeatures, clothing, faceFeatures, headBlend, headOverlays } from './../../../utils/data.js';
 
 const state = () => ({
 	headBlend: headBlend, faceFeatures: faceFeatures, headOverlays: headOverlays, bodyFeatures: bodyFeatures,
-	clothing: clothing
+	clothing: clothing, accessories: accessories
 })
 
 const getters = {
@@ -20,6 +20,9 @@ const getters = {
 	},
 	getClothing: state => {
 		return state.clothing;
+	},
+	getAccessories: state => {
+		return state.accessories;
 	}
 }
 
@@ -31,7 +34,8 @@ const actions = {
 
 const mutations = {
 	setData(state, data) {
-		state.headBlend = headBlend, state.faceFeatures = faceFeatures, state.headOverlays = headOverlays, state.bodyFeatures = bodyFeatures, state.clothing = clothing;
+		state.headBlend = headBlend, state.faceFeatures = faceFeatures, state.headOverlays = headOverlays, state.bodyFeatures = bodyFeatures;
+		state.clothing = clothing, state.accessories = accessories;
 
 		for (let i = 0; i < state.headBlend.length; i++) {
 			state.headBlend[i].value = data.headBlend[i];
@@ -50,8 +54,6 @@ const mutations = {
 				state.headOverlays[i].value = value, state.headOverlays[i + 1].value = data.headOverlays[id].opacity;
 			}
 		}
-
-		console.log(data)
 
 		for (let i = 0; i < state.bodyFeatures.length; i++) {
 			let option = state.bodyFeatures[i]
@@ -101,6 +103,21 @@ const mutations = {
 			} else {
 				clothesOption.value = data.variations.drawables[clothesOption.id], clothesOption.maxValue = data.totals.drawables[clothesOption.id];
 				clothesOption.subOptions[0].value = data.variations.drawablesTextures[clothesOption.id], clothesOption.subOptions[0].maxValue = data.totals.drawablesTextures[clothesOption.id];
+			}
+		}
+
+		for (let i = 0; i < state.accessories.length; i++) {
+			let accessoryOption = state.accessories[i];
+
+			switch (i) {
+				case 1: case 2: case 4: case 5:
+					accessoryOption.value = data.variations.props[accessoryOption.id], accessoryOption.maxValue = data.totals.props[accessoryOption.id];
+					accessoryOption.subOptions[0].value = data.variations.propsTextures[accessoryOption.id], accessoryOption.subOptions[0].maxValue = data.totals.propsTextures[accessoryOption.id];
+					break;
+				default:
+					accessoryOption.value = data.variations.drawables[accessoryOption.id], accessoryOption.maxValue = data.totals.drawables[accessoryOption.id];
+					accessoryOption.subOptions[0].value = data.variations.drawablesTextures[accessoryOption.id], accessoryOption.subOptions[0].maxValue = data.totals.drawablesTextures[accessoryOption.id];
+					break;
 			}
 		}
     }

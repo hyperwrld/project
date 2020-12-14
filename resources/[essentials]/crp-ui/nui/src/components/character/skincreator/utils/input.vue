@@ -34,7 +34,7 @@
 				if (!this.canChange(newValue)) {
 					this.data.value = oldValue;
 				} else {
-					this.click(this.data.id, this.data.isMain);
+					this.click(this.data.id, this.data.isMain, this.data.isProp);
 				}
 			}
     	},
