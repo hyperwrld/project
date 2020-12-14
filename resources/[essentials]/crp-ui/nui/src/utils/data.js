@@ -478,3 +478,125 @@ export const bodyFeatures = [
 		]
 	}
 ];
+
+export const clothing = [
+	{
+		id: 0,
+		title: 'Chapéus',
+		value: 0,
+		minValue: -1,
+		maxValue: 0,
+		isMain: true,
+		subOptions: [
+			{
+				id: 0,
+				title: 'Texturas',
+				value: 0,
+				minValue: 0,
+				maxValue: 0
+			}
+		]
+	},
+	{
+		id: 11,
+		title: 'Casacos',
+		value: 0,
+		minValue: 0,
+		maxValue: 0,
+		isMain: true,
+		subOptions: [
+			{
+				id: 11,
+				title: 'Texturas',
+				value: 0,
+				minValue: 0,
+				maxValue: 0
+			}
+		]
+	},
+	{
+		id: 8,
+		title: 'T-shirts',
+		value: 0,
+		minValue: 0,
+		maxValue: 0,
+		isMain: true,
+		subOptions: [
+			{
+				id: 8,
+				title: 'Texturas',
+				value: 0,
+				minValue: 0,
+				maxValue: 0
+			}
+		]
+	},
+	{
+		id: 3,
+		title: 'Braços',
+		value: 0,
+		minValue: 0,
+		maxValue: 0,
+		isMain: true,
+		subOptions: [
+			{
+				id: 3,
+				title: 'Texturas',
+				value: 0,
+				minValue: 0,
+				maxValue: 0
+			}
+		]
+	},
+	{
+		id: 4,
+		title: 'Calças',
+		value: 0,
+		minValue: 0,
+		maxValue: 0,
+		isMain: true,
+		subOptions: [
+			{
+				id: 4,
+				title: 'Texturas',
+				value: 0,
+				minValue: 0,
+				maxValue: 0
+			}
+		]
+	},
+	{
+		id: 6,
+		title: 'Sapatos',
+		value: 0,
+		minValue: 0,
+		maxValue: 0,
+		isMain: true,
+		subOptions: [
+			{
+				id: 6,
+				title: 'Texturas',
+				value: 0,
+				minValue: 0,
+				maxValue: 0
+			}
+		]
+	},
+	{
+		id: 10,
+		title: 'Decals',
+		value: 0,
+		minValue: 0,
+		maxValue: 0,
+		isMain: true,
+		subOptions: [
+			{
+				id: 10,
+				title: 'Texturas',
+				value: 0,
+				minValue: 0,
+				maxValue: 0
+			}
+		]
+	}
+];

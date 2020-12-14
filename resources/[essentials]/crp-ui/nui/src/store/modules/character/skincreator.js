@@ -1,7 +1,8 @@
-import { bodyFeatures, faceFeatures, headBlend, headOverlays } from './../../../utils/data.js';
+import { bodyFeatures, clothing, faceFeatures, headBlend, headOverlays } from './../../../utils/data.js';
 
 const state = () => ({
-	headBlend: headBlend, faceFeatures: faceFeatures, headOverlays: headOverlays, bodyFeatures: bodyFeatures
+	headBlend: headBlend, faceFeatures: faceFeatures, headOverlays: headOverlays, bodyFeatures: bodyFeatures,
+	clothing: clothing
 })
 
 const getters = {
@@ -16,6 +17,9 @@ const getters = {
 	},
 	getBodyFeatures: state => {
 		return state.bodyFeatures;
+	},
+	getClothing: state => {
+		return state.clothing;
 	}
 }
 
@@ -27,7 +31,7 @@ const actions = {
 
 const mutations = {
 	setData(state, data) {
-		state.headBlend = headBlend, state.faceFeatures = faceFeatures, state.headOverlays = headOverlays, state.bodyFeatures = bodyFeatures;
+		state.headBlend = headBlend, state.faceFeatures = faceFeatures, state.headOverlays = headOverlays, state.bodyFeatures = bodyFeatures, state.clothing = clothing;
 
 		for (let i = 0; i < state.headBlend.length; i++) {
 			state.headBlend[i].value = data.headBlend[i];
@@ -37,7 +41,7 @@ const mutations = {
 			state.faceFeatures[i].value = data.faceFeatures[i];
 		}
 
-		for (let i = 0; i < state.headOverlays.length; i += 2) {
+		for (let i = 0; i < state.headOverlays.length; i+=2) {
 			const id = state.headOverlays[i].id;
 
 			if (data.headOverlays[id]) {
@@ -46,6 +50,8 @@ const mutations = {
 				state.headOverlays[i].value = value, state.headOverlays[i + 1].value = data.headOverlays[id].opacity;
 			}
 		}
+
+		console.log(data)
 
 		for (let i = 0; i < state.bodyFeatures.length; i++) {
 			let option = state.bodyFeatures[i]
@@ -58,8 +64,8 @@ const mutations = {
 
             switch (i) {
                 case 0:
-					option.value = data.drawables.drawables[2], option.maxValue = data.totals.drawablesTotals[2];
-					option.subOptions[0].value = data.drawables.textures[2], option.subOptions[0].maxValue = data.totals.textureTotals[2];
+					option.value = data.variations.drawables[2], option.maxValue = data.totals.drawables[2];
+					option.subOptions[0].value = data.variations.drawablesTextures[2], option.subOptions[0].maxValue = data.totals.drawablesTextures[2];
 					option.subOptions[1].value = data.colors.hairColor, option.subOptions[2].value = data.colors.hairHightlightColor, option.subOptions[2].items = data.colors.hairColors;
                     break;
                 default:
@@ -80,10 +86,22 @@ const mutations = {
 					}
 
                     if (option.maxValue == 0) {
-						option.maxValue = data.totals.drawablesTotals[option.id];
+						option.maxValue = data.totals.drawables[option.id];
 					}
                     break;
             }
+		}
+
+		for (let i = 0; i < state.clothing.length; i++) {
+			let clothesOption = state.clothing[i];
+
+			if (i == 0) {
+				clothesOption.value = data.variations.props[0], clothesOption.maxValue = data.totals.props[0];
+				clothesOption.subOptions[0].value = data.variations.propsTextures[0], clothesOption.subOptions[0].maxValue = data.totals.propsTextures[0];
+			} else {
+				clothesOption.value = data.variations.drawables[clothesOption.id], clothesOption.maxValue = data.totals.drawables[clothesOption.id];
+				clothesOption.subOptions[0].value = data.variations.drawablesTextures[clothesOption.id], clothesOption.subOptions[0].maxValue = data.totals.drawablesTextures[clothesOption.id];
+			}
 		}
     }
 }
