@@ -32,6 +32,22 @@ function LoadModel(modelHash)
 	end
 end
 
+function CreateEntity(type, modelHash, coords, isNetwork, netMissionEntity, pedType)
+	if not HasModelLoaded(modelHash) then
+		LoadModel(modelHash)
+	end
+
+	local entity = 0
+
+	if type == 1 then
+		entity = CreatePed(pedType, modelHash, coords, isNetwork, netMissionEntity)
+	end
+
+	SetModelAsNoLongerNeeded(modelHash)
+
+	return entity
+end
+
 function GetVehicleInDirection(fromEntity, fromCoords, toCoords)
 	local rayHandle = StartShapeTestCapsule(fromEntity.x, fromEntity.y, fromEntity.z, toCoords.x, toCoords.y, toCoords.z, 5.0, 10, fromEntity, 7)
 	local retval, hit, endCoords, surfaceNormal, entityHit = GetShapeTestResult(rayHandle)

@@ -13,5 +13,7 @@ client_scripts {
 shared_script 'shared/util.lua'
 
 server_scripts {
-	'server/*.lua'
+	'server/database.lua',
+	'server/rpc.lua',
+	'server/polyzone.lua'
 }
