@@ -24,6 +24,20 @@ function LoadDictionary(dictionary)
 	end
 end
 
+function TaskPlayAnimation(entity, dictionary, animation, blendInSpeed, blendOutSpeed, duration, flag, playbackRate)
+	if dictionary and not IsEntityPlayingAnim(entity, dictionary, animation, 3) then
+		LoadDictionary(dictionary)
+
+		TaskPlayAnim(entity, dictionary, animation, blendInSpeed, blendOutSpeed, duration, flag, playbackRate, false, false, false)
+
+		RemoveAnimDict(dictionary)
+	else
+		if not IsPedUsingScenario(entity, animation) then
+			TaskStartScenarioInPlace(entity, animation, 0, true)
+		end
+	end
+end
+
 function LoadModel(modelHash)
 	RequestModel(modelHash)
 
