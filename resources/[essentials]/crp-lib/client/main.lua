@@ -48,6 +48,25 @@ function CreateEntity(type, modelHash, coords, isNetwork, netMissionEntity, pedT
 	return entity
 end
 
+function DoesPedExistInCoords(coords, distance)
+    local handle, ped = FindFirstPed()
+    local isFound, foundPed, success = false, 0
+
+    repeat
+        local pedCoords = GetEntityCoords(ped)
+
+        if #(coords - pedCoords) < distance then
+            isFound, foundPed = true, ped
+        end
+
+        success, ped = FindNextPed(handle)
+    until not success
+
+    EndFindPed(handle)
+
+    return isFound, foundPed
+end
+
 function GetVehicleInDirection(fromEntity, fromCoords, toCoords)
 	local rayHandle = StartShapeTestCapsule(fromEntity.x, fromEntity.y, fromEntity.z, toCoords.x, toCoords.y, toCoords.z, 5.0, 10, fromEntity, 7)
 	local retval, hit, endCoords, surfaceNormal, entityHit = GetShapeTestResult(rayHandle)
