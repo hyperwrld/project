@@ -1,6 +1,6 @@
 local isInsideZone = false
 
-exports['crp-lib']:createCircleZones({
+exports['crp-lib']:createZones(2, {
 	{ coords = vector3(-48.55, -1757.73, 29.42),  data = 'normal' },
 	{ coords = vector3(25.99, -1347.76, 29.5),    data = 'normal' },
 	{ coords = vector3(1136.1, -982.85, 46.42),   data = 'normal' },
