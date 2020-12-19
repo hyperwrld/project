@@ -1,11 +1,14 @@
-import { accessories, bodyFeatures, clothing, faceFeatures, headBlend, headOverlays } from './../../../utils/data.js';
+import { accessories, bodyFeatures, clothing, faceFeatures, getMenuCategories, headBlend, headOverlays } from './../../../utils/data.js';
 
 const state = () => ({
-	headBlend: headBlend, faceFeatures: faceFeatures, headOverlays: headOverlays, bodyFeatures: bodyFeatures,
-	clothing: clothing, accessories: accessories
+	categories: [], headBlend: [], faceFeatures: [],
+	headOverlays: [], bodyFeatures: [],clothing: [], accessories: []
 })
 
 const getters = {
+	getCategories: state => {
+		return state.categories;
+	},
 	getHeadBlend: state => {
 		return state.headBlend;
 	},
@@ -34,8 +37,10 @@ const actions = {
 
 const mutations = {
 	setData(state, data) {
-		state.headBlend = headBlend, state.faceFeatures = faceFeatures, state.headOverlays = headOverlays, state.bodyFeatures = bodyFeatures;
-		state.clothing = clothing, state.accessories = accessories;
+		const categories = getMenuCategories(data.type);
+
+		state.categories = categories, state.headBlend = headBlend, state.faceFeatures = faceFeatures;
+		state.clothing = clothing, state.accessories = accessories, state.bodyFeatures = bodyFeatures, state.headOverlays = headOverlays;
 
 		for (let i = 0; i < state.headBlend.length; i++) {
 			state.headBlend[i].value = data.headBlend[i];

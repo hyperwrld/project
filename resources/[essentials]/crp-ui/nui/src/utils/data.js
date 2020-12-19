@@ -747,3 +747,37 @@ export const accessories = [
 		]
 	}
 ];
+
+export const getMenuCategories = (type) => {
+	const skinCategories = [
+		{ title: 'Ped',  name: 'ped'               },
+		{ title: 'Pais', name: 'headBlend'         },
+		{ title: 'Cara', name: 'faceFeatures'      },
+		{ title: 'Pele', name: 'headOverlays'      },
+		{ title: 'Corpo', name: 'bodyFeatures'     },
+		{ title: 'Roupa', name: 'clothing'         },
+		{ title: 'Acessórios', name: 'accessories' }
+	];
+
+	let data, menus = [];
+
+	// type: 1 (all), 2 (clothing), 3 (hairshop), 4 (tattoos)
+
+	switch (type) {
+		case 2:
+			data = [5, 6, 0];
+			break;
+		case 3:
+			data = [4, 3];
+			break;
+		default:
+			data = [0, 1, 2, 3, 4, 5, 6];
+			break;
+	}
+
+	for (let i = 0; i < data.length; i++) {
+		menus[i] = skinCategories[data[i]];
+	}
+
+	return menus;
+}

@@ -14,7 +14,7 @@
 
 	import test from './components/character/skincreator/skincreator.vue';
 
-	import nui from './utils/nui.js';
+	import { send } from './utils/lib.js';
 
     export default {
 		name: 'app',
@@ -25,7 +25,7 @@
 			closeMenu: function(appName) {
 				this.changeRouter({ path: '/' });
 
-                nui.send('closeMenu', appName);
+                send('closeMenu', appName);
 			},
 			changeRouter: function(data) {
 				this.$router.push(data).catch(error => {
