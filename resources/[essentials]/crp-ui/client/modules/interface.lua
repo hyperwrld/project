@@ -28,24 +28,6 @@ function setCurrencyHudStatus(data)
 	})
 end
 
-function setCurrentMoney(currentMoney)
-	SendNUIMessage({
-		app = 'hud', event = 'setCurrentMoney', eventData = currentMoney
-	})
-end
-
-function addMoney(quantity)
-	SendNUIMessage({
-		app = 'hud', event = 'addMoney', eventData = quantity
-	})
-end
-
-function removeMoney(quantity)
-	SendNUIMessage({
-		app = 'hud', event = 'removeMoney', eventData = quantity
-	})
-end
-
 function toggleInteraction(status, message)
 	SendNUIMessage({
 		app = 'hud', event = 'setInteractionData', eventData = { status = status, message = message }

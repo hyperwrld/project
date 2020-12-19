@@ -5,7 +5,7 @@ function CRP.DB:FetchCharacters(source)
 
     if not identifier or identifier == '' then return false end
 
-	local query = [[SELECT id, firstname, lastname, gender, dateofbirth, job, bank, money FROM users WHERE identifier = ?;]]
+	local query = [[SELECT id, firstname, lastname, gender, dateofbirth, job, bank FROM users WHERE identifier = ?;]]
 
     return Citizen.Await(DB:Execute(query, identifier))
 end
@@ -82,7 +82,7 @@ function CRP.DB:RetrieveCharacter(source, characterId)
     if not identifier or identifier == '' then return false end
 	if not characterId or type(characterId) ~= 'number' then return false end
 
-    local query = [[SELECT id, identifier, firstname, lastname, money, bank, job, grade, phone, dateofbirth, gender, skin FROM users WHERE identifier = ? AND id = ?;]]
+    local query = [[SELECT id, identifier, firstname, lastname, bank, job, grade, phone, dateofbirth, gender, skin FROM users WHERE identifier = ? AND id = ?;]]
     local result = Citizen.Await(DB:Execute(query, identifier, characterId))
 
 	if #result == 0 then

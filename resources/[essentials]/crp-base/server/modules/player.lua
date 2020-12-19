@@ -22,15 +22,12 @@ function CRP.Player:CreateCharacter(source, data)
 	self.identifier     = data.identifier
 	self.firstname      = data.firstname
 	self.lastname       = data.lastname
-	self.money          = data.money
 	self.bank           = data.bank
 	self.job            = data.job
 	self.grade          = data.grade
 	self.phone          = data.phone
 	self.dateofbirth    = data.dateofbirth
 	self.gender         = data.gender
-
-	TriggerClientEvent('crp-ui:setCurrentMoney', self.source, self.money)
 
 	self.getCharacterId = function()
 		return self.id
@@ -42,30 +39,6 @@ function CRP.Player:CreateCharacter(source, data)
 
 	self.getGender = function()
 		return self.gender
-	end
-
-	self.getMoney = function()
-		return self.money
-	end
-
-	self.addMoney = function(quantity)
-		if type(quantity) == 'number' then
-			local newQuantity = self.money + quantity
-
-			self.money = math.floor(newQuantity)
-
-			TriggerClientEvent('crp-ui:addMoney', self.source, quantity)
-		end
-	end
-
-	self.removeMoney = function(quantity)
-		if type(quantity) == 'number' then
-			local newQuantity = self.money - quantity
-
-			self.money = math.floor(newQuantity)
-
-			TriggerClientEvent('crp-ui:removeMoney', self.source, quantity)
-		end
 	end
 
 	self.getBank = function()
