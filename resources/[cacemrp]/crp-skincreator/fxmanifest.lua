@@ -1,37 +1,24 @@
-fx_version 'adamant'
+fx_version 'cerulean'
 
 game 'gta5'
 
-ui_page 'nui/index.html'
+dependecies {
+	'crp-ui',
+	'crp-lib'
+}
+
+shared_scripts {
+	'@crp-lib/shared/util.lua'
+}
 
 client_scripts {
-    'client/utils.js',
-    'client/main.js'
+	'@crp-lib/client/main.lua',
+	'@crp-lib/client/rpc.lua',
+	'client/*.lua'
 }
 
 server_scripts {
-    'server/main.js'
-}
-
-files {
-    'nui/index.html',
-    'nui/js/main.js',
-    'nui/css/main.css',
-
-    'nui/css/fonts/fa-brands-400.eot',
-    'nui/css/fonts/fa-brands-400.svg',
-    'nui/css/fonts/fa-brands-400.ttf',
-    'nui/css/fonts/fa-brands-400.woff',
-    'nui/css/fonts/fa-brands-400.woff2',
-    'nui/css/fonts/fa-regular-400.eot',
-    'nui/css/fonts/fa-regular-400.svg',
-    'nui/css/fonts/fa-regular-400.ttf',
-    'nui/css/fonts/fa-regular-400.woff',
-    'nui/css/fonts/fa-regular-400.woff2',
-    'nui/css/fonts/fa-solid-900.eot',
-    'nui/css/fonts/fa-solid-900.svg',
-    'nui/css/fonts/fa-solid-900.ttf',
-    'nui/css/fonts/fa-solid-900.woff',
-    'nui/css/fonts/fa-solid-900.woff2',
-    'nui/css/all.min.css'
+	'@crp-lib/server/database.lua',
+	'@crp-lib/server/rpc.lua',
+	'server/*.lua'
 }
