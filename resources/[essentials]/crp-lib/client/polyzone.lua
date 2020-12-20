@@ -1,16 +1,32 @@
-function createZones(type, points, zoneName, eventName, canLog) -- type: 1 (PolyZones) / 2 (CircleZones)
+function createCircleZones(points, radius, useZ, zoneName, eventName, canLog)
 	local zones = {}
 
 	for i = 1, #points do
-		name = 'zone-' .. tostring(i)
+		name = 'circleZone-' .. tostring(i)
 
-		if type == 1 then
-			zones[#zones + 1] = PolyZone:Create(points[i].coords, 0.6, { name = name, debugPoly=true, useZ = true, data = points[i].data })
-		elseif type == 2 then
-			zones[#zones + 1] = CircleZone:Create(points[i].coords, 0.6, { name = name, debugPoly=true, useZ = true, data = points[i].data })
-		end
+		zones[#zones + 1] = CircleZone:Create(points[i].coords, radius, { name = name, useZ = useZ, data = points[i].data, debugPoly = true })
 	end
 
+	createZones(zones, zoneName, eventName, canLog)
+end
+
+exports('createCircleZones', createCircleZones)
+
+function createBoxZones(points, length, width, heading, minZ, maxZ, zoneName, eventName, canLog)
+	local zones = {}
+
+	for i = 1, #points do
+		name = 'boxZone-' .. tostring(i)
+
+		zones[#zones + 1] = BoxZone:Create(points[i].coords, length, width, { name = name, heading = heading, minZ = minZ, maxZ = maxZ, data = points[i].data, debugPoly = true })
+	end
+
+	createZones(zones, zoneName, eventName, canLog)
+end
+
+exports('createBoxZones', createBoxZones)
+
+function createZones(zones, zoneName, eventName, canLog)
 	local comboZone = ComboZone:Create(zones, { name = zoneName })
 
 	comboZone:onPlayerInOut(function(isPointInside, point, zone)
