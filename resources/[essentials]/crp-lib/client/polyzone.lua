@@ -12,13 +12,15 @@ end
 
 exports('createCircleZones', createCircleZones)
 
-function createBoxZones(points, length, width, heading, minZ, maxZ, zoneName, eventName, canLog)
+function createBoxZones(points, zoneName, eventName, canLog)
 	local zones = {}
 
 	for i = 1, #points do
 		name = 'boxZone-' .. tostring(i)
 
-		zones[#zones + 1] = BoxZone:Create(points[i].coords, length, width, { name = name, heading = heading, minZ = minZ, maxZ = maxZ, data = points[i].data, debugPoly = true })
+		zones[#zones + 1] = BoxZone:Create(points[i].coords, points[i].length, points[i].width, {
+			name = name, heading = points[i].heading, minZ = points[i].minZ, maxZ = points[i].maxZ, data = points[i].data, debugPoly = true
+		})
 	end
 
 	createZones(zones, zoneName, eventName, canLog)
