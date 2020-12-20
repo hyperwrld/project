@@ -1,7 +1,11 @@
+debugActivated = true
+
 local resourceName = GetCurrentResourceName()
 
 function Debug(string)
-	print('^4[' .. resourceName .. ']^0 ' .. string)
+	if debugActivated then
+		print('^4[' .. resourceName .. ']^0 ' .. string)
+	end
 end
 
 function GetRandomNumber(firstNumber, secondNumber)
