@@ -22,12 +22,6 @@ function setVehicleHudData(location, speed, fuel, time)
 	})
 end
 
-function setCurrencyHudStatus(data)
-	SendNUIMessage({
-		app = 'hud', event = 'setCurrencyHudStatus', eventData = data
-	})
-end
-
 function toggleInteraction(status, message)
 	SendNUIMessage({
 		app = 'hud', event = 'setInteractionData', eventData = { status = status, message = message }
@@ -52,19 +46,6 @@ exports('setCharacterData', setCharacterData)
 exports('setHudData', setHudData)
 exports('setVehicleHudData', setVehicleHudData)
 
-RegisterNetEvent('crp-ui:setCurrencyHudStatus')
-AddEventHandler('crp-ui:setCurrencyHudStatus', setCurrencyHudStatus)
-
-RegisterNetEvent('crp-ui:setCurrentMoney')
-AddEventHandler('crp-ui:setCurrentMoney', setCurrentMoney)
-
-RegisterNetEvent('crp-ui:addMoney')
-AddEventHandler('crp-ui:addMoney', addMoney)
-
-RegisterNetEvent('crp-ui:removeMoney')
-AddEventHandler('crp-ui:removeMoney', removeMoney)
-
 exports('toggleInteraction', toggleInteraction)
-
 exports('setAlert', setAlert)
 exports('setCustomAlert', setCustomAlert)
