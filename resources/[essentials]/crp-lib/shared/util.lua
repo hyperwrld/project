@@ -1,6 +1,4 @@
-debugActivated = true
-
-local resourceName = GetCurrentResourceName()
+local resourceName, debugActivated = GetCurrentResourceName(), true
 
 function Debug(string)
 	if debugActivated then
