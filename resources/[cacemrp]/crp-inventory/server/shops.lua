@@ -34,6 +34,18 @@ local shopsData = {
 				price = 1
 			}
 		}
+	},
+	[2] = {
+		name = 'Armamento',
+		permission = 'police',
+		items = {
+			{
+				item = 'CRP_CACETETE',
+				count = 50,
+				slot = 1,
+				price = 500
+			}
+		}
 	}
 }
 

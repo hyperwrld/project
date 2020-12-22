@@ -1,6 +1,6 @@
 local isInsideZone = false
 
-exports['crp-lib']:createZones(2, {
+exports['crp-lib']:createCircleZones({
 	{ coords = vector3(-48.55, -1757.73, 29.42),  data = 'normal' },
 	{ coords = vector3(25.99, -1347.76, 29.5),    data = 'normal' },
 	{ coords = vector3(1136.1, -982.85, 46.42),   data = 'normal' },
@@ -20,8 +20,8 @@ exports['crp-lib']:createZones(2, {
 	{ coords = vector3(1961.59, 3740.43, 32.34),  data = 'normal' },
 	{ coords = vector3(1393.79, 3605.06, 34.98),  data = 'normal' },
 	{ coords = vector3(1698.14, 4924.74, 42.06),  data = 'normal' },
-	{ coords = vector3(1729.04, 6414.23, 35.04),  data = 'normal' },
-}, 'shopsZone', GetCurrentResourceName())
+	{ coords = vector3(1729.04, 6414.23, 35.04),  data = 'normal' }
+}, 0.6, true, 'shopsZone', GetCurrentResourceName())
 
 AddEventHandler('crp-shops:onPlayerInOut', function(isPointInside, zone)
 	if isPointInside then
@@ -35,13 +35,17 @@ AddEventHandler('crp-shops:onPlayerInOut', function(isPointInside, zone)
 	isInsideZone = isPointInside
 end)
 
-function ListenForKeys(type)
+function ListenForKeys(data)
 	Citizen.CreateThread(function()
 		while isInsideZone do
 			Citizen.Wait(0)
 
 			if IsControlJustReleased(0, 38) then
-				TriggerEvent('crp-inventory:openShop', type)
+				if type == 'normal' then
+					TriggerEvent('crp-inventory:openShop', data)
+				else
+					TriggerEvent('crp-skincreator:openShop', data.type)
+				end
 			end
 		end
 	end)

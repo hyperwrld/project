@@ -1,8 +1,8 @@
 local isInsideZone, storePed, isRobbing = false, 0, false
 
-exports['crp-lib']:createZones(2, {
-	{ coords = vector3(26.43, -1345.34, 29.5),  data = vector4(24.31, -1347.32, 29.49054, 263.16) }
-}, 'robberyZone', GetCurrentResourceName() .. ':robbery', true)
+exports['crp-lib']:createBoxZones({
+	{ coords = vector3(-161.76, -302.12, 39.73), length = 3.8, width = 3.2, heading = 341, minZ = 38.73, maxZ = 40.73, data = { name = 'normal' } }
+}, 'robberyZone', GetCurrentResourceName() .. ':robbery')
 
 AddEventHandler('crp-shops:robbery:onPlayerInOut', function(isPointInside, zone)
 	if isPointInside then
