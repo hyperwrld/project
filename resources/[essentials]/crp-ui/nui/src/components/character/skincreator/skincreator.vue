@@ -8,6 +8,9 @@
 	import accessories from './modules/accessories.vue';
 
 	import { mapGetters } from 'vuex';
+	import { send } from './../../../utils/lib.js';
+
+	import dialog from './dialog/dialog.js';
 
 	import { library } from '@fortawesome/fontawesome-svg-core';
 	import { faAngleLeft, faAngleRight, faFlushed, faGlasses, faHatCowboy, faSocks, faTshirt, faUserTie } from '@fortawesome/free-solid-svg-icons';
@@ -38,19 +41,34 @@
         },
 		data() {
 			return {
-				currentCategory: ''
+				currentCategory: '', isDialogOpen: false
 			}
 		},
-		mounted() {
+		destroyed() {
+            window.removeEventListener('message', this.listener);
+        },
+        mounted() {
+            this.listener = window.addEventListener('keydown', (event) => {
+                if (event.keyCode == 27 && !this.isDialogOpen) {
+					this.isDialogOpen = true;
+
+					dialog.createDialog().then(response => {
+						send('saveSkin', response);
+					}).catch(error => {
+						this.isDialogOpen = false;
+					});
+                }
+			}, false);
+
 			this.handleSwitchCategory(this.categories[0].name);
-		},
+        },
 		render (h) {
 			return (
 				<div class='skincreator'>
 					<div class='categories'>
 						{ this.categories.map((menu, index) => {
 							return (
-								<button class={ this.currentCategory == menu.name ? 'active' : '' } onClick ={ () => this.handleSwitchCategory(menu.name) }>{ menu.title }</button>
+								<button class={ this.currentCategory == menu.name ? 'active' : '' } onClick={ () => this.handleSwitchCategory(menu.name) }>{ menu.title }</button>
 							)
 						})}
 					</div>

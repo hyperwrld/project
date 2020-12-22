@@ -55,6 +55,7 @@
 	}
 
 	.container {
+		position: relative;
 		display: grid;
 		grid-template-rows: 10fr 32px;
 		row-gap: 2.5px;
