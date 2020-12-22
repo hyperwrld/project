@@ -22,8 +22,8 @@ function createBoxZones(points, zoneName, eventName, canLog)
 	for i = 1, #points do
 		name = 'boxZone-' .. tostring(i)
 
-		zones[#zones + 1] = BoxZone:Create(points[i].coords, points[i].length, points[i].width, {
-			name = name, heading = points[i].heading, minZ = points[i].minZ, maxZ = points[i].maxZ, data = points[i].data, debugPoly = true
+		zones[#zones + 1] = BoxZone:Create(points[i].coords.xyz, points[i].length, points[i].width, {
+			name = name, heading = points[i].coords.w, minZ = points[i].minZ, maxZ = points[i].maxZ, data = points[i].data, debugPoly = true
 		})
 	end
 
