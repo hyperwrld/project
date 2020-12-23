@@ -18,7 +18,7 @@
 		align-items: center;
 		justify-content: center;
 
-		&-container {
+		div[class*="-container"] {
 			margin-right: 0.5%;
 			margin-left: 0.5%;
 			height: 50% !important;
@@ -74,7 +74,7 @@
 				margin-left: 1.5%;
 			}
 
-			&:last-child {
+			& > &:last-child {
 				height: 100%;
 			}
 		}
@@ -90,7 +90,7 @@
 				font-size: 1.5vh;
 			}
 
-			&:last-child {
+			& > &:last-child {
 				position: absolute;
 				bottom: 0;
 				transition: 0.2s ease-in-out;

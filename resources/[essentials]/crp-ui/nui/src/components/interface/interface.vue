@@ -1,5 +1,4 @@
 <script>
-	import currency from './currency/currency.vue';
 	import hud from './hud/hud.vue';
 	import interaction from './interaction/interaction.vue';
 	import notifications from './notifications/notifications.vue';
@@ -7,12 +6,12 @@
 	export default {
 		name: 'interface',
 		components: {
-			currency, hud, interaction, notifications
+			hud, interaction, notifications
 		},
 		render (h) {
 			return (
 				<div class='interface'>
-					<currency/><hud/><interaction/><notifications/>
+					<hud/><interaction/><notifications/>
 				</div>
 			);
 		}
