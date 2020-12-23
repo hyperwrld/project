@@ -14,9 +14,9 @@ Citizen.CreateThread(function()
 
 				isEnteringVehicle = true
 
-				TriggerClientEvent('crp-lib:enteringVehicle', vehicle, seat, GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)), entityNetId)
+				TriggerEvent('crp-lib:enteringVehicle', vehicle, seat, GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)), entityNetId)
 			elseif not DoesEntityExist(vehicle) and not IsPedInAnyVehicle(playerPed, true) and isEnteringVehicle then
-				TriggerClientEvent('crp-lib:enteringAborted')
+				TriggerEvent('crp-lib:enteringAborted')
 
 				isEnteringVehicle = false
 			elseif IsPedInAnyVehicle(playerPed, false) then
@@ -24,13 +24,13 @@ Citizen.CreateThread(function()
 
 				local vehicleModel, entityNetId = GetEntityModel(currentVehicle), VehToNet(currentVehicle)
 
-				TriggerClientEvent('crp-lib:enteredVehicle', currentVehicle, currentSeat, GetDisplayNameFromVehicleModel(vehicleModel), entityNetId)
+				TriggerEvent('crp-lib:enteredVehicle', currentVehicle, currentSeat, GetDisplayNameFromVehicleModel(vehicleModel), entityNetId)
 			end
 		elseif isInVehicle then
 			if not IsPedInAnyVehicle(playerPed, false) or IsPlayerDead(PlayerId()) then
 				local vehicleModel, entityNetId = GetEntityModel(currentVehicle), VehToNet(currentVehicle)
 
-				TriggerClientEvent('crp-lib:leftVehicle', currentVehicle, currentSeat, GetDisplayNameFromVehicleModel(vehicleModel), entityNetId)
+				TriggerEvent('crp-lib:leftVehicle', currentVehicle, currentSeat, GetDisplayNameFromVehicleModel(vehicleModel), entityNetId)
 
 				isInVehicle, currentVehicle, currentSeat = false, 0, 0
 			end

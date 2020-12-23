@@ -17,11 +17,11 @@ Citizen.CreateThread(function()
 					SetVehicleNeedsToBeHotwired(vehicle, false)
 					SetVehicleEngineOn(vehicle, false, true, true)
 
-					exports['crp-ui']:showInteraction('[G] Procurar / [H] Ligação direta')
+					exports['crp-ui']:toggleInteraction(true, '[G] Procurar / [H] Ligação direta')
 				elseif isShowingAction then
 					isShowingAction = false
 
-					exports['crp-ui']:hideInteraction()
+					exports['crp-ui']:toggleInteraction(false)
 				end
 
 				if not isDoingAction then

@@ -27,9 +27,9 @@ AddEventHandler('crp-shops:onPlayerInOut', function(isPointInside, zone)
 	if isPointInside then
 		ListenForKeys(zone.data)
 
-		exports['crp-ui']:showInteraction('[E] para abrir a loja.')
+		exports['crp-ui']:toggleInteraction(true, '[E] para abrir a loja.')
 	else
-		exports['crp-ui']:hideInteraction()
+		exports['crp-ui']:toggleInteraction(false)
 	end
 
 	isInsideZone = isPointInside
