@@ -16,7 +16,7 @@ local zoneNames = {
     WINDF = 'Ron Alternates Wind Farm', WVINE = 'West Vinewood', ZANCUDO = 'Zancudo River', ZP_ORT = 'Port of South Los Santos', ZQ_UAR = 'Davis Quartz'
 }
 
-local _lastHealth, _lastArmour, _lastBreath, _lastStress, isOnVehicle, isCompassOn = 0, 0, 0, 0, false, false
+local _lastHealth, _lastArmour, _lastBreath, _lastStress, isRadarOn, isOnVehicle, isCompassOn = 0, 0, 0, 0, false, false, false
 local south, west, north, east, south2 = (-100), (-100 * 2), (-100 * 3), (-100 * 4), (-100 * 5)
 
 hunger, thirst, stress, playerPed, vehicle = 100, 100, 0, PlayerPedId(), 0
@@ -47,48 +47,54 @@ Citizen.CreateThread(function()
     end
 end)
 
-Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait(500)
+AddEventHandler('crp-lib:enteredVehicle', function(vehicle, seat, vehicleModel, entityNetId)
+	DisplayRadar(true)
 
-		vehicle = GetVehiclePedIsUsing(playerPed)
+	isOnVehicle, isRadarOn = true, true
 
-		if vehicle ~= 0 and IsVehicleEngineOn(vehicle) then
-			local position = GetEntityCoords(playerPed)
-			local zoneName = zoneNames[GetNameOfZone(position.x, position.y, position.z)]
-			local currentStreetHash, crossingRoadHash = GetStreetNameAtCoord(position.x, position.y, position.z)
-            local streetName, crossingRoadName = GetStreetNameFromHashKey(currentStreetHash), GetStreetNameFromHashKey(crossingRoadHash)
-			local speed = math.ceil(GetEntitySpeed(vehicle) * 3.6)
+	exports['crp-ui']:setHudData('isOnVehicle', true)
 
-			if not isOnVehicle then
-				DisplayRadar(true)
+	Citizen.CreateThread(function()
+		while isOnVehicle do
+			Citizen.Wait(500)
 
-				isOnVehicle = true
+			if IsVehicleEngineOn(vehicle) then
+				local position = GetEntityCoords(playerPed)
+				local zoneName = zoneNames[GetNameOfZone(position.x, position.y, position.z)]
+				local currentStreetHash, crossingRoadHash = GetStreetNameAtCoord(position.x, position.y, position.z)
+				local streetName, crossingRoadName = GetStreetNameFromHashKey(currentStreetHash), GetStreetNameFromHashKey(crossingRoadHash)
+				local speed = math.ceil(GetEntitySpeed(vehicle) * 3.6)
 
-				exports['crp-ui']:setHudData('isOnVehicle', true)
-			end
+				if not isRadarOn then
+					isRadarOn = true
+				end
 
-            if crossingRoadName ~= '' then
-                streetName = streetName .. ' | ' .. crossingRoadName
-            end
+				if crossingRoadName ~= '' then
+					streetName = streetName .. ' | ' .. crossingRoadName
+				end
 
-            if zoneName then
-                streetName = streetName .. ' | [' .. zoneName .. ']'
-			end
+				if zoneName then
+					streetName = streetName .. ' | [' .. zoneName .. ']'
+				end
 
-			exports['crp-ui']:setVehicleHudData(streetName, speed, DecorGetInt(vehicle, 'currentFuel'), GetCurrentTime())
-		else
-			if isOnVehicle then
+				exports['crp-ui']:setVehicleHudData(streetName, speed, DecorGetInt(vehicle, 'currentFuel'), GetCurrentTime())
+			elseif isRadarOn then
 				DisplayRadar(false)
 
-				isOnVehicle = false
+				isRadarOn = false
 
 				exports['crp-ui']:setHudData('isOnVehicle', false)
 			end
-
-			Citizen.Wait(1000)
 		end
-	end
+	end)
+end)
+
+AddEventHandler('crp-lib:leftVehicle', function(vehicle, seat, vehicleModel, entityNetId)
+	DisplayRadar(false)
+
+	isOnVehicle, isRadarOn = false, false
+
+	exports['crp-ui']:setHudData('isOnVehicle', false)
 end)
 
 Citizen.CreateThread(function()
