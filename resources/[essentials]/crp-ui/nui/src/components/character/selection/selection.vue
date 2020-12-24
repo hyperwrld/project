@@ -72,8 +72,7 @@
 					choices: [
 						{ key: 'firstName', type: 'text', min: 1, max: 10, placeholder: 'Primeiro nome' }, { key: 'lastName', type: 'text', min: 1, max: 10, placeholder: 'Último nome' },
 						{ key: 'dateOfBirth', type: 'date', placeholder: 'Data de nascimento' },
-						{ key: 'gender', type: 'select', placeholder: 'Sexo', options: [ { text: 'Masculino', value: false }, { text: 'Feminino', value: true } ] },
-						{ key: 'history', type: 'textarea', placeholder: 'História', min: 100, max: 500 }
+						{ key: 'gender', type: 'select', placeholder: 'Sexo', options: [ { text: 'Masculino', value: false }, { text: 'Feminino', value: true } ] }
 					]
 				}).then(response => {
 					if (response) {
@@ -108,29 +107,30 @@
 													{ character.firstname + ' ' + character.lastname }
 													<span>// { character.dateofbirth }</span>
 												</h3>
-												<span>
-													Sexo: { character.gender ? 'Feminino' : 'Masculino' } // Trabalho: { character.job }<br/>
-													Dinheiro: { character.money + '€' } // Banco: { character.bank + '€' }<br/>
-												</span>
+												<span>Sexo: { character.gender ? 'Feminino' : 'Masculino' } // Trabalho: { character.job }</span>
+												<span>Banco: { character.bank + '€' }</span>
 											</div> : <h3>Slot Vazio</h3>
 										}
 									</div>
 								)
 							})}
 						</div>
-						<div class='buttons'>
-							{ this.charactersData[this.currentItem] && this.charactersData[this.currentItem].firstname ?
-								<div class='buttons-container'>
-									<button class={ this.isLoading ? 'loading' : '' } onClick={ () => this.selectCharacter() }>
-										Selecionar { this.isLoading &&
-											<i class='fa fa-circle-o-notch fa-spin'/>
-										}
-									</button>
-									<button onClick={ () => this.deleteCharacter() }>Apagar</button>
-								</div> : <button onClick={ () => this.createCharacter() }>Criar</button>
-							}
-							<button onClick={ () => this.handleDisconnect() }>Disconectar</button>
-						</div>
+						{ this.charactersData[this.currentItem] && this.charactersData[this.currentItem].firstname ?
+							<div class='buttons'>
+								<button class={ this.isLoading ? 'loading' : '' } onClick={ () => this.selectCharacter() }>
+									Selecionar { this.isLoading &&
+										<i class='fa fa-circle-o-notch fa-spin'/>
+									}
+								</button>
+								<button onClick={ () => this.deleteCharacter() }>Apagar</button>
+								<button onClick={ () => this.handleDisconnect() }>Disconectar</button>
+							</div>
+						:
+							<div class='buttons'>
+								<button onClick={ () => this.createCharacter() }>Criar</button>
+								<button onClick={ () => this.handleDisconnect() }>Disconectar</button>
+							</div>
+						}
 					</div>
 				</transition>
 			);

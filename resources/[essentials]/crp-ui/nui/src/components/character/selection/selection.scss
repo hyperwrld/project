@@ -30,17 +30,15 @@
 	}
 
 	.character-list {
-		display: flex;
-		justify-content: center;
-		flex-direction: column;
+		display: grid;
+		grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+		gap: 5px;
 
 		.character {
-			height: 19.4%;
 			width: 100%;
 			padding: 5%;
 			background-color: rgba(22, 25, 35, 0.4);
 			box-shadow: inset 0 2px 0 rgba(22, 25, 35, 0.1), inset 0 -2px 0 rgba(22, 25, 35, 0.1);
-			margin-bottom: 5px;
 			backdrop-filter: blur(5px);
 			color: ivory;
 			display: flex;
@@ -60,15 +58,19 @@
 			}
 
 			& > .info-container {
+				display: flex;
+				flex-direction: column;
+				font-size: 0.7vw;
+
 				h3 > span {
 					color: rgba(255, 255, 240, 0.5);
 					margin-left: 2.5%;
-					font-size: 1vh;
+					font-size: 0.5vw;
 				}
 
 				& > span {
 					margin-top: 1%;
-					font-size: 1vh;
+					font-size: 0.5vw;
 					color: rgba(255, 255, 240, 0.5);
 				}
 			}
@@ -88,19 +90,16 @@
 	}
 
 	& > .buttons {
-		.buttons-container {
-			margin-bottom: 10px;
-			height: 70%;
-		}
+		display: grid;
+		grid-template-rows: 1fr 1fr 1fr;
+		gap: 5px;
 
 		button {
 			box-shadow: rgb(255, 255, 255) 0px 0px 0px 2px inset;
 			background-color: rgba(22, 25, 35, 0.4);
 			color: ivory;
 			width: 100%;
-			height: 42.859%;
 			backdrop-filter: blur(5px);
-			margin-bottom: 10px;
 			font-size: 1.3vh;
 			outline: none;
 
@@ -108,10 +107,6 @@
 				background-color: #fff;
 				box-shadow: inset 0 0 0 2px rgba(22, 25, 35, 0.4);
 				color: #0c0c0c;
-			}
-
-			&:last-child {
-				margin-bottom: 0;
 			}
 
 			&.loading {
@@ -125,8 +120,6 @@
 		}
 
 		& > button {
-			height: 30%;
-
 			&:last-child {
 				box-shadow: rgb(239, 0, 0) 0px 0px 0px 2px inset;
 				background-color: rgba(22, 25, 35, 0.4);

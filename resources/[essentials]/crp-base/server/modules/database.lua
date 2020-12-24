@@ -32,7 +32,6 @@ function CRP.DB:CreateCharacter(source, data)
 	if not data.firstName or type(data.firstName) ~= 'string' then return false end
 	if not data.lastName or type(data.lastName) ~= 'string' then return false end
 	if not data.dateOfBirth or type(data.dateOfBirth) ~= 'string' then return false end
-	if not data.history or type(data.history) ~= 'string' then return false end
 	if data.gender == nil or type(data.gender) ~= 'boolean' then return false end
 
 	local characterExist = CRP.DB:DoesCharacterExist(data.firstName, data.lastName)
@@ -47,8 +46,8 @@ function CRP.DB:CreateCharacter(source, data)
 		return false
 	end
 
-	local query, phoneNumber = [[INSERT INTO users (identifier, firstname, lastname, dateofbirth, gender, story, phone) VALUES (?, ?, ?, date_format(?, '%d/%m/%Y'), ?, ?, ?);]], CRP.Util:GeneratePhoneNumber()
-    local result = Citizen.Await(DB:Execute(query, identifier, data.firstName, data.lastName, data.dateOfBirth, data.gender, data.history, phoneNumber))
+	local query, phoneNumber = [[INSERT INTO users (identifier, firstname, lastname, dateofbirth, gender, phone) VALUES (?, ?, ?, date_format(?, '%d/%m/%Y'), ?, ?);]], CRP.Util:GeneratePhoneNumber()
+    local result = Citizen.Await(DB:Execute(query, identifier, data.firstName, data.lastName, data.dateOfBirth, data.gender, phoneNumber))
 
 	if not result.changedRows then
 		return false

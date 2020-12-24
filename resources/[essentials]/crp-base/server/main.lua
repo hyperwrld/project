@@ -21,10 +21,21 @@ function getCharacterByPhone(number)
 	return false
 end
 
-RPC:register('fetchCharacters', function(source) return CRP.DB:FetchCharacters(source) end)
-RPC:register('createCharacter', function(source, data) return CRP.DB:CreateCharacter(source, data) end)
-RPC:register('deleteCharacter', function(source, data) return CRP.DB:DeleteCharacter(source, data) end)
-RPC:register('selectCharacter', function(source, characterId) return CRP.DB:RetrieveCharacter(source, characterId) end)
+RPC:register('fetchCharacters', function(source)
+	return CRP.DB:FetchCharacters(source)
+end)
+
+RPC:register('createCharacter', function(source, data)
+	return CRP.DB:CreateCharacter(source, data)
+end)
+
+RPC:register('deleteCharacter', function(source, data)
+	return CRP.DB:DeleteCharacter(source, data)
+end)
+
+RPC:register('selectCharacter', function(source, characterId)
+	return CRP.DB:RetrieveCharacter(source, characterId)
+end)
 
 exports('getAllCharacters', getAllCharacters)
 exports('getCharacter', getCharacter)
