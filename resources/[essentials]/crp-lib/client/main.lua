@@ -24,6 +24,14 @@ function LoadDictionary(dictionary)
 	end
 end
 
+function LoadAnimationSet(setName)
+	RequestAnimSet(setName)
+
+	while not HasAnimSetLoaded(setName) do
+	  	Citizen.Wait(0)
+	end
+end
+
 function TaskPlayAnimation(entity, dictionary, animation, blendInSpeed, blendOutSpeed, duration, flag, playbackRate)
 	if dictionary and not IsEntityPlayingAnim(entity, dictionary, animation, 3) then
 		LoadDictionary(dictionary)

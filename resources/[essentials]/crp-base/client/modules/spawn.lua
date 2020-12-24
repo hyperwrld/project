@@ -12,12 +12,16 @@ function CRP.Spawn:InitializeIntro()
 	SetEntityInvincible(playerPed, true)
 	FreezeEntityPosition(playerPed, true)
 
+	-- Meter de noite quando se spawna
+
 	local firstCam = CreateCamWithParams('DEFAULT_SCRIPTED_CAMERA', 907.71, 1039.36, 295.67, 2.5, 0.0, 38.68, 45.0, true, 0)
-	local secondCam = CreateCamWithParams('DEFAULT_SCRIPTED_CAMERA', 853.67, 990.04, 295.67, 2.5, 0.0, 30.37, 45.0, true, 0)
 
 	DoScreenFadeOut(0)
 	SetCamActive(firstCam, true)
-    RenderScriptCams(true, false, 5000, true, true)
+	RenderScriptCams(true, false, 5000, true, true)
+
+	local secondCam = CreateCamWithParams('DEFAULT_SCRIPTED_CAMERA', 853.67, 990.04, 295.67, 2.5, 0.0, 30.37, 45.0, true, 0)
+
     SetCamActiveWithInterp(secondCam, firstCam, 15000, 100, 100)
 
     Citizen.Wait(1500)
@@ -38,35 +42,38 @@ end
 function CRP.Spawn:InitializeMenu()
 	local playerPed, data = PlayerPedId(), RPC:execute('fetchCharacters')
 
+	DoScreenFadeOut(500)
+
 	Citizen.Wait(500)
-
-	DoScreenFadeOut(1000)
-
-	Citizen.Wait(1000)
 
 	DestroyAllCams(true)
-	SetEntityCoords(playerPed, 8.16, -664.74, 16.13, 0.0, 0.0, 0.0, true)
-	SetEntityVisible(playerPed, false)
-	SetEntityInvincible(playerPed, true)
-	FreezeEntityPosition(playerPed, true)
+	RenderScriptCams(false, false, 2000, true, true)
 
-	local cam = CreateCamWithParams('DEFAULT_SCRIPTED_CAMERA', 7.59, -664.55, 15.86, 1.0, 0.0, 290.54, 45.0, true, 0)
+	currentPed = CreateEntity(1, `mp_m_freemode_01`, vector4(409.8483, -1001.0, -100.0, 5.39), false, true, 0)
 
-	SetCamActive(cam, true)
-    RenderScriptCams(true, false, 5000, true, true)
-	LoadModel('mp_m_freemode_01')
+	SetEntityCoords(playerPed, 409.8483, -1001.0, -100.0, 0.0, 0.0, 0.0)
+	SetEntityHeading(playerPed, 5.39)
 
-	currentPed = CreatePed('PED_TYPE_CIVMALE', 'mp_m_freemode_01', 11.08, -663.11, 16.13, 110.13, false, true)
+	firstCam = CreateCamWithParams('DEFAULT_SCRIPTED_CAMERA', 415.55, -998.50, -99.29, 0.00, 0.00, 89.75, 50.00, false, 0)
 
-	if data[1] then
+    SetCamActive(firstCam, true)
+    RenderScriptCams(true, false, 2000, true, true)
 
-	end
+	LoadAnimationSet('move_m@gangster@var_e')
+
+	SetPedMovementClipset(currentPed, 'move_m@gangster@var_e', 0.1)
+
+	RemoveAnimSet('move_m@gangster@var_e')
 
 	Citizen.Wait(500)
 
-	DoScreenFadeIn(500)
+	TaskGoStraightToCoord(currentPed, 409.8483, -998.54, -100.0, 0.15, -1, 265.70, 100)
 
-	Citizen.Wait(1000)
+	DoScreenFadeIn(7500)
+
+	secondCam = CreateCamWithParams('DEFAULT_SCRIPTED_CAMERA', 413.55, -998.50, -98.79, 0.00, 0.00, 89.75, 50.00, false, 0)
+
+	SetCamActiveWithInterp(secondCam, firstCam, 5000, true, true)
 
 	exports['crp-ui']:openApp('selection', data, true)
 end

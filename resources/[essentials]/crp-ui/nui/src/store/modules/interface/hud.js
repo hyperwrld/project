@@ -46,7 +46,7 @@ const mutations = {
 	},
 	setVehicleHudData(state, data) {
         for (var name in data) {
-            state.vehicleData[name] = data[name];
+            state[name] = data[name];
         }
     }
 }
