@@ -2,10 +2,13 @@ playerPed = PlayerPedId()
 
 local oldSkin, currentTattos = {}, {}
 
-AddEventHandler('crp-skincreator:openMenu', function()
-	playerPed, oldSkin = PlayerPedId(), 0
+AddEventHandler('crp-skincreator:openShop', function(type)
+	playerPed, oldSkin = PlayerPedId(), getCurrentSkin()
 
-	exports['crp-ui']:openApp('skincreator', getData(), true)
+	exports['crp-ui']:openApp('skincreator', {
+		type = type, headBlend = getHeadBlend(), faceFeatures = getFaceFeatures(),
+		headOverlays = getHeadOverlays(), colors = getColors(), variations = getVariations(), totals = getTotals()
+	}, true)
 end)
 
 RegisterUICallback('modifyHeadBlend', function(data, cb)
@@ -106,9 +109,12 @@ RegisterUICallback('modifyAccessories', function(data, cb)
 	cb(callbackData)
 end)
 
-function getData()
-	return {
-		headBlend = getHeadBlend(), faceFeatures = getFaceFeatures(), headOverlays = getHeadOverlays(),
-		colors = getColors(), variations = getVariations(), totals = getTotals()
-	}
-end
+RegisterUICallback('saveSkin', function(data, cb)
+	if data then
+
+	else
+		setOldSkin(oldSkin)
+	end
+
+	cb('ok')
+end)

@@ -22,7 +22,7 @@ function getHeadOverlays()
 			if colourType == 0 then
 				data[i] = { overlayValue = overlayValue, opacity = overlayOpacity }
 			else
-				data[i] = { overlayValue = overlayValue, firstColour = firstColour, secondColour = secondColour, opacity = overlayOpacity }
+				data[i] = { overlayValue = overlayValue, colourType = colourType, firstColour = firstColour, secondColour = secondColour, opacity = overlayOpacity }
 			end
 		end
 	end
@@ -94,4 +94,87 @@ function getTotals()
 	return {
 		drawables = drawables, drawablesTextures = drawablesTextures, props = props, propsTextures = propsTextures
 	}
+end
+
+function getCurrentModel()
+	local model = GetEntityModel(playerPed)
+
+	for i = 1, #maleSkins do
+		if `maleSkins[i]` == model then
+			return true, 'male'
+		end
+	end
+
+	for i = 1, #femaleSkins do
+		if `femaleSkins[i]` == model then
+			return true, 'female'
+		end
+	end
+
+	return false
+end
+
+function getCurrentSkin()
+	return {
+		model = GetEntityModel(playerPed), headBlend = getHeadBlend(), faceFeatures = getFaceFeatures(),
+		headOverlays = getHeadOverlays(), colors = getColors(), variations = getVariations(), totals = getTotals()
+	}
+end
+
+function setOldSkin(data)
+	setSkin(data.model)
+
+	setClothing(data.variations.drawables, data.variations.props, data.variations.drawablesTextures, data.variations.propsTextures)
+	setFaceFeatures(data.faceFeatures)
+	setHeadOverlays(data.headOverlays)
+
+	local headBlend = data.headBlend
+
+	SetPedHairColor(playerPed, data.hairColor, data.hairHightlightColor)
+	SetPedHeadBlendData(playerPed, headBlend[1], headBlend[2], headBlend[3], headBlend[4], headBlend[5], headBlend[6], headBlend[7], headBlend[8], headBlend[9], false)
+end
+
+function setSkin(model)
+	SetEntityInvincible(playerPed, true)
+
+	if IsModelInCdimage(model) and IsModelValid(model) then
+		LoadModel(model)
+
+		SetPlayerModel(PlayerId(), model)
+		SetModelAsNoLongerNeeded(model)
+
+		playerPed = PlayerPedId()
+
+		SetPedDefaultComponentVariation(playerPed)
+	end
+
+	SetEntityInvincible(playerPed, false)
+end
+
+function setClothing(drawables, props, drawablesTextures, propsTextures)
+	for i = 1, 12 do
+		SetPedComponentVariation(playerPed, i - 1, drawables[i], drawablesTextures[i], 2)
+	end
+
+	for i = 1, 8 do
+		ClearPedProp(playerPed, i - 1)
+
+		SetPedPropIndex(playerPed, i - 1, props[i], propsTextures[i], true)
+	end
+end
+
+function setFaceFeatures(data)
+    for i = 1, 20 do
+        SetPedFaceFeature(player, i-  1, data[i])
+    end
+end
+
+function setHeadOverlays(data)
+	for i = 1, 12 do
+		SetPedHeadOverlay(playerPed, i - 1, data[i].overlayValue, data[i].overlayOpacity)
+
+		if data[i].firstColour then
+			SetPedHeadOverlayColor(playerPed, i - 1, data[i].colourType, data[i].firstColour, data[i].secondColour)
+		end
+	end
 end
