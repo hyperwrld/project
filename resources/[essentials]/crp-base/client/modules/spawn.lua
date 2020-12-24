@@ -49,7 +49,19 @@ function CRP.Spawn:InitializeMenu()
 	DestroyAllCams(true)
 	RenderScriptCams(false, false, 2000, true, true)
 
-	currentPed = CreateEntity(1, `mp_m_freemode_01`, vector4(409.8483, -1001.0, -100.0, 5.39), false, true, 0)
+	local modelHash = `mp_m_freemode_01`
+
+	if data[1] and data[1].skin then
+		modelHash = data[1].skin.model
+	elseif (GetRandomNumber(10) <= 5 and not data[1]) or (data[1] and data[1].gender) then
+		modelHash = `mp_f_freemode_01`
+	end
+
+	currentPed = CreateEntity(1, modelHash, vector4(409.8483, -1001.0, -100.0, 5.39), false, true, 0)
+
+	if data[1] and data[1].skin then
+		exports['crp-skincreator']:setCharacterSkin(data[1].skin)
+	end
 
 	SetEntityCoords(playerPed, 409.8483, -1001.0, -100.0, 0.0, 0.0, 0.0)
 	SetEntityHeading(playerPed, 5.39)
@@ -79,5 +91,5 @@ function CRP.Spawn:InitializeMenu()
 end
 
 function CRP.Spawn:SpawnCharacter(characterData)
-
+	print(json.encode(characterData))
 end
