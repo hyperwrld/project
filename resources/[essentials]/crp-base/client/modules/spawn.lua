@@ -2,15 +2,14 @@ local isInMenu, currentPed, cam = false
 
 CRP.Spawn = {}
 
-function CRP.Spawn:InitializeIntro()
-	local playerPed = PlayerPedId()
+function CRP.Spawn:InitializeMenu()
+	DoScreenFadeOut(0)
+
+	local playerPed, data = PlayerPedId(), RPC:execute('fetchCharacters')
 
 	CRP.Gameplay:InitializeNatives()
 
-	SetEntityCoords(playerPed, 907.71, 1039.36, 290.67, 0.0, 0.0, 0.0, true)
-	SetEntityVisible(playerPed, false)
-	SetEntityInvincible(playerPed, true)
-	FreezeEntityPosition(playerPed, true)
+	Citizen.Wait(500)
 
 	isInMenu = true
 
@@ -24,45 +23,8 @@ function CRP.Spawn:InitializeIntro()
 		end
 	end)
 
-	-- Meter de noite quando se spawna
-
-	local firstCam = CreateCamWithParams('DEFAULT_SCRIPTED_CAMERA', 907.71, 1039.36, 295.67, 2.5, 0.0, 38.68, 45.0, true, 0)
-
-	DoScreenFadeOut(0)
-	SetCamActive(firstCam, true)
-	RenderScriptCams(true, false, 5000, true, true)
-
-	local secondCam = CreateCamWithParams('DEFAULT_SCRIPTED_CAMERA', 853.67, 990.04, 295.67, 2.5, 0.0, 30.37, 45.0, true, 0)
-
-    SetCamActiveWithInterp(secondCam, firstCam, 15000, 100, 100)
-
-    Citizen.Wait(1500)
-
-	DoScreenFadeIn(500)
-
-	Citizen.Wait(1500)
-
-	exports['crp-ui']:openApp('intro', nil, false)
-
-	Citizen.Wait(6000)
-
-	exports['crp-ui']:closeApp('intro')
-
-	CRP.Spawn:InitializeMenu()
-end
-
-function CRP.Spawn:InitializeMenu()
-	local playerPed, data = PlayerPedId(), RPC:execute('fetchCharacters')
-
-	DoScreenFadeOut(500)
-
-	Citizen.Wait(500)
-
 	SetEntityVisible(playerPed, true)
 	FreezeEntityPosition(playerPed, false)
-
-	DestroyAllCams(true)
-	RenderScriptCams(false, false, 2000, true, true)
 
 	if data[1] and data[1].skin then
 		exports['crp-skincreator']:setCharacterSkin(json.decode(data[1].skin))
@@ -101,6 +63,8 @@ function CRP.Spawn:InitializeMenu()
 	secondCam = CreateCamWithParams('DEFAULT_SCRIPTED_CAMERA', 413.55, -998.50, -98.79, 0.00, 0.00, 89.75, 50.00, false, 0)
 
 	SetCamActiveWithInterp(secondCam, firstCam, 5000, true, true)
+
+	Citizen.Wait(2500)
 
 	exports['crp-ui']:openApp('selection', data, true)
 end
