@@ -63,7 +63,7 @@ function CRP.Spawn:InitializeMenu()
 	RenderScriptCams(false, false, 2000, true, true)
 
 	if data[1] and data[1].skin then
-		exports['crp-skincreator']:setCharacterSkin(data[1].skin)
+		exports['crp-skincreator']:setCharacterSkin(json.decode(data[1].skin))
 	else
 		local modelHash = `mp_m_freemode_01`
 
@@ -78,8 +78,6 @@ function CRP.Spawn:InitializeMenu()
 
 	SetEntityCoords(playerPed, 409.8483, -1001.0, -100.0, 0.0, 0.0, 0.0)
 	SetEntityHeading(playerPed, 5.39)
-
-	print(GetEntityCoords(playerPed))
 
 	firstCam = CreateCamWithParams('DEFAULT_SCRIPTED_CAMERA', 415.55, -998.50, -99.29, 0.00, 0.00, 89.75, 50.00, false, 0)
 

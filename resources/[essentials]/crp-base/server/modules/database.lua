@@ -5,7 +5,7 @@ function CRP.DB:FetchCharacters(source)
 
     if not identifier or identifier == '' then return false end
 
-	local query = [[SELECT id, firstname, lastname, gender, dateofbirth, job, bank FROM users WHERE identifier = ?;]]
+	local query = [[SELECT id, firstname, lastname, gender, dateofbirth, job, bank, skin FROM characters WHERE identifier = ?;]]
 
     return Citizen.Await(DB:Execute(query, identifier))
 end
@@ -14,7 +14,7 @@ function CRP.DB:DoesCharacterExist(firstname, lastname)
     if not firstname or type(firstname) ~= 'string' then return false end
     if not lastname or type(lastname) ~= 'string' then return false end
 
-    local query = [[SELECT 1 FROM users WHERE firstname = ? AND lastname = ?;]]
+    local query = [[SELECT 1 FROM characters WHERE firstname = ? AND lastname = ?;]]
     local result = Citizen.Await(DB:Execute(query, firstname, lastname))
 
     if result[1] then
@@ -46,7 +46,7 @@ function CRP.DB:CreateCharacter(source, data)
 		return false
 	end
 
-	local query, phoneNumber = [[INSERT INTO users (identifier, firstname, lastname, dateofbirth, gender, phone) VALUES (?, ?, ?, date_format(?, '%d/%m/%Y'), ?, ?);]], CRP.Util:GeneratePhoneNumber()
+	local query, phoneNumber = [[INSERT INTO characters (identifier, firstname, lastname, dateofbirth, gender, phone) VALUES (?, ?, ?, date_format(?, '%d/%m/%Y'), ?, ?);]], CRP.Util:GeneratePhoneNumber()
     local result = Citizen.Await(DB:Execute(query, identifier, data.firstName, data.lastName, data.dateOfBirth, data.gender, phoneNumber))
 
 	if not result.changedRows then
@@ -65,7 +65,7 @@ function CRP.DB:DeleteCharacter(source, data)
     if not identifier or identifier == '' then return false end
     if not data.characterId or type(data.characterId) ~= 'number' then return false end
 
-    local query = [[DELETE FROM users WHERE identifier = ? AND id = ?;]]
+    local query = [[DELETE FROM characters WHERE identifier = ? AND id = ?;]]
     local result = Citizen.Await(DB:Execute(query, identifier, data.characterId))
 
     if not result.changedRows then
@@ -81,7 +81,7 @@ function CRP.DB:RetrieveCharacter(source, characterId)
     if not identifier or identifier == '' then return false end
 	if not characterId or type(characterId) ~= 'number' then return false end
 
-    local query = [[SELECT id, identifier, firstname, lastname, bank, job, grade, phone, dateofbirth, gender, skin FROM users WHERE identifier = ? AND id = ?;]]
+    local query = [[SELECT id, identifier, firstname, lastname, bank, job, grade, phone, dateofbirth, gender, skin FROM characters WHERE identifier = ? AND id = ?;]]
     local result = Citizen.Await(DB:Execute(query, identifier, characterId))
 
 	if #result == 0 then
@@ -94,7 +94,7 @@ function CRP.DB:RetrieveCharacter(source, characterId)
 end
 
 function CRP.DB:GetCharactersTotal(identifier)
-    local query = [[SELECT COUNT(1) AS count FROM users WHERE identifier = ?;]]
+    local query = [[SELECT COUNT(1) AS count FROM characters WHERE identifier = ?;]]
 	local result = Citizen.Await(DB:Execute(query, identifier))
 
 	return result[1].count
