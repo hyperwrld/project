@@ -29,6 +29,12 @@ RegisterUICallback('disconnectUser', function(data, cb)
 	cb({ status = true })
 end)
 
+RegisterUICallback('changedCharacter', function(data, cb)
+	CRP.Spawn:ChangeCharacter(data)
+
+	cb('ok')
+end)
+
 RegisterUICallback('selectCharacter', function(data, cb)
 	local success, characterData = RPC:execute('selectCharacter', data)
 

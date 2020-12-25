@@ -33,6 +33,8 @@
 				if (this.isLoading || this.isUsingMenu) return;
 
 				this.currentItem = futureIndex;
+
+				send('changedCharacter', this.charactersData[this.currentItem]);
 			},
 			selectCharacter: function() {
 				if (this.isLoading || this.isUsingMenu) return;

@@ -17,7 +17,7 @@ function CRP.Spawn:InitializeMenu()
 		while isInMenu do
 			Citizen.Wait(0)
 
-			CRP.Spawn:ConcealPlayers()
+			setConcealStatus(true)
 
 			DisableAllControlActions(0)
 		end
@@ -29,13 +29,7 @@ function CRP.Spawn:InitializeMenu()
 	if data[1] and data[1].skin then
 		exports['crp-skincreator']:setCharacterSkin(json.decode(data[1].skin))
 	else
-		local modelHash = `mp_m_freemode_01`
-
-		if GetRandomNumber(10) <= 5 then
-			modelHash = `mp_f_freemode_01`
-		end
-
-		exports['crp-skincreator']:setSkin(modelHash)
+		setRandomSkin()
 	end
 
 	playerPed = PlayerPedId()
@@ -67,6 +61,14 @@ function CRP.Spawn:InitializeMenu()
 	Citizen.Wait(2500)
 
 	exports['crp-ui']:openApp('selection', data, true)
+end
+
+function CRP.Spawn:ChangeCharacter(data)
+	if data.skin then
+		exports['crp-skincreator']:setCharacterSkin(json.decode(data.skin))
+	else
+		setRandomSkin()
+	end
 end
 
 function CRP.Spawn:SpawnCharacter(data)
@@ -104,13 +106,23 @@ function CRP.Spawn:SpawnCharacter(data)
 
 	isInMenu = false
 
-	CRP.Spawn:ConcealPlayers(false)
+	setConcealStatus(false)
 end
 
-function CRP.Spawn:ConcealPlayers(status)
+function setConcealStatus(status)
 	for _, player in ipairs(GetActivePlayers()) do
 		if player ~= PlayerId() and ((status and NetworkIsPlayerConcealed(player)) or (not status and not NetworkIsPlayerConcealed(player))) then
 			NetworkConcealPlayer(player, status, true)
 		end
 	end
+end
+
+function setRandomSkin()
+	local modelHash = `mp_m_freemode_01`
+
+	if GetRandomNumber(10) <= 5 then
+		modelHash = `mp_f_freemode_01`
+	end
+
+	exports['crp-skincreator']:setSkin(modelHash)
 end
