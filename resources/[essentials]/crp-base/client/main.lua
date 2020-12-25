@@ -20,7 +20,7 @@ AddEventHandler('crp-ui:closedMenu', function(name, data)
 
 	Debug('[Main]: Character Selection closed.')
 
-	CRP.Spawn:SpawnCharacter(data)
+	CRP.Spawn:SpawnCharacter(data.characterData)
 end)
 
 RegisterUICallback('disconnectUser', function(data, cb)

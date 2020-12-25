@@ -1,4 +1,4 @@
-local isCreatingCharacter, currentPed, cam = false
+local isInMenu, currentPed, cam = false
 
 CRP.Spawn = {}
 
@@ -12,13 +12,15 @@ function CRP.Spawn:InitializeIntro()
 	SetEntityInvincible(playerPed, true)
 	FreezeEntityPosition(playerPed, true)
 
-	isCreatingCharacter = true
+	isInMenu = true
 
 	Citizen.CreateThread(function()
-		while isCreatingCharacter do
-			Citizen.Wait(500)
+		while isInMenu do
+			Citizen.Wait(0)
 
 			CRP.Spawn:ConcealPlayers()
+
+			DisableAllControlActions(0)
 		end
 	end)
 
@@ -103,12 +105,42 @@ function CRP.Spawn:InitializeMenu()
 	exports['crp-ui']:openApp('selection', data, true)
 end
 
-function CRP.Spawn:SpawnCharacter(characterData)
-	if not characterData.skin then
+function CRP.Spawn:SpawnCharacter(data)
+	local playerPed = PlayerPedId()
+
+	if not data.skin then
 		TriggerEvent('crp-skincreator:openShop', 1)
 	end
 
-	print(json.encode(characterData))
+	if not data.position then
+		DoScreenFadeOut(1000)
+
+		Citizen.Wait(1500)
+
+		DestroyAllCams(true)
+		RenderScriptCams(false, false, 2000, true, true)
+
+		Citizen.Wait(1000)
+
+		SetEntityCoords(playerPed, -1046.93, -2753.75, 7.56)
+		SetEntityHeading(playerPed, 334.42)
+
+		TaskGoStraightToCoord(playerPed, -1040.99, -2743.54, 13.95, 1.0, -1, 330.0, 1000)
+
+		Citizen.Wait(1500)
+
+		DoScreenFadeIn(500)
+
+		while GetScriptTaskStatus(playerPed, 0x7d8f4411) ~= 7 do
+			Citizen.Wait(0)
+		end
+	else
+
+	end
+
+	isInMenu = false
+
+	CRP.Spawn:ConcealPlayers(false)
 end
 
 function CRP.Spawn:ConcealPlayers(status)
