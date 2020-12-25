@@ -130,8 +130,8 @@ function setCharacterSkin(data)
 
 	local headBlend = data.headBlend
 
-	SetPlayerPedHairColor(playerPed, data.hairColor, data.hairHightlightColor)
-	SetPlayerPedHeadBlendData(playerPed, headBlend[1], headBlend[2], headBlend[3], headBlend[4], headBlend[5], headBlend[6], headBlend[7], headBlend[8], headBlend[9], false)
+	SetPedHairColor(playerPed, data.hairColor, data.hairHightlightColor)
+	SetPedHeadBlendData(playerPed, headBlend[1], headBlend[2], headBlend[3], headBlend[4], headBlend[5], headBlend[6], headBlend[7], headBlend[8], headBlend[9], false)
 end
 
 exports('setCharacterSkin', setCharacterSkin)
