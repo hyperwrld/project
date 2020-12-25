@@ -121,23 +121,23 @@ function getCurrentSkin()
 	}
 end
 
-function setCharacterSkin(data, ped)
-	ped = setSkin(data.model, ped)
+function setCharacterSkin(data)
+	setSkin(data.model)
+	setClothing(data.variations.drawables, data.variations.props, data.variations.drawablesTextures, data.variations.propsTextures)
 
-	setClothing(data.variations.drawables, data.variations.props, data.variations.drawablesTextures, data.variations.propsTextures, ped)
-	setFaceFeatures(data.faceFeatures, ped)
-	setHeadOverlays(data.headOverlays, ped)
+	setFaceFeatures(data.faceFeatures)
+	setHeadOverlays(data.headOverlays)
 
 	local headBlend = data.headBlend
 
-	SetPedHairColor(ped, data.hairColor, data.hairHightlightColor)
-	SetPedHeadBlendData(ped, headBlend[1], headBlend[2], headBlend[3], headBlend[4], headBlend[5], headBlend[6], headBlend[7], headBlend[8], headBlend[9], false)
+	SetPlayerPedHairColor(playerPed, data.hairColor, data.hairHightlightColor)
+	SetPlayerPedHeadBlendData(playerPed, headBlend[1], headBlend[2], headBlend[3], headBlend[4], headBlend[5], headBlend[6], headBlend[7], headBlend[8], headBlend[9], false)
 end
 
 exports('setCharacterSkin', setCharacterSkin)
 
-function setSkin(model, ped)
-	SetEntityInvincible(ped, true)
+function setSkin(model)
+	SetEntityInvincible(playerPed, true)
 
 	if IsModelInCdimage(model) and IsModelValid(model) then
 		LoadModel(model)
@@ -145,40 +145,57 @@ function setSkin(model, ped)
 		SetPlayerModel(PlayerId(), model)
 		SetModelAsNoLongerNeeded(model)
 
-		ped = PlayerPedId()
+		playerPed = PlayerPedId()
 
-		SetPedDefaultComponentVariation(ped)
+		if model ~= `mp_m_freemode_01` and model ~= `mp_f_freemode_01` then
+			SetPedRandomComponentVariation(playerPed, false)
+		else
+			SetPedHeadOverlay(playerPed, 1, 0, 0.0)
+			SetPedHairColor(playerPed, 1, 1)
+			SetPedHeadBlendData(playerPed, 0, 0, 0, 15, 0, 0, 0, 1.0, 0, false)
+
+			SetPedComponentVariation(playerPed, 11, 0, 11, 0)
+			SetPedComponentVariation(playerPed, 8, 0, 1, 0)
+			SetPedComponentVariation(playerPed, 6, 1, 0, 0)
+
+			SetPedHeadOverlayColor(playerPed, 1, 1, 0, 0)
+			SetPedHeadOverlayColor(playerPed, 2, 1, 0, 0)
+			SetPedHeadOverlayColor(playerPed, 4, 2, 0, 0)
+			SetPedHeadOverlayColor(playerPed, 5, 2, 0, 0)
+			SetPedHeadOverlayColor(playerPed, 8, 2, 0, 0)
+			SetPedHeadOverlayColor(playerPed, 10, 1, 0, 0)
+		end
 	end
 
-	SetEntityInvincible(ped, false)
-
-	return ped
+	SetEntityInvincible(playerPed, false)
 end
 
-function setClothing(drawables, props, drawablesTextures, propsTextures, ped)
+exports('setSkin', setSkin)
+
+function setClothing(drawables, props, drawablesTextures, propsTextures)
 	for i = 1, 12 do
-		SetPedComponentVariation(ped, i - 1, drawables[i], drawablesTextures[i], 2)
+		SetPedComponentVariation(playerPed, i - 1, drawables[i], drawablesTextures[i], 2)
 	end
 
 	for i = 1, 8 do
-		ClearPedProp(ped, i - 1)
+		ClearPedProp(playerPed, i - 1)
 
-		SetPedPropIndex(ped, i - 1, props[i], propsTextures[i], true)
+		SetPedPropIndex(playerPed, i - 1, props[i], propsTextures[i], true)
 	end
 end
 
-function setFaceFeatures(data, ped)
+function setFaceFeatures(data)
     for i = 1, 20 do
-        SetPedFaceFeature(ped, i-  1, data[i])
+        SetPedFaceFeature(playerPed, i-  1, data[i])
     end
 end
 
-function setHeadOverlays(data, ped)
+function setHeadOverlays(data)
 	for i = 1, 12 do
-		SetPedHeadOverlay(ped, i - 1, data[i].overlayValue, data[i].overlayOpacity)
+		SetPedHeadOverlay(playerPed, i - 1, data[i].overlayValue, data[i].overlayOpacity)
 
 		if data[i].firstColour then
-			SetPedHeadOverlayColor(ped, i - 1, data[i].colourType, data[i].firstColour, data[i].secondColour)
+			SetPedHeadOverlayColor(playerPed, i - 1, data[i].colourType, data[i].firstColour, data[i].secondColour)
 		end
 	end
 end

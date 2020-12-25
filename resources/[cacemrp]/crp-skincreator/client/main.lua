@@ -113,7 +113,7 @@ RegisterUICallback('saveSkin', function(data, cb)
 	if data then
 		TriggerServerEvent('crp-skincreator:saveSkin', getCurrentSkin())
 	else
-		setCharacterSkin(oldSkin, playerPed)
+		setCharacterSkin(oldSkin)
 	end
 
 	cb('ok')

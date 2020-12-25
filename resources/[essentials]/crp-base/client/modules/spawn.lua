@@ -1,4 +1,4 @@
-local currentPed, cam
+local isCreatingCharacter, currentPed, cam = false
 
 CRP.Spawn = {}
 
@@ -11,6 +11,16 @@ function CRP.Spawn:InitializeIntro()
 	SetEntityVisible(playerPed, false)
 	SetEntityInvincible(playerPed, true)
 	FreezeEntityPosition(playerPed, true)
+
+	isCreatingCharacter = true
+
+	Citizen.CreateThread(function()
+		while isCreatingCharacter do
+			Citizen.Wait(500)
+
+			CRP.Spawn:ConcealPlayers()
+		end
+	end)
 
 	-- Meter de noite quando se spawna
 
@@ -46,25 +56,30 @@ function CRP.Spawn:InitializeMenu()
 
 	Citizen.Wait(500)
 
+	SetEntityVisible(playerPed, true)
+	FreezeEntityPosition(playerPed, false)
+
 	DestroyAllCams(true)
 	RenderScriptCams(false, false, 2000, true, true)
 
-	local modelHash = `mp_m_freemode_01`
-
-	if data[1] and data[1].skin then
-		modelHash = data[1].skin.model
-	elseif (GetRandomNumber(10) <= 5 and not data[1]) or (data[1] and data[1].gender) then
-		modelHash = `mp_f_freemode_01`
-	end
-
-	currentPed = CreateEntity(1, modelHash, vector4(409.8483, -1001.0, -100.0, 5.39), false, true, 0)
-
 	if data[1] and data[1].skin then
 		exports['crp-skincreator']:setCharacterSkin(data[1].skin)
+	else
+		local modelHash = `mp_m_freemode_01`
+
+		if GetRandomNumber(10) <= 5 then
+			modelHash = `mp_f_freemode_01`
+		end
+
+		exports['crp-skincreator']:setSkin(modelHash)
 	end
+
+	playerPed = PlayerPedId()
 
 	SetEntityCoords(playerPed, 409.8483, -1001.0, -100.0, 0.0, 0.0, 0.0)
 	SetEntityHeading(playerPed, 5.39)
+
+	print(GetEntityCoords(playerPed))
 
 	firstCam = CreateCamWithParams('DEFAULT_SCRIPTED_CAMERA', 415.55, -998.50, -99.29, 0.00, 0.00, 89.75, 50.00, false, 0)
 
@@ -73,13 +88,13 @@ function CRP.Spawn:InitializeMenu()
 
 	LoadAnimationSet('move_m@gangster@var_e')
 
-	SetPedMovementClipset(currentPed, 'move_m@gangster@var_e', 0.1)
+	SetPedMovementClipset(playerPed, 'move_m@gangster@var_e', 0.1)
 
 	RemoveAnimSet('move_m@gangster@var_e')
 
-	Citizen.Wait(500)
+	Citizen.Wait(1000)
 
-	TaskGoStraightToCoord(currentPed, 409.8483, -998.54, -100.0, 0.15, -1, 265.70, 100)
+	TaskGoStraightToCoord(playerPed, 409.8483, -998.54, -100.0, 0.15, -1, 265.70, 100)
 
 	DoScreenFadeIn(7500)
 
@@ -91,5 +106,17 @@ function CRP.Spawn:InitializeMenu()
 end
 
 function CRP.Spawn:SpawnCharacter(characterData)
+	if not characterData.skin then
+		TriggerEvent('crp-skincreator:openShop', 1)
+	end
+
 	print(json.encode(characterData))
+end
+
+function CRP.Spawn:ConcealPlayers(status)
+	for _, player in ipairs(GetActivePlayers()) do
+		if player ~= PlayerId() and ((status and NetworkIsPlayerConcealed(player)) or (not status and not NetworkIsPlayerConcealed(player))) then
+			NetworkConcealPlayer(player, status, true)
+		end
+	end
 end
