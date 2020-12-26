@@ -26,7 +26,7 @@ function CRP.Spawn:InitializeMenu()
 	SetEntityVisible(playerPed, true)
 	FreezeEntityPosition(playerPed, false)
 
-	if data[1] and #data[1].skin > 0 then
+	if data[1] and (data[1].skin and #data[1].skin > 0) then
 		exports['crp-skincreator']:setCharacterSkin(json.decode(data[1].skin))
 	else
 		setRandomSkin()
@@ -64,8 +64,14 @@ function CRP.Spawn:InitializeMenu()
 end
 
 function CRP.Spawn:ChangeCharacter(data)
-	if data.skin and #data.skin > 0 then
-		exports['crp-skincreator']:setCharacterSkin(json.decode(data.skin))
+	local characterSkin
+
+	if data.skin then
+		characterSkin = json.decode(data.skin)
+	end
+
+	if characterSkin then
+		exports['crp-skincreator']:setCharacterSkin(characterSkin)
 	else
 		setRandomSkin()
 	end
@@ -74,7 +80,13 @@ end
 function CRP.Spawn:SpawnCharacter(data)
 	local playerPed = PlayerPedId()
 
-	if not data.skin then
+	local characterSkin
+
+	if data.skin then
+		characterSkin = json.decode(data.skin)
+	end
+
+	if not characterSkin then
 		TriggerEvent('crp-skincreator:openShop', 1)
 	end
 
@@ -84,6 +96,8 @@ function CRP.Spawn:SpawnCharacter(data)
 		isInMenu = false
 
 		setConcealStatus(false)
+	else
+		spawnNewCharacter(playerPed)
 	end
 end
 
@@ -92,33 +106,7 @@ AddEventHandler('crp-ui:closedMenu', function(name, data)
 		return
 	end
 
-	local playerPed = PlayerPedId()
-
-	DoScreenFadeOut(1000)
-
-	Citizen.Wait(1500)
-
-	DestroyAllCams(true)
-	RenderScriptCams(false, false, 2000, true, true)
-
-	Citizen.Wait(1000)
-
-	SetEntityCoords(playerPed, -1046.93, -2753.75, 7.56)
-	SetEntityHeading(playerPed, 334.42)
-
-	setConcealStatus(false)
-
-	TaskGoStraightToCoord(playerPed, -1040.99, -2743.54, 13.95, 1.0, -1, 330.0, 1000)
-
-	Citizen.Wait(1500)
-
-	DoScreenFadeIn(500)
-
-	while GetScriptTaskStatus(playerPed, 0x7d8f4411) ~= 7 do
-		Citizen.Wait(0)
-	end
-
-	isInMenu = false
+	spawnNewCharacter(PlayerPedId())
 end)
 
 function setConcealStatus(status)
@@ -137,4 +125,32 @@ function setRandomSkin()
 	end
 
 	exports['crp-skincreator']:setSkin(modelHash)
+end
+
+function spawnNewCharacter(playerPed)
+	DoScreenFadeOut(1000)
+
+	Citizen.Wait(1500)
+
+	DestroyAllCams(true)
+	RenderScriptCams(false, false, 2000, true, true)
+
+	Citizen.Wait(1000)
+
+	SetEntityCoords(playerPed, -1046.93, -2753.75, 7.56)
+	SetEntityHeading(playerPed, 334.42)
+
+	setConcealStatus(false)
+
+	TaskGoStraightToCoord(playerPed, -1040.99, -2743.54, 13.95, 1.0, -1, 330.0, 1000)
+
+	Citizen.Wait(3000)
+
+	DoScreenFadeIn(500)
+
+	while GetScriptTaskStatus(playerPed, 0x7d8f4411) ~= 7 do
+		Citizen.Wait(0)
+	end
+
+	isInMenu = false
 end
