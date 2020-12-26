@@ -30,7 +30,7 @@
                 return `${day}/${month}/${year}`
             },
 			changeCurrentItem: function(futureIndex) {
-				if (this.isLoading || this.isUsingMenu) return;
+				if (this.isLoading || this.isUsingMenu || this.currentItem == futureIndex) return;
 
 				this.currentItem = futureIndex;
 

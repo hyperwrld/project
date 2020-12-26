@@ -20,6 +20,7 @@
 
 	export default {
 		name: 'skincreator',
+		props: ['closeMenu'],
 		components: {
 			ped, headBlend, faceFeatures, headOverlays, bodyFeatures,clothing, accessories
 		},
@@ -54,6 +55,8 @@
 
 					dialog.createDialog().then(response => {
 						send('saveSkin', response);
+
+						this.closeMenu({ appName: 'skincreator' });
 					}).catch(error => {
 						this.isDialogOpen = false;
 					});

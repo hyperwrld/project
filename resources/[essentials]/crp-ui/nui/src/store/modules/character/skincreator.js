@@ -42,8 +42,10 @@ const mutations = {
 		state.categories = categories, state.headBlend = headBlend, state.faceFeatures = faceFeatures;
 		state.clothing = clothing, state.accessories = accessories, state.bodyFeatures = bodyFeatures, state.headOverlays = headOverlays;
 
-		for (let i = 0; i < state.headBlend.length; i++) {
-			state.headBlend[i].value = data.headBlend[i];
+		if (data.headBlend) {
+			for (let i = 0; i < state.headBlend.length; i++) {
+				state.headBlend[i].value = data.headBlend[i];
+			}
 		}
 
 		for (let i = 0; i < state.faceFeatures.length; i++) {
@@ -78,22 +80,24 @@ const mutations = {
                 default:
 					const headOverlay = data.headOverlays[option.id];
 
-					option.value = (headOverlay.overlayValue == 255) ? -1 : headOverlay.overlayValue, option.subOptions[0].value = headOverlay.opacity;
+					if (headOverlay) {
+						option.value = (headOverlay.overlayValue == 255) ? -1 : headOverlay.overlayValue, option.subOptions[0].value = headOverlay.opacity;
 
-					if (option.value != -1) {
-						option.subOptions[1].value = headOverlay.firstColour;
+						if (option.value != -1) {
+							option.subOptions[1].value = headOverlay.firstColour;
+
+							if (option.subOptions[2]) {
+								option.subOptions[2].value = headOverlay.secondColour;
+							}
+						}
 
 						if (option.subOptions[2]) {
-							option.subOptions[2].value = headOverlay.secondColour;
+							option.subOptions[2].items = data.colors.makeupColors;
 						}
-					}
 
-					if (option.subOptions[2]) {
-						option.subOptions[2].items = data.colors.makeupColors;
-					}
-
-                    if (option.maxValue == 0) {
-						option.maxValue = data.totals.drawables[option.id];
+						if (option.maxValue == 0) {
+							option.maxValue = data.totals.drawables[option.id];
+						}
 					}
                     break;
             }
