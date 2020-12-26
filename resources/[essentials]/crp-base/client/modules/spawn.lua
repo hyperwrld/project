@@ -26,7 +26,7 @@ function CRP.Spawn:InitializeMenu()
 	SetEntityVisible(playerPed, true)
 	FreezeEntityPosition(playerPed, false)
 
-	if data[1] and data[1].skin then
+	if data[1] and #data[1].skin > 0 then
 		exports['crp-skincreator']:setCharacterSkin(json.decode(data[1].skin))
 	else
 		setRandomSkin()
@@ -64,7 +64,7 @@ function CRP.Spawn:InitializeMenu()
 end
 
 function CRP.Spawn:ChangeCharacter(data)
-	if data.skin then
+	if data.skin and #data.skin > 0 then
 		exports['crp-skincreator']:setCharacterSkin(json.decode(data.skin))
 	else
 		setRandomSkin()
@@ -78,36 +78,48 @@ function CRP.Spawn:SpawnCharacter(data)
 		TriggerEvent('crp-skincreator:openShop', 1)
 	end
 
-	if not data.position then
-		DoScreenFadeOut(1000)
+	if data.position then
+		SetEntityCoords(playerPed, data.position)
 
-		Citizen.Wait(1500)
+		isInMenu = false
 
-		DestroyAllCams(true)
-		RenderScriptCams(false, false, 2000, true, true)
+		setConcealStatus(false)
+	end
+end
 
-		Citizen.Wait(1000)
+AddEventHandler('crp-ui:closedMenu', function(name, data)
+	if name ~= 'skincreator' or not isInMenu then
+		return
+	end
 
-		SetEntityCoords(playerPed, -1046.93, -2753.75, 7.56)
-		SetEntityHeading(playerPed, 334.42)
+	local playerPed = PlayerPedId()
 
-		TaskGoStraightToCoord(playerPed, -1040.99, -2743.54, 13.95, 1.0, -1, 330.0, 1000)
+	DoScreenFadeOut(1000)
 
-		Citizen.Wait(1500)
+	Citizen.Wait(1500)
 
-		DoScreenFadeIn(500)
+	DestroyAllCams(true)
+	RenderScriptCams(false, false, 2000, true, true)
 
-		while GetScriptTaskStatus(playerPed, 0x7d8f4411) ~= 7 do
-			Citizen.Wait(0)
-		end
-	else
+	Citizen.Wait(1000)
 
+	SetEntityCoords(playerPed, -1046.93, -2753.75, 7.56)
+	SetEntityHeading(playerPed, 334.42)
+
+	setConcealStatus(false)
+
+	TaskGoStraightToCoord(playerPed, -1040.99, -2743.54, 13.95, 1.0, -1, 330.0, 1000)
+
+	Citizen.Wait(1500)
+
+	DoScreenFadeIn(500)
+
+	while GetScriptTaskStatus(playerPed, 0x7d8f4411) ~= 7 do
+		Citizen.Wait(0)
 	end
 
 	isInMenu = false
-
-	setConcealStatus(false)
-end
+end)
 
 function setConcealStatus(status)
 	for _, player in ipairs(GetActivePlayers()) do
