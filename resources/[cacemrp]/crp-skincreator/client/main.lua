@@ -2,15 +2,29 @@ playerPed, camera, zPos, fov, startPosition, startCamPosition = PlayerPedId(), n
 
 local oldSkin, currentTattos = {}, {}
 
-AddEventHandler('crp-skincreator:openShop', function(type)
+AddEventHandler('crp-skincreator:openShop', function(type) 	-- type: 1 (all), 2 (clothing), 3 (hairshop), 4 (tattoos)
 	playerPed, oldSkin = PlayerPedId(), getCurrentSkin()
+
+	local data = {}
 
 	triggerCustomCamera()
 
-	exports['crp-ui']:openApp('skincreator', {
-		type = type, headBlend = getHeadBlend(), faceFeatures = getFaceFeatures(),
-		headOverlays = getHeadOverlays(), colors = getColors(), variations = getVariations(), totals = getTotals()
-	}, true)
+	if type == 2 {
+		data = {
+			type = type, variations = getVariations(), totals = getTotals(), currentModel = getCurrentModel()
+		}
+	} elseif type == 3 {
+		data = {
+			type = type, headOverlays = getHeadOverlays(), colors = getColors(), variations = getVariations(), totals = getTotals()
+		}
+	} else {
+		data = {
+			type = type, headBlend = getHeadBlend(), faceFeatures = getFaceFeatures(), currentModel = getCurrentModel(),
+			headOverlays = getHeadOverlays(), colors = getColors(), variations = getVariations(), totals = getTotals()
+		}
+	}
+
+	exports['crp-ui']:openApp('skincreator', data, true)
 end)
 
 RegisterUICallback('modifyHeadBlend', function(data, cb)

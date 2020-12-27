@@ -1,3 +1,34 @@
+export const ped = [
+	{
+		id: 0,
+		title: 'Skin Masculino',
+		value: 0,
+		minValue: 0,
+		maxValue: 0
+	},
+	{
+		id: 0,
+		title: 'Skin Feminina',
+		value: 0,
+		minValue: 0,
+		maxValue: 0
+	},
+	{
+		id: 1,
+		title: 'Cara',
+		value: 0,
+		minValue: 0,
+		maxValue: 0
+	},
+	{
+		id: 2,
+		title: 'Texturas',
+		value: 0,
+		minValue: 0,
+		maxValue: 0
+	}
+];
+
 export const headBlend = [
 	{
 		id: 0,
@@ -776,13 +807,13 @@ export const camera = [
 
 export const getMenuCategories = (type) => {
 	const skinCategories = [
-		{ title: 'Ped',  name: 'ped'               },
-		{ title: 'Pais', name: 'headBlend'         },
-		{ title: 'Cara', name: 'faceFeatures'      },
-		{ title: 'Pele', name: 'headOverlays'      },
-		{ title: 'Corpo', name: 'bodyFeatures'     },
-		{ title: 'Roupa', name: 'clothing'         },
-		{ title: 'Acessórios', name: 'accessories' }
+		{ title: 'Ped',  name: 'ped'               }, // 0
+		{ title: 'Pais', name: 'headBlend'         }, // 1
+		{ title: 'Cara', name: 'faceFeatures'      }, // 2
+		{ title: 'Pele', name: 'headOverlays'      }, // 3
+		{ title: 'Corpo', name: 'bodyFeatures'     }, // 4
+		{ title: 'Roupa', name: 'clothing'         }, // 5
+		{ title: 'Acessórios', name: 'accessories' }  // 6
 	];
 
 	let data, menus = [];

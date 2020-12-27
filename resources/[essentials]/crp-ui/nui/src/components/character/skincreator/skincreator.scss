@@ -125,8 +125,18 @@
 			&::v-deep .container-three {
 				grid-template: [row1-start] "a a" 1fr [row1-end] [row2-start] "b b" auto [row2-end] / 1fr 1fr;
 
-				.color {
+				.color, .input:last-child {
 					grid-area: b;
+				}
+
+				.input:last-child > .controls {
+					grid-template-columns: 1fr 3fr 1fr !important;
+				}
+			}
+
+			&::v-deep .container {
+				.controls {
+					grid-template-columns: 1fr 3fr 1fr !important;
 				}
 			}
 

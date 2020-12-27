@@ -241,7 +241,7 @@ function GetCurrentTime()
 
     if minutes >= 0 and minutes < 10 then
         minutes = '0' .. minutes
-    end
+	end
 
     return hours .. ':' .. minutes
 end

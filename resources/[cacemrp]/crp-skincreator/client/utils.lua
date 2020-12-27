@@ -92,22 +92,28 @@ function getTotals()
 	end
 
 	return {
-		drawables = drawables, drawablesTextures = drawablesTextures, props = props, propsTextures = propsTextures, skins = { #femaleSkins, #maleSkins }
+		drawables = drawables, drawablesTextures = drawablesTextures, props = props, propsTextures = propsTextures, skins = { #maleSkins, #femaleSkins }
 	}
 end
 
 function getCurrentModel()
 	local model = GetEntityModel(playerPed)
 
+	if `mp_m_freemode_01` == model then
+		return { true, true }
+	elseif `mp_f_freemode_01` == model then
+		return { true, false }
+	end
+
 	for i = 1, #maleSkins do
 		if `maleSkins[i]` == model then
-			return true, 'male'
+			return { i, true }
 		end
 	end
 
 	for i = 1, #femaleSkins do
 		if `femaleSkins[i]` == model then
-			return true, 'female'
+			return { i, false }
 		end
 	end
 
