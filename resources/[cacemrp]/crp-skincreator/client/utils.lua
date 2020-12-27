@@ -92,7 +92,7 @@ function getTotals()
 	end
 
 	return {
-		drawables = drawables, drawablesTextures = drawablesTextures, props = props, propsTextures = propsTextures
+		drawables = drawables, drawablesTextures = drawablesTextures, props = props, propsTextures = propsTextures, skins = { #femaleSkins, #maleSkins }
 	}
 end
 

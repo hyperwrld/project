@@ -1,6 +1,6 @@
-playerPed = PlayerPedId()
+playerPed, camera, zPos, fov, startPosition, startCamPosition = PlayerPedId(), nil, 0, 90.0
 
-local oldSkin, currentTattos, camera, zPos, fov, startPosition, startCamPosition = {}, {}, nil, 0, 90.0
+local oldSkin, currentTattos = {}, {}
 
 AddEventHandler('crp-skincreator:openShop', function(type)
 	playerPed, oldSkin = PlayerPedId(), getCurrentSkin()
