@@ -1,9 +1,11 @@
 playerPed = PlayerPedId()
 
-local oldSkin, currentTattos = {}, {}
+local oldSkin, currentTattos, camera, zPos, fov, startPosition, startCamPosition = {}, {}, nil, 0, 90.0
 
 AddEventHandler('crp-skincreator:openShop', function(type)
 	playerPed, oldSkin = PlayerPedId(), getCurrentSkin()
+
+	triggerCustomCamera()
 
 	exports['crp-ui']:openApp('skincreator', {
 		type = type, headBlend = getHeadBlend(), faceFeatures = getFaceFeatures(),
@@ -107,6 +109,18 @@ RegisterUICallback('modifyAccessories', function(data, cb)
 	end
 
 	cb(callbackData)
+end)
+
+RegisterUICallback('modifyCameraValue', function(data, cb)
+	if data.type == 0 then
+		changeCameraHeight(data.value)
+	elseif data.type == 1 then
+		changeCameraZoom(data.value)
+	else
+		SetEntityHeading(playerPed, RoundNumber(data.value, 1))
+	end
+
+	cb('ok')
 end)
 
 RegisterUICallback('saveSkin', function(data, cb)

@@ -60,6 +60,10 @@ function CRP.Spawn:InitializeMenu()
 
 	Citizen.Wait(2500)
 
+	while GetScriptTaskStatus(playerPed, 0x7d8f4411) ~= 7 do
+		Citizen.Wait(0)
+	end
+
 	exports['crp-ui']:openApp('selection', data, true)
 end
 
@@ -96,7 +100,7 @@ function CRP.Spawn:SpawnCharacter(data)
 		isInMenu = false
 
 		setConcealStatus(false)
-	else
+	elseif characterSkin then
 		spawnNewCharacter(playerPed)
 	end
 end

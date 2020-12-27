@@ -199,3 +199,60 @@ function setHeadOverlays(data)
 		end
 	end
 end
+
+function triggerCustomCamera()
+	startPosition = GetEntityCoords(playerPed)
+
+    if not camera then
+        FreezeEntityPosition(playerPed, true)
+
+		local forwardVector = GetEntityForwardVector(playerPed)
+		local forwardCameraPosition = vector3(startPosition.x + forwardVector.x * 1.2, startPosition.y + forwardVector.y * 1.2, startPosition.z + zPos)
+
+		fov, startCamPosition = 90.0, forwardCameraPosition
+
+		camera = CreateCamWithParams('DEFAULT_SCRIPTED_CAMERA', forwardCameraPosition, 0, 0, 0, fov, true, 0)
+
+		PointCamAtCoord(camera, startPosition)
+		SetCamActive(camera, true)
+		RenderScriptCams(true, false, 0, true, false)
+	end
+end
+
+function changeCameraHeight(value)
+	if camera then
+		zPos = value
+
+		if zPos > 0.8 then
+			zPos = 0.8
+		end
+
+		if zPos < -0.8 then
+			zPos = -0.8
+		end
+
+        SetCamCoord(camera, startCamPosition.x, startCamPosition.y, startCamPosition.z + zPos)
+        PointCamAtCoord(camera, startCamPosition.x, startCamPosition.y, startCamPosition.z + zPos)
+
+        SetCamActive(camera, true)
+        RenderScriptCams(true, false, 0, true, false)
+    end
+end
+
+function changeCameraZoom(value)
+	if camera then
+		fov = value
+
+		if fov > 100 then
+			fov = 100.0
+		end
+
+		if fov < 10 then
+			fov = 10.0
+		end
+
+        SetCamFov(camera, RoundNumber(fov, 1))
+        SetCamActive(camera, true)
+        RenderScriptCams(true, false, 0, true, false)
+    end
+end

@@ -1,13 +1,16 @@
-import { accessories, bodyFeatures, clothing, faceFeatures, getMenuCategories, headBlend, headOverlays } from './../../../utils/data.js';
+import { accessories, bodyFeatures, camera, clothing, faceFeatures, getMenuCategories, headBlend, headOverlays } from './../../../utils/data.js';
 
 const state = () => ({
-	categories: [], headBlend: [], faceFeatures: [],
+ 	categories: [], camera: [], headBlend: [], faceFeatures: [],
 	headOverlays: [], bodyFeatures: [],clothing: [], accessories: []
 })
 
 const getters = {
 	getCategories: state => {
 		return state.categories;
+	},
+	getCameraData: state => {
+		return state.camera;
 	},
 	getHeadBlend: state => {
 		return state.headBlend;
@@ -39,7 +42,7 @@ const mutations = {
 	setData(state, data) {
 		const categories = getMenuCategories(data.type);
 
-		state.categories = categories, state.headBlend = headBlend, state.faceFeatures = faceFeatures;
+		state.categories = categories, state.camera = camera, state.headBlend = headBlend, state.faceFeatures = faceFeatures;
 		state.clothing = clothing, state.accessories = accessories, state.bodyFeatures = bodyFeatures, state.headOverlays = headOverlays;
 
 		if (data.headBlend) {

@@ -14,6 +14,10 @@
 		render (h) {
 			const data = this.data;
 
+			if (!data.step) {
+				data.step = 0.1;
+			}
+
 			return (
 				<div class='option range'>
 					<div class='label-container'>
@@ -21,7 +25,7 @@
 						<span>{ parseFloat(data.value).toFixed(1) + ' | ' + parseFloat(data.maxValue).toFixed(1) }</span>
 					</div>
 					<div class='control'>
-						<input type='range' min={ data.minValue } max={ data.maxValue } step='0.1' value={ data.value } onInput={ (event) => this.changeValue(event) }/>
+						<input type='range' min={ data.minValue } max={ data.maxValue } step={ data.step } value={ data.value } onInput={ (event) => this.changeValue(event) }/>
 					</div>
 				</div>
 			);

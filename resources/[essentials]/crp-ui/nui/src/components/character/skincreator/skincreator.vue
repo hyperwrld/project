@@ -9,6 +9,9 @@
 
 	import { mapGetters } from 'vuex';
 	import { send } from './../../../utils/lib.js';
+	import { camera, footerButtons } from './../../../utils/data.js';
+
+	import optionRange from './utils/range.vue';
 
 	import dialog from './dialog/dialog.js';
 
@@ -26,7 +29,7 @@
 		},
 		computed: {
 			...mapGetters('skincreator', {
-				categories: 'getCategories'
+				categories: 'getCategories', camera: 'getCameraData'
 			})
 		},
 		methods: {
@@ -38,7 +41,10 @@
 						console.log(error);
 					}
 				});
-            }
+			},
+			modifyCameraValue: function(index) {
+				send('modifyCameraValue', { type: camera[index].id, value: Number(camera[index].value) });
+			}
         },
 		data() {
 			return {
@@ -85,6 +91,15 @@
 							<font-awesome-icon icon='user-tie'/>
 							<font-awesome-icon icon='socks'/>
 						</div>
+					</div>
+					<div class='footer'>
+						{ this.camera.map((buttonData, index) => {
+							return (
+								<div class='footer-container'>
+									<optionRange data={ buttonData } click={ this.modifyCameraValue }/>
+								</div>
+							)
+						})}
 					</div>
 				</div>
 			);

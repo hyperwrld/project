@@ -748,6 +748,32 @@ export const accessories = [
 	}
 ];
 
+export const camera = [
+	{
+		id: 0,
+		title: 'Altura',
+		value: 0,
+		minValue: -0.8,
+		maxValue: 0.8
+	},
+	{
+		id: 1,
+		title: 'Zoom',
+		value: 55,
+		step: 1,
+		minValue: 10,
+		maxValue: 100
+	},
+	{
+		id: 2,
+		title: 'Rotação',
+		value: 180,
+		step: 1,
+		minValue: 0,
+		maxValue: 360
+	}
+];
+
 export const getMenuCategories = (type) => {
 	const skinCategories = [
 		{ title: 'Ped',  name: 'ped'               },
