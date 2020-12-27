@@ -9,20 +9,20 @@ AddEventHandler('crp-skincreator:openShop', function(type) 	-- type: 1 (all), 2 
 
 	triggerCustomCamera()
 
-	if type == 2 {
+	if type == 2 then
 		data = {
 			type = type, variations = getVariations(), totals = getTotals(), currentModel = getCurrentModel()
 		}
-	} elseif type == 3 {
+	elseif type == 3 then
 		data = {
 			type = type, headOverlays = getHeadOverlays(), colors = getColors(), variations = getVariations(), totals = getTotals()
 		}
-	} else {
+	else
 		data = {
 			type = type, headBlend = getHeadBlend(), faceFeatures = getFaceFeatures(), currentModel = getCurrentModel(),
 			headOverlays = getHeadOverlays(), colors = getColors(), variations = getVariations(), totals = getTotals()
 		}
-	}
+	end
 
 	exports['crp-ui']:openApp('skincreator', data, true)
 end)
@@ -145,4 +145,20 @@ RegisterUICallback('saveSkin', function(data, cb)
 	end
 
 	cb('ok')
+end)
+
+AddEventHandler('crp-ui:closedMenu', function(name, data)
+	if name ~= 'skincreator' then
+		return
+	end
+
+	if camera then
+		camera = nil
+	end
+
+	FreezeEntityPosition(playerPed, false)
+	DestroyAllCams(true)
+	RenderScriptCams(false, false, 0, false, false)
+
+	zPos, fov, startPosition, startCamPosition = 0, 90.0, nil, nil
 end)
