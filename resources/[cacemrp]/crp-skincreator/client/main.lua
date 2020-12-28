@@ -27,6 +27,36 @@ AddEventHandler('crp-skincreator:openShop', function(type) 	-- type: 1 (all), 2 
 	exports['crp-ui']:openApp('skincreator', data, true)
 end)
 
+RegisterUICallback('selectPedSkin', function(data, cb)
+	local model
+
+	if data.index then
+		if data.sex then
+			model = maleSkins[data.index]
+		else
+			model = femaleSkins[data.index]
+		end
+	else
+		if data.sex then
+			model = `mp_m_freemode_01`
+		else
+			model = `mp_f_freemode_01`
+		end
+	end
+
+	setSkin(model)
+
+	if not data.index then
+		return cb('ok')
+	end
+
+	local drawable = GetPedDrawableVariation(playerPed, index)
+
+	cb({
+		drawable, GetPedTextureVariation(playerPed, index), GetNumberOfPedDrawableVariations(playerPed, index), GetNumberOfPedTextureVariations(playerPed, index, drawable)
+	})
+end)
+
 RegisterUICallback('modifyHeadBlend', function(data, cb)
 	SetPedHeadBlendData(playerPed, data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], false)
 

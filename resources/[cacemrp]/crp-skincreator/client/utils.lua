@@ -154,7 +154,7 @@ function setSkin(model)
 		playerPed = PlayerPedId()
 
 		if model ~= `mp_m_freemode_01` and model ~= `mp_f_freemode_01` then
-			SetPedRandomComponentVariation(playerPed, false)
+			SetPedDefaultComponentVariation(playerPed)
 		else
 			SetPedHeadOverlay(playerPed, 1, 0, 0.0)
 			SetPedHairColor(playerPed, 1, 1)

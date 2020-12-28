@@ -32,11 +32,11 @@
 			let inputs = [], headBlend = this.headBlend;
 
 			for (var i = 0; i < 9; i++) {
-				let data = i < 6 ? '' : <div class='container'><optionRange data={headBlend[i]} click={this.modifyHeadBlend}/></div>;
+				let data = i < 6 ? '' : <div class='container'><optionRange data={ headBlend[i] } click={ this.modifyHeadBlend }/></div>;
 
 				if (i < 3) {
 					data = <div class='container'>
-						<optionInput data={headBlend[i]} click={this.modifyHeadBlend}/><optionInput data={headBlend[i+3]} click={this.modifyHeadBlend}/>
+						<optionInput data={ headBlend[i] } click={ this.modifyHeadBlend }/><optionInput data={ headBlend[i + 3] } click={ this.modifyHeadBlend }/>
 					</div>;
 				}
 

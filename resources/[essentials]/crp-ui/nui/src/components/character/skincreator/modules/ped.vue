@@ -1,5 +1,6 @@
 <script>
 	import { mapGetters } from 'vuex';
+	import { send } from './../../../../utils/lib.js';
 
 	import optionInput from './../utils/input.vue';
 
@@ -20,16 +21,28 @@
 			})
 		},
 		methods: {
+			selectPedSkin: function(skinData) {
+				send('selectPedSkin', skinData).then(data => {
+					if (skinData.index) {
+						this.pedData[2].value = data[0], this.pedData[2].maxValue = data[2];
+						this.pedData[3].value = data[1], this.pedData[3].maxValue = data[3];
+					}
+				});
+			},
 			changeOption: function(type, option) {
 				type == 1 ? this.pedInfo.type = option : this.pedInfo.sex = option;
-			}
-		},
-		data () {
-    		return {
-				data: {
-					type: false, sex: false
+
+				let data = { sex: this.pedInfo.sex };
+
+				if (this.pedInfo.type) {
+					data.index = (this.pedInfo.sex ? this.pedData[0].value : this.pedData[1].value) + 1;
 				}
-    		}
+
+				this.selectPedSkin(data);
+			},
+			changeSkin: function(index) {
+				this.selectPedSkin({ sex: this.pedInfo.sex, index: ((this.pedInfo.sex ? this.pedData[0].value : this.pedData[1].value) + 1) });
+			}
 		},
 		render (h) {
 			let inputs = [], pedData = this.pedData;
@@ -41,7 +54,7 @@
 					if (i == 1) {
 						let index = this.pedInfo.sex ? 0 : 1;
 
-						data = <optionInput data={ pedData[index] }/>;
+						data = <optionInput data={ pedData[index] } click={ this.changeSkin }/>;
 					}
 
 					inputs.push(data);
@@ -77,6 +90,12 @@
 							{ inputs }
 						</div>
 					}
+					<div class='container'>
+						<div class='option reset'>
+							<span>O botão de reset vai colocar a tua personagem como estava antes de entrares na loja.</span>
+							<button class='reset'>Resetar</button>
+						</div>
+					</div>
 				</div>
 			);
 		}

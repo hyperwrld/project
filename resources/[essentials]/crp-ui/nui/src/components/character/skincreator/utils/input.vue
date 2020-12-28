@@ -44,8 +44,8 @@
 			return (
 				<div class='option input'>
 					<div class='label-container'>
-						<span class='label'>{ data.title }</span>
-						<span>{ data.value + ' | ' + data.maxValue }</span>
+						<span>{ data.title }</span>
+						<span class='counter'>{ data.value + ' | ' + data.maxValue }</span>
 					</div>
 					<div class='controls'>
 						<button class='arrowLeft' onClick={ () => this.changeValue(false) }>&#8249;</button>

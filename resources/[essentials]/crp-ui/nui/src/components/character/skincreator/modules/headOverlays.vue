@@ -27,7 +27,7 @@
 
 			for (let i = 0; i < headOverlays.length; i += 2) {
 				let data = <div class='container'>
-					<optionInput data={headOverlays[i]} click={this.modifyHeadOverlay}/><optionRange data={headOverlays[i + 1]} click={this.modifyHeadOverlay}/>
+					<optionInput data={ headOverlays[i] } click={ this.modifyHeadOverlay }/><optionRange data={ headOverlays[i + 1] } click={ this.modifyHeadOverlay }/>
 				</div>;
 
 				options.push(data);

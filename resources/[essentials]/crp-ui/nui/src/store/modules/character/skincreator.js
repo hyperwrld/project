@@ -54,7 +54,7 @@ const mutations = {
 			case 2:
 				setClothingData(state, data.variations, data.totals);
 				setAccessoriesData(state, data.variations, data.totals);
-				setPedData(state, data.currentModel, data.totals);
+				setPedData(state, data.currentModel, data.variations, data.totals);
 				break;
 			case 3:
 				setHeadOverlayData(state, data.headOverlays);
@@ -73,7 +73,7 @@ const mutations = {
 					state.faceFeatures[i].value = data.faceFeatures[i];
 				}
 
-				setPedData(state, data.currentModel, data.totals);
+				setPedData(state, data.currentModel, data.variations, data.totals);
 				setHeadOverlayData(state, data.headOverlays);
 				setBodyFeatures(state, data.colors, data.variations, data.totals, data.headOverlays);
 				setClothingData(state, data.variations, data.totals);
@@ -83,14 +83,16 @@ const mutations = {
     }
 }
 
-function setPedData(state, currentModel, totals) {
+function setPedData(state, currentModel, variations, totals) {
 	state.pedInfo = { type: false, sex: false }, state.ped = ped;
 	state.pedInfo.type = isNaN(currentModel[0]) ? currentModel[0] : false, state.pedInfo.sex = currentModel[1];
 
-	if (!state.pedInfo.type) {
-		state.pedInfo.sex ? state.ped[0].value : state.ped[1].value = currentModel[0];
+	if (state.pedInfo.type) {
+		state.pedInfo.sex ? state.ped[0].value = currentModel[0] : state.ped[1].value = currentModel[0];
 	}
 
+	state.ped[2].value = variations.drawables[0], state.ped[2].maxValue = totals.drawables[0];
+	state.ped[3].value = variations.drawablesTextures[0], state.ped[3].maxValue = totals.drawablesTextures[0];
 	state.ped[0].maxValue = totals.skins[0], state.ped[1].maxValue = totals.skins[1];
 }
 

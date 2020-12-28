@@ -24,7 +24,7 @@
 
 			for (let i = 1; i < faceFeatures.length; i += 2) {
 				let data = <div class='container'>
-					<optionRange data={faceFeatures[i-1]} click={this.modifyFaceFeature}/><optionRange data={faceFeatures[i]} click={this.modifyFaceFeature}/>
+					<optionRange data={ faceFeatures[i - 1] } click={ this.modifyFaceFeature }/><optionRange data={ faceFeatures[i] } click={ this.modifyFaceFeature }/>
 				</div>;
 
 				ranges.push(data);
