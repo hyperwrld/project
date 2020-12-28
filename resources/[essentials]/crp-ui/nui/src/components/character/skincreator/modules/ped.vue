@@ -42,7 +42,10 @@
 			},
 			changeSkin: function(index) {
 				this.selectPedSkin({ sex: this.pedInfo.sex, index: ((this.pedInfo.sex ? this.pedData[0].value : this.pedData[1].value) + 1) });
-			}
+            },
+            resetSkin: function() {
+                send('saveSkin', false);
+            }
 		},
 		render (h) {
 			let inputs = [], pedData = this.pedData;
@@ -93,7 +96,7 @@
 					<div class='container'>
 						<div class='option reset'>
 							<span>O botão de reset vai colocar a tua personagem como estava antes de entrares na loja.</span>
-							<button class='reset'>Resetar</button>
+							<button class='reset' onClick={ this.resetSkin }>Resetar</button>
 						</div>
 					</div>
 				</div>

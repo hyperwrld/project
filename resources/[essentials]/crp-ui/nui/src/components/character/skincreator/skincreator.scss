@@ -111,9 +111,12 @@
 
 						span {
 							font-size: 13px !important;
+							width: 65%;
 
 							&.counter {
 								font-size: 10px !important;
+								width: 30%;
+								text-align: right;
 							}
 						}
 					}
@@ -261,6 +264,7 @@
 
 		gap: 5px;
 		padding: 5px;
+		color: rgba(255, 255, 255, 0.75);
 
 		&::v-deep .footer-container {
 			padding: 5px;
@@ -286,9 +290,12 @@
 
 					span {
 						font-size: 13px !important;
+						width: 65%;
 
 						&.counter {
 							font-size: 10px !important;
+							width: 30%;
+							text-align: right;
 						}
 					}
 				}
