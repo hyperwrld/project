@@ -115,9 +115,9 @@ function setHeadOverlayData(state, headOverlay) {
 function setBodyFeatures(state, colors, variations, totals, headOverlays) {
 	state.bodyFeatures = bodyFeatures;
 
-	option.value = variations.drawables[2], option.maxValue = totals.drawables[2];
-	option.subOptions[0].value = variations.drawablesTextures[2], option.subOptions[0].maxValue = totals.drawablesTextures[2];
-	option.subOptions[1].value = colors.hairColor, option.subOptions[2].value = colors.hairHightlightColor, option.subOptions[2].items = colors.hairColors;
+	state.bodyFeatures[0].value = variations.drawables[2], state.bodyFeatures[0].maxValue = totals.drawables[2];
+	state.bodyFeatures[0].subOptions[0].value = variations.drawablesTextures[2], state.bodyFeatures[0].subOptions[0].maxValue = totals.drawablesTextures[2];
+	state.bodyFeatures[0].subOptions[1].value = colors.hairColor, state.bodyFeatures[0].subOptions[2].value = colors.hairHightlightColor, state.bodyFeatures[0].subOptions[2].items = colors.hairColors;
 
 	for (let i = 0; i < state.bodyFeatures.length; i++) {
 		let option = state.bodyFeatures[i]
@@ -153,10 +153,10 @@ function setBodyFeatures(state, colors, variations, totals, headOverlays) {
 }
 
 function setClothingData(state, variations, totals) {
-	state.accessories = accessories;
+	state.clothing = clothing;
 
-	clothesOption.value = variations.props[0], clothesOption.maxValue = totals.props[0];
-	clothesOption.subOptions[0].value = variations.propsTextures[0], clothesOption.subOptions[0].maxValue = totals.propsTextures[0];
+	state.clothing[0].value = variations.props[0], state.clothing[0].maxValue = totals.props[0];
+	state.clothing[0].subOptions[0].value = variations.propsTextures[0], state.clothing[0].subOptions[0].maxValue = totals.propsTextures[0];
 
 	for (let i = 1; i < state.clothing.length; i++) {
 		let clothesOption = state.clothing[i];
@@ -167,7 +167,7 @@ function setClothingData(state, variations, totals) {
 }
 
 function setAccessoriesData(state, variations, totals) {
-	state.clothing = clothing;
+	state.accessories = accessories;
 
 	for (let i = 0; i < state.accessories.length; i++) {
 		let accessoryOption = state.accessories[i];
@@ -179,7 +179,7 @@ function setAccessoriesData(state, variations, totals) {
 				break;
 			default:
 				accessoryOption.value = variations.drawables[accessoryOption.id], accessoryOption.maxValue = totals.drawables[accessoryOption.id];
-				accessoryOption.subOptions[0].value = variations.drawablesTextures[accessoryOption.id], accessoryOption.subOptions[0].maxValue = totals.drawablesTextures[accessoryOption.id];
+				accessoryOption.subOptions[0].value = variations.drawablesTextures[accessoryOption.id], accessoryOption.subOptions[0].maxValue = totals.drawablesTextures[accessoryOption.id] - 1;
 				break;
 		}
 	}

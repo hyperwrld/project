@@ -98,11 +98,10 @@ end
 
 function getCurrentModel()
 	local model = GetEntityModel(playerPed)
+	local success, modelSex = isMpModel(model)
 
-	if `mp_m_freemode_01` == model then
-		return { true, true }
-	elseif `mp_f_freemode_01` == model then
-		return { true, false }
+	if success then
+		return { true, modelSex }
 	end
 
 	for i = 1, #maleSkins do
@@ -115,6 +114,18 @@ function getCurrentModel()
 		if `femaleSkins[i]` == model then
 			return { i, false }
 		end
+	end
+
+	return false
+end
+
+function isMpModel(model)
+	if `mp_m_freemode_01` == model then
+		return true, true
+	end
+
+	if `mp_f_freemode_01` == model then
+		return true, false
 	end
 
 	return false

@@ -1,6 +1,6 @@
 playerPed, camera, zPos, fov, startPosition, startCamPosition = PlayerPedId(), nil, 0, 90.0
 
-local oldSkin, currentTattos = {}, {}
+local oldSkin, currentTattos, clothing = {}, {}, {}
 
 AddEventHandler('crp-skincreator:openShop', function(type) 	-- type: 1 (all), 2 (clothing), 3 (hairshop), 4 (tattoos)
 	playerPed, oldSkin = PlayerPedId(), getCurrentSkin()
@@ -64,7 +64,7 @@ RegisterUICallback('modifyHeadBlend', function(data, cb)
 end)
 
 RegisterUICallback('modifyFaceFeature', function(data, cb)
-	SetPedFaceFeature(playerPed, data.index, data.scale)
+	SetPedFaceFeature(playerPed, data.index, RoundNumber(data.scale, 1))
 
 	cb('ok')
 end)
@@ -153,6 +153,63 @@ RegisterUICallback('modifyAccessories', function(data, cb)
 	end
 
 	cb(callbackData)
+end)
+
+RegisterUICallback('toggleClothing', function(data, cb)
+	local model = GetEntityModel(playerPed)
+	local success, modelSex = isMpModel(model)
+
+	if success then
+		if clothing[data] then
+			for i = 1, #clothing[data] do
+				local clothes = clothing[data][i]
+
+				if (data == 1 and i ~= 1) and (clothes.value) ~= -1 then
+					SetPedPropIndex(playerPed, clothes.id, clothes.value, clothes.secondValue, true)
+				else
+					SetPedComponentVariation(playerPed, clothes.id, clothes.value, clothes.secondValue, 2)
+				end
+			end
+
+			clothing[data] = nil
+		else
+			local defaultClothing = defaultMaleClothing[data].male
+
+			if not modelSex then
+				defaultClothing = defaultMaleClothing[data].female
+			end
+
+			clothing[data] = {}
+
+			for i = 1, #defaultClothing do
+				local clothes, id, value, secondValue = defaultClothing[i]
+
+				if data == 1 and type(clothes) == 'number' then
+					id, value, secondValue = clothes, GetPedPropIndex(playerPed, clothes), GetPedPropTextureIndex(playerPed, clothes)
+
+					ClearPedProp(playerPed, clothes)
+				else
+					id, value, secondValue = clothes.id, GetPedDrawableVariation(playerPed, clothes.id), GetPedTextureVariation(playerPed, clothes.id)
+
+					SetPedComponentVariation(playerPed, clothes.id, clothes.value, clothes.secondValue, 2)
+				end
+
+				clothing[data][i] = { id = id, value = value, secondValue = secondValue }
+			end
+		end
+	end
+
+	cb('ok')
+end)
+
+RegisterUICallback('toggleAnimation', function(data, cb)
+	if not IsPedUsingScenario(playerPed, 'WORLD_HUMAN_HUMAN_STATUE') then
+		TaskPlayAnimation(playerPed, nil, 'WORLD_HUMAN_HUMAN_STATUE')
+	else
+		ClearPedTasks(playerPed)
+	end
+
+	cb('ok')
 end)
 
 RegisterUICallback('modifyCameraValue', function(data, cb)

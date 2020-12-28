@@ -16,10 +16,10 @@
 	import dialog from './dialog/dialog.js';
 
 	import { library } from '@fortawesome/fontawesome-svg-core';
-	import { faAngleLeft, faAngleRight, faFlushed, faGlasses, faHatCowboy, faSocks, faTshirt, faUserTie } from '@fortawesome/free-solid-svg-icons';
+	import { faAngleLeft, faAngleRight, faFlushed, faSocks, faTshirt, faChild } from '@fortawesome/free-solid-svg-icons';
 	import { faRedhat } from '@fortawesome/free-brands-svg-icons';
 
-	library.add(faAngleLeft, faAngleRight, faHatCowboy, faGlasses, faTshirt, faFlushed, faUserTie, faSocks);
+	library.add(faAngleLeft, faAngleRight, faTshirt, faFlushed, faSocks, faChild);
 
 	export default {
 		name: 'skincreator',
@@ -44,6 +44,12 @@
 			},
 			modifyCameraValue: function(index) {
 				send('modifyCameraValue', { type: camera[index].id, value: Number(camera[index].value) });
+			},
+			toggleClothing: function(type) {
+				send('toggleClothing', type);
+			},
+			toggleAnimation: function() {
+				send('toggleAnimation');
 			}
         },
 		data() {
@@ -84,12 +90,10 @@
 					<div class='container'>
 						<router-view/>
 						<div class='camera'>
-							<font-awesome-icon icon='hat-cowboy'/>
-							<font-awesome-icon icon='glasses'/>
-							<font-awesome-icon icon='tshirt'/>
-							<font-awesome-icon icon='flushed'/>
-							<font-awesome-icon icon='user-tie'/>
-							<font-awesome-icon icon='socks'/>
+							<font-awesome-icon icon='flushed' onClick={ () =>  this.toggleClothing(1) }/>
+							<font-awesome-icon icon='tshirt'  onClick={ () =>  this.toggleClothing(2) }/>
+							<font-awesome-icon icon='socks'   onClick={ () =>  this.toggleClothing(3) }/>
+							<font-awesome-icon icon='child'   onClick={ () =>  this.toggleAnimation() }/>
 						</div>
 					</div>
 					<div class='footer'>

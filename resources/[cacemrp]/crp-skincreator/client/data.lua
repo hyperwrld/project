@@ -1,3 +1,106 @@
+defaultMaleClothing = {
+	[1] = {
+		male = {
+			{
+				id = 1,
+				value = 0,
+				secondValue = 0
+			},
+			0, 1, 2
+		},
+		female = {
+			{
+				id = 1,
+				value = 0,
+				secondValue = 0
+			},
+			0, 1, 2
+		}
+	},
+	[2] = {
+		male = {
+			{
+				id = 3,
+				value = 15,
+				secondValue = 0
+			},
+			{
+				id = 5,
+				value = 0,
+				secondValue = 0
+			},
+			{
+				id = 8,
+				value = 15,
+				secondValue = 0
+			},
+			{
+				id = 9,
+				value = 0,
+				secondValue = 0
+			},
+			{
+				id = 11,
+				value = 15,
+				secondValue = 0
+			}
+		},
+		female = {
+			{
+				id = 3,
+				value = 15,
+				secondValue = 0
+			},
+			{
+				id = 5,
+				value = 0,
+				secondValue = 0
+			},
+			{
+				id = 8,
+				value = 14,
+				secondValue = 0
+			},
+			{
+				id = 9,
+				value = 0,
+				secondValue = 0
+			},
+			{
+				id = 11,
+				value = 15,
+				secondValue = 0
+			}
+		}
+	},
+	[3] = {
+		male = {
+			{
+				id = 4,
+				value = 18,
+				secondValue = 8
+			},
+			{
+				id = 6,
+				value = 34,
+				secondValue = 0
+			}
+		},
+		female = {
+			{
+				id = 4,
+				value = 15,
+				secondValue = 0
+			},
+			{
+				id = 6,
+				value = 35,
+				secondValue = 0
+			}
+		}
+	}
+}
+
 femaleSkins = {
 	'mp_f_freemode_01',
 	'a_f_m_beach_01',
