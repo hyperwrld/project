@@ -2,15 +2,15 @@ export const ped = [
 	{
 		id: 0,
 		title: 'Skin Masculino',
-		value: 0,
-		minValue: 0,
+		value: 1,
+		minValue: 1,
 		maxValue: 0
 	},
 	{
 		id: 0,
 		title: 'Skin Feminina',
-		value: 0,
-		minValue: 0,
+		value: 1,
+		minValue: 1,
 		maxValue: 0
 	},
 	{

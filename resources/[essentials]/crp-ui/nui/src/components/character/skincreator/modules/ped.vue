@@ -17,15 +17,15 @@
 		},
 		computed: {
 			...mapGetters('skincreator', {
-				pedInfo: 'getPedInfo', pedData: 'getPed'
+				pedInfo: 'getPedInfo', pedData: 'getPedData'
 			})
 		},
 		methods: {
 			selectPedSkin: function(skinData) {
 				send('selectPedSkin', skinData).then(data => {
 					if (skinData.index) {
-						this.pedData[2].value = data[0], this.pedData[2].maxValue = data[2];
-						this.pedData[3].value = data[1], this.pedData[3].maxValue = data[3];
+						this.pedData[2].value = data[0], this.pedData[2].maxValue = data[2] - 1;
+						this.pedData[3].value = data[1], this.pedData[3].maxValue = data[3] - 1;
 					}
 				});
 			},
@@ -35,14 +35,17 @@
 				let data = { sex: this.pedInfo.sex };
 
 				if (this.pedInfo.type) {
-					data.index = (this.pedInfo.sex ? this.pedData[0].value : this.pedData[1].value) + 1;
+					data.index = (this.pedInfo.sex ? this.pedData[0].value : this.pedData[1].value);
 				}
 
 				this.selectPedSkin(data);
 			},
 			changeSkin: function(index) {
-				this.selectPedSkin({ sex: this.pedInfo.sex, index: ((this.pedInfo.sex ? this.pedData[0].value : this.pedData[1].value) + 1) });
-            },
+				this.selectPedSkin({ sex: this.pedInfo.sex, index: Number((this.pedInfo.sex ? this.pedData[0].value : this.pedData[1].value)) });
+			},
+			changeSkinValue: function(index) {
+				send('modifyAccessories', { index: 0, value: this.pedData[2].value, secondValue: this.pedData[3].value });
+			},
             resetSkin: function() {
                 send('saveSkin', false);
             }
@@ -52,7 +55,7 @@
 
 			if (this.pedInfo.type) {
 				for (var i = 1; i < pedData.length; i++) {
-					let data = <optionInput data={ pedData[i] }/>;
+					let data = <optionInput data={ pedData[i] } click={ this.changeSkinValue }/>;
 
 					if (i == 1) {
 						let index = this.pedInfo.sex ? 0 : 1;

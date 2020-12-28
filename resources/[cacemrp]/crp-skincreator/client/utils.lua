@@ -105,13 +105,13 @@ function getCurrentModel()
 	end
 
 	for i = 1, #maleSkins do
-		if `maleSkins[i]` == model then
+		if maleSkins[i] == model then
 			return { i, true }
 		end
 	end
 
 	for i = 1, #femaleSkins do
-		if `femaleSkins[i]` == model then
+		if femaleSkins[i] == model then
 			return { i, false }
 		end
 	end
@@ -148,7 +148,10 @@ function setCharacterSkin(data)
 	local headBlend = data.headBlend
 
 	SetPedHairColor(playerPed, data.hairColor, data.hairHightlightColor)
-	SetPedHeadBlendData(playerPed, headBlend[1], headBlend[2], headBlend[3], headBlend[4], headBlend[5], headBlend[6], headBlend[7], headBlend[8], headBlend[9], false)
+
+	if headBlend then
+		SetPedHeadBlendData(playerPed, headBlend[1], headBlend[2], headBlend[3], headBlend[4], headBlend[5], headBlend[6], headBlend[7], headBlend[8], headBlend[9], false)
+	end
 end
 
 exports('setCharacterSkin', setCharacterSkin)
@@ -202,13 +205,13 @@ function setClothing(drawables, props, drawablesTextures, propsTextures)
 end
 
 function setFaceFeatures(data)
-    for i = 1, 20 do
-        SetPedFaceFeature(playerPed, i-  1, data[i])
+    for i = 1, #data do
+        SetPedFaceFeature(playerPed, i - 1, data[i])
     end
 end
 
 function setHeadOverlays(data)
-	for i = 1, 12 do
+	for i = 1, #data do
 		SetPedHeadOverlay(playerPed, i - 1, data[i].overlayValue, data[i].overlayOpacity)
 
 		if data[i].firstColour then
@@ -272,4 +275,16 @@ function changeCameraZoom(value)
         SetCamActive(camera, true)
         RenderScriptCams(true, false, 0, true, false)
     end
+end
+
+function updateData()
+	local data = {
+		type = menuType, variations = getVariations(), totals = getTotals()
+	}
+
+	if menuType == 1 then
+		data.headOverlays, data.colors = getHeadOverlays(), getColors()
+	end
+
+	exports['crp-ui']:updateData(data)
 end

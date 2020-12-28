@@ -1,25 +1,25 @@
-playerPed, camera, zPos, fov, startPosition, startCamPosition = PlayerPedId(), nil, 0, 90.0
+playerPed, menuType, camera, zPos, fov, startPosition, startCamPosition = PlayerPedId(), 1, nil, 0, 90.0
 
 local oldSkin, currentTattos, clothing = {}, {}, {}
 
 AddEventHandler('crp-skincreator:openShop', function(type) 	-- type: 1 (all), 2 (clothing), 3 (hairshop), 4 (tattoos)
-	playerPed, oldSkin = PlayerPedId(), getCurrentSkin()
+	playerPed, oldSkin, menuType = PlayerPedId(), getCurrentSkin(), type
 
 	local data, heading = {}, GetEntityHeading(playerPed)
 
 	triggerCustomCamera()
 
-	if type == 2 then
+	if menuType == 2 then
 		data = {
-			type = type, heading = heading, variations = getVariations(), totals = getTotals(), currentModel = getCurrentModel()
+			type = menuType, heading = heading, variations = getVariations(), totals = getTotals(), currentModel = getCurrentModel()
 		}
-	elseif type == 3 then
+	elseif menuType == 3 then
 		data = {
-			type = type, heading = heading, headOverlays = getHeadOverlays(), colors = getColors(), variations = getVariations(), totals = getTotals()
+			type = menuType, heading = heading, headOverlays = getHeadOverlays(), colors = getColors(), variations = getVariations(), totals = getTotals()
 		}
 	else
 		data = {
-			type = type, heading = heading, headBlend = getHeadBlend(), faceFeatures = getFaceFeatures(), currentModel = getCurrentModel(),
+			type = menuType, heading = heading, headBlend = getHeadBlend(), faceFeatures = getFaceFeatures(), currentModel = getCurrentModel(),
 			headOverlays = getHeadOverlays(), colors = getColors(), variations = getVariations(), totals = getTotals()
 		}
 	end
@@ -44,7 +44,11 @@ RegisterUICallback('selectPedSkin', function(data, cb)
 		end
 	end
 
-	setSkin(model)
+	if not (GetEntityModel(playerPed) == model) then
+		setSkin(model)
+
+		updateData()
+	end
 
 	if not data.index then
 		return cb('ok')
@@ -229,6 +233,8 @@ RegisterUICallback('saveSkin', function(data, cb)
 		TriggerServerEvent('crp-skincreator:saveSkin', getCurrentSkin())
 	else
 		setCharacterSkin(oldSkin)
+
+		updateData()
 	end
 
 	cb('ok')

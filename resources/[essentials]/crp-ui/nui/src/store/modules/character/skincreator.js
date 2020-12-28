@@ -15,7 +15,7 @@ const getters = {
 	getPedInfo: state => {
 		return state.pedInfo
 	},
-	getPed: state => {
+	getPedData: state => {
 		return state.ped;
 	},
 	getHeadBlend: state => {
@@ -41,7 +41,10 @@ const getters = {
 const actions = {
     setData(state, data) {
         state.commit('setData', data);
-    }
+	},
+	updateData(state, data) {
+		state.commit('updateData', data);
+	}
 }
 
 const mutations = {
@@ -82,19 +85,27 @@ const mutations = {
 		}
 
 		state.camera[2].value = data.heading;
-    }
+	},
+	updateData(state, data) {
+		if (data.type == 1) {
+			setBodyFeatures(state, data.colors, data.variations, data.totals, data.headOverlays);
+		}
+
+		setClothingData(state, data.variations, data.totals);
+		setAccessoriesData(state, data.variations, data.totals);
+	}
 }
 
 function setPedData(state, currentModel, variations, totals) {
 	state.pedInfo = { type: false, sex: false }, state.ped = ped;
-	state.pedInfo.type = isNaN(currentModel[0]) ? currentModel[0] : false, state.pedInfo.sex = currentModel[1];
+	state.pedInfo.type = (typeof currentModel[0] == 'number') ? true : false, state.pedInfo.sex = currentModel[1];
 
 	if (state.pedInfo.type) {
-		state.pedInfo.sex ? state.ped[0].value = currentModel[0] : state.ped[1].value = currentModel[0];
+		state.pedInfo.sex ? state.ped[0].value = currentModel[0]: state.ped[1].value = currentModel[0];
 	}
 
-	state.ped[2].value = variations.drawables[0], state.ped[2].maxValue = totals.drawables[0];
-	state.ped[3].value = variations.drawablesTextures[0], state.ped[3].maxValue = totals.drawablesTextures[0];
+	state.ped[2].value = variations.drawables[0], state.ped[2].maxValue = totals.drawables[0] - 1;
+	state.ped[3].value = variations.drawablesTextures[0], state.ped[3].maxValue = totals.drawablesTextures[0] - 1;
 	state.ped[0].maxValue = totals.skins[0], state.ped[1].maxValue = totals.skins[1];
 }
 
