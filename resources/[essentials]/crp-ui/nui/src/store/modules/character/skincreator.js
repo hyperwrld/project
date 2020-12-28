@@ -79,7 +79,9 @@ const mutations = {
 				setClothingData(state, data.variations, data.totals);
 				setAccessoriesData(state, data.variations, data.totals);
 				break;
-        }
+		}
+
+		state.camera[2].value = data.heading;
     }
 }
 
@@ -113,6 +115,10 @@ function setHeadOverlayData(state, headOverlay) {
 function setBodyFeatures(state, colors, variations, totals, headOverlays) {
 	state.bodyFeatures = bodyFeatures;
 
+	option.value = variations.drawables[2], option.maxValue = totals.drawables[2];
+	option.subOptions[0].value = variations.drawablesTextures[2], option.subOptions[0].maxValue = totals.drawablesTextures[2];
+	option.subOptions[1].value = colors.hairColor, option.subOptions[2].value = colors.hairHightlightColor, option.subOptions[2].items = colors.hairColors;
+
 	for (let i = 0; i < state.bodyFeatures.length; i++) {
 		let option = state.bodyFeatures[i]
 
@@ -122,31 +128,25 @@ function setBodyFeatures(state, colors, variations, totals, headOverlays) {
 			option.subOptions[1].items = colors.hairColors;
 		}
 
-		if (i == 0) {
-			option.value = variations.drawables[2], option.maxValue = totals.drawables[2];
-			option.subOptions[0].value = variations.drawablesTextures[2], option.subOptions[0].maxValue = totals.drawablesTextures[2];
-			option.subOptions[1].value = colors.hairColor, option.subOptions[2].value = colors.hairHightlightColor, option.subOptions[2].items = colors.hairColors;
-		} else {
-			const headOverlay = headOverlays[option.id];
+		const headOverlay = headOverlays[option.id];
 
-			if (headOverlay) {
-				option.value = (headOverlay.overlayValue == 255) ? -1 : headOverlay.overlayValue, option.subOptions[0].value = headOverlay.opacity;
+		if (headOverlay) {
+			option.value = (headOverlay.overlayValue == 255) ? -1 : headOverlay.overlayValue, option.subOptions[0].value = headOverlay.opacity;
 
-				if (option.value != -1) {
-					option.subOptions[1].value = headOverlay.firstColour;
-
-					if (option.subOptions[2]) {
-						option.subOptions[2].value = headOverlay.secondColour;
-					}
-				}
+			if (option.value != -1) {
+				option.subOptions[1].value = headOverlay.firstColour;
 
 				if (option.subOptions[2]) {
-					option.subOptions[2].items = colors.makeupColors;
+					option.subOptions[2].value = headOverlay.secondColour;
 				}
+			}
 
-				if (option.maxValue == 0) {
-					option.maxValue = totals.drawables[option.id];
-				}
+			if (option.subOptions[2]) {
+				option.subOptions[2].items = colors.makeupColors;
+			}
+
+			if (option.maxValue == 0) {
+				option.maxValue = totals.drawables[option.id];
 			}
 		}
 	}
@@ -155,16 +155,14 @@ function setBodyFeatures(state, colors, variations, totals, headOverlays) {
 function setClothingData(state, variations, totals) {
 	state.accessories = accessories;
 
-	for (let i = 0; i < state.clothing.length; i++) {
+	clothesOption.value = variations.props[0], clothesOption.maxValue = totals.props[0];
+	clothesOption.subOptions[0].value = variations.propsTextures[0], clothesOption.subOptions[0].maxValue = totals.propsTextures[0];
+
+	for (let i = 1; i < state.clothing.length; i++) {
 		let clothesOption = state.clothing[i];
 
-		if (i == 0) {
-			clothesOption.value = variations.props[0], clothesOption.maxValue = totals.props[0];
-			clothesOption.subOptions[0].value = variations.propsTextures[0], clothesOption.subOptions[0].maxValue = totals.propsTextures[0];
-		} else {
-			clothesOption.value = variations.drawables[clothesOption.id], clothesOption.maxValue = totals.drawables[clothesOption.id];
-			clothesOption.subOptions[0].value = variations.drawablesTextures[clothesOption.id], clothesOption.subOptions[0].maxValue = totals.drawablesTextures[clothesOption.id];
-		}
+		clothesOption.value = variations.drawables[clothesOption.id], clothesOption.maxValue = totals.drawables[clothesOption.id];
+		clothesOption.subOptions[0].value = variations.drawablesTextures[clothesOption.id], clothesOption.subOptions[0].maxValue = totals.drawablesTextures[clothesOption.id];
 	}
 }
 

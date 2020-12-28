@@ -5,21 +5,21 @@ local oldSkin, currentTattos = {}, {}
 AddEventHandler('crp-skincreator:openShop', function(type) 	-- type: 1 (all), 2 (clothing), 3 (hairshop), 4 (tattoos)
 	playerPed, oldSkin = PlayerPedId(), getCurrentSkin()
 
-	local data = {}
+	local data, heading = {}, GetEntityHeading(playerPed)
 
 	triggerCustomCamera()
 
 	if type == 2 then
 		data = {
-			type = type, variations = getVariations(), totals = getTotals(), currentModel = getCurrentModel()
+			type = type, heading = heading, variations = getVariations(), totals = getTotals(), currentModel = getCurrentModel()
 		}
 	elseif type == 3 then
 		data = {
-			type = type, headOverlays = getHeadOverlays(), colors = getColors(), variations = getVariations(), totals = getTotals()
+			type = type, heading = heading, headOverlays = getHeadOverlays(), colors = getColors(), variations = getVariations(), totals = getTotals()
 		}
 	else
 		data = {
-			type = type, headBlend = getHeadBlend(), faceFeatures = getFaceFeatures(), currentModel = getCurrentModel(),
+			type = type, heading = heading, headBlend = getHeadBlend(), faceFeatures = getFaceFeatures(), currentModel = getCurrentModel(),
 			headOverlays = getHeadOverlays(), colors = getColors(), variations = getVariations(), totals = getTotals()
 		}
 	end

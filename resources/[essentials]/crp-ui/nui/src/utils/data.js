@@ -790,7 +790,7 @@ export const camera = [
 	{
 		id: 1,
 		title: 'Zoom',
-		value: 55,
+		value: 90,
 		step: 1,
 		minValue: 10,
 		maxValue: 100
