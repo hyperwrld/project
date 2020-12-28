@@ -5,7 +5,7 @@ AddEventHandler('onResourceStart', function(resourceName)
 	  	return
 	end
 
-	Debug('[Main] Resource started | Cleaning drop/container inventories | Cleaning old items.')
+	Debug('Resource started | Cleaning drop/container inventories | Cleaning old items.')
 
 	DB:Execute([[DELETE FROM inventory WHERE name LIKE 'drop%' OR name LIKE 'container%';]])
 end)
@@ -30,12 +30,12 @@ function openInventory(source, type, name, data)
 	local success, firstInventory, secondInventory = loadInventories(source, type, name, data)
 
 	if not success or type == 5 then
-		Debug('[Main] Couldnt load the inventories.')
+		Debug('Couldnt load the inventories.')
 
 		return false
 	end
 
-	Debug('[Main] Inventories (character & ' .. name ..') loaded.')
+	Debug('Inventories (character & ' .. name ..') loaded.')
 
 	return true, { player = firstInventory, secondary = secondInventory }
 end
@@ -46,7 +46,7 @@ end
 function loadInventories(source, type, name, data)
 	local maxSlots, maxWeight = 1000, 40
 
-	Debug('[Main] Loading inventories...')
+	Debug('Loading inventories...')
 
 	local character = exports['crp-base']:GetCharacter(source)
 	local characterName = 'character-' .. character.getCharacterID()

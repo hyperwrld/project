@@ -1,7 +1,7 @@
 function createCircleZones(points, radius, useZ, zoneName, eventName, canLog)
 	local zones = {}
 
-	Debug('[Main] Trying to create zone (' .. zoneName .. ' - type: circle).')
+	Debug('Trying to create zone (' .. zoneName .. ' - type: circle).')
 
 	for i = 1, #points do
 		name = 'circleZone-' .. tostring(i)
@@ -17,7 +17,7 @@ exports('createCircleZones', createCircleZones)
 function createBoxZones(points, zoneName, eventName, canLog)
 	local zones = {}
 
-	Debug('[Main] Trying to create zone (' .. zoneName .. ' - type: box).')
+	Debug('Trying to create zone (' .. zoneName .. ' - type: box).')
 
 	for i = 1, #points do
 		name = 'boxZone-' .. tostring(i)
@@ -35,7 +35,7 @@ exports('createBoxZones', createBoxZones)
 function createZones(zones, zoneName, eventName, canLog)
 	local comboZone = ComboZone:Create(zones, { name = zoneName })
 
-	Debug('[Main] Created zone (' .. zoneName .. ') successfully.')
+	Debug('Created zone (' .. zoneName .. ') successfully.')
 
 	comboZone:onPlayerInOut(function(isPointInside, point, zone)
 		if zone then

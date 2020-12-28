@@ -63,7 +63,7 @@ function openInventory()
 		local vehicle = GetVehiclePedIsIn(playerPed, false)
 
 		if vehicle ~= 0 then
-			Debug('[Main] Opened glovebox inventory.')
+			Debug('Opened glovebox inventory.')
 
 			TriggerEvent('crp-inventory:openInventory', 3, 'glovebox-' .. GetVehicleNumberPlateText(vehicle))
 		end
@@ -72,7 +72,7 @@ function openInventory()
 		local found, container = searchContainers(playerPed, coords)
 
 		if found then
-			Debug('[Main] Opened container inventory.')
+			Debug('Opened container inventory.')
 
 			TriggerEvent('crp-inventory:openInventory', 4, 'container (' .. math.floor(container.x + 0.5) .. ' | ' .. math.floor(container.y + 0.5) .. ')')
 		else
@@ -91,11 +91,11 @@ function openInventory()
 
 						Citizen.Wait(1000)
 
-						Debug('[Main] Checking vehicle trunk.')
+						Debug('Checking vehicle trunk.')
 
 						TriggerEvent('crp-inventory:openInventory', 2, 'trunk-' .. GetVehicleNumberPlateText(vehicle))
 					else
-						Debug('[Main] The vehicle trunk is closed.')
+						Debug('The vehicle trunk is closed.')
 
 						exports['crp-ui']:setAlert('O veículo está trancado', 'inform')
 					end
@@ -103,7 +103,7 @@ function openInventory()
 			else
 				local name, coords = searchDropInventories(coords)
 
-				Debug('[Main] Opened drop inventory.')
+				Debug('Opened drop inventory.')
 
 				TriggerEvent('crp-inventory:openInventory', 1, name, coords)
 			end
@@ -205,7 +205,7 @@ AddEventHandler('crp-ui:closedMenu', function(name, data)
 		return
 	end
 
-	Debug('[Main] Inventory closed.')
+	Debug('Inventory closed.')
 
 	TriggerServerEvent('crp-inventory:closedInventory', data.first, data.second)
 
@@ -232,7 +232,7 @@ AddEventHandler('onClientResourceStart', function(resourceName)
 	  	return
 	end
 
-	Debug('[Main] Updated items list on the crp-ui.')
+	Debug('Updated items list on the crp-ui.')
 
 	exports['crp-ui']:setAppData('inventory', itemsList)
 end)

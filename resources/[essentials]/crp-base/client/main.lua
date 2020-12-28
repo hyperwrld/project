@@ -18,7 +18,7 @@ AddEventHandler('crp-ui:closedMenu', function(name, data)
 		return
 	end
 
-	Debug('[Main]: Character Selection closed.')
+	Debug('Character Selection closed.')
 
 	CRP.Spawn:SpawnCharacter(data.characterData)
 end)
