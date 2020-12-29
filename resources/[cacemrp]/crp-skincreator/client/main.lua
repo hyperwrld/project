@@ -74,7 +74,7 @@ RegisterUICallback('modifyFaceFeature', function(data, cb)
 end)
 
 RegisterUICallback('modifyHeadOverlay', function(data, cb)
-	SetPedHeadOverlay(playerPed, data.index, data.value, data.opacity)
+	SetPedHeadOverlay(playerPed, data.index, data.value, RoundNumber(data.opacity, 1))
 
 	cb('ok')
 end)
@@ -249,6 +249,7 @@ AddEventHandler('crp-ui:closedMenu', function(name, data)
 		camera = nil
 	end
 
+	ClearPedTasks(playerPed)
 	FreezeEntityPosition(playerPed, false)
 	DestroyAllCams(true)
 	RenderScriptCams(false, false, 0, false, false)
