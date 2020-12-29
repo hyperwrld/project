@@ -97,7 +97,7 @@
         },
 		render (h) {
 			return (
-				<transition name='fade' appear>
+				<transition appear name='fade'>
 					<div class='selection'>
 						<div class='character-list'>
 							{ this.charactersData.map((character, index) => {

@@ -57,7 +57,7 @@
 </script>
 
 <style lang='scss'>
-    @import 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css';
+	@import './plugins/vue2-animate.min.css';
     @import 'https://fonts.googleapis.com/css2?family=Quantico&display=swap';
 
     html, body {

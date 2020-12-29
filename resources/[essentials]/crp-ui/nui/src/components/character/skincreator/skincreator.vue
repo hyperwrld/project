@@ -89,7 +89,7 @@
 					</div>
 					<div class='container'>
 						<router-view/>
-						<div class='camera'>
+						<div class='buttons'>
 							<font-awesome-icon icon='flushed' onClick={ () =>  this.toggleClothing(1) }/>
 							<font-awesome-icon icon='tshirt'  onClick={ () =>  this.toggleClothing(2) }/>
 							<font-awesome-icon icon='socks'   onClick={ () =>  this.toggleClothing(3) }/>

@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import intro from './../components/character/intro/intro.vue';
 import selection from './../components/character/selection/selection.vue';
 
 import skincreator from './../components/character/skincreator/skincreator.vue';
@@ -33,9 +32,6 @@ Vue.use(VueRouter);
 
 export default new VueRouter({
 	routes: [
-		{
-			path: '/intro', component: intro
-		},
 		{
 			path: '/selection', component: selection
 		},
