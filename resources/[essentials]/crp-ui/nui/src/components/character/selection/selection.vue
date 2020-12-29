@@ -2,15 +2,11 @@
 	import { mapGetters } from 'vuex';
 	import { send } from './../../../utils/lib';
 
-	import modals from './../dialogs/dialogs.js';
-	import dialogs from './../dialogs/dialogs.vue';
+	import dialogs from './dialogs/dialogs.js';
 
 	export default {
 		name: 'selection',
 		props: ['closeMenu'],
-		component: {
-			dialogs
-		},
   		data () {
     		return {
 				currentItem: 0, isLoading: false, isUsingMenu: false
@@ -54,7 +50,7 @@
 
 				this.isUsingMenu = true;
 
-				modals.createDialog({
+				dialogs.createDialog({
 					title: 'Apagar o personagem', sendButton: 'Apagar', nuiType: 'deleteCharacter', additionalData: { characterId: this.charactersData[this.currentItem].id }
 				}).then(response => {
 					if (response) {
@@ -69,7 +65,7 @@
 
 				this.isUsingMenu = true;
 
-				modals.createDialog({
+				dialogs.createDialog({
 					title: 'Criação de personagem', sendButton: 'Enviar', nuiType: 'createCharacter',
 					choices: [
 						{ key: 'firstName', type: 'text', min: 1, max: 10, placeholder: 'Primeiro nome' }, { key: 'lastName', type: 'text', min: 1, max: 10, placeholder: 'Último nome' },
