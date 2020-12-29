@@ -2,7 +2,7 @@ local resourceName, debugActivated = GetCurrentResourceName(), true
 
 function Debug(string)
 	if debugActivated then
-		print('^4[' .. resourceName .. ']^0 ' .. string)
+		print('^4[' .. resourceName .. ']^0: ' .. string)
 	end
 end
 

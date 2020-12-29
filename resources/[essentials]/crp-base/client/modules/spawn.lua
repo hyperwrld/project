@@ -115,7 +115,13 @@ end)
 
 function setConcealStatus(status)
 	for _, player in ipairs(GetActivePlayers()) do
-		if player ~= PlayerId() and ((status and NetworkIsPlayerConcealed(player)) or (not status and not NetworkIsPlayerConcealed(player))) then
+		if player == PlayerId() then
+			return
+		end
+
+		local isConcealed = NetworkIsPlayerConcealed(player)
+
+		if (status and not isConcealed) or (not status and isConcealed) then
 			NetworkConcealPlayer(player, status, true)
 		end
 	end

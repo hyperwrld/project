@@ -19,7 +19,7 @@ function CRP.Util:GeneratePhoneNumber()
 	while true do
 		phoneNumber = '96' .. GetRandomNumber(1111111, 9999999)
 
-		local query = [[SELECT 1 FROM users WHERE phone = ?;]]
+		local query = [[SELECT 1 FROM characters WHERE phone = ?;]]
 		local result = Citizen.Await(DB:Execute(query, phoneNumber))
 
 		if not result[1] then
