@@ -5,9 +5,9 @@ CRP.Spawn = {}
 function CRP.Spawn:InitializeMenu()
 	DoScreenFadeOut(0)
 
-	local playerPed, data = PlayerPedId(), RPC:execute('fetchCharacters')
-
 	CRP.Gameplay:InitializeNatives()
+
+	local data = RPC:execute('fetchCharacters')
 
 	Citizen.Wait(500)
 
@@ -103,6 +103,8 @@ function CRP.Spawn:SpawnCharacter(data)
 	elseif characterSkin then
 		spawnNewCharacter(playerPed)
 	end
+
+	TriggerEvent('crp-base:characterSpawned')
 end
 
 AddEventHandler('crp-ui:closedMenu', function(name, data)
@@ -115,7 +117,7 @@ end)
 
 function setConcealStatus(status)
 	for _, player in ipairs(GetActivePlayers()) do
-		if player == PlayerId() then
+		if player == playerId then
 			return
 		end
 

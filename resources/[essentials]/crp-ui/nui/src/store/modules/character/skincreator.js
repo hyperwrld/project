@@ -126,10 +126,6 @@ function setHeadOverlayData(state, headOverlay) {
 function setBodyFeatures(state, colors, variations, totals, headOverlays) {
 	state.bodyFeatures = bodyFeatures;
 
-	state.bodyFeatures[0].value = variations.drawables[2], state.bodyFeatures[0].maxValue = totals.drawables[2];
-	state.bodyFeatures[0].subOptions[0].value = variations.drawablesTextures[2], state.bodyFeatures[0].subOptions[0].maxValue = totals.drawablesTextures[2];
-	state.bodyFeatures[0].subOptions[1].value = colors.hairColor, state.bodyFeatures[0].subOptions[2].value = colors.hairHightlightColor, state.bodyFeatures[0].subOptions[2].items = colors.hairColors;
-
 	for (let i = 0; i < state.bodyFeatures.length; i++) {
 		let option = state.bodyFeatures[i]
 
@@ -139,25 +135,31 @@ function setBodyFeatures(state, colors, variations, totals, headOverlays) {
 			option.subOptions[1].items = colors.hairColors;
 		}
 
-		const headOverlay = headOverlays[option.id];
+		if (i == 0) {
+			option.value = variations.drawables[2], option.maxValue = totals.drawables[2];
+			option.subOptions[0].value = variations.drawablesTextures[2], option.subOptions[0].maxValue = totals.drawablesTextures[2];
+			option.subOptions[1].value = colors.hairColor, option.subOptions[2].value = colors.hairHightlightColor, option.subOptions[2].items = colors.hairColors;
+		} else {
+			const headOverlay = headOverlays[option.id];
 
-		if (headOverlay) {
-			option.value = (headOverlay.overlayValue == 255) ? -1 : headOverlay.overlayValue, option.subOptions[0].value = headOverlay.opacity;
+			if (headOverlay) {
+				option.value = (headOverlay.overlayValue == 255) ? -1 : headOverlay.overlayValue, option.subOptions[0].value = headOverlay.opacity;
 
-			if (option.value != -1) {
-				option.subOptions[1].value = headOverlay.firstColour;
+				if (option.value != -1) {
+					option.subOptions[1].value = headOverlay.firstColour;
+
+					if (option.subOptions[2]) {
+						option.subOptions[2].value = headOverlay.secondColour;
+					}
+				}
 
 				if (option.subOptions[2]) {
-					option.subOptions[2].value = headOverlay.secondColour;
+					option.subOptions[2].items = colors.makeupColors;
 				}
-			}
 
-			if (option.subOptions[2]) {
-				option.subOptions[2].items = colors.makeupColors;
-			}
-
-			if (option.maxValue == 0) {
-				option.maxValue = totals.drawables[option.id];
+				if (option.maxValue == 0) {
+					option.maxValue = totals.drawables[option.id];
+				}
 			}
 		}
 	}

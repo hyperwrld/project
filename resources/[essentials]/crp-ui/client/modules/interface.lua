@@ -4,6 +4,12 @@ function updateMinimap(x, y)
 	})
 end
 
+function setHudHideState(state)
+	SendNUIMessage({
+		app = 'hud', event = 'setHudHideState', eventData = state
+	})
+end
+
 function setCharacterData(data)
 	SendNUIMessage({
 		app = 'hud', event = 'setCharacterData', eventData = data
@@ -41,6 +47,7 @@ function setCustomAlert(action, id, text, type)
 end
 
 exports('updateMinimap', updateMinimap)
+exports('setHudHideState', setHudHideState)
 exports('setCharacterData', setCharacterData)
 
 exports('setHudData', setHudData)

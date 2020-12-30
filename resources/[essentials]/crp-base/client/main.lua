@@ -3,13 +3,13 @@ Citizen.CreateThread(function()
 		Citizen.Wait(0)
 
         if NetworkIsPlayerActive(PlayerId()) then
-			TriggerEvent('crp-base:onPlayerJoined')
+			TriggerEvent('crp-base:playerJoined')
 			break
 		end
 	end
 end)
 
-AddEventHandler('crp-base:onPlayerJoined', function()
+AddEventHandler('crp-base:playerJoined', function()
     CRP.Spawn:InitializeMenu()
 end)
 
@@ -18,7 +18,7 @@ AddEventHandler('crp-ui:closedMenu', function(name, data)
 		return
 	end
 
-	Debug('Character Selection closed.')
+	Debug('Character selection closed.')
 
 	CRP.Spawn:SpawnCharacter(data.characterData)
 end)
