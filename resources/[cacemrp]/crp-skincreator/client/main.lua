@@ -256,5 +256,7 @@ AddEventHandler('crp-ui:closedMenu', function(name, data)
 	DestroyAllCams(true)
 	RenderScriptCams(false, false, 1, false, false)
 
+	TriggerEvent('crp-base:setPedConfigFlag')
+
 	zPos, fov, startPosition, startCamPosition = 0, 90.0, nil, nil
 end)

@@ -21,7 +21,6 @@ function CRP.Gameplay:InitializeNatives()
 		SetCanAttackFriendly(playerId, true, true)
 		SetMaxWantedLevel(0)
 		SetFlyThroughWindscreenParams(100.0, 105.0, 17.0, 50.0)
-		-- SetPedConfigFlag(playerPed, 35, false)  / Needs to be inside a thread
 
 		while true do
 			Citizen.Wait(0)
@@ -32,3 +31,10 @@ function CRP.Gameplay:InitializeNatives()
 		end
 	end)
 end
+
+AddEventHandler('crp-base:setPedConfigFlag', function()
+	playerPed = PlayerPedId()
+
+	SetPedConfigFlag(playerPed, 35, false)
+	SetPedConfigFlag(playerPed, 184, true)
+end)
