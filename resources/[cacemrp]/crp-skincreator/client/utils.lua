@@ -16,14 +16,10 @@ function getHeadOverlays()
 	local data = {}
 
 	for i = 1, 12, 1 do
-		local retval, overlayValue, colourType, firstColour, secondColour, overlayOpacity = GetPedHeadOverlayData(playerPed, i - 1)
+		local success, overlayValue, colourType, firstColour, secondColour, overlayOpacity = GetPedHeadOverlayData(playerPed, i - 1)
 
-		if retval then
-			if colourType == 0 then
-				data[i] = { overlayValue = overlayValue, opacity = overlayOpacity }
-			else
-				data[i] = { overlayValue = overlayValue, colourType = colourType, firstColour = firstColour, secondColour = secondColour, opacity = overlayOpacity }
-			end
+		if success then
+			data[i] = { overlayValue = overlayValue, colourType = colourType, firstColour = firstColour, secondColour = secondColour, opacity = overlayOpacity }
 		end
 	end
 
@@ -46,7 +42,7 @@ function getColors()
 	end
 
 	return {
-		hairColors = hairColors, hairColor = GetPedHairColor(playerPed),
+		hairColors = hairColors, hairColor = GetPedHairColor(playerPed), eyeColor = GetPedEyeColor(playerPed),
 		hairHightlightColor = GetPedHairHighlightColor(playerPed), makeupColors = makeupColors
 	}
 end
@@ -139,19 +135,20 @@ function getCurrentSkin()
 end
 
 function setCharacterSkin(data)
-	setSkin(data.model)
-	setClothing(data.variations.drawables, data.variations.props, data.variations.drawablesTextures, data.variations.propsTextures)
-
-	setFaceFeatures(data.faceFeatures)
-	setHeadOverlays(data.headOverlays)
-
 	local headBlend = data.headBlend
 
-	SetPedHairColor(playerPed, data.hairColor, data.hairHightlightColor)
+	setSkin(data.model)
 
 	if headBlend then
 		SetPedHeadBlendData(playerPed, headBlend[1], headBlend[2], headBlend[3], headBlend[4], headBlend[5], headBlend[6], headBlend[7], headBlend[8], headBlend[9], false)
 	end
+
+	setFaceFeatures(data.faceFeatures)
+
+	SetPedHairColor(playerPed, data.hairColor, data.hairHightlightColor)
+
+	setHeadOverlays(data.headOverlays)
+	setClothing(data.variations.drawables, data.variations.props, data.variations.drawablesTextures, data.variations.propsTextures)
 end
 
 exports('setCharacterSkin', setCharacterSkin)
@@ -167,24 +164,16 @@ function setSkin(model)
 
 		playerPed = PlayerPedId()
 
-		if model ~= `mp_m_freemode_01` and model ~= `mp_f_freemode_01` then
-			SetPedDefaultComponentVariation(playerPed)
-		else
-			SetPedHeadOverlay(playerPed, 1, 0, 0.0)
-			SetPedHairColor(playerPed, 1, 1)
-			SetPedHeadBlendData(playerPed, 0, 0, 0, 15, 0, 0, 0, 1.0, 0, false)
+		ClearPedDecorations(playerPed)
+		ClearPedFacialDecorations(playerPed)
+		SetPedDefaultComponentVariation(playerPed)
 
-			SetPedComponentVariation(playerPed, 11, 0, 11, 0)
-			SetPedComponentVariation(playerPed, 8, 0, 1, 0)
-			SetPedComponentVariation(playerPed, 6, 1, 0, 0)
-
-			SetPedHeadOverlayColor(playerPed, 1, 1, 0, 0)
-			SetPedHeadOverlayColor(playerPed, 2, 1, 0, 0)
-			SetPedHeadOverlayColor(playerPed, 4, 2, 0, 0)
-			SetPedHeadOverlayColor(playerPed, 5, 2, 0, 0)
-			SetPedHeadOverlayColor(playerPed, 8, 2, 0, 0)
-			SetPedHeadOverlayColor(playerPed, 10, 1, 0, 0)
+		if isMpModel(model) then
+			SetPedHairColor(playerPed, 0, 0)
+			SetPedEyeColor(playerPed, 0)
 		end
+
+		ClearAllPedProps(playerPed)
 	end
 
 	SetEntityInvincible(playerPed, false)
@@ -212,7 +201,7 @@ end
 
 function setHeadOverlays(data)
 	for i = 1, #data do
-		SetPedHeadOverlay(playerPed, i - 1, data[i].overlayValue, data[i].overlayOpacity)
+		SetPedHeadOverlay(playerPed, i - 1, data[i].overlayValue, data[i].opacity)
 
 		if data[i].firstColour then
 			SetPedHeadOverlayColor(playerPed, i - 1, data[i].colourType, data[i].firstColour, data[i].secondColour)

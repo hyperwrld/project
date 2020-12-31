@@ -6,7 +6,7 @@ defaultMaleClothing = {
 				value = 0,
 				secondValue = 0
 			},
-			0, 1, 2
+			0, 1
 		},
 		female = {
 			{
@@ -14,7 +14,7 @@ defaultMaleClothing = {
 				value = 0,
 				secondValue = 0
 			},
-			0, 1, 2
+			0, 1
 		}
 	},
 	[2] = {

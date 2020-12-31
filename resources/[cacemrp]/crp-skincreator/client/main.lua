@@ -62,7 +62,7 @@ RegisterUICallback('selectPedSkin', function(data, cb)
 end)
 
 RegisterUICallback('modifyHeadBlend', function(data, cb)
-	SetPedHeadBlendData(playerPed, data[1], data[2], data[3], data[4], data[5], data[6], data[7], data[8], data[9], false)
+	SetPedHeadBlendData(playerPed, data[1], data[2], data[3], data[4], data[5], data[6], RoundNumber(data[7], 1), RoundNumber(data[8], 1), RoundNumber(data[9], 1), false)
 
 	cb('ok')
 end)
@@ -82,7 +82,9 @@ end)
 RegisterUICallback('modifyBodyFeature', function(data, cb)
 	local callbackData = 'ok'
 
-	if data.index == 0 then
+	if data.index == -1 then
+		SetPedEyeColor(playerPed, data.value)
+	elseif data.index == 0 then
 		SetPedComponentVariation(playerPed, 2, data.value, data.secondValue, 2)
 
 		if data.isMain then
@@ -112,7 +114,7 @@ RegisterUICallback('modifyFeatureColor', function(data, cb)
 				secondColor = tonumber(data.firstColor)
 			end
 
-			SetPedHeadOverlayColor(playerPed, data.index, colourType, tonumber(data.firstColor), secondColor)
+			SetPedHeadOverlayColor(playerPed, data.index, data.colorType, tonumber(data.firstColor), secondColor)
 		end
 	end
 
@@ -252,7 +254,7 @@ AddEventHandler('crp-ui:closedMenu', function(name, data)
 	ClearPedTasks(playerPed)
 	FreezeEntityPosition(playerPed, false)
 	DestroyAllCams(true)
-	RenderScriptCams(false, false, 0, false, false)
+	RenderScriptCams(false, false, 1, false, false)
 
 	zPos, fov, startPosition, startCamPosition = 0, 90.0, nil, nil
 end)

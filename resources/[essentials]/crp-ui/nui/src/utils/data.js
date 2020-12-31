@@ -175,7 +175,7 @@ export const faceFeatures = [
 	},
 	{
 		id: 11,
-		title: 'Estrabismo',
+		title: 'Abertura do olho',
 		value: 0,
 		minValue: -1.0,
 		maxValue: 1.0
@@ -358,11 +358,19 @@ export const bodyFeatures = [
 		]
 	},
 	{
+		id: -1,
+		title: 'Cor dos olhos',
+		value: 0,
+		minValue: 0,
+		maxValue: 31
+	},
+	{
 		id: 1,
 		title: 'Barba',
 		value: -1,
 		minValue: -1,
 		maxValue: 0,
+		colorType: 1,
 		isMain: true,
 		subOptions: [
 			{
@@ -387,6 +395,7 @@ export const bodyFeatures = [
 		value: -1,
 		minValue: -1,
 		maxValue: 33,
+		colorType: 1,
 		isMain: true,
 		subOptions: [
 			{
@@ -411,6 +420,7 @@ export const bodyFeatures = [
 		value: -1,
 		minValue: -1,
 		maxValue: 74,
+		colorType: 0,
 		isMain: true,
 		subOptions: [
 			{
@@ -442,6 +452,7 @@ export const bodyFeatures = [
 		value: -1,
 		minValue: -1,
 		maxValue: 6,
+		colorType: 2,
 		isMain: true,
 		subOptions: [
 			{
@@ -466,6 +477,7 @@ export const bodyFeatures = [
 		value: -1,
 		minValue: -1,
 		maxValue: 9,
+		colorType: 2,
 		isMain: true,
 		subOptions: [
 			{
@@ -490,6 +502,7 @@ export const bodyFeatures = [
 		value: -1,
 		minValue: -1,
 		maxValue: 16,
+		colorType: 1,
 		isMain: true,
 		subOptions: [
 			{
