@@ -1,17 +1,17 @@
 <script>
 	import hud from './hud/hud.vue';
-	import interaction from './interaction/interaction.vue';
+	import interactions from './interactions/interactions.vue';
 	import notifications from './notifications/notifications.vue';
 
 	export default {
 		name: 'interface',
 		components: {
-			hud, interaction, notifications
+			hud, interactions, notifications
 		},
 		render (h) {
 			return (
 				<div class='interface'>
-					<hud/><interaction/><notifications/>
+					<hud/><interactions/><notifications/>
 				</div>
 			);
 		}

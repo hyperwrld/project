@@ -28,9 +28,9 @@ function setVehicleHudData(location, speed, fuel, time)
 	})
 end
 
-function toggleInteraction(status, message)
+function toggleInteraction(status, firstMessage, secondMessage)
 	SendNUIMessage({
-		app = 'hud', event = 'setInteractionData', eventData = { status = status, message = message }
+		app = 'interactions', event = 'setInteractionsData', eventData = { status = status, firstMessage = firstMessage, secondMessage = secondMessage }
 	})
 end
 
