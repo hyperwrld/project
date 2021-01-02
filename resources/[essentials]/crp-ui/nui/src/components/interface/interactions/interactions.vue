@@ -22,7 +22,7 @@
 
 			return (
 				<transition appear name='fade'>
-					{ data.status &&
+					{ data.state &&
 						<div class='interactions'>
 							<div class='interaction' domPropsInnerHTML={ this.processMessage(data.firstMessage) }/>
 							{ data.secondMessage &&

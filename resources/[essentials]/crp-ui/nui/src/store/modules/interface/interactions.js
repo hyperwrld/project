@@ -1,5 +1,5 @@
 const state = () => ({
-	status: false, firstMessage: '', secondMessage: ''
+	state: false, firstMessage: '', secondMessage: ''
 })
 
 const getters = {
@@ -16,9 +16,9 @@ const actions = {
 
 const mutations = {
 	setInteractionsData(state, data) {
-		state.status = data.status;
+		state.state = data.state;
 
-		if (data.status) {
+		if (data.state) {
 			state.firstMessage = data.firstMessage;
 
 			if (data.secondMessage) {

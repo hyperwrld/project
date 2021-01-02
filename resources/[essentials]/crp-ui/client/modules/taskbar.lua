@@ -1,6 +1,6 @@
 local isDoingAction, wasCancelled, percentage = false, false, 0
 
-function setTaskbar(text, time, canCancel)
+function setTaskbar(message, time, canCancel)
 	if isDoingAction then
 		setAlert('Não é possível fazer duas ações ao mesmo tempo.', 'error')
 
@@ -10,7 +10,7 @@ function setTaskbar(text, time, canCancel)
 	isDoingAction, wasCancelled = true, false
 
 	SendNUIMessage({
-		app = 'taskbar', event = 'setTaskbar', eventData = { text = text, time = time }
+		app = 'taskbar', event = 'setTaskbar', eventData = { message = message, time = time }
 	})
 
 	while isDoingAction do
