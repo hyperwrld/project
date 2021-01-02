@@ -1,69 +1,116 @@
-local canShuffle = false
+local isLoggedIn, isInVehicle, isEnteringVehicle, isCheckingTask, isShowingAction, currentVehicle, currentSeat = false, false, false, false, false, 0, 0
 
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(0)
+playerPed, playerId, isDoingAction = PlayerPedId(), PlayerId(), false
 
-        local playerPed = PlayerPedId()
+AddEventHandler('crp-base:characterSpawned', function()
+	Citizen.CreateThread(function()
+		while true do
+			Citizen.Wait(5000)
 
-        if not canShuffle then
-            if not GetPedConfigFlag(playerPed, 184, 1) then
-                SetPedConfigFlag(playerPed, 184, true)
+			playerPed, playerId = PlayerPedId(), PlayerId()
+		end
+	end)
+
+	Citizen.CreateThread(function()
+		while true do
+			Citizen.Wait(50)
+
+			if not isInVehicle then
+				local vehicle = GetVehiclePedIsTryingToEnter(playerPed)
+
+				if DoesEntityExist(vehicle) and not isEnteringVehicle then
+					isEnteringVehicle = true
+
+					TriggerEvent('crp-vehicles:enteringVehicle', vehicle, GetSeatPedIsTryingToEnter(playerPed), GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)), VehToNet(vehicle))
+				elseif not DoesEntityExist(vehicle) and not IsPedInAnyVehicle(playerPed, true) and isEnteringVehicle then
+					isEnteringVehicle = false
+
+					TriggerEvent('crp-vehicles:enteringAborted')
+				elseif IsPedInAnyVehicle(playerPed, false) then
+					isEnteringVehicle, isInVehicle, currentVehicle = false, true, GetVehiclePedIsUsing(playerPed)
+
+					TriggerEvent('crp-vehicles:enteredVehicle', currentVehicle, getPedVehicleSeat(), GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)), VehToNet(currentVehicle))
+				end
+			elseif isInVehicle and not IsPedInAnyVehicle(playerPed, false) then
+				TriggerEvent('crp-vehicles:leftVehicle', currentVehicle, currentSeat, GetDisplayNameFromVehicleModel(GetEntityModel(vehicle)), VehToNet(currentVehicle))
+
+				isInVehicle, currentVehicle, currentSeat = false, 0, 0
 			end
+		end
+	end)
+end)
 
-            if IsPedInAnyVehicle(playerPed, false) then
-				local vehicle = GetVehiclePedIsIn(playerPed, 0)
+AddEventHandler('crp-vehicles:enteringVehicle', function(vehicle)
+	SetVehicleNeedsToBeHotwired(vehicle, false)
+end)
 
-				if GetIsTaskActive(playerPed, 165) then
-					if GetSeatPedIsTryingToEnter(playerPed) == -1 and GetPedConfigFlag(playerPed, 184, 1) then
-                        SetPedIntoVehicle(playerPed, vehicle, 0)
-                        SetVehicleCloseDoorDeferedAction(vehicle, 0)
+AddEventHandler('crp-vehicles:enteredVehicle', function(vehicle, currentSeat, vehicleModel, vehicleNetId)
+	isCheckingTask = true
+
+	print('Started checkingTask.')
+
+	SetVehicleEngineOn(vehicle, false, true, true)
+
+	Citizen.CreateThread(function()
+		while isCheckingTask do
+			Citizen.Wait(0)
+
+			if GetIsTaskActive(playerPed, 165) then
+				if GetSeatPedIsTryingToEnter(playerPed) == -1 and GetPedConfigFlag(playerPed, 184, 1) then
+					SetPedIntoVehicle(playerPed, vehicle, 0)
+				end
+			end
+		end
+	end)
+
+	Citizen.Wait(2000)
+
+	if isCheckingTask then
+		print('Stopped checkingTask.')
+
+		isCheckingTask = false
+	end
+
+	if not hasVehicleKey(vehicle) and not hasHotwiredVehicle(vehicle) then
+		isShowingAction = true
+
+		exports['crp-ui']:toggleInteraction(true, '[G] Procurar', '[H] Ligação direta')
+
+		Citizen.CreateThread(function()
+			while isShowingAction do
+				Citizen.Wait(0)
+
+				if not isDoingAction then
+					if IsControlJustPressed(0, 47) then
+						searchVehicle(vehicle)
+					end
+
+					if IsControlJustPressed(0, 74) then
+						hotwireVehicle(vehicle)
 					end
 				end
-            end
-        else
-            if GetPedConfigFlag(playerPed, 184, 1) then
-                SetPedConfigFlag(playerPed, 184, false)
-            end
-        end
-    end
+			end
+		end)
+	end
 end)
 
-RegisterNetEvent('crp-vehicles:changeSeat')
-AddEventHandler('crp-vehicles:changeSeat', function(seatNumber)
-	local playerPed = PlayerPedId()
+AddEventHandler('crp-vehicles:leftVehicle', function()
+	if isCheckingTask then
+		isCheckingTask = false
 
-	if not IsPedInAnyVehicle(playerPed, 0) then
-		exports['crp-ui']:setAlert('Não estás em nenhum veículo.', 'error')
-		return
+		print('Stopped checkingTask.')
 	end
 
-	local vehicle = GetVehiclePedIsIn(playerPed, 0)
-	local vehicleSeatsNumber = GetVehicleModelNumberOfSeats(GetEntityModel(vehicle))
+	if isShowingAction then
+		isShowingAction = false
 
-	if seatNumber < - 1 or seatNumber > vehicleSeatsNumber - 2 then
-		exports['crp-ui']:setAlert('Inseriste um número de assento inválido.', 'error')
-		return
+		exports['crp-ui']:toggleInteraction(false)
 	end
 
-	if not IsVehicleSeatFree(vehicle, seatNumber) then
-		exports['crp-ui']:setAlert('O assento que inseriste já está ocupado.', 'error')
-		return
+	if isDoingAction then
+		isDoingAction = false
 	end
-
-	SetPedIntoVehicle(playerPed, vehicle, seatNumber)
 end)
 
-function GetPedCurrentSeat(playerPed, vehicle)
-    local numberSeats = GetVehicleModelNumberOfSeats(vehicle)
-
-	for i = -1, numberSeats do
-        local targetPed = GetPedInVehicleSeat(vehicle, i)
-
-        if targetPed == playerPed then
-            return i
-        end
-    end
-
-	return false
-end
+RegisterCommand('+toggleVehicleEngine', toggleVehicleEngine, false)
+RegisterKeyMapping('+toggleVehicleEngine', 'Ligar/Desligar o motor', 'keyboard', 'M')
