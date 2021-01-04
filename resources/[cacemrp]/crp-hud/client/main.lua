@@ -16,170 +16,86 @@ local zoneNames = {
     WINDF = 'Ron Alternates Wind Farm', WVINE = 'West Vinewood', ZANCUDO = 'Zancudo River', ZP_ORT = 'Port of South Los Santos', ZQ_UAR = 'Davis Quartz'
 }
 
-local _lastHealth, _lastArmour, _lastBreath, _lastStress, isRadarOn, isOnVehicle, isCompassOn = 0, 0, 0, 0, false, false, false
-local south, west, north, east, south2 = (-100), (-100 * 2), (-100 * 3), (-100 * 4), (-100 * 5)
+local _lastHealth, _lastArmour, _lastBreath, playerPed, playerId = 0, 0, 0, PlayerPedId(), PlayerId()
+local isLoggedIn, isDevModeOn, isVehicleEngineOn, isWatchOn = false, false, false, false
 
-hunger, thirst, stress, playerPed, vehicle = 100, 100, 0, PlayerPedId(), 0
+AddEventHandler('crp-base:characterSpawned', function()
+	exports['crp-ui']:setHudHideState(false)
 
-Citizen.CreateThread(function()
-	updateMinimap()
-
-	while true do
-		Citizen.Wait(100)
-
-		local health, armour, breath = GetEntityHealth(playerPed), GetPedArmour(playerPed), GetPlayerUnderwaterTimeRemaining(PlayerId())
-
-		if checkUpdate(health, armour, breath, stress) then
-			exports['crp-ui']:setCharacterData({ health = health / 2, armour = armour, breath = breath, stress = stress })
-		end
-	end
+	startThreads()
 end)
 
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(50)
-
-		if isCompassOn or IsVehicleEngineOn(vehicle) then
-			exports['crp-ui']:setHudData('direction', GetDirectionHeading())
-        else
-            Citizen.Wait(1000)
-        end
-    end
-end)
-
-AddEventHandler('crp-lib:enteredVehicle', function(vehicle, seat, vehicleModel, entityNetId)
-	DisplayRadar(true)
-
-	isOnVehicle, isRadarOn = true, true
-
-	exports['crp-ui']:setHudData('isOnVehicle', true)
-
-	Citizen.CreateThread(function()
-		while isOnVehicle do
-			Citizen.Wait(500)
-
-			if IsVehicleEngineOn(vehicle) then
-				local position = GetEntityCoords(playerPed)
-				local zoneName = zoneNames[GetNameOfZone(position.x, position.y, position.z)]
-				local currentStreetHash, crossingRoadHash = GetStreetNameAtCoord(position.x, position.y, position.z)
-				local streetName, crossingRoadName = GetStreetNameFromHashKey(currentStreetHash), GetStreetNameFromHashKey(crossingRoadHash)
-				local speed = math.ceil(GetEntitySpeed(vehicle) * 3.6)
-
-				if not isRadarOn then
-					isRadarOn = true
-				end
-
-				if crossingRoadName ~= '' then
-					streetName = streetName .. ' | ' .. crossingRoadName
-				end
-
-				if zoneName then
-					streetName = streetName .. ' | [' .. zoneName .. ']'
-				end
-
-				exports['crp-ui']:setVehicleHudData(streetName, speed, DecorGetInt(vehicle, 'currentFuel'), GetCurrentTime())
-			elseif isRadarOn then
-				DisplayRadar(false)
-
-				isRadarOn = false
-
-				exports['crp-ui']:setHudData('isOnVehicle', false)
-			end
-		end
-	end)
-end)
-
-AddEventHandler('crp-lib:leftVehicle', function(vehicle, seat, vehicleModel, entityNetId)
-	DisplayRadar(false)
-
-	isOnVehicle, isRadarOn = false, false
-
-	exports['crp-ui']:setHudData('isOnVehicle', false)
-end)
-
-Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait(36000)
-
-		if hunger > 0 then
-			hunger = hunger - math.random(4)
-
-			if hunger < 0 then
-				hunger = 0
-			end
-		end
-
-		if thirst > 0 then
-			thirst = thirst - 1
-		end
-
-		if hunger < 5 or thirst < 5 then
-	    	local newHealth = GetEntityHealth(playerPed) - math.random(10)
-
-			SetEntityHealth(playerPed, newHealth)
-		end
-
-		exports['crp-ui']:setCharacterData({ hunger = hunger, thirst = thirst })
-	end
-end)
-
-Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait(5000)
-
-		playerPed = PlayerPedId()
-
-		if stress >= 75 then
-			ShakeGameplayCam('SMALL_EXPLOSION_SHAKE', 0.1)
-		elseif stress >= 45 then
-			ShakeGameplayCam('SMALL_EXPLOSION_SHAKE', 0.07)
-		elseif stress >= 20 then
-			ShakeGameplayCam('SMALL_EXPLOSION_SHAKE', 0.02)
-		end
-	end
-end)
-
-RegisterNetEvent('crp-hud:setMeta')
-AddEventHandler('crp-hud:setMeta', function(data)
-	if not data then
+function startThreads()
+	if isLoggedIn then
 		return
 	end
 
-	if data.hunger == nil then hunger = 100 else hunger = data.hunger end
-	if data.thirst == nil then thirst = 100 else thirst = data.thirst end
-	if data.stress == nil then stress = 0   else stress = data.stress end
+	isLoggedIn = true
 
-	if data.health < 10.0 then
-		SetEntityHealth(playerPed, 10.0)
-	else
-		SetEntityHealth(playerPed, data.health)
-	end
+	playerPed, playerId = PlayerPedId(), PlayerId()
 
-    SetPedArmour(playerPed, data.armour)
-end)
+	Citizen.CreateThread(function()
+		while isLoggedIn do
+			Citizen.Wait(5000)
 
-RegisterNetEvent('crp-hud:updateMeta')
-AddEventHandler('crp-hud:updateMeta', function(name, state)
-	if state then
-		_G[name] = _G[name] + value
-	else
-		_G[name] = _G[name] - value
-	end
-
-	if name == 'stress' then
-		if state then
-			-- TODO: Ganhaste stress.
-		else
-			-- TODO: Perdeste stress.
+			playerPed, playerId = PlayerPedId(), PlayerId()
 		end
+	end)
+
+	Citizen.CreateThread(function()
+		updateMinimap()
+
+		while isLoggedIn do
+			Citizen.Wait(100)
+
+			local health, armour, breath = GetEntityHealth(playerPed), GetPedArmour(playerPed), GetPlayerUnderwaterTimeRemaining(playerId)
+
+			if checkUpdate(health, armour, breath) then
+				exports['crp-ui']:setData({ health = health / 2, armour = armour, breath = breath })
+			end
+		end
+	end)
+end
+
+AddEventHandler('crp-vehicles:startedEngine', function(state, vehicle)
+	isVehicleEngineOn = state
+
+	if state then
+		Citizen.CreateThread(function()
+			while isVehicleEngineOn do
+				Citizen.Wait(1000)
+
+				local position, speed = GetEntityCoords(playerPed), RoundNumber(GetEntitySpeed(vehicle) * 3.6)
+				local zoneName = zoneNames[GetNameOfZone(position.x, position.y, position.z)]
+				local currentStreetHash, crossingRoadHash = GetStreetNameAtCoord(position.x, position.y, position.z)
+				local streetName, crossingRoadName = GetStreetNameFromHashKey(currentStreetHash), GetStreetNameFromHashKey(crossingRoadHash)
+
+				if #crossingRoadName > 0 then
+					streetName = streetName .. ' [' .. crossingRoadName .. ']'
+				end
+
+				exports['crp-ui']:setData({ zoneName = zoneName, streetName = streetName, speed = speed })
+			end
+		end)
+
+		Citizen.CreateThread(function()
+			while isWatchOn or isVehicleEngineOn do
+				Citizen.Wait(60)
+
+				exports['crp-ui']:setData({ direction = getDirectionHeading() })
+			end
+		end)
+
+		Citizen.CreateThread(function()
+			while isWatchOn or isVehicleEngineOn do
+				Citizen.Wait(2000)
+
+				exports['crp-ui']:setData({ time = getCurrentTime() })
+			end
+		end)
 	end
 
-	if _G[name] < 0 then _G[name] = 0 end
-	if _G[name] > 100 then _G[name] = 100 end
-
-	TriggerServerEvent('crp-updateMeta', _lastHealth, _lastArmour, hunger, thirst, stress)
-
-	exports['crp-ui']:setCharacterData({ health = _lastHealth / 2, armour = _lastArmour, breath = breath, stress = stress })
+	exports['crp-ui']:setData({ isOnVehicle = state })
 end)
 
 function updateMinimap()
@@ -192,47 +108,44 @@ function updateMinimap()
 	exports['crp-ui']:updateMinimap(topX, topY)
 end
 
-function checkUpdate(health, armour, breath, stress)
-	if _lastHealth == health and _lastArmour == armour and _lastBreath == breath and _lastStress == stress then
+function checkUpdate(health, armour, breath)
+	if _lastHealth == health and _lastArmour == armour and _lastBreath == breath then
 		return false
 	end
 
-	_lastHealth = health
-	_lastArmour = armour
-	_lastBreath = breath
-	_lastStress = stress
+	_lastHealth, _lastArmour, _lastBreath = health, armour, breath
 
 	return true
 end
 
-function GetDirectionHeading()
+local function calculateRangePercent(min, max, amt)
+	return (((amt - min) * 100) / (max - min)) / 100
+end
+
+function getDirectionHeading()
     local camRot = GetGameplayCamRot(0)
 	local heading = 360.0 - ((camRot.z + 360.0) % 360.0)
 
     if (heading < 90) then
         local rangePercent = heading / 90
 
-        return math.floor((1 - rangePercent) * north + rangePercent * east)
+        return math.floor((1 - rangePercent) * (-100 * 3) + rangePercent * (-100 * 4))
     elseif (heading < 180) then
-        local rangePercent = CalculateRangePercent(90, 180, heading)
+        local rangePercent = calculateRangePercent(90, 180, heading)
 
-        return math.floor((1 - rangePercent) * east + rangePercent * south2)
+        return math.floor((1 - rangePercent) * (-100 * 4) + rangePercent * (-100 * 5))
     elseif (heading < 270) then
-        local rangePercent = CalculateRangePercent(180, 270, heading)
+        local rangePercent = calculateRangePercent(180, 270, heading)
 
-        return math.floor((1 - rangePercent) * south + rangePercent * west)
+        return math.floor((1 - rangePercent) * (-100) + rangePercent * (-100 * 2))
     elseif (heading <= 360) then
-        local rangePercent = CalculateRangePercent(270, 360, heading)
+        local rangePercent = calculateRangePercent(270, 360, heading)
 
-        return math.floor((1 - rangePercent) * west + rangePercent * north)
+        return math.floor((1 - rangePercent) * (-100 * 2) + rangePercent * (-100 * 3))
     end
 end
 
-function CalculateRangePercent(min, max, amt)
-    return (((amt - min) * 100) / (max - min)) / 100
-end
-
-function GetCurrentTime()
+function getCurrentTime()
 	local hours, minutes = GetClockHours(), GetClockMinutes()
 
     if hours >= 0 and hours < 10 then
@@ -245,7 +158,3 @@ function GetCurrentTime()
 
     return hours .. ':' .. minutes
 end
-
-RegisterCommand('hud', function(source, args)
-	updateMinimap()
-end)

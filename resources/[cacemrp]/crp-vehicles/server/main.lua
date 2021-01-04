@@ -3,7 +3,7 @@ local vehiclesKeys, hotwiredVehicles = {}, {}
 AddEventHandler('crp-base:characterLoaded', function(source, character)
 	local characterId = character.getCharacterId()
 
-	if (not #vehiclesKeys[characterId]) and (not #vehiclesKeys[characterId]) then
+	if (vehiclesKeys[characterId] and not #vehiclesKeys[characterId]) and (not hotwiredVehicles[characterId] and not #hotwiredVehicles[characterId]) then
 		return
 	end
 

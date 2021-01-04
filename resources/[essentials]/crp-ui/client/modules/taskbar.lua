@@ -10,7 +10,7 @@ function setTaskbar(message, time, canCancel)
 	isDoingAction, wasCancelled = true, false
 
 	SendNUIMessage({
-		app = 'taskbar', event = 'setTaskbar', eventData = { message = message, time = time }
+		app = 'taskbar', event = 'setTaskbar', data = { message = message, time = time }
 	})
 
 	while isDoingAction do

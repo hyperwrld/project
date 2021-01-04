@@ -2,226 +2,173 @@
 	font-family: 'Quantico', sans-serif;
 
 	position: absolute;
-	height: fit-content;
-	width: fit-content;
-
-	color: white;
+	color: ivory;
 
 	.character-data {
+		display: grid;
+		position: absolute;
+
+		grid-template-columns: repeat(2, 1fr) repeat(4, 0.5fr);
+		align-items: center;
+		gap: 2px;
+
 		height: 26.823529411%;
 		left: 2.725%;
 		right: 2.725%;
-		display: flex;
-		flex-wrap: wrap;
-		position: absolute;
 		bottom: -11.570588235%;
-		align-items: center;
-		justify-content: center;
 
 		div[class*="-container"] {
-			margin-right: 0.5%;
-			margin-left: 0.5%;
-			height: 50% !important;
-
-			border: 2px solid rgba(54, 52, 52, 0.8);
-			background-color: #545454;
+			position: relative;
 			display: flex;
 			align-items: center;
+			overflow: hidden;
 
-			&:first-child {
-				margin-left: 0 !important;
-			}
-
-			&:last-child {
-				margin-right: 0 !important;
-			}
+			height: 50%;
+			width: 100%;
+			border: 2px solid rgba(54, 52, 52, 0.8);
+			background-color: rgba(84, 84, 84, 1.0);
 
 			svg {
 				position: absolute;
 				z-index: 999;
-				font-size: 1.5vh;
+				font-size: 0.8vw;
 			}
 
-			.health {
-				background-color: rgba(115, 190, 115, 1.0);
+			&[class*='health-'], &[class*='armour-'] {
+				svg {
+					margin-left: 7.5%;
+				}
+
+				div:last-child {
+					height: 100%;
+					max-width: 100%;
+
+					&.health {
+						background-color: rgba(115, 190, 115, 1.0);
+					}
+
+					&.armour {
+						background-color: rgba(106, 137, 204, 1.0);
+					}
+				}
 			}
 
-			.armour {
-				background-color: rgba(106, 137, 204, 1.0);
-			}
+			&:not([class*='health-']):not([class*='armour-']) {
+				justify-content: center;
 
-			.hunger {
-				background-color: rgba(246, 185, 59, 1.0);
-			}
+				div:last-child {
+					position: absolute;
+					transition: 0.2s ease-in-out;
+					max-height: 100%;
+					width: 100%;
 
-			.thirst {
-				background-color: rgba(77, 121, 255, 1.0);
-			}
+					&.hunger {
+						background-color: rgba(246, 185, 59, 1.0);
+					}
 
-			.breath {
-				background-color: rgba(130, 210, 255, 0.9);
-			}
+					&.thirst {
+						background-color: rgba(77, 121, 255, 1.0);
+					}
 
-			.stress {
-				background-color: rgba(199, 0, 57, 1.0);
-			}
-		}
+					&.breath {
+						background-color: rgba(130, 210, 255, 0.9);
+					}
 
-		.health-container, .armour-container {
-			width: 23.5%;
-			box-sizing: border-box;
-
-			svg {
-				margin-left: 1.5%;
-			}
-
-			& > &:last-child {
-				height: 100%;
-			}
-		}
-
-		.hunger-container, .thirst-container, .breath-container, .stress-container {
-			width: 12%;
-
-			position: relative;
-			overflow: hidden;
-			justify-content: center;
-
-			& > &:last-child {
-				position: absolute;
-				bottom: 0;
-				transition: 0.2s ease-in-out;
-				max-height: 100%;
-				height: 0%;
-				width: 100%;
+					&.stress {
+						background-color: rgba(199, 0, 57, 1.0);
+					}
+				}
 			}
 		}
 	}
 
 	.vehicle-data {
-		font-size: 17px;
-		text-shadow: -1px 1px 2px #000, 1px 1px 2px #000, 1px -1px 0 #000, -1px -1px 0 #000;
+		position: absolute;
+		left: 105.725%;
+		bottom: 0;
 
-		.fade-enter-active {
-			animation: fadeIn 1s;
+		display: grid;
+		grid-template-rows: repeat(3, auto);
+		gap: 5px;
+		text-shadow: 0px 0px 2px #000, 0px 0px 3px #000, 0px 0px 3px #000, 0px 0px 3px #000;
+
+		.top, .middle, .bottom {
+			display: grid;
 		}
 
-		.fade-leave-active {
-			animation: fadeOut 1s;
-		}
-
-		.fade-enter, .fade-leave-to {
-			opacity: 0;
-		}
-
-		span {
-			margin-bottom: 0;
-		}
-
-		.top {
-			position: absolute;
-			height: 12.823529411%;
-			width: 20%;
-			left: 105.725%;
-			right: 2.725%;
-			bottom: 34.0706%;
-
-			&.compass {
-				bottom: 16.0706% !important;
-			}
-		}
-
-		.middle {
-			display: flex;
-			flex-direction: row;
-			position: absolute;
-			height: 12.823529411%;
-			width: 200%;
-			left: 105.725%;
-			right: 2.725%;
-			bottom: 16.0706%;
-
-			.fa-gas-pump {
-				font-size: 11px;
-			}
-
-			.low {
-				color: rgba(255, 77, 64, 1.0);
-			}
-
-			* {
-				display: flex;
-				flex-direction: row;
-				justify-content: center;
-				align-items: center;
-				margin-left: 1%;
-				margin-right: 1.5%;
-
-				* {
-					margin-bottom: 0;
-				}
-
-				&:last-child {
-					font-size: 10px;
-					margin-left: 10%;
-				}
-			}
-
-			div:first-child {
-				margin-left: 0;
-			}
-
-			div:last-child {
-				margin-right: 0;
-			}
-
-			.fuel, .speed {
-				width: 9%;
-				justify-content: left;
-			}
-
-			.speed {
-				width: 15%;
-			}
-
-			.seatbelt, .speed-limiter {
-				img {
-					width: 22px;
-					height: 80%;
-				}
-			}
+		.top > span {
+			font-size: 0.7em;
 		}
 
 		.bottom {
-			display: flex;
-			flex-direction: row;
-			position: absolute;
-			height: 12.823529411%;
-			width: 300%;
-			left: 105.725%;
-			right: 2.725%;
-			bottom: -2.0706%;
-			align-items: center;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 20px;
 
 			.direction {
 				width: 100px;
 				height: 23px;
 				overflow: hidden;
+
+				.image {
+					height: 100%;
+					background-position: center center;
+					background-size: 400px;
+					background-repeat: repeat;
+					width: 800%;
+					z-index: 1;
+					background-image: url('./../../../assets/compass.png');
+				}
 			}
 
-			.direction > .image {
-				height: 100%;
-				background-position: center center;
-				background-size: 400px;
-				background-repeat: repeat;
-				width: 800%;
-				z-index: 1;
-				background-image: url('./../../../assets/compass.png');
-			}
+			.vehicle-info {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 20px;
 
-			span:last-child {
-				margin-left: 3%;
-				margin-bottom: 0;
+				.fuel, .speed {
+					display: grid;
+					grid-template-columns: repeat(2, auto);
+					gap: 5px;
+
+					height: fit-content;
+					justify-content: center;
+					align-items: center;
+
+					&.low {
+						color: rgba(255, 77, 64, 1.0);
+					}
+
+					span:last-child {
+						font-size: 0.6em;
+					}
+				}
+
+				.warnings {
+					display: grid;
+					grid-template-columns: repeat(3, auto);
+					gap: 20px;
+
+					justify-content: center;
+					align-items: center;
+
+					svg {
+						font-size: 1em;
+						width: 1.3em;
+					}
+
+					img {
+						font-size: 1em;
+    					width: 1.2em;
+					}
+
+					.fa-gas-pump {
+						color: red;
+					}
+
+					.fa-tachometer-alt {
+						color: orange;
+					}
+				}
 			}
 		}
 	}

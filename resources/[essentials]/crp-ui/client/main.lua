@@ -15,7 +15,7 @@ function openApp(appName, data, hasCursor)
 	end)
 
 	SendNUIMessage({
-		app = appName, event = 'setData', status = true, eventData = data
+		app = appName, event = 'setData', state = true, data = data
 	})
 end
 
@@ -26,13 +26,13 @@ function closeApp(appName)
 	SetNuiFocusKeepInput(false)
 
 	SendNUIMessage({
-		app = appName, status = false
+		app = appName, state = false
 	})
 end
 
 function setAppData(appName, data)
 	SendNUIMessage({
-		app = appName, event = 'setData', eventData = data
+		app = appName, event = 'setData', data = data
 	})
 end
 
@@ -47,6 +47,10 @@ RegisterNUICallback('closeMenu', function(data, cb)
 	isAppOpen = false
 
     cb(true)
+end)
+
+RegisterCommand('zz', function()
+	DisplayRadar(true)
 end)
 
 function RegisterUIEvent(name)

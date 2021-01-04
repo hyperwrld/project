@@ -130,6 +130,8 @@ function toggleVehicleEngine()
 		end
 
 		SetVehicleEngineOn(vehicle, state, false, false)
+
+		TriggerEvent('crp-vehicles:startedEngine', state, vehicle)
 	end
 end
 

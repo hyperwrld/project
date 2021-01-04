@@ -1,9 +1,9 @@
 <script>
 	import { mapGetters } from 'vuex';
 	import { library } from '@fortawesome/fontawesome-svg-core';
-	import { faHeart, faShieldAlt, faHamburger, faTint, faLungs, faBrain, faGasPump } from '@fortawesome/free-solid-svg-icons';
+	import { faHeart, faShieldAlt, faHamburger, faTint, faLungs, faBrain, faGasPump, faTachometerAlt } from '@fortawesome/free-solid-svg-icons';
 
-	library.add(faHeart, faShieldAlt, faHamburger, faTint, faLungs, faBrain, faGasPump);
+	library.add(faHeart, faShieldAlt, faHamburger, faTint, faLungs, faBrain, faGasPump, faTachometerAlt);
 
 	export default {
 		name: 'hud',
@@ -12,64 +12,78 @@
 				hudData: 'getHudData'
 			})
 		},
+		data() {
+            return {
+				icons: {
+					health: 'heart', armour: 'shield-alt', hunger: 'hamburger', thirst: 'tint', breath: 'lungs', stress: 'brain'
+				}
+            }
+        },
 		render (h) {
-			return (
-				<div class='hud' style={{ top: this.hudData.top + 'px', left: this.hudData.left + 'px', width: this.hudData.width + 'px', height: this.hudData.height + 'px' }}>
-					<div class='character-data'>
-						{ Object.keys(this.hudData.characterData).map((key, index) => {
-							const data = this.hudData.characterData[key];
+			let data = this.hudData, characterData = [];
 
-							return (
-								<div class={ key + '-container' }>
-									<font-awesome-icon icon={ data[0] }/>
-									{ key == 'health' || key == 'armour' ?
-										<div class={ key + (data[1] <= 15 ? ' low' : '') } style={{ width: (data[1] + '%') }}/>
-									:
-										<div class={ key + (data[1] <= 15 ? ' low' : '') } style={{ height: data[1], top: (100 - data[1]) + '%' }}/>
-									}
-								</div>
-							)
-						})}
-					</div>
-					{ this.hudData.isOnVehicle || this.hudData.isCompassOn &&
-						<transition name='fade' appear>
-							<div class='vehicle-data'>
-								<div class={ 'top' + (this.hudData.isOnVehicle ? '' : 'compass') }>
-									<span>{ this.hudData.time }</span>
-								</div>
-								{ this.hudData.isOnVehicle &&
-									<div class='middle'>
-										<div class='fuel'>
-											<span class={ this.hudData.fuel <= 15 ? 'low' : '' }>{ this.hudData.fuel }</span>
-											<font-awesome-icon icon='gas-pump'/>
-										</div>
-										<div class='speed'>
-											<span>{ this.hudData.speed } <p>km/h</p></span>
-										</div>
-										{ !this.hudData.hasSeatBelt &&
-											<div class='seatbelt'>
-												<img src='./../../../assets/seatbelt.svg'/>
-											</div>
-										}
-										{ this.hudData.isSpeedLimiterOn &&
-											<div class='speed-limiter'>
-												<img src='./../../../assets/speed-limiter.svg'/>
-											</div>
-										}
-									</div>
-								}
-								<div class='bottom'>
-									<div class='direction'>
-										<div class='image' style={{ transform: 'translate3d(' + this.hudData.direction + 'px, 0px, 0px)' }}/>
-									</div>
-									{ this.hudData.isOnVehicle &&
-										<span>{ this.hudData.location }</span>
-									}
-								</div>
+			if (!data.hideState) {
+				Object.keys(this.icons).map((key, index) => {
+					const value = data[key];
+
+					characterData.push(
+						<div class={ key + '-container' }>
+							<font-awesome-icon icon={ this.icons[key] }/>
+							<div class={ key + (value <= 15 ? ' low' : '') } style={(key == 'health' || key == 'armour') ? { width: (value + '%') } : { height: value + '%', top: (100 - value) + '%' }}/>
+						</div>
+					)
+				})
+			}
+
+			return (
+				<transition appear name='fade'>
+					{ !data.hideState &&
+						<div class='hud' style={{ top: data.top + 'px', left: data.left + 'px', width: data.width + 'px', height: data.height + 'px' }}>
+							<div class='character-data'>
+								{ characterData }
 							</div>
-						</transition>
+							{ (data.isOnVehicle || data.isCompassOn) &&
+								<div class='vehicle-data'>
+									<div class='top'>
+										<span>{ data.time }</span>
+									</div>
+									{ data.isOnVehicle &&
+										<div class='middle'>
+											<span>{ data.zoneName }</span>
+											<span>{ data.streetName }</span>
+										</div>
+									}
+									<div class='bottom'>
+										<div class='direction'>
+											<div class='image' style={{ transform: 'translate3d(' + data.direction + 'px, 0px, 0px)' }}/>
+										</div>
+										{ data.isOnVehicle &&
+											<div class='vehicle-info'>
+												<div class='fuel'>
+													<span class={ data.fuel <= 15 ? 'low' : '' }>{ data.fuel }</span><span>Gasolina</span>
+												</div>
+												<div class='speed'>
+													<span>{ data.speed }</span><span>km/h</span>
+												</div>
+												<div class='warnings'>
+													{ data.fuel < 15 &&
+														<font-awesome-icon icon='gas-pump'/>
+													}
+													{ !data.hasSeatbelt &&
+														<img src={ require('./../../../assets/seatbelt.svg') }/>
+													}
+													{ data.isSpeedLimiterOn &&
+														<font-awesome-icon icon='tachometer-alt'/>
+													}
+												</div>
+											</div>
+										}
+									</div>
+								</div>
+							}
+						</div>
 					}
-				</div>
+				</transition>
 			);
 		}
 	}

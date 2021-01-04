@@ -1,57 +1,42 @@
 function updateMinimap(x, y)
 	SendNUIMessage({
-		app = 'hud', event = 'setMinimapData', eventData = { x = x, y = y }
+		app = 'hud', event = 'setMinimap', data = { x = x, y = y }
 	})
 end
 
 function setHudHideState(state)
 	SendNUIMessage({
-		app = 'hud', event = 'setHudHideState', eventData = state
+		app = 'hud', event = 'setHudHideState', data = state
 	})
 end
 
-function setCharacterData(data)
+function setData(data)
 	SendNUIMessage({
-		app = 'hud', event = 'setCharacterData', eventData = data
+		app = 'hud', event = 'setData', data = data
 	})
 end
 
-function setHudData(name, value)
+function toggleInteraction(state, firstMessage, secondMessage)
 	SendNUIMessage({
-		app = 'hud', event = 'setHudData', eventData = { name = name, value = value }
-	})
-end
-
-function setVehicleHudData(location, speed, fuel, time)
-	SendNUIMessage({
-		app = 'hud', event = 'setVehicleHudData', eventData = { location = location, speed = speed, fuel = fuel, time = time }
-	})
-end
-
-function toggleInteraction(status, firstMessage, secondMessage)
-	SendNUIMessage({
-		app = 'interactions', event = 'setInteractionsData', eventData = { status = status, firstMessage = firstMessage, secondMessage = secondMessage }
+		app = 'interactions', event = 'setInteractionsData', data = { state = state, firstMessage = firstMessage, secondMessage = secondMessage }
 	})
 end
 
 function setAlert(text, type, time)
 	SendNUIMessage({
-		app = 'notifications', event = 'setAlert', eventData = { text = text, type = type, time = time }
+		app = 'notifications', event = 'setAlert', data = { text = text, type = type, time = time }
 	})
 end
 
 function setCustomAlert(action, id, text, type)
 	SendNUIMessage({
-		app = 'notifications', event = 'setCustomAlert', eventData = { action = action, id = id, text = text, type = type }
+		app = 'notifications', event = 'setCustomAlert', data = { action = action, id = id, text = text, type = type }
 	})
 end
 
 exports('updateMinimap', updateMinimap)
 exports('setHudHideState', setHudHideState)
-exports('setCharacterData', setCharacterData)
-
-exports('setHudData', setHudData)
-exports('setVehicleHudData', setVehicleHudData)
+exports('setData', setData)
 
 exports('toggleInteraction', toggleInteraction)
 exports('setAlert', setAlert)

@@ -1,6 +1,6 @@
 <template>
 	<v-app>
-		<userInterface/><taskbar/><actionbar/>
+		<userInterface/>
 		<router-view :closeMenu='closeMenu'/>
     </v-app>
 </template>
@@ -8,18 +8,14 @@
 <script>
 	import { mapState } from 'vuex';
 
-    import userInterface from './components/interface/interface.vue';
-	import taskbar from './components/taskbar/taskbar.vue';
-	import actionbar from './components/inventory/actionbar/actionbar.vue';
-
-	import test from './components/character/skincreator/skincreator.vue';
+	import userInterface from './components/interface/interface.vue';
 
 	import { send } from './utils/lib.js';
 
     export default {
 		name: 'app',
 		components: {
-			userInterface, taskbar, actionbar, test
+			userInterface
 		},
 		methods: {
 			closeMenu: function(appName) {
@@ -40,15 +36,17 @@
         },
         mounted() {
             this.listener = window.addEventListener('message', (event) => {
-				if (event.data.event != undefined) {
-					this.$store.dispatch(event.data.app + '/' + event.data.event, event.data.eventData);
+				const info = event.data;
+
+				if (info.event != undefined) {
+					this.$store.dispatch(info.app + '/' + info.event, info.data);
 				}
 
-				if (event.data.status != undefined) {
-					if (!event.data.status) {
-						this.closeMenu(event.data.app);
+				if (info.state != undefined) {
+					if (!info.state) {
+						this.closeMenu(info.app);
 					} else {
-						this.changeRouter({ path: event.data.app });
+						this.changeRouter({ path: info.app });
 					}
 				}
 			});
