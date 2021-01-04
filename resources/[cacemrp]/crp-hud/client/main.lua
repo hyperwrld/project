@@ -57,7 +57,7 @@ function startThreads()
 	end)
 end
 
-AddEventHandler('crp-vehicles:startedEngine', function(state, vehicle)
+AddEventHandler('crp-vehicles:toggledEngine', function(state, vehicle)
 	isVehicleEngineOn = state
 
 	if state then
@@ -96,6 +96,12 @@ AddEventHandler('crp-vehicles:startedEngine', function(state, vehicle)
 	end
 
 	exports['crp-ui']:setData({ isOnVehicle = state })
+end)
+
+AddEventHandler('crp-vehicles:leftVehicle', function()
+	if isVehicleEngineOn then
+		isVehicleEngineOn = false
+	end
 end)
 
 function updateMinimap()

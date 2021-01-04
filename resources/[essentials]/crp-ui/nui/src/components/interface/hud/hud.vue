@@ -43,43 +43,45 @@
 								{ characterData }
 							</div>
 							{ (data.isOnVehicle || data.isCompassOn) &&
-								<div class='vehicle-data'>
-									<div class='top'>
-										<span>{ data.time }</span>
-									</div>
-									{ data.isOnVehicle &&
-										<div class='middle'>
-											<span>{ data.zoneName }</span>
-											<span>{ data.streetName }</span>
-										</div>
-									}
-									<div class='bottom'>
-										<div class='direction'>
-											<div class='image' style={{ transform: 'translate3d(' + data.direction + 'px, 0px, 0px)' }}/>
+								<transition appear name='fade'>
+									<div class='vehicle-data'>
+										<div class='top'>
+											<span>{ data.time }</span>
 										</div>
 										{ data.isOnVehicle &&
-											<div class='vehicle-info'>
-												<div class='fuel'>
-													<span class={ data.fuel <= 15 ? 'low' : '' }>{ data.fuel }</span><span>Gasolina</span>
-												</div>
-												<div class='speed'>
-													<span>{ data.speed }</span><span>km/h</span>
-												</div>
-												<div class='warnings'>
-													{ data.fuel < 15 &&
-														<font-awesome-icon icon='gas-pump'/>
-													}
-													{ !data.hasSeatbelt &&
-														<img src={ require('./../../../assets/seatbelt.svg') }/>
-													}
-													{ data.isSpeedLimiterOn &&
-														<font-awesome-icon icon='tachometer-alt'/>
-													}
-												</div>
+											<div class='middle'>
+												<span>{ data.zoneName }</span>
+												<span>{ data.streetName }</span>
 											</div>
 										}
+										<div class='bottom'>
+											<div class='direction'>
+												<div class='image' style={{ transform: 'translate3d(' + data.direction + 'px, 0px, 0px)' }}/>
+											</div>
+											{ data.isOnVehicle &&
+												<div class='vehicle-info'>
+													<div class='fuel'>
+														<span class={ data.fuel <= 15 ? 'low' : '' }>{ data.fuel }</span><span>Gasolina</span>
+													</div>
+													<div class='speed'>
+														<span>{ data.speed }</span><span>km/h</span>
+													</div>
+													<div class='warnings'>
+														{ data.fuel < 15 &&
+															<font-awesome-icon icon='gas-pump'/>
+														}
+														{ !data.hasSeatbelt &&
+															<img src={ require('./../../../assets/seatbelt.svg') }/>
+														}
+														{ data.isSpeedLimiterOn &&
+															<font-awesome-icon icon='tachometer-alt'/>
+														}
+													</div>
+												</div>
+											}
+										</div>
 									</div>
-								</div>
+								</transition>
 							}
 						</div>
 					}
