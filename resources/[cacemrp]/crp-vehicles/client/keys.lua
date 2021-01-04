@@ -125,13 +125,15 @@ function toggleVehicleEngine()
 	if IsPedInAnyVehicle(playerPed, false) then
 		local vehicle, state = GetVehiclePedIsIn(playerPed, false), true
 
-		if GetIsVehicleEngineRunning(vehicle) then
-			state = false
+		if hasVehicleKey(vehicle) or hasHotwiredVehicle(vehicle) then
+			if GetIsVehicleEngineRunning(vehicle) then
+				state = false
+			end
+
+			SetVehicleEngineOn(vehicle, state, false, false)
+
+			TriggerEvent('crp-vehicles:toggledEngine', state, vehicle)
 		end
-
-		SetVehicleEngineOn(vehicle, state, false, false)
-
-		TriggerEvent('crp-vehicles:toggledEngine', state, vehicle)
 	end
 end
 
