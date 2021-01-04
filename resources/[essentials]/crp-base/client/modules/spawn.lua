@@ -104,6 +104,7 @@ function CRP.Spawn:SpawnCharacter(data)
 		spawnNewCharacter(playerPed)
 	end
 
+	TriggerEvent('crp-base:setPedConfigFlag')
 	TriggerEvent('crp-base:characterSpawned')
 end
 

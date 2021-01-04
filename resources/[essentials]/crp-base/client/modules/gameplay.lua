@@ -35,6 +35,11 @@ end
 AddEventHandler('crp-base:setPedConfigFlag', function()
 	playerPed = PlayerPedId()
 
-	SetPedConfigFlag(playerPed, 35, false)
-	SetPedConfigFlag(playerPed, 184, true)
+	Debug('Setted ped config flags.')
+
+	Citizen.CreateThread(function()
+		SetPedConfigFlag(playerPed, 35, false)
+		SetPedConfigFlag(playerPed, 184, true)
+		SetPedConfigFlag(playerPed, 429, true)
+	end)
 end)
