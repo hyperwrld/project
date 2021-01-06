@@ -27,7 +27,7 @@ RPC:register('getItem', function(source, slot)
 end)
 
 function openInventory(source, type, name, data)
-	local success, firstInventory, secondInventory = loadInventories(source, type, name, data)
+	local success, data = loadInventories(source, type, name, data)
 
 	if not success or type == 5 then
 		Debug('Couldnt load the inventories.')
@@ -37,7 +37,7 @@ function openInventory(source, type, name, data)
 
 	Debug('Inventories (character & ' .. name ..') loaded.')
 
-	return true, { player = firstInventory, secondary = secondInventory }
+	return true, data
 end
 
 -- List of types:
@@ -48,9 +48,9 @@ function loadInventories(source, type, name, data)
 
 	Debug('Loading inventories...')
 
-	local character = exports['crp-base']:GetCharacter(source)
-	local characterName = 'character-' .. character.getCharacterID()
-	local firstInventory = loadInventory(characterName, 40, 100)
+	local character = exports['crp-base']:getCharacter(source)
+	local characterName = 'character-' .. character.getCharacterId()
+	local first = loadInventory(characterName, 40, 100)
 
 	if type == 2 then
 		maxWeight = 100
@@ -62,9 +62,9 @@ function loadInventories(source, type, name, data)
 		maxSlots, maxWeight = inventoryTypes[type].slots, inventoryTypes[type].weight
 	end
 
-	local secondInventory = loadInventory(name, maxSlots, maxWeight, type, data)
+	local second = loadInventory(name, maxSlots, maxWeight, type, data)
 
-	if not firstInventory or not secondInventory then
+	if not first or not second then
 		return false
 	end
 
@@ -72,7 +72,11 @@ function loadInventories(source, type, name, data)
 		return
 	end
 
-	return true, firstInventory, secondInventory
+	return true, {
+		firstName = first.name, firstItems = first.items, secondItems = second.items,
+		secondName = second.name, secondMaxWeight = second.maxWeight,
+		maxSlots = second.maxSlots, type = second.type, coords = second.coords
+	}
 end
 
 function canOpenInventories(source, firstName, secondName)

@@ -155,13 +155,13 @@ end
 RegisterUICallback('moveItem', function(data, cb)
 	local success, current, future = RPC:execute('moveItem', data.current, data.future, data.currentIndex, data.futureIndex, data.count, data.data)
 
-    cb({ status = success, current = current, future = future })
+    cb({ success = success, current = current, future = future })
 end)
 
 RegisterUICallback('buyItem', function(data, cb)
 	local success, current, future = RPC:execute('buyItem', data.current, data.future, data.currentIndex, data.futureIndex, data.count, data.data)
 
-    cb({ status = success, current = current, future = future })
+    cb({ success = success, current = current, future = future })
 end)
 
 AddEventHandler('crp-inventory:useItem', function(data)
@@ -234,7 +234,7 @@ AddEventHandler('onClientResourceStart', function(resourceName)
 
 	Debug('Updated items list on the crp-ui.')
 
-	exports['crp-ui']:setAppData('inventory', itemsList)
+	exports['crp-ui']:setItems(itemsList)
 end)
 
 RegisterCommand('+openInventory', openInventory, false)

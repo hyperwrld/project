@@ -1,5 +1,6 @@
 <script>
 	import { mapGetters } from 'vuex';
+
 	import { send } from './../../../../utils/lib.js';
 
 	export default {
