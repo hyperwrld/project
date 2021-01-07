@@ -2,7 +2,7 @@ local containers = {
 	684586828, 218085040, 666561306, -58485588, -206690185, 1511880420, 682791951, 577432224, 364445978
 }
 
-function searchContainers(playerPed, coords)
+function searchContainers(coords)
 	local rayHandle = StartShapeTestRay(coords, GetOffsetFromEntityInWorldCoords(playerPed, 0, 2.5, -0.4), 16, playerPed, 0)
 	local retval, hit, endCoords, surfaceNormal, entityHit = GetShapeTestResult(rayHandle)
 	local entityModel = GetEntityModel(entityHit)
@@ -18,7 +18,7 @@ function searchContainers(playerPed, coords)
 	return false
 end
 
-function GetVehicleInFront(playerPed, coords)
+function GetVehicleInFront(coords)
     local rayHandle = StartShapeTestRay(coords, GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 2.0, 0.0), 10, playerPed, 0)
     local retval, hit, endCoords, surfaceNormal, entityHit = GetShapeTestResult(rayHandle)
 
@@ -69,11 +69,11 @@ function holsterWeapon(weaponName)
 	-- 	dictionary, animation = 'reaction@intimidation@cop@unarmed', 'outro'
 	-- end
 
-	PlayAnimation(dictionary, animation, inSpeed, outSpeed)
+	playAnimation(dictionary, animation)
 
 	Citizen.Wait((GetAnimDuration(dictionary, animation) * 1000) - 2200)
 
-	SetCurrentPedWeapon(playerPed, GetHashKey('weapon_unarmed'), 1)
+	SetCurrentPedWeapon(playerPed, `weapon_unarmed`, 1)
 
 	exports['crp-ui']:addQueue(weaponName, 1, false)
 
@@ -86,7 +86,6 @@ function holsterWeapon(weaponName)
 end
 
 function equipWeapon(weaponData, weaponAmmo)
-	local playerPed = PlayerPedId()
 	local dictionary, animation = 'reaction@intimidation@1h', 'intro'
 	-- local job = exports['crp-userinfo']:isPed('job')
 
@@ -95,24 +94,25 @@ function equipWeapon(weaponData, weaponAmmo)
 	-- end
 
 	RemoveAllPedWeapons(playerPed)
-	PlayAnimation(dictionary, animation, 1.0, 1.0)
+
+	playAnimation(dictionary, animation)
 
 	Citizen.Wait(900)
 
 	GiveWeaponToPed(playerPed, weaponData.hash, weaponAmmo, 0, 1)
 	SetCurrentPedWeapon(playerPed, weaponData.hash, 1)
 
-	if weaponData.hash == GetHashKey('WEAPON_CARBINERIFLE_MK2') then
-		GiveWeaponComponentToPed(playerPed, weaponData.hash, GetHashKey('COMPONENT_AT_AR_AFGRIP_02'))
-		GiveWeaponComponentToPed(playerPed, weaponData.hash, GetHashKey('COMPONENT_AT_AR_FLSH'))
-		GiveWeaponComponentToPed(playerPed, weaponData.hash, GetHashKey('COMPONENT_AT_CR_BARREL_02'))
-		GiveWeaponComponentToPed(playerPed, weaponData.hash, GetHashKey('COMPONENT_AT_MUZZLE_06'))
-		GiveWeaponComponentToPed(playerPed, weaponData.hash, GetHashKey('COMPONENT_AT_SIGHTS'))
-		GiveWeaponComponentToPed(playerPed, weaponData.hash, GetHashKey('COMPONENT_CARBINERIFLE_MK2_CLIP_TRACER'))
+	if weaponData.hash == `WEAPON_CARBINERIFLE_MK2` then
+		GiveWeaponComponentToPed(playerPed, weaponData.hash, `COMPONENT_AT_AR_AFGRIP_02`)
+		GiveWeaponComponentToPed(playerPed, weaponData.hash, `COMPONENT_AT_AR_FLSH`)
+		GiveWeaponComponentToPed(playerPed, weaponData.hash, `COMPONENT_AT_CR_BARREL_02`)
+		GiveWeaponComponentToPed(playerPed, weaponData.hash, `COMPONENT_AT_MUZZLE_06`)
+		GiveWeaponComponentToPed(playerPed, weaponData.hash, `COMPONENT_AT_SIGHTS`)
+		GiveWeaponComponentToPed(playerPed, weaponData.hash, `COMPONENT_CARBINERIFLE_MK2_CLIP_TRACER`)
 	end
 
-	if weaponData.hash == GetHashKey('WEAPON_COMBATPISTOL') then
-		GiveWeaponComponentToPed(playerPed, weaponData.hash, GetHashKey('COMPONENT_AT_PI_FLSH'))
+	if weaponData.hash == `WEAPON_COMBATPISTOL` then
+		GiveWeaponComponentToPed(playerPed, weaponData.hash, `COMPONENT_AT_PI_FLSH`)
 	end
 
 	exports['crp-ui']:addQueue(weaponData.identifier, 1, true)
@@ -124,11 +124,7 @@ function equipWeapon(weaponData, weaponAmmo)
     isDoingAnimation = false
 end
 
-function PlayAnimation(dictionary, animation, inSpeed, outSpeed)
-	local playerPed = PlayerPedId()
-
-    LoadDictionary(dictionary)
-
+function playAnimation(dictionary, animation)
 	isDoingAnimation = true
 
 	Citizen.CreateThread(function()
@@ -141,5 +137,20 @@ function PlayAnimation(dictionary, animation, inSpeed, outSpeed)
 		end
 	end)
 
-	TaskPlayAnim(playerPed, dictionary, animation, inSpeed, outSpeed, -1, 50, 0, 0, 0, 0)
+	TaskPlayAnimation(playerPed, dictionary, animation, 1.0, 1.0, -1, 50, 0)
 end
+
+RegisterNetEvent('crp-inventory:addDropInventory')
+AddEventHandler('crp-inventory:addDropInventory', function(name, coords)
+	dropInventories[#dropInventories + 1] = { name = name, coords = coords }
+end)
+
+RegisterNetEvent('crp-inventory:removeDropInventory')
+AddEventHandler('crp-inventory:removeDropInventory', function(name)
+	for i = 1, #dropInventories, 1 do
+		if dropInventories[i].name == name then
+			table.remove(dropInventories, i)
+			break
+		end
+	end
+end)
