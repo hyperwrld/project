@@ -50,19 +50,9 @@
 			},
 			toggleAnimation: function() {
 				send('toggleAnimation');
-			}
-        },
-		data() {
-			return {
-				currentCategory: '', isDialogOpen: false
-			}
-		},
-		destroyed() {
-            window.removeEventListener('message', this.listener);
-        },
-        mounted() {
-            this.listener = window.addEventListener('keydown', (event) => {
-                if (event.keyCode == 27 && !this.isDialogOpen) {
+			},
+			openDialog: function(event) {
+				if (event.keyCode == 27 && !this.isDialogOpen) {
 					this.isDialogOpen = true;
 
 					dialog.createDialog().then(response => {
@@ -73,7 +63,18 @@
 						this.isDialogOpen = false;
 					});
                 }
-			}, false);
+			}
+        },
+		data() {
+			return {
+				currentCategory: '', isDialogOpen: false
+			}
+		},
+		destroyed() {
+            window.removeEventListener('keydown', this.openDialog);
+        },
+        mounted() {
+            window.addEventListener('keydown', this.openDialog, false);
 
 			this.handleSwitchCategory(this.categories[0].name);
         },

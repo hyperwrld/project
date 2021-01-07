@@ -24,7 +24,7 @@
 				<div class='item'>
 					<div class='item-info'>{ this.item.quantity } [{ itemData.weight.toFixed(2) }]</div>
 					<div class='item-image'>
-						<img src={ require('./../../../../assets/' + itemData.image) }></img>
+						<img src={ require('./../../../../assets/' + itemData.image) }/>
 					</div>
 					<div class='item-durability' style={ itemPercentage >= 10 ? { width: itemPercentage + '%' } : { width: '100%', backgroundColor: '#a60505' }}>
 						{ durabilityLabel }

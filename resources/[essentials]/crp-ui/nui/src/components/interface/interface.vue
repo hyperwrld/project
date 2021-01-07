@@ -3,16 +3,17 @@
 	import interactions from './interactions/interactions.vue';
 	import notifications from './notifications/notifications.vue';
 	import taskbar from './taskbar/taskbar.vue';
+	import queue from './queue/queue.vue';
 
 	export default {
 		name: 'interface',
 		components: {
-			hud, interactions, notifications, taskbar
+			hud, interactions, notifications, taskbar, queue
 		},
 		render (h) {
 			return (
 				<div class='interface'>
-					<hud/><interactions/><notifications/><taskbar/>
+					<hud/><interactions/><notifications/><taskbar/><queue/>
 				</div>
 			);
 		}

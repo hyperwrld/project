@@ -1,8 +1,8 @@
 import { send } from "../../../utils/lib";
 
 const state = () => ({
-	itemsList: [], firstName: '', firstWeight: 0, firstMaxWeight: 325, firstItems: [],
-	secondName: '', secondWeight: 0, secondMaxWeight: 0, secondItems: [], type: 0, shopType: 0, maxSlots: [], coords: {}
+	itemsList: [], firstName: '', firstWeight: 0, firstMaxWeight: 325, firstItems: [], secondName: '',
+	secondWeight: 0, secondMaxWeight: 0, secondItems: [], type: 0, shopType: 0, maxSlots: [], coords: {}, queue: []
 })
 
 const getters = {
@@ -11,6 +11,9 @@ const getters = {
 	},
 	getItemsList: state =>  {
 		return state.itemsList;
+	},
+	getQueueData: state => {
+		return state.queue;
 	}
 }
 
@@ -23,6 +26,9 @@ const actions = {
 	},
 	moveItem(state, data) {
 		state.commit('moveItem', data);
+	},
+	addQueue(state, data) {
+		state.commit('addQueue', data);
 	}
 }
 
@@ -88,7 +94,7 @@ const mutations = {
 			});
 		}
 	},
-	calculateWeight(state, data) {
+	calculateWeight(state) {
 		let firstWeight = 0, secondWeight = 0;
 
 		for (let i = 0; i < state.firstItems.length; i++) {
@@ -108,6 +114,16 @@ const mutations = {
 		}
 
 		state.firstWeight = firstWeight, state.secondWeight = secondWeight;
+	},
+	addQueue(state, data) {
+		const item = state.itemsList.find(element => element.identifier == data.itemId);
+		const message = item.hash ? (data.state ? 'EQUIPADO' : 'DESEQUIPADO') : (data.state ? 'USADO' : 'REMOVIDO ') + data.quantity + 'X';
+
+		state.queue.push({ message: message, image: item.image, name: item.name });
+
+		setTimeout(() => {
+            state.queue.splice(0, 1);
+        }, 3000);
 	}
 }
 
