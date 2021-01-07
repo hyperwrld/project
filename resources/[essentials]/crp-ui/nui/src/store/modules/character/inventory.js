@@ -123,7 +123,7 @@ const mutations = {
 
 		setTimeout(() => {
             state.queue.splice(0, 1);
-        }, 3000);
+        }, 4000);
 	}
 }
 

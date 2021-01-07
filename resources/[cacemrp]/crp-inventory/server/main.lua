@@ -258,8 +258,8 @@ function removeDropInventory(name)
 end
 
 function getActionBarItems(source)
-	local character = exports['crp-base']:GetCharacter(source)
-	local name = 'character-' .. character.getCharacterID()
+	local character = exports['crp-base']:getCharacter(source)
+	local name = 'character-' .. character.getCharacterId()
 
 	if not inventories[name] then
 		loadInventory(name, 40, 100)
@@ -269,8 +269,8 @@ function getActionBarItems(source)
 end
 
 function getItem(source, slot)
-	local character = exports['crp-base']:GetCharacter(source)
-	local name = 'character-' .. character.getCharacterID()
+	local character = exports['crp-base']:getCharacter(source)
+	local name = 'character-' .. character.getCharacterId()
 
 	if not inventories[name] then
 		loadInventory(name, 40, 100)

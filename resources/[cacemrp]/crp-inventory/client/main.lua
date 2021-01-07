@@ -163,7 +163,11 @@ function useItem(slot)
 
 	local success, data = RPC:execute('getItem', slot)
 
-	if not data then
+	if not success then
+		if data then
+			exports['crp-ui']:setAlert(data)
+		end
+
 		return
 	end
 
