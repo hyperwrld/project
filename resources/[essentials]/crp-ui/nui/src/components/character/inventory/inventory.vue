@@ -19,13 +19,8 @@
 		},
 		data() {
             return {
-                itemCount: 0
+				itemCount: 0
             }
-		},
-		watch: {
-			itemCount: function(newValue, oldValue) {
-				// console.log(newValue, oldValue)
-			}
 		},
 		methods: {
 			returnData: function(data) {
@@ -56,15 +51,20 @@
 			},
 			close: function() {
 				this.closeMenu({ appName: 'inventory', first: this.inventoryData.firstName, second: this.inventoryData.secondName });
+			},
+			closeEvent: function(event) {
+                if (event.keyCode == 27)  {
+					this.close();
+
+					event.preventDefault();
+				}
 			}
 		},
 		destroyed() {
-            window.removeEventListener('message', this.listener);
+			window.removeEventListener('keydown', this.closeEvent, false);
         },
         mounted() {
-            this.listener = window.addEventListener('keydown', (event) => {
-                if (event.keyCode == 27) this.close();
-            }, false);
+            window.addEventListener('keydown', this.closeEvent, false);
         },
 		render(h) {
 			const data = this.inventoryData;
