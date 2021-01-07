@@ -36,7 +36,7 @@ function startThreads()
 
 	Citizen.CreateThread(function()
 		while isLoggedIn do
-			Citizen.Wait(100)
+			Citizen.Wait(0)
 
 			local coords, letSleep = GetEntityCoords(playerPed), true
 
@@ -144,7 +144,7 @@ function openInventory()
 	end
 end
 
-function toggleActionbar()
+function toggleActionBar()
 	local data = {}
 
 	actionBarState = not actionBarState

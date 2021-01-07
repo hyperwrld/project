@@ -82,21 +82,17 @@ end
 function canOpenInventories(source, firstName, secondName)
 	local first, second = openInventories[firstName], openInventories[secondName]
 
-	if (first ~= nil and first.status and first.source ~= source) then
+	if (first ~= nil and first.state and first.source ~= source) then
 		return false
 	end
 
-	if (second ~= nil and second.status and second.source ~= source) then
+	if (second ~= nil and second.state and second.source ~= source) then
 		return false
 	end
 
-	local data = { status = true, source = source }
+	local data = { state = true, source = source }
 
-	openInventories[firstName] = data
-
-	if openInventories[secondName] then
-		openInventories[secondName] = data
-	end
+	openInventories[firstName], openInventories[secondName] = data, data
 
 	return true
 end
@@ -105,7 +101,7 @@ RegisterNetEvent('crp-inventory:closedInventory')
 AddEventHandler('crp-inventory:closedInventory', function(firstName, secondName)
 	local _source, first, second = source, openInventories[firstName], openInventories[secondName]
 
-	if (not first or not first.status) or (not second or second.status) then
+	if (not first or not first.state) or (not second or not second.state) then
 		return
 	end
 
@@ -113,7 +109,11 @@ AddEventHandler('crp-inventory:closedInventory', function(firstName, secondName)
 		return
 	end
 
-	local data = { status = false, source = nil }
+	local data = { state = false, source = nil }
+
+	if inventories[secondName].isEmpty() then
+		removeDropInventory(secondName)
+	end
 
 	openInventories[firstName], openInventories[secondName] = data, data
 end)
@@ -121,7 +121,7 @@ end)
 AddEventHandler('playerDropped', function(reason)
 	for key, value in pairs(openInventories) do
 		if value.source == source then
-			openInventories[key] = { status = false, source = nil }
+			openInventories[key] = { state = false, source = nil }
 
 			Debug('Closed the inventory ' .. key)
 		end
@@ -139,10 +139,6 @@ function loadInventory(name, slots, weight, _type, data)
 	local result = Citizen.Await(DB:Execute(query, name))
 
 	inventories[name] = createInventory(name, slots, weight, _type, result, data)
-
-	if _type == 1 then
-		addDropInventory(name, data)
-	end
 
 	return inventories[name]:returnData()
 end
@@ -197,10 +193,6 @@ function swapItems(data, _data, current, future, currentSlot, futureSlot, count)
 		else
 			inventories[current].removeItem(data.item, currentSlot, true)
 			inventories[future].updateItem(data.item, futureSlot, _data.count + data.count)
-
-			if inventories[current].isEmpty() then
-				removeDropInventory(current)
-			end
 		end
 	else
 		if not (inventories[future].canCarry((current == future), data.item, data.count, _data.slot) and inventories[current].canCarry((current == future), _data.item, _data.count, data.slot)) then
@@ -231,16 +223,16 @@ function moveItem(data, current, future, currentSlot, futureSlot, count)
 	else
 		inventories[current].removeItem(data.item, data.slot, false)
 		inventories[future].swapItem(data, current, futureSlot)
-
-		if inventories[current].isEmpty() then
-			removeDropInventory(current)
-		end
 	end
 
 	local currentSlotData = false
 
 	if inventories[current] then
 		currentSlotData = inventories[current].getItemData(currentSlot)
+	end
+
+	if inventories[future].type == 1 then
+		addDropInventory(future, inventories[future].coords)
 	end
 
 	return true, currentSlotData, inventories[future].getItemData(futureSlot)
