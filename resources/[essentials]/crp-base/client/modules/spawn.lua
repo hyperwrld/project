@@ -64,7 +64,7 @@ function CRP.Spawn:InitializeMenu()
 		Citizen.Wait(0)
 	end
 
-	exports['crp-ui']:openApp('selection', data, true)
+	exports['crp-ui']:openApp('selection', data)
 end
 
 function CRP.Spawn:ChangeCharacter(data)

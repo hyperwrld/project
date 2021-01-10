@@ -1,18 +1,27 @@
 local isAppOpen, events = false, {}
 
-function openApp(appName, data, hasCursor)
+function openApp(appName, data, hasFocus, hasCursor, canDisable)
 	isAppOpen = true
 
-	SetNuiFocus(true, hasCursor or false)
-	-- SetNuiFocusKeepInput(true)
+	if hasFocus == nil then
+		hasFocus = true
+	end
 
-	Citizen.CreateThread(function()
-        while isAppOpen do
-			Citizen.Wait(0)
+	if hasCursor == nil then
+		hasCursor = true
+	end
 
-			DisableAllControlActions(0)
-		end
-	end)
+	SetNuiFocus(hasFocus, hasCursor)
+
+	if canDisable then
+		Citizen.CreateThread(function()
+			while isAppOpen do
+				Citizen.Wait(0)
+
+				DisableAllControlActions(0)
+			end
+		end)
+	end
 
 	SendNUIMessage({
 		app = appName, event = 'setData', state = true, data = data
@@ -47,10 +56,6 @@ RegisterNUICallback('closeMenu', function(data, cb)
 	isAppOpen = false
 
     cb(true)
-end)
-
-RegisterCommand('zz', function()
-	DisplayRadar(true)
 end)
 
 function RegisterUIEvent(name)

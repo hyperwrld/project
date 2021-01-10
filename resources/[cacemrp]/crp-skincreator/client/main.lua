@@ -24,7 +24,7 @@ AddEventHandler('crp-skincreator:openShop', function(type) 	-- type: 1 (all), 2 
 		}
 	end
 
-	exports['crp-ui']:openApp('skincreator', data, true)
+	exports['crp-ui']:openApp('skincreator', data)
 end)
 
 RegisterUICallback('selectPedSkin', function(data, cb)

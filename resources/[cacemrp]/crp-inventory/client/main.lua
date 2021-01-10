@@ -145,15 +145,13 @@ function openInventory()
 end
 
 function toggleActionBar()
-	local data = {}
-
 	actionBarState = not actionBarState
 
 	if actionBarState then
-		data = RPC:execute('getActionBarItems')
+		exports['crp-ui']:openApp('actionbar', RPC:execute('getActionBarItems'), false, false)
+	else
+		exports['crp-ui']:closeApp('actionbar')
 	end
-
-	exports['crp-ui']:toggleActionBar(actionBarState, data)
 end
 
 function useItem(slot)
@@ -211,7 +209,7 @@ AddEventHandler('crp-inventory:openInventory', function(type, name, data)
 			TaskPlayAnimation(playerPed, 'pickup_object', 'putdown_low', 5.0, 1.5, 1.0, 48, 0.0)
 		end
 
-		exports['crp-ui']:openApp('inventory', data, true)
+		exports['crp-ui']:openApp('inventory', data)
 	end
 end)
 
@@ -219,7 +217,7 @@ AddEventHandler('crp-inventory:openShop', function(type)
 	local success, data = RPC:execute('openShop', type)
 
 	if success then
-		exports['crp-ui']:openApp('inventory', data, true)
+		exports['crp-ui']:openApp('inventory', data)
 	end
 end)
 
