@@ -90,11 +90,9 @@
 				}
 
 				.item {
-					display: flex;
-					flex-direction: column;
-					align-items: center;
-					width: 100% !important;
-					height: 100% !important;
+					position: relative;
+					width: 100%;
+					height: 100%;
 
 					&[aria-grabbed='true'] {
 						outline: transparent;
