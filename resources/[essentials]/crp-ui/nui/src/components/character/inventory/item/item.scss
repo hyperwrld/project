@@ -27,15 +27,16 @@
 	}
 
 	.item-durability {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
 		height: 100%;
 		width: 100%;
 
-		text-align: center;
 		font-size: 0.35rem;
 		color: white;
-
 		background-color: green;
-		align-self: start;
 	}
 
 	.item-name {

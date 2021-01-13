@@ -1,0 +1,163 @@
+.phone {
+	font-family: 'Quantico', sans-serif;
+
+	position: absolute;
+	width: 230px;
+	height: 473px;
+
+	right: 5%;
+	bottom: 5%;
+
+	background: black;
+	border-radius: 28px;
+	padding: 7px 7px;
+	animation-duration: 1.5s;
+
+	.inner {
+		position: absolute;
+		width: 100%;
+		height: calc(100% - 4px);
+
+		top: 2px;
+		left: 0px;
+
+        border-radius: 28px;
+        border-top: 2px solid #9fa0a2;
+		border-bottom: 2px solid #9fa0a2;
+
+        background: black;
+        z-index: 1;
+        -webkit-box-shadow: inset 0 0 6px 0 rgba(255, 255, 255, 0.5);
+        box-shadow: inset 0 0 6px 0 rgba(255, 255, 255, 0.5);
+	}
+
+	.overflow {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+
+		top: 0;
+		left: 0;
+
+		border-radius: 28px;
+		overflow: hidden;
+
+		.shadow {
+			position: absolute;
+			height: 101%;
+			width: calc(100% - 20px);
+
+			top: -0.5%;
+			left: 10px;
+
+			border-radius: 38px;
+			z-index: 5;
+			pointer-events: none;
+
+			-webkit-box-shadow: inset 0 0 60px 0 white, inset 0 0 30px 0 rgba(255, 255, 255, 0.5), 0 0 20px 0 white, 0 0 20px 0 rgba(255, 255, 255, 0.5);
+			box-shadow: inset 0 0 60px 0 rgba(255, 255, 255, 0.6), inset 0 0 30px 0 rgba(255, 255, 255, 0.3), 0 0 20px 0 rgba(255, 255, 255, 0.6), 0 0 20px 0 rgba(255, 255, 255, 0.3);
+		}
+	}
+
+	.camera {
+		position: absolute;
+		height: 8px;
+		width: 8px;
+
+		top: 12px;
+        left: 0;
+        right: 0;
+		margin: 0 auto;
+
+        background: #212b36;
+        z-index: 55;
+        border-radius: 100%;
+	}
+
+	.screen {
+		position: relative;
+		width: 100%;
+		height: 100%;
+
+		overflow: hidden;
+		border-radius: 22px;
+		z-index: 33;
+		background-color: black;
+
+		.content {
+			position: relative;
+			width: 100%;
+			height: 100%;
+
+			display: grid;
+			grid-template-rows: 4.5% 90% 4.5%;
+			gap: 0.5%;
+
+			overflow: hidden;
+			border-radius: 22px;
+			// opacity: 0;
+
+			transition: 0.5s;
+			background-image: linear-gradient(45deg, #FBDA61 0%, #FF5ACD 100%);
+
+			&:hover {
+				opacity: 1;
+			}
+
+			&.onApp {
+				background: #f2f2f2;
+			}
+
+			.header {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 20px;
+
+				width: 100%;
+				height: 100%;
+				padding: 0 10%;
+
+				color: black;
+
+				.left, .right {
+					display: grid;
+					grid-auto-columns: auto;
+					grid-template-columns: repeat(2, 1fr);
+					gap: 10px;
+
+					height: 100%;
+					width: min-content;
+					font-size: 0.55rem;
+					align-items: center;
+					font-weight: bold;
+
+					&.right {
+						margin-left: auto;
+					}
+				}
+			}
+
+			.app-screen {
+				width: 100%;
+				height: 100%;
+				position: relative;
+			}
+
+			.footer {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+
+				.back {
+					height: 5px;
+					width: 45px;
+					background-color: black;
+
+					border: 1.5px solid #d6d6d6;
+					box-shadow: 0px 0px 5px 0px #dbdbdb;
+					border-radius: 20px;
+				}
+			}
+		}
+	}
+}

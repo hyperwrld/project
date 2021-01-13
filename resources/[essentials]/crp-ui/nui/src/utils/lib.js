@@ -37,3 +37,8 @@ export const send = async (event, data = {}) => {
 		body: JSON.stringify(data)
 	}).then(response => response.json());
 };
+
+export const fragment = {
+	functional: true,
+	render: (h, ctx) => ctx.children
+}
