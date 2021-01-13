@@ -1,4 +1,6 @@
 <script>
+	import { mapGetters } from 'vuex';
+
 	import { library } from '@fortawesome/fontawesome-svg-core';
 	import { faPhoneAlt, faCommentAlt, faUser, faCar, faAd, faCog, faMapPin, faCamera } from '@fortawesome/free-solid-svg-icons';
 	import { faTwitter } from '@fortawesome/free-brands-svg-icons';
@@ -14,9 +16,24 @@
 				searchInput: ''
 			}
 		},
+		computed: {
+			...mapGetters('phone', {
+				history: 'getHistory'
+			})
+		},
 		methods: {
 			filterItems(appName) {
-				return [{ name: 9666, time: 333 }, { name: 'Tiago Guerreiro', time: 33354545}];
+				const search = this.searchInput.toLowerCase().trim();
+
+				if (!search) {
+					return this.history;
+				}
+
+				if (isNaN(this.searchInput)) {
+					return this.history.filter(c => c.name.toLowerCase().indexOf(search) > -1);
+				} else {
+					return this.history.filter(c => c.name.toString().toLowerCase().indexOf(search) > -1);
+				}
 			}
 		},
 		render(h) {
@@ -36,10 +53,8 @@
 									return (
 										<v-expansion-panel class='history-square'>
 											<v-expansion-panel-header>
-												<div class='number-info'>
-													<div class='name'>{ call.name }</div>
-													<div class='time'>{ convertTime(call.time) }</div>
-												</div>
+												<div class='name'>{ call.name }</div>
+												<div class='time'>{ convertTime(call.time) }</div>
 											</v-expansion-panel-header>
 											<v-expansion-panel-content>
 												<font-awesome-icon icon={ ['fas', 'phone-alt'] }/>

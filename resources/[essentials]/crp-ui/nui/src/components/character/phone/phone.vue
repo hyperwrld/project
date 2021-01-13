@@ -1,6 +1,4 @@
 <script>
-	import { mapGetters } from 'vuex';
-
 	import { library } from '@fortawesome/fontawesome-svg-core';
 	import { faVolumeUp, faSignal, faCamera, faAngleLeft, faBatteryThreeQuarters } from '@fortawesome/free-solid-svg-icons';
 	import { faCircle } from '@fortawesome/free-regular-svg-icons';
@@ -9,10 +7,12 @@
 
 	export default {
 		name: 'phone',
-		computed: {
-			...mapGetters('phone', {
-				items: 'getItems'
-			})
+		methods: {
+			changeApp: function() {
+				if (this.$route.name != 'home') {
+					this.$router.push({ path: '/phone/' });
+				}
+			}
 		},
 		render(h) {
 			return (
@@ -36,7 +36,7 @@
 								</div>
 								<router-view class='app-screen'/>
 								<div class='footer'>
-									<div class='back'/>
+									<div class='back' onClick={ this.changeApp }/>
 								</div>
 							</div>
 						</div>

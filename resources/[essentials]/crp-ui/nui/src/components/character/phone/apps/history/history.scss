@@ -65,98 +65,73 @@
 			}
 		}
 
-		.history-square {
-            height: fit-content;
-            width: 100%;
+		.v-expansion-panel {
+			height: fit-content;
+			width: 100%;
+			min-height: 44.5px;
 
-            position: relative;
-            display: flex;
-            min-height: 44.5px;
+			padding: 1%;
+			border-bottom: solid 1px rgba(219, 219, 219, 1.0);
+			border-radius: 0;
 
-            align-items: center;
-            padding: 1%;
-            text-align: center;
-            flex: 0 1 auto;
-            flex-direction: column;
-            border-bottom: solid 1px rgba(219, 219, 219, 1);
-            border-radius: 0;
-
-            button {
+            .v-expansion-panel-header {
                 height: 100%;
                 width: 100%;
                 font-size: 0.5rem;
                 padding: 0;
-                min-height: 44.5px;
+				min-height: 44.5px;
 
-                .number-info {
-                    width: 100%;
-                    margin: 0;
+				* {
+					display: flex;
+					align-items: center;
+					margin: 0 2%;
 
-                    .name {
-                        font-size: 0.75rem;
-                        width: 90%;
-                        white-space: nowrap;
-                        text-overflow: ellipsis;
-                        overflow: hidden
-                    }
+					&.name {
+						font-size: 0.75rem;
+						white-space: nowrap;
+						text-overflow: ellipsis;
+						overflow: hidden;
+					}
 
-                    .time {
-                        position: absolute;
-                        width: 50%;
-                        height: fit-content;
-                        font-size: 0.45rem;
-                        right: 0;
-                        bottom: 5%;
-						justify-content: flex-end;
-						color: rgb(138, 138, 138, 0.87);
-                    }
-                }
+					&.time {
+						position: absolute;
+						right: 0;
+						bottom: 5%;
 
-                svg {
-                    width: 10% !important;
-                    font-size: 1.25rem;
-                    display: none;
-                }
-
-                * {
-                    width: 13%;
-                    display: flex;
-                    align-items: center;
-                    margin: 0 2%;
-                    height: 100%;
-                }
+						font-size: 0.45rem;
+						color: rgba(138, 138, 138, 0.87)
+					}
+				}
             }
 
             .v-expansion-panel-content {
-                width: 100%;
-                height: 29.2px;
+				height: 29.2px;
 
-                :first-child {
-                    padding: 2%;
-                    font-size: 0.3rem;
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: center;
-                    align-items: center;
+				::v-deep div {
+					display: flex;
+					justify-content: center;
+					align-items: center;
 
-                    * {
-                        width: 30%;
-                        height: 50%;
-                        padding: 0;
-                    }
+					padding: 2%;
 
-                    .fa-phone-alt {
-                        color: #13b86c;
-                    }
+					svg {
+						width: 30%;
+						height: 50%;
+						padding: 0;
 
-                    .fa-comment-alt {
-                        color: #0191e7;
-                    }
+						&.fa-phone-alt {
+							color: #13b86c;
+						}
 
-                    .fa-user-plus {
-                        color: #f09d02;
-                    }
-                }
+						&.fa-comment-alt {
+							color: #0191e7;
+						}
+
+						&.fa-user-plus {
+							color: #f09d02;
+						}
+					}
+				}
             }
         }
 

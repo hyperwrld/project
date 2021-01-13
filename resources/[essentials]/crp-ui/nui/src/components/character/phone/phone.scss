@@ -97,7 +97,7 @@
 			border-radius: 22px;
 			// opacity: 0;
 
-			transition: 0.5s;
+			transition: 0.5s opacity;
 			background-image: linear-gradient(45deg, #FBDA61 0%, #FF5ACD 100%);
 
 			&:hover {
@@ -138,9 +138,9 @@
 			}
 
 			.app-screen {
+				position: relative;
 				width: 100%;
 				height: 100%;
-				position: relative;
 			}
 
 			.footer {

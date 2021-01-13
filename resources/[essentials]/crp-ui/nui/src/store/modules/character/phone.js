@@ -3,7 +3,15 @@ const state = () => ({
 })
 
 const getters = {
+	getHistory: state => {
+		for (let i = 0; i < state.history.length; i++) {
+			let contact = state.contacts.find(element => element.number === state.history[i].number)
 
+			state.history[i].name = contact ? contact.name : state.history[i].number;
+		}
+
+        return state.history;
+	}
 }
 
 const actions = {
