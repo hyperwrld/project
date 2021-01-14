@@ -4,6 +4,7 @@ local coresume, costatus = coroutine.resume, coroutine.status
 local debug = debug
 local coroutine_close = coroutine.close or (function(c) end) -- 5.3 compatibility
 local hadThread = false
+local curTime = 0
 
 -- setup msgpack compat
 msgpack.set_string('string_compat')
@@ -143,7 +144,7 @@ function Citizen.CreateThread(threadFunction)
 end
 
 function Citizen.Wait(msec)
-	coroutine.yield(GetGameTimer() + msec)
+	coroutine.yield(curTime + msec)
 end
 
 -- legacy alias (and to prevent people from calling the game's function)
@@ -153,6 +154,10 @@ CreateThread = Citizen.CreateThread
 function Citizen.CreateThreadNow(threadFunction, name)
 	local bid = boundaryIdx + 1
 	boundaryIdx = boundaryIdx + 1
+
+	if not hadThread then
+		curTime = GetGameTimer()
+	end
 	
 	local di = debug.getinfo(threadFunction, 'S')
 	name = name or ('thread_now %s[%d..%d]'):format(di.short_src, di.linedefined, di.lastlinedefined)
@@ -219,7 +224,7 @@ function Citizen.SetTimeout(msec, callback)
 
 	local coro = coroutine.create(tfn)
 	threads[coro] = {
-		wakeTime = GetGameTimer() + msec,
+		wakeTime = curTime + msec,
 		boundary = bid
 	}
 
@@ -235,7 +240,7 @@ Citizen.SetTickRoutine(function()
 
 	-- flag to skip thread exec if we don't have any
 	local thisHadThread = false
-	local curTime = GetGameTimer()
+	curTime = GetGameTimer()
 
 	for coro, thread in pairs(newThreads) do
 		rawset(threads, coro, thread)
@@ -494,12 +499,19 @@ if IsDuplicityVersion() then
 		end
 	end)
 
-	function PerformHttpRequest(url, cb, method, data, headers)
+	function PerformHttpRequest(url, cb, method, data, headers, options)
+		local followLocation = true
+		
+		if options and options.followLocation ~= nil then
+			followLocation = options.followLocation
+		end
+	
 		local t = {
 			url = url,
 			method = method or 'GET',
 			data = data or '',
-			headers = headers or {}
+			headers = headers or {},
+			followLocation = followLocation
 		}
 
 		local d = json.encode(t)
