@@ -57,10 +57,14 @@ const mutations = {
 
 			if (itemData) {
 				slotData = { itemId: itemData.item, quantity: itemData.count, meta: itemData.meta, durability: itemData.creation_time };
+
+				if (state.type == 5) slotData.price = itemData.price;
 			}
 
 			state.secondItems[i] = slotData;
 		}
+
+		this.commit('inventory/calculateWeight');
 	},
 	setItems(state, data) {
 		state.itemsList = data;
@@ -78,7 +82,7 @@ const mutations = {
 				count: Number(data.quantity), data: { type: state.type, coords: state.coords }
 			}, nuiType = 'moveItem';
 
-			if (state.type == 5) {
+			if (state.type == 5 && data.current == data.secondName) {
 				moveInfo.data.shopType = state.shopType, nuiType = 'buyItem';
 			}
 

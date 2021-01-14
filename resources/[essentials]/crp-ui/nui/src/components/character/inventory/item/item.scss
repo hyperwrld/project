@@ -51,7 +51,7 @@
 		color: white;
 		background-color: rgba(0, 0, 0, 0.6);
 
-		span {
+		::v-deep * {
 			color: green;
 		}
 	}

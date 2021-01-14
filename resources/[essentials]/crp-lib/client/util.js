@@ -5,7 +5,7 @@ exports('getHeadBlend', (playerPed) => {
         return false;
     };
 
-    Citizen.invokeNative('0x2746BD9D88C5C5D0', playerPed, arrayFloat, true);
+	Citizen.invokeNative('0x2746BD9D88C5C5D0', playerPed, arrayFloat, true);
 
 	return [
 		arrayInt[0], arrayInt[2], arrayInt[4], arrayInt[6], arrayInt[8],

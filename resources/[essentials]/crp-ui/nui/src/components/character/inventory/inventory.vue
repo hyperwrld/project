@@ -75,7 +75,7 @@
 						<div class='container'>
 							<div class='information'>
 								<span>{ data.firstName }</span>
-								<span>{ data.firstWeight + ' / ' + data.firstMaxWeight }</span>
+								<span>{ data.firstWeight.toFixed(2) + ' / ' + data.firstMaxWeight.toFixed(2) }</span>
 							</div>
 							<div class='slots'>
 								{ data.firstItems.map((slot, index) => {
@@ -108,7 +108,7 @@
 						<div class='container'>
 							<div class='information'>
 								<span>{ data.secondName }</span>
-								<span>{ data.secondWeight + ' / ' + data.secondMaxWeight }</span>
+								<span>{ data.secondWeight.toFixed(2) + ' / ' + data.secondMaxWeight.toFixed(2) }</span>
 							</div>
 							<div class='slots'>
 								{ data.secondItems.map((slot, index) => {

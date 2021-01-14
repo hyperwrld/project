@@ -7,8 +7,7 @@ client_scripts {
 	'@polyzone/client/BoxZone.lua',
 	'@polyzone/client/CircleZone.lua',
 	'@polyzone/client/ComboZone.lua',
-	'client/*.lua',
-	'client/util.js'
+	'client/*.*'
 }
 
 shared_script 'shared/util.lua'

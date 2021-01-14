@@ -6,7 +6,7 @@ function createCircleZones(points, radius, useZ, zoneName, eventName, canLog)
 	for i = 1, #points do
 		name = 'circleZone-' .. tostring(i)
 
-		zones[#zones + 1] = CircleZone:Create(points[i].coords, radius, { name = name, useZ = useZ, data = points[i].data, debugPoly = true })
+		zones[#zones + 1] = CircleZone:Create(points[i].coords, radius, { name = name, useZ = useZ, data = points[i].data })
 	end
 
 	createZones(zones, zoneName, eventName, canLog)
@@ -23,7 +23,7 @@ function createBoxZones(points, zoneName, eventName, canLog)
 		name = 'boxZone-' .. tostring(i)
 
 		zones[#zones + 1] = BoxZone:Create(points[i].coords.xyz, points[i].length, points[i].width, {
-			name = name, heading = points[i].coords.w, minZ = points[i].minZ, maxZ = points[i].maxZ, data = points[i].data, debugPoly = true
+			name = name, heading = points[i].coords.w, minZ = points[i].minZ, maxZ = points[i].maxZ, data = points[i].data
 		})
 	end
 
