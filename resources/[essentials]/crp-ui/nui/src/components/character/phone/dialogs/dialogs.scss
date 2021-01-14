@@ -1,0 +1,180 @@
+
+.v-dialog__content {
+	font-family: 'Quantico', sans-serif;
+
+	position: absolute;
+
+	::v-deep .v-dialog {
+		box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.55);
+		margin: 5% !important;
+
+		.v-card {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+
+			overflow: hidden;
+			min-height: 120px;
+
+			* {
+				width: 100%;
+			}
+
+			.loader {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
+
+				opacity: 0;
+				transition: 0.5s opacity ease-in-out;
+
+				&::before {
+					font-family: FontAwesome;
+					content: '\f00c';
+
+					position: absolute;
+					font-size: 20px;
+					color: white;
+
+					opacity: 0;
+					transition: opacity 1s ease-in-out;
+				}
+
+				&::after {
+					font-family: FontAwesome;
+					content: '\f00d';
+
+					position: absolute;
+					font-size: 20px;
+					color: white;
+
+					opacity: 0;
+					transition: opacity 1s ease-in-out;
+				}
+
+				&.loading {
+					opacity: 1;
+
+					svg {
+						animation: rotator 1.4s linear infinite;
+
+						circle {
+							animation: dash 1.4s ease-in-out infinite;
+						}
+					}
+				}
+
+				&.failure {
+					opacity: 1;
+
+					&::after {
+						opacity: 1;
+					}
+
+					svg > circle {
+						fill: rgb(217, 83, 79);
+						stroke-width: 0;
+					}
+				}
+
+				&.done {
+					opacity: 1;
+
+					&::before {
+						opacity: 1;
+					}
+
+					svg > circle {
+						fill: rgb(92, 184, 92);
+						stroke-width: 0;
+					}
+				}
+
+				svg > circle {
+					stroke: #0060CE;
+					stroke-dasharray: 124;
+					stroke-dashoffset: 0;
+
+					transform-origin: center;
+					fill: transparent;
+
+					transition: fill 1s ease-in-out, stroke-width 0.5s ease-in-out;
+				}
+			}
+
+			.v-card__title {
+				font-size: 1.3rem !important;
+				padding: 5%;
+
+				justify-content: center;
+			}
+
+			.v-card__text {
+				padding: 0 10% 5%;
+				line-height: normal;
+
+				.choice:first-child {
+					margin-bottom: 2.5%;
+				}
+
+				input, textarea {
+					width: 100%;
+					padding: 3.5%;
+
+					border: 1px solid #1a1a1a;
+					background: #242424;
+					color: #afafaf;
+
+					resize: none;
+					outline: none;
+					overflow: hidden;
+				}
+
+				input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+					-webkit-appearance: none;
+					margin: 0;
+				}
+			}
+
+			.v-card__actions {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				justify-content: center;
+
+				padding: 0 5% 5%;
+
+				* {
+					font-size: 0.8rem;
+				}
+			}
+		}
+	}
+
+	@keyframes rotator {
+		0% {
+			transform: rotate(0);
+		}
+
+		100% {
+			transform: rotate(270deg);
+		}
+	}
+
+	@keyframes dash {
+		0% {
+			stroke-dashoffset: 124;
+		}
+
+		50% {
+			stroke-dashoffset: 30;
+			transform: rotate(135deg);
+		}
+
+		100% {
+			stroke-dashoffset: 124;
+			transform: rotate(450deg);
+		}
+	}
+}

@@ -24,7 +24,7 @@
 						</div>
 						<div class='camera'/>
 						<div class='screen'>
-							<div class={`content ${ this.$route.name != 'home' ? 'onApp' : ''}`}>
+							<div class={ `content ${ this.$route.name != 'home' ? 'onApp' : ''}` }>
 								<div class='header'>
 									<div class='left'>
 										<div class='time'>19:20</div>

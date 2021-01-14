@@ -7,6 +7,8 @@
 
 	import { fragment, convertTime } from './../../../../../utils/lib.js';
 
+	import dialogs from './../../dialogs/dialogs.js';
+
 	library.add(faPhoneAlt, faCommentAlt, faUser, faCar, faTwitter, faAd, faCog, faMapPin, faCamera);
 
 	export default {
@@ -34,6 +36,36 @@
 				} else {
 					return this.history.filter(c => c.name.toString().toLowerCase().indexOf(search) > -1);
 				}
+			},
+			sendMessage(contactNumber) {
+				dialogs.createDialog({
+					attachDiv: '.list', title: 'Enviar Mensagem',
+					choices: [
+						{ key: 'message', placeholder: 'Mensagem', errorText: 'Insira uma mensagem para mandar a um número.' }
+					],
+					sendText: 'Enviar', nuiType: 'sendMessage', data: { number: contactNumber }
+				}).then(response => {
+					// if (response) {
+					// 	let found = this.contacts.find(element => element.id == contactId);
+
+					// 	found.name = response.choiceData.name, found.number = Number(response.choiceData.number);
+					// }
+      			})
+			},
+			addContact: function(contactNumber) {
+				dialogs.createDialog({
+					attachDiv: '.list', title: 'Adicionar contato',
+					choices: [
+						{ key: 'name', type: 'text', min: 1, max: 20, placeholder: 'Nome', errorText: 'Escolha um nome com o máximo de 20 caracteres.' }
+					],
+					sendText: 'Adicionar', nuiType: 'addContact', data: { number: contactNumber }
+				}).then(response => {
+					// if (response) {
+						// let found = this.contacts.find(element => element.id == contactId);
+
+						// found.name = response.choiceData.name, found.number = Number(response.choiceData.number);
+					// }
+      			})
 			}
 		},
 		render(h) {
@@ -51,14 +83,14 @@
 							<v-expansion-panels flat accordion>
 								{ this.filterItems().map((call, index) => {
 									return (
-										<v-expansion-panel class='history-square'>
+										<v-expansion-panel>
 											<v-expansion-panel-header>
 												<div class='name'>{ call.name }</div>
 												<div class='time'>{ convertTime(call.time) }</div>
 											</v-expansion-panel-header>
 											<v-expansion-panel-content>
-												<font-awesome-icon icon={ ['fas', 'phone-alt'] }/>
-												<font-awesome-icon icon={ ['fas', 'comment-alt'] }/>
+												<font-awesome-icon icon={ ['fas', 'phone-alt'] } onClick={ () => this.addContact(call.number) }/>
+												<font-awesome-icon icon={ ['fas', 'comment-alt'] } onClick={ () => this.sendMessage(call.number) }/>
 												{ !isNaN(call.name) &&
 													<font-awesome-icon icon={ ['fas', 'user-plus'] }/>
 												}

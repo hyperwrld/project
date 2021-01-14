@@ -1,0 +1,114 @@
+<script>
+	import { library } from '@fortawesome/fontawesome-svg-core';
+	import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
+	import { fragment } from '../../../../utils/lib';
+
+	library.add(faExclamationCircle);
+
+	export default {
+		name: 'dialogs',
+		data() {
+			return {
+				state: true, loaderState: true, loaderClass: 'loading', errorsList: []
+			}
+		},
+		props: {
+			attachDiv: String, title: String, choices: Array,
+			sendText: String, nuiType: String, data: Object
+		},
+		methods: {
+			cancelDialog() {
+				this.$emit('cancel');
+			},
+			submitDialog() {
+				const choiceData = typeof(this.data) == 'object' ? this.data : {};
+
+				if (this.choices && this.choices.length > 0) {
+					this.errorsList = [];
+
+					for (let i = 0; i < this.choices.length; i++) {
+						const choice = this.choices[i];
+
+						if (choice.value == undefined || ((choice.max && choice.value.length > choice.max) || (choice.min && choice.value.length < choice.min))) {
+							this.errorsList.push(choice.errorText);
+						} else {
+							choiceData[choice.key] = choice.value;
+						}
+					}
+				}
+
+				if (this.errorsList.length == 0) {
+					this.loaderState = true, this.loaderClass = 'loading';
+
+					send(this.nuiType, choiceData).then(data => {
+						this.loaderClass = data.state ? 'done' : 'failure';
+
+						setTimeout(() => {
+							if (data.state) {
+								this.$emit('submit', { choiceData: choiceData, data: data });
+							}
+
+							this.loaderState = false;
+						}, 1000);
+					});
+				}
+			}
+		},
+		render(h) {
+			return (
+				<transition appear name='fade'>
+					<v-dialog v-model={ this.state } persistent max-width='290' attach={ this.attachDiv } hide-overlay dark>
+						<v-card>
+							{ this.loaderState ?
+								<div class={ `loader ${ this.loaderClass }` }>
+									<svg class='spinner' width='43px' height='43px' viewBox='0 0 44 44' xmlns='http://www.w3.org/2000/svg'>
+										<circle class='path' fill='none' stroke-width='4' stroke-linecap='round' cx='22' cy='22' r='20'/>
+									</svg>
+								</div>
+								:
+								<fragment>
+									<v-card-title class='headline'>{ this.title }</v-card-title>
+									{ (this.choices && this.choices.length > 0) &&
+										<v-card-text>
+											{ this.choices.map((choice, index) => {
+												return (
+													<div class='choice'>
+														{ choice.type ?
+															<input type={ choice.type } v-model={ choice.value } placeholder={ choice.placeholder } maxlength={ choice.max } required/>
+															:
+															<textarea type='text' v-model={ choice.value } placeholder={ choice.placeholder } required/>
+														}
+													</div>
+												)
+											})}
+										</v-card-text>
+									}
+									<v-card-actions>
+										<v-btn color='red darken-1' text>Voltar</v-btn>
+										<v-btn color='green darken-1' text>{ this.sendText }</v-btn>
+									</v-card-actions>
+
+									{ (this.choices && this.errorsList.length > 0) &&
+										<div class='errors'>
+											{ this.errorsList.map((error, index) => {
+												return (
+													<div class='error'>
+														<font-awesome-icon icon={ ['fas', 'exclamation-circle'] }/> { error }
+													</div>
+												)
+											})}
+										</div>
+									}
+								</fragment>
+							}
+						</v-card>
+					</v-dialog>
+				</transition>
+			);
+		}
+	}
+</script>
+
+<style scoped lang='scss'>
+    @import './dialogs.scss';
+</style>
