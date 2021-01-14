@@ -1,4 +1,9 @@
+eventPrefix = '__PolyZone__:'
 PolyZone = {}
+
+local defaultColorWalls = {0, 255, 0}
+local defaultColorOutline = {255, 0, 0}
+local defaultColorGrid = {255, 255, 255}
 
 -- Utility functions
 local abs = math.abs
@@ -24,6 +29,34 @@ local function _wn_inner_loop(p0, p1, p2, wn)
     end
   end
   return wn
+end
+
+function addBlip(pos)
+  local blip = AddBlipForCoord(pos.x, pos.y, 0.0)
+  SetBlipColour(blip, 7)
+  SetBlipDisplay(blip, 8)
+  SetBlipScale(blip, 1.0)
+  SetBlipAsShortRange(blip, true)
+  return blip
+end
+
+function clearTbl(tbl)
+  -- Only works with contiguous (array-like) tables
+  if tbl == nil then return end
+  for i=1, #tbl do
+    tbl[i] = nil
+  end
+  return tbl
+end
+
+function copyTbl(tbl)
+  -- Only a shallow copy, and only works with contiguous (array-like) tables
+  if tbl == nil then return end
+  local ret = {}
+  for i=1, #tbl do
+    ret[i] = tbl[i]
+  end
+  return ret
 end
 
 -- Winding Number Algorithm - http://geomalgorithms.com/a03-_inclusion.html
@@ -94,9 +127,9 @@ end
 
 function PolyZone:draw()
   local zDrawDist = 45.0
-  local oColor = self.debugColors.outline
+  local oColor = self.debugColors.outline or defaultColorOutline
   local oR, oG, oB = oColor[1], oColor[2], oColor[3]
-  local wColor = self.debugColors.walls
+  local wColor = self.debugColors.walls or defaultColorWalls
   local wR, wG, wB = wColor[1], wColor[2], wColor[3]
   local plyPed = PlayerPedId()
   local plyPos = GetEntityCoords(plyPed)
@@ -139,7 +172,7 @@ local function _drawGrid(poly)
   end
 
   local lines = poly.lines
-  local color = poly.debugColors.grid
+  local color = poly.debugColors.grid or defaultColorGrid
   local r, g, b = color[1], color[2], color[3]
   for i=1, #lines do
     local line = lines[i]
@@ -175,14 +208,20 @@ local function _pointInPoly(point, poly)
   end
 
   -- Returns true if the grid cell associated with the point is entirely inside the poly
-  if poly.grid then
+  local grid = poly.grid
+  if grid then
     local gridDivisions = poly.gridDivisions
     local size = poly.size
     local gridPosX = x - minX
     local gridPosY = y - minY
     local gridCellX = (gridPosX * gridDivisions) // size.x
     local gridCellY = (gridPosY * gridDivisions) // size.y
-    if (poly.grid[gridCellY + 1][gridCellX + 1]) then return true end
+    local gridCellValue = grid[gridCellY + 1][gridCellX + 1]
+    if gridCellValue == nil and poly.lazyGrid then
+      gridCellValue = _isGridCellInsidePoly(gridCellX, gridCellY, poly)
+      grid[gridCellY + 1][gridCellX + 1] = gridCellValue
+    end
+    if gridCellValue then return true end
   end
 
   return _windingNumber(point, poly.points)
@@ -208,7 +247,7 @@ local function _calculateGridCellPoints(cellX, cellY, poly)
 end
 
 
-local function _isGridCellInsidePoly(cellX, cellY, poly)
+function _isGridCellInsidePoly(cellX, cellY, poly)
   gridCellPoints = _calculateGridCellPoints(cellX, cellY, poly)
   local polyPoints = {table.unpack(poly.points)}
   -- Connect the polygon to its starting point
@@ -308,6 +347,9 @@ end
 
 -- Calculate for each grid cell whether it is entirely inside the polygon, and store if true
 local function _createGrid(poly, options)
+  poly.gridArea = 0.0
+  poly.gridCellWidth = poly.size.x / poly.gridDivisions
+  poly.gridCellHeight = poly.size.y / poly.gridDivisions
   Citizen.CreateThread(function()
     -- Calculate all grid cells that are entirely inside the polygon
     local isInside = {}
@@ -356,25 +398,30 @@ local function _calculatePoly(poly, options)
   poly.max = vector2(maxX, maxY)
   poly.min = vector2(minX, minY)
   poly.size = poly.max - poly.min
+  poly.boundingRadius = math.sqrt(poly.size.y * poly.size.y + poly.size.x * poly.size.x) / 2
   poly.center = (poly.max + poly.min) / 2
   poly.area = _calculatePolygonArea(poly.points)
-  if poly.useGrid then
+  if poly.useGrid and not poly.lazyGrid then
     if options.debugGrid then
       poly.gridXPoints = {}
       poly.gridYPoints = {}
       poly.lines = {}
     end
-    poly.gridArea = 0.0
+    _createGrid(poly, options)
+  elseif poly.useGrid then
+    local isInside = {}
+    for y=1, poly.gridDivisions do
+      isInside[y] = {}
+    end
+    poly.grid = isInside
     poly.gridCellWidth = poly.size.x / poly.gridDivisions
     poly.gridCellHeight = poly.size.y / poly.gridDivisions
-    _createGrid(poly, options)
-  else
-    collectgarbage("collect")
   end
 end
 
 
 local function _initDebug(poly, options)
+  if options.debugBlip then poly:addDebugBlip() end
   local debugEnabled = options.debugPoly or options.debugGrid
   if not debugEnabled then
     return
@@ -401,9 +448,10 @@ function PolyZone:new(points, options)
   end
 
   options = options or {}
-  local colors = options.debugColors or {}
   local useGrid = options.useGrid
   if useGrid == nil then useGrid = true end
+  local lazyGrid = options.lazyGrid
+  if lazyGrid == nil then lazyGrid = true end
   local poly = {
     name = tostring(options.name) or nil,
     points = points,
@@ -414,16 +462,15 @@ function PolyZone:new(points, options)
     minZ = tonumber(options.minZ) or nil,
     maxZ = tonumber(options.maxZ) or nil,
     useGrid = useGrid,
+    lazyGrid = lazyGrid,
     gridDivisions = tonumber(options.gridDivisions) or 30,
-    debugColors = {
-      walls = colors.walls or {0, 255, 0},
-      outline = colors.outline or {255, 0, 0},
-      grid = colors.grid or {255, 255, 255}
-    },
+    debugColors = options.debugColors or {},
     debugPoly = options.debugPoly or false,
     debugGrid = options.debugGrid or false,
-    data = options.data or {}
+    data = options.data or {},
+    isPolyZone = true,
   }
+  if poly.debugGrid then poly.lazyGrid = false end
   _calculatePoly(poly, options)
   setmetatable(poly, self)
   self.__index = self
@@ -462,6 +509,20 @@ function PolyZone.getPlayerHeadPosition()
   return GetPedBoneCoords(PlayerPedId(), HeadBone);
 end
 
+function PolyZone.ensureMetatable(zone)
+  if zone.isComboZone then
+    setmetatable(zone, ComboZone)
+  elseif zone.isEntityZone then
+    setmetatable(zone, EntityZone)
+  elseif zone.isBoxZone then
+    setmetatable(zone, BoxZone)
+  elseif zone.isCircleZone then
+    setmetatable(zone, CircleZone)
+  elseif zone.isPolyZone then
+    setmetatable(zone, PolyZone)
+  end
+end
+
 function PolyZone:onPointInOut(getPointCb, onPointInOutCb, waitInMS)
   -- Localize the waitInMS value for performance reasons (default of 500 ms)
   local _waitInMS = 500
@@ -485,6 +546,28 @@ end
 
 function PolyZone:onPlayerInOut(onPointInOutCb, waitInMS)
   self:onPointInOut(PolyZone.getPlayerPosition, onPointInOutCb, waitInMS)
+end
+
+function PolyZone:addEvent(eventName)
+  if self.events == nil then self.events = {} end
+  local internalEventName = eventPrefix .. eventName
+  RegisterNetEvent(internalEventName)
+  self.events[eventName] = AddEventHandler(internalEventName, function (...)
+    if self:isPointInside(PolyZone.getPlayerPosition()) then
+      TriggerEvent(eventName, ...)
+    end
+  end)
+end
+
+function PolyZone:removeEvent(eventName)
+  if self.events and self.events[eventName] then
+    RemoveEventHandler(self.events[eventName])
+    self.events[eventName] = nil
+  end
+end
+
+function PolyZone:addDebugBlip()
+  return addBlip(self.center or self:getBoundingBoxCenter())
 end
 
 function PolyZone:setPaused(paused)

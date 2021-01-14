@@ -62,6 +62,7 @@ end
 
 -- Initialization functions
 local function _initDebug(zone, options)
+  if options.debugBlip then zone:addDebugBlip() end
   if not options.debugPoly then
     return
   end
@@ -86,13 +87,13 @@ function BoxZone:new(center, length, width, options)
   zone.center = center
   zone.length = length
   zone.width = width
-  zone.boundingRadius = math.sqrt(length * length + width * width) / 2
   zone.startPos = center.xy
   zone.offsetPos = vector2(0.0, 0.0)
   zone.offsetRot = options.heading or 0.0
   zone.minScale, zone.maxScale = minScale, maxScale
   zone.minOffset, zone.maxOffset = minOffset, maxOffset
   zone.scaleZ, zone.offsetZ = scaleZ, offsetZ
+  zone.isBoxZone = true
 
   setmetatable(zone, self)
   self.__index = self
