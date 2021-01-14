@@ -182,8 +182,16 @@ function useItem(slot)
 		isWeaponEquiped, weaponSlot = true, slot
 
 		equipWeapon(itemData, data.meta.ammo)
-	else
-		TriggerEvent('crp-inventory:useItem', data.item)
+
+		return
+	end
+
+	if itemData.eventName then
+		isUsingItem = true
+
+		exports['crp-ui']:addQueue(itemData.identifier, 1, true)
+
+		TriggerEvent(itemData.eventName, data)
 	end
 end
 
@@ -231,6 +239,10 @@ AddEventHandler('crp-ui:closedMenu', function(name, data)
 	TriggerServerEvent('crp-inventory:closedInventory', data.first, data.second)
 
 	ClearPedTasks(playerPed)
+end)
+
+AddEventHandler('crp-inventory:usedItem', function()
+	isUsingItem = false
 end)
 
 RegisterCommand('+openInventory', openInventory, false)

@@ -60,6 +60,13 @@
 						iconType: 'fas'
 					},
 					{
+						code: 'email',
+						name: 'Email',
+						color: '#2d8400',
+						icon: 'envelope',
+						iconType: 'fas'
+					},
+					{
 						code: 'camera',
 						name: 'Câmera',
 						color: '#313131',

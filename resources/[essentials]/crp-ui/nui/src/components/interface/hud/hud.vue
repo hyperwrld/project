@@ -42,11 +42,11 @@
 							<div class='character-data'>
 								{ characterData }
 							</div>
-							{ (data.isOnVehicle || data.isCompassOn) &&
+							{ (data.isOnVehicle || data.isWatchOn) &&
 								<transition appear name='fade'>
 									<div class='vehicle-data'>
 										<div class='top'>
-											<span>{ data.time }</span>
+											<span class={ (!data.isOnVehicle) ? 'center' : '' }>{ data.time }</span>
 										</div>
 										{ data.isOnVehicle &&
 											<div class='middle'>

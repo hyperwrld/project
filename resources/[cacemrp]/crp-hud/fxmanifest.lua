@@ -3,9 +3,7 @@ fx_version 'cerulean'
 game 'gta5'
 
 dependecies {
-	'crp-base',
-	'crp-ui',
-	'crp-lib'
+	'crp-base', 'crp-ui', 'crp-lib'
 }
 
 client_scripts {

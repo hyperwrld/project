@@ -98,6 +98,11 @@
 
 		.top > span {
 			font-size: 0.7em;
+
+			&.center {
+				width: 100px;
+    			text-align: center;
+			}
 		}
 
 		.bottom {

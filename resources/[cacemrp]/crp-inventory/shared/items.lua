@@ -193,6 +193,16 @@ itemsList = {
 		weight = 0,
 		decayRate = 0.0,
 		canStack = true
+	},
+	{
+		identifier = 'CRP_RELOGIO',
+		name = 'Relógio',
+		description = '',
+		image = 'crp-relogio.png',
+		weight = 0,
+		decayRate = 0.0,
+		canStack = false,
+		eventName = 'crp-hud:usedWatch'
 	}
 }
 
