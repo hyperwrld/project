@@ -28,6 +28,8 @@ function openApp(appName, data, hasFocus, hasCursor, canDisable)
 	})
 end
 
+exports('openApp', openApp)
+
 function closeApp(appName)
 	isAppOpen = false
 
@@ -39,11 +41,15 @@ function closeApp(appName)
 	})
 end
 
+exports('closeApp', closeApp)
+
 function setAppData(appName, data)
 	SendNUIMessage({
 		app = appName, event = 'setData', data = data
 	})
 end
+
+exports('setAppData', setAppData)
 
 RegisterNUICallback('closeMenu', function(data, cb)
 	SetNuiFocus(false, false)
@@ -68,6 +74,9 @@ function RegisterUIEvent(name)
 	end
 end
 
+exports('SendUIMessage', SendNUIMessage)
+exports('RegisterUIEvent', RegisterUIEvent)
+
 Citizen.CreateThread(function()
 	TriggerEvent('crp-ui:isReady')
 end)
@@ -82,10 +91,3 @@ AddEventHandler('onResourceStop', function(resourceName)
 	SetNuiFocus(false, false)
 	SetNuiFocusKeepInput(false)
 end)
-
-exports('openApp', openApp)
-exports('closeApp', closeApp)
-exports('setAppData', setAppData)
-
-exports('RegisterUIEvent', RegisterUIEvent)
-exports('SendUIMessage', SendNUIMessage)
