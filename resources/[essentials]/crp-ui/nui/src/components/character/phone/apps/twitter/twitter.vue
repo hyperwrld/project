@@ -73,6 +73,7 @@
 								<span>Não foi encontrado nenhum tweet.</span>
 							</fragment>
 						}
+						<font-awesome-icon class='button' icon={ ['fas', 'feather-alt'] }/>
 					</div>
 				</div>
 			);

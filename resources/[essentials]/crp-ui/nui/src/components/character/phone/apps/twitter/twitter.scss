@@ -42,6 +42,14 @@
             display: none;
 		}
 
+		.button {
+			position: absolute;
+			right: 5%;
+			bottom: 2%;
+
+			z-index: 999;
+        }
+
 		&.empty {
 			display: flex;
 			flex-direction: column;
