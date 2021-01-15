@@ -77,7 +77,7 @@
 										</div>
 									)
 								})}
-								</fragment>
+							</fragment>
 							:
 							<fragment>
 								<font-awesome-icon icon={ ['fas', 'sad-tear'] }/>
