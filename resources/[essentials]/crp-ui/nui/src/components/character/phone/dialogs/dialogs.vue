@@ -9,11 +9,11 @@
 		name: 'dialogs',
 		data() {
 			return {
-				state: true, loaderState: true, loaderClass: 'loading', errorsList: []
+				state: true, loaderState: false, loaderClass: 'loading', errorsList: []
 			}
 		},
 		props: {
-			attachDiv: String, title: String, choices: Array,
+			attach: String, title: String, choices: Array,
 			sendText: String, nuiType: String, data: Object
 		},
 		methods: {
@@ -57,7 +57,7 @@
 		render(h) {
 			return (
 				<transition appear name='fade'>
-					<v-dialog v-model={ this.state } persistent max-width='290' attach={ this.attachDiv } hide-overlay dark>
+					<v-dialog v-model={ this.state } persistent max-width='290' attach={ this.attach } hide-overlay dark>
 						<v-card>
 							{ this.loaderState ?
 								<div class={ `loader ${ this.loaderClass }` }>
@@ -84,8 +84,8 @@
 										</v-card-text>
 									}
 									<v-card-actions>
-										<v-btn color='red darken-1' text>Voltar</v-btn>
-										<v-btn color='green darken-1' text>{ this.sendText }</v-btn>
+										<v-btn color='red darken-1' text onClick={ this.cancelDialog }>Voltar</v-btn>
+										<v-btn color='green darken-1' text onClick={ this.submitDialog }>{ this.sendText }</v-btn>
 									</v-card-actions>
 
 									{ (this.choices && this.errorsList.length > 0) &&

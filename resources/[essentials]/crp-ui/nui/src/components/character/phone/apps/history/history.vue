@@ -39,7 +39,7 @@
 			},
 			sendMessage(contactNumber) {
 				dialogs.createDialog({
-					attachDiv: '.list', title: 'Enviar Mensagem',
+					attach: '.list', title: 'Enviar Mensagem',
 					choices: [
 						{ key: 'message', placeholder: 'Mensagem', errorText: 'Insira uma mensagem para mandar a um número.' }
 					],
@@ -54,7 +54,7 @@
 			},
 			addContact: function(contactNumber) {
 				dialogs.createDialog({
-					attachDiv: '.list', title: 'Adicionar contato',
+					attach: '.list', title: 'Adicionar contato',
 					choices: [
 						{ key: 'name', type: 'text', min: 1, max: 20, placeholder: 'Nome', errorText: 'Escolha um nome com o máximo de 20 caracteres.' }
 					],
