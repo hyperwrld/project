@@ -24,7 +24,7 @@
 			})
 		},
 		methods: {
-			filterItems(appName) {
+			filterItems() {
 				const search = this.searchInput.toLowerCase().trim();
 
 				if (!search) {

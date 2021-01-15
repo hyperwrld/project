@@ -1,5 +1,5 @@
 const state = () => ({
-	currentNumber: undefined, history: [], conversations: [], contacts: [], tweets: [], adverts: []
+	currentNumber: undefined, history: [], messages: [], contacts: [], tweets: [], adverts: []
 })
 
 const getters = {
@@ -11,6 +11,16 @@ const getters = {
 		}
 
         return state.history;
+	},
+	getMessages: state => {
+		for (let i = 0; i < state.messages.length; i++) {
+			let name = state.currentNumber != state.messages[i].sender ? state.messages[i].sender : state.messages[i].receiver;
+			let contact = state.contacts.find(element => element.number === name);
+
+			state.messages[i].name = contact ? contact.name : name;
+		}
+
+		return state.messages;
 	}
 }
 
