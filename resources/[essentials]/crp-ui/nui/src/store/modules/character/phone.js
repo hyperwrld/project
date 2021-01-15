@@ -21,6 +21,11 @@ const getters = {
 		}
 
 		return state.messages;
+	},
+	getTweets: state => {
+		return state.tweets.sort(function(a, b) {
+			return b.id - a.id;
+		});
 	}
 }
 

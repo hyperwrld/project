@@ -17,15 +17,12 @@ export const processMessage = (message) => {
 }
 
 export const doesImageExist = (imageUrl) => {
-	var image = new Image();
+	var http = new XMLHttpRequest();
 
-	image.src = imageUrl;
+	http.open('HEAD', imageUrl, false);
+    http.send();
 
-    if (image.width == 0) {
-       	return false;
-    } else {
-       	return true;
-    }
+	return http.status != 404;
 };
 
 export const send = async (event, data = {}) => {

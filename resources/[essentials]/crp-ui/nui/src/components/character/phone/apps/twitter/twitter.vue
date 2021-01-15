@@ -7,11 +7,15 @@
 	import { fragment, convertTime, processMessage } from './../../../../../utils/lib.js';
 
 	import dialogs from './../../dialogs/dialogs.js';
+	import images from './../../images/images.vue';
 
 	library.add(faSearch, faEnvelope, faUser, faSadTear);
 
 	export default {
 		name: 'twitter',
+		components: {
+			images
+		},
 		computed: {
 			...mapGetters('phone', {
 				tweets: 'getTweets'
@@ -51,7 +55,7 @@
 											<div class='content'>
 												<div domPropsInnerHTML={ message }/>
 												{ imgs.length > 0 &&
-													<images imgs={ imgs }/>
+													<images images={ imgs }/>
 												}
 											</div>
 											<div class='bottom'>
