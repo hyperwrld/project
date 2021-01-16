@@ -2,14 +2,15 @@
 	import { mapGetters } from 'vuex';
 
 	import { library } from '@fortawesome/fontawesome-svg-core';
-	import { faUser, faSearch, faEnvelope, faSadTear } from '@fortawesome/free-solid-svg-icons';
+	import { faFeatherAlt, faReply, faRetweet, faSadTear } from '@fortawesome/free-solid-svg-icons';
+	import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 
 	import { fragment, convertTime, processMessage } from './../../../../../utils/lib.js';
 
 	import dialogs from './../../dialogs/dialogs.js';
 	import images from './../../images/images.vue';
 
-	library.add(faSearch, faEnvelope, faUser, faSadTear);
+	library.add(faTwitter, faFeatherAlt, faSadTear, faRetweet, faReply);
 
 	export default {
 		name: 'twitter',
@@ -22,7 +23,30 @@
 			})
 		},
 		methods: {
-
+			sendTweet() {
+				dialogs.createDialog({
+					attach: '.list', title: 'Envie um tweet',
+					choices: [
+						{ key: 'message', placeholder: 'Mensagem', errorText: 'Escolha uma mensagem para colocar no seu tweet.' }
+					],
+					sendText: 'Enviar', nuiType: 'sendTweet'
+				});
+			},
+			replyTweet(name) {
+				dialogs.createDialog({
+					attach: '.tweets-list', title: 'Envie um tweet',
+					choices: [
+						{ key: 'message', value: '@' + name + ' ', placeholder: 'Mensagem', errorText: 'Escolha uma mensagem para colocar no seu tweet.' }
+					],
+					sendText: 'Enviar', nuiType: 'sendTweet'
+				});
+			},
+			sendRetweet(tweetId) {
+				dialogs.createDialog({
+					attach: '.tweets-list', title: 'Tens a certeza que queres retweetar?',
+					sendText: 'Retweetar', nuiType: 'sendRetweet', data: { tweetId: tweetId }
+				});
+			}
 		},
 		render(h) {
 			return (
@@ -59,8 +83,8 @@
 												}
 											</div>
 											<div class='bottom'>
-												<font-awesome-icon icon={ ['fas', 'reply'] } onClick={ (event) => this.sendTweet(tweet.name, event) }/>
-												<font-awesome-icon icon={ ['fas', 'retweet'] } onClick={ (event) => this.sendRetweet(tweet.id, event) }/>
+												<font-awesome-icon icon={ ['fas', 'reply'] } onClick={ () => this.replyTweet(tweet.name) }/>
+												<font-awesome-icon icon={ ['fas', 'retweet'] } onClick={ () => this.sendRetweet(tweet.id) }/>
 												<div>{ convertTime(tweet.time) }</div>
 											</div>
 										</div>
@@ -73,7 +97,7 @@
 								<span>Não foi encontrado nenhum tweet.</span>
 							</fragment>
 						}
-						<font-awesome-icon class='button' icon={ ['fas', 'feather-alt'] }/>
+						<font-awesome-icon class='button' icon={ ['fas', 'feather-alt'] } onClick={ this.sendTweet }/>
 					</div>
 				</div>
 			);
