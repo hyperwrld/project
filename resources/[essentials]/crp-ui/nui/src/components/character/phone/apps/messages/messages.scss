@@ -18,17 +18,23 @@
 			display: flex;
 			align-items: center;
 
-			input {
-				outline: none;
-				width: 90%;
+            input {
+				font-family: 'Quantico', sans-serif;
+
+                outline: none;
+                width: 90%;
 				padding: 0 1%;
+
 				color: black;
 				font-weight: bold;
 
-				&::placeholder, &:focus {
-					color: black;
-				}
-			}
+				background-color: transparent;
+    			border: none;
+
+                &::placeholder, &:focus {
+                    color: black;
+                }
+            }
 		}
 	}
 
