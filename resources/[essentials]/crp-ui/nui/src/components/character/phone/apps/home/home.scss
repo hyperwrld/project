@@ -1,5 +1,7 @@
 html, body {
     .home {
+		font-family: 'Quantico', sans-serif;
+
         display: flex;
         flex-flow: wrap;
         align-content: flex-start;
@@ -29,7 +31,7 @@ html, body {
 		position: absolute;
 		width: auto;
 
-		padding: 4.5px 4.5px;
+		padding: 1px 4.5px;
 		font-size: 0.65rem;
 		line-height: normal;
 

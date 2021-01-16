@@ -25,6 +25,9 @@
 				color: black;
 				font-weight: bold;
 
+				background-color: transparent;
+    			border: none;
+
                 &::placeholder, &:focus {
                     color: black;
                 }
