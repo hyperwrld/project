@@ -15,18 +15,13 @@ import accessories from './../components/character/skincreator/modules/accessori
 import inventory from './../components/character/inventory/inventory.vue';
 import actionbar from './../components/character/actionbar/actionbar.vue';
 
-import phone from './../components/phone/phone.vue';
-import home from './../components/phone/home/home.vue';
-import history from './../components/phone/history/history.vue';
-import contacts from './../components/phone/contacts/contacts.vue';
-import messages from './../components/phone/messages/messages.vue';
-import message from './../components/phone/messages/message/message.vue';
-import twitter from './../components/phone/twitter/twitter.vue';
-import adverts from './../components/phone/adverts/adverts.vue';
-
-import menu from './../components/menu/menu.vue';
-
-import vehicleshop from './../components/vehicleshop/vehicleshop.vue';
+import phone from './../components/character/phone/phone.vue';
+import home from './../components/character/phone/apps/home/home.vue';
+import history from './../components/character/phone/apps/history/history.vue';
+import messages from './../components/character/phone/apps/messages/messages.vue';
+import contacts from './../components/character/phone/apps/contacts/contacts.vue';
+import twitter from './../components/character/phone/apps/twitter/twitter.vue';
+import adverts from './../components/character/phone/apps/adverts/adverts.vue';
 
 Vue.use(VueRouter);
 
@@ -36,8 +31,7 @@ export default new VueRouter({
 			path: '/selection', name: 'selection', component: selection
 		},
 		{
-			path: '/skincreator', name: 'skincreator', component: skincreator,
-			children: [
+			path: '/skincreator', name: 'skincreator', component: skincreator, children: [
 				{
 					path: 'ped', name: 'ped', component: ped
 				},
@@ -66,6 +60,28 @@ export default new VueRouter({
 		},
 		{
 			path: '/actionbar', name: 'actionbar', component: actionbar
+		},
+		{
+			path: '/phone', name: 'phone', component: phone, children: [
+				{
+					path: '', name: 'home', component: home
+				},
+				{
+					path: 'history', name: 'history', component: history
+				},
+				{
+					path: 'messages', name: 'messages', component: messages
+				},
+				{
+					path: 'contacts', name: 'contacts', component: contacts
+				},
+				{
+					path: 'twitter', name: 'twitter', component: twitter
+				},
+				{
+					path: 'adverts', name: 'adverts', component: adverts
+				}
+			]
 		}
 	]
 })

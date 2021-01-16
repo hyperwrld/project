@@ -29,6 +29,9 @@ const getters = {
 		return state.tweets.sort(function(a, b) {
 			return b.id - a.id;
 		});
+	},
+	getAdverts: state => {
+		return state.adverts.sort((a, b) => b.id - a.id);
 	}
 }
 

@@ -94,7 +94,7 @@
 					{ this.apps.map((app, index) => {
 						return (
 							<div class='app' style={{ backgroundColor: app.color }} onClick={ () => this.openApp(app.code) }>
-								<v-tooltip top content-class='tooltip' scopedSlots={{ activator: ({on}) => <font-awesome-icon {...{ on }} icon={ [app.iconType, app.icon ] }/> }}>
+								<v-tooltip top content-class='tooltip' nudge-top={ 2 } scopedSlots={{ activator: ({on}) => <font-awesome-icon {...{ on }} icon={ [app.iconType, app.icon ] }/> }}>
 									<span>{ app.name }</span>
 								</v-tooltip>
 							</div>
