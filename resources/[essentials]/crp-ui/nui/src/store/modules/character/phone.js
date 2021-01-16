@@ -22,6 +22,9 @@ const getters = {
 
 		return state.messages;
 	},
+	getContacts: state => {
+		return state.contacts.sort((a, b) => a.name.localeCompare(b.name));
+	},
 	getTweets: state => {
 		return state.tweets.sort(function(a, b) {
 			return b.id - a.id;

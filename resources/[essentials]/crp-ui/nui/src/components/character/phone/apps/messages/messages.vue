@@ -47,6 +47,8 @@
 			}
 		},
 		render(h) {
+			const isNotEmpty = this.filterItems().length > 0 ? true : false;
+
 			return (
 				<div class='messages'>
 					<div class='top'>
@@ -56,8 +58,8 @@
 						</div>
 						<font-awesome-icon icon={ ['fas', 'envelope'] }/>
 					</div>
-					<div class={`list ${ this.filterItems().length > 0 ? '' : 'empty'}`}>
-						{ this.filterItems().length > 0 ?
+					<div class={`list ${ isNotEmpty ? '' : 'empty'}`}>
+						{ isNotEmpty ?
 							<fragment>
 								{ this.filterItems().map((call, index) => {
 									return (

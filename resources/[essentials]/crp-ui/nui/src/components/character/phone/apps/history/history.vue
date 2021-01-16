@@ -69,6 +69,8 @@
 			}
 		},
 		render(h) {
+			const isNotEmpty = this.filterItems().length > 0 ? true : false;
+
 			return (
 				<div class='history'>
 					<div class='top'>
@@ -78,8 +80,8 @@
 						</div>
 						<font-awesome-icon icon={ ['fas', 'phone-alt'] }/>
 					</div>
-					<div class={`list ${ this.filterItems().length > 0 ? '' : 'empty'}`}>
-						{ this.filterItems().length > 0 ?
+					<div class={`list ${ isNotEmpty ? '' : 'empty'}`}>
+						{ isNotEmpty ?
 							<v-expansion-panels flat accordion>
 								{ this.filterItems().map((call, index) => {
 									return (
