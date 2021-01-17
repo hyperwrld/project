@@ -1,9 +1,14 @@
 <script>
 	import { mapGetters } from 'vuex';
 
+	import { library } from '@fortawesome/fontawesome-svg-core';
+	import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+
 	import { send } from './../../../utils/lib';
 
 	import dialogs from './dialogs/dialogs.js';
+
+	library.add(faCircleNotch);
 
 	export default {
 		name: 'selection',
@@ -19,21 +24,21 @@
 			})
 		},
 		methods: {
-			formatDate: function(date) {
+			formatDate(date) {
                 if (!date) return null
 
                 const [year, month, day] = date.split('-')
 
                 return `${day}/${month}/${year}`
             },
-			changeCurrentItem: function(futureIndex) {
+			changeCurrentItem(futureIndex) {
 				if (this.isLoading || this.isUsingMenu || this.currentItem == futureIndex) return;
 
 				this.currentItem = futureIndex;
 
 				send('changedCharacter', this.charactersData[this.currentItem]);
 			},
-			selectCharacter: function() {
+			selectCharacter() {
 				if (this.isLoading || this.isUsingMenu) return;
 
 				this.isLoading = true;
@@ -46,7 +51,7 @@
 					}, 5000);
 				});
 			},
-			deleteCharacter: function() {
+			deleteCharacter() {
 				if (this.isLoading || this.isUsingMenu) return;
 
 				this.isUsingMenu = true;
@@ -61,7 +66,7 @@
 					this.isUsingMenu = false;
 				})
 			},
-			createCharacter: function() {
+			createCharacter() {
 				if (this.isLoading || this.isUsingMenu) return;
 
 				this.isUsingMenu = true;
@@ -86,7 +91,7 @@
 					this.isUsingMenu = false;
 				})
 			},
-            handleDisconnect: function() {
+            handleDisconnect() {
 				if (this.isLoading || this.isUsingMenu) return;
 
                 send('disconnectUser');
@@ -118,7 +123,7 @@
 							<div class='buttons'>
 								<button class={ this.isLoading ? 'loading' : '' } onClick={ () => this.selectCharacter() }>
 									Selecionar { this.isLoading &&
-										<i class='fa fa-circle-o-notch fa-spin'/>
+										<font-awesome-icon icon='circle-notch' class='fa-spin'/>
 									}
 								</button>
 								<button onClick={ () => this.deleteCharacter() }>Apagar</button>

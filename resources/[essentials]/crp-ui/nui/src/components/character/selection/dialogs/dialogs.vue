@@ -1,23 +1,23 @@
 <script>
 	import { mapGetters } from 'vuex';
 
+	import { library } from '@fortawesome/fontawesome-svg-core';
+	import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
+
 	import { send } from './../../../../utils/lib.js';
+
+	library.add(faCircleNotch);
 
 	export default {
 		name: 'dialogs',
 		props: {
-			title: String,
-			type: Boolean,
-			choices: Array,
-			sendButton: String,
-			nuiType: String,
-			additionalData: Object
+			title: String, type: Boolean, choices: Array, sendButton: String, nuiType: String, additionalData: Object
 		},
 		methods: {
-			closeDialog: function() {
+			closeDialog() {
 				this.$emit('cancel');
 			},
-			submitDialog: function() {
+			submitDialog() {
 				if (this.isLoading) return;
 
 				let choicesData = typeof(this.additionalData) == 'object' ? this.additionalData : {}, errorCount = 0;
@@ -85,7 +85,7 @@
 							<button onClick={ () => this.closeDialog() }>Voltar</button>
 							<button class={ this.isLoading ? 'loading' : '' } onClick={ () => this.submitDialog() }>
 								{ this.sendButton } { this.isLoading &&
-									<i class='fa fa-circle-o-notch fa-spin'/>
+									<font-awesome-icon icon='circle-notch' class='fa-spin'/>
 								}
 							</button>
 						</div>
