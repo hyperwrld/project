@@ -7,7 +7,7 @@
 	text-align: center;
 	margin-top: 2%;
 
-	border-top: solid lightgrey 0.5px;
+	border-top: solid ivory 0.5px;
 	padding-top: 5px;
 	pointer-events: all;
 
@@ -35,6 +35,7 @@
 			flex-direction: column;
 			justify-content: center;
 			align-items: center;
+			box-sizing: border-box;
 
 			z-index: 99;
 
@@ -52,6 +53,7 @@
 			display: flex;
 			justify-content: center;
 			align-items: center;
+			box-sizing: border-box;
 
 			width: 100%;
 			margin-top: 2%;

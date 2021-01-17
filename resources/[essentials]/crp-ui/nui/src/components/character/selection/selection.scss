@@ -1,5 +1,5 @@
 .selection {
-	font-family: Quantico, sans-serif;
+	font-family: 'Quantico', sans-serif;
 	position: absolute;
 	animation-duration: 1.0s;
 
@@ -27,7 +27,6 @@
 			flex-direction: column;
 			justify-content: space-evenly;
 
-			width: 100%;
 			padding: 10px;
 			background-color: rgba(9, 10, 14, 1.0);
 			border-top: 2px solid rgba(22, 25, 35, 0.7);
@@ -80,8 +79,11 @@
 		gap: 5px;
 
 		button {
+			font-family: 'Quantico', sans-serif;
+
 			font-size: 0.6em;
 			outline: none;
+			color: ivory;
 
 			border: 2px solid rgba(255, 255, 255, 1.0);
 			background-color: rgba(9, 10, 14, 1.0);
