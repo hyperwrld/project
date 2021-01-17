@@ -74,7 +74,7 @@
 													{ choice.options.map((option, index) => {
 														return <option value={ option.value }>{ option.text }</option>
 													})}
-												</select> : <input v-model={ choice.value } type={ choice.type } maxlength={ choice.max }/>
+												</select> : <input v-model={ choice.value } type={ choice.type } maxlength={ choice.max } max='2000-01-01'/>
 											}
 										</div>
 									)

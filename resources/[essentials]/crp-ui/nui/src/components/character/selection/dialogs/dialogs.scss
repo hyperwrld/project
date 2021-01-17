@@ -19,23 +19,25 @@
     text-transform: uppercase;
 
 	h3 {
-		color: rgba(255, 255, 240, 0.5);
 		font-size: 3vh;
+		text-align: center;
+		color: rgba(255, 255, 240, 0.5);
 	}
 
 	.inputs-container {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
-		grid-template-rows: repeat(2, 0.5fr);
+		grid-template-rows: repeat(2, 50px);
 		gap: 15px;
 
 		div {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
+			display: grid;
+			grid-template-rows: auto 1fr;
+			grid-template-columns: 1fr;
+
 			padding: 0 3.5vw;
 			font-size: 1vh;
+			text-align: center;
 
 			&.error {
 				background-color: transparent !important;
@@ -47,11 +49,10 @@
 			}
 
 			input, select {
+				font-family: 'Quantico', sans-serif;
+
 				border: 2px solid rgba(255, 255, 255, 1.0);
 				background-color: rgba(22, 25, 35, 0.4);
-
-				width: 100%;
-				height: 1.6vw;
 				font-size: 1.3vh;
 
 				outline: none;
@@ -79,8 +80,11 @@
 		height: 4vh;
 
 		button {
+			font-family: 'Quantico', sans-serif;
+
 			border: 2px solid rgba(255, 255, 255, 1.0);
 			background-color: rgba(22, 25, 35, 0.4);
+			color: ivory;
 
 			font-size: 1.3vh;
 			outline: none;

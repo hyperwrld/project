@@ -12,9 +12,6 @@
 
 	export default {
 		name: 'adverts',
-		components: {
-			images
-		},
 		data() {
 			return {
 				searchInput: ''
