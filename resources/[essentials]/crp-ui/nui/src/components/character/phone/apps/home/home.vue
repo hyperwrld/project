@@ -47,7 +47,7 @@
 					},
 					{
 						code: 'adverts',
-						name: 'Páginas amarelas',
+						name: 'Anúncios',
 						color: '#ffd300',
 						icon: 'ad',
 						iconType: 'fas'
