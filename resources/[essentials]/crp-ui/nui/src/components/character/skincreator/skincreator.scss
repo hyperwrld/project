@@ -28,12 +28,15 @@
 		box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.3);
 
 		button {
+			font-family: 'Quantico', sans-serif;
+
 			background-color: rgba(0, 0, 0, 0.5);
 			color: rgba(255, 255, 255, 0.75);
 			border-radius: 3px;
 
 			box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 			text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+			border: none;
 
 			text-transform: uppercase;
 			outline: none;
@@ -130,15 +133,22 @@
 
 					.controls {
 						display: grid;
-						grid-template-columns: 4fr 3fr 4fr;
+						grid-template-columns: 0.5fr 1fr 0.5fr;
 						gap: 12px;
 
 						input {
-							width: 100%;
+							font-family: 'Quantico', sans-serif;
+
+							max-width: 50px;
+							margin: auto;
+
 							font-size: 14px;
 							text-align: center;
 							outline: none;
 							color: rgba(255, 255, 255, 0.75);
+
+							background: transparent;
+    						border: none;
 
 							&::-webkit-outer-spin-button, &::-webkit-inner-spin-button {
 								-webkit-appearance: none;
@@ -201,13 +211,17 @@
 					}
 
 					button {
+						font-family: 'Quantico', sans-serif;
+
 						padding: 4px 0;
 						background-color: #0260b8;
 						border-radius: 3px;
+						border: none;
 
 						box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
 						text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
 						outline: none;
+						color: white;
 
 						&.active {
 							background-color: #1d84e6;
@@ -279,7 +293,6 @@
 			.option {
 				display: grid;
 				grid-template-rows: auto;
-				width: 100%;
 
 				padding: 5px 12px;
 				border-radius: 3px;

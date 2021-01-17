@@ -26,15 +26,19 @@
 
 <style scoped lang='scss'>
 	.dialog {
+		font-family: 'Quantico', sans-serif;
+
 		position: absolute;
 		top: 50%;
 		left: 50%;
+
 		transform: translate(-50%, -50%);
 		width: 80%;
 
 		color: rgba(255, 255, 255, 0.75);
 		background-color: #232323;
 		box-shadow: 0px 0px 5px 0px black;
+
 		border-radius: 2.5px;
 		padding: 5px;
 		border: 0.5px solid rgba(255, 255, 255, 0.75);
@@ -47,12 +51,18 @@
 			margin-top: 10px;
 
 			button {
+				font-family: 'Quantico', sans-serif;
+
 				text-transform: uppercase;
 				float: right;
 				border-radius: 2.5px;
+
 				padding: 1px 5px;
 				font-size: 0.9em;
+				color: ivory;
+
 				outline: none;
+				border: none;
 
 				&.back {
 					float: left;

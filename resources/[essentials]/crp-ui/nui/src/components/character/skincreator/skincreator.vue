@@ -33,7 +33,7 @@
 			})
 		},
 		methods: {
-            handleSwitchCategory: function(appName) {
+            handleSwitchCategory(appName) {
 				this.currentCategory = appName;
 
 				this.$router.push('/skincreator/' + appName).catch(error => {
@@ -42,16 +42,16 @@
 					}
 				});
 			},
-			modifyCameraValue: function(index) {
+			modifyCameraValue(index) {
 				send('modifyCameraValue', { type: camera[index].id, value: Number(camera[index].value) });
 			},
-			toggleClothing: function(type) {
+			toggleClothing(type) {
 				send('toggleClothing', type);
 			},
-			toggleAnimation: function() {
+			toggleAnimation() {
 				send('toggleAnimation');
 			},
-			openDialog: function(event) {
+			openDialog(event) {
 				if (event.keyCode == 27 && !this.isDialogOpen) {
 					this.isDialogOpen = true;
 
