@@ -80,7 +80,7 @@ function toggleDesync(state, type, hour, minute)
 
 	Citizen.CreateThread(function()
 		while desyncState do
-			Citizen.Wait(0)
+			Citizen.Wait(100)
 
 			ClearOverrideWeather()
 			ClearWeatherTypePersist()
