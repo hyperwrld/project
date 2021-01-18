@@ -6,16 +6,16 @@ dependecies {
 	'crp-ui', 'crp-lib'
 }
 
-shared_scripts {
-	'@crp-lib/shared/util.lua',
-	'shared.lua'
-}
-
 client_scripts {
 	'@crp-lib/client/main.lua',
 	'@crp-lib/client/rpc.lua',
 	'client/main.lua',
     'client/modules/*.lua'
+}
+
+shared_scripts {
+	'@crp-lib/shared/util.lua',
+	'shared.lua'
 }
 
 server_scripts {

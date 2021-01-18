@@ -53,6 +53,8 @@ function CRP.DB:CreateCharacter(source, data)
 		return false
 	end
 
+	addLicenses(result.insertId)
+
 	return true, {
 		id = result.insertId,
 		money = 500, bank = 5000
