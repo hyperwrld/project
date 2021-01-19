@@ -4,10 +4,14 @@ game 'gta5'
 
 client_scripts {
 	'client/main.lua',
-	'client/*.lua',
-  	'client/creation/*.lua'
+	'client/BoxZone.lua',
+  	'client/EntityZone.lua',
+  	'client/CircleZone.lua',
+	'client/ComboZone.lua',
+	'client/creation/*.lua'
 }
 
 server_scripts {
-	'server/*.lua'
+  'server/creation.lua',
+  'server/main.lua'
 }

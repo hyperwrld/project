@@ -115,3 +115,8 @@ function GetClosestPlayer()
 
     return closestPlayer, closestDistance
 end
+
+RegisterNetEvent('crp-lib:playSound')
+AddEventHandler('crp-lib:playSound', function(soundName, volume)
+    exports['crp-lib']:triggerSound(soundName, volume)
+end)

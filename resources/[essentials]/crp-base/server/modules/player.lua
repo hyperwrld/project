@@ -62,9 +62,11 @@ function CRP.Player:CreateCharacter(source, data)
 	end
 
 	self.getJob = function()
-		return {
-			name = self.job, grade = self.grade
-		}
+		return self.job
+	end
+
+	self.getJobGrade = function()
+		return self.grade
 	end
 
 	self.setJob = function(jobName, grade)

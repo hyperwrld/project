@@ -34,6 +34,12 @@ function setCustomAlert(action, id, text, type)
 	})
 end
 
+function triggerSound(soundName, volume)
+	SendNUIMessage({
+		app = 'sound', event = 'playSound', data = { soundName = soundName, volume = volume }
+	})
+end
+
 exports('updateMinimap', updateMinimap)
 exports('setHudHideState', setHudHideState)
 exports('setData', setData)
@@ -41,3 +47,5 @@ exports('setData', setData)
 exports('toggleInteraction', toggleInteraction)
 exports('setAlert', setAlert)
 exports('setCustomAlert', setCustomAlert)
+
+exports('triggerSound', triggerSound)

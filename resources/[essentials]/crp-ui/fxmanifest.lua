@@ -16,6 +16,6 @@ files {
 	'nui/dist/js/*.js',
     'nui/dist/css/*.css',
 
-	'nui/dist/img/*.png',
-    'nui/dist/img/*.svg'
+	'nui/dist/img/*.*',
+	'nui/dist/media/*.ogg'
 }

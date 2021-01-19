@@ -29,15 +29,23 @@
             this.listener = window.addEventListener('message', (event) => {
 				const info = event.data;
 
-				if (info.event != undefined) {
-					this.$store.dispatch(info.app + '/' + info.event, info.data);
-				}
+				if (info.app == 'sound') {
+					let audio = new Audio(require('./assets/sounds/' + info.data.soundName + '.ogg'));
 
-				if (info.state != undefined) {
-					if (!info.state) {
-						this.closeMenu(info.app);
-					} else {
-						this.changeRouter({ path: info.app });
+					audio.volume = info.data.volume;
+
+   					audio.play();
+				} else {
+					if (info.event != undefined) {
+						this.$store.dispatch(info.app + '/' + info.event, info.data);
+					}
+
+					if (info.state != undefined) {
+						if (!info.state) {
+							this.closeMenu(info.app);
+						} else {
+							this.changeRouter({ path: info.app });
+						}
 					}
 				}
 			});
