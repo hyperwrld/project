@@ -1,235 +1,75 @@
-local doorList = {
-    -- ! Los Santos Station
+local doors, isInsideZone, currentDoorId = {}, false, nil
 
-    [1] = { name = 'v_ilev_ph_gendoor004', coords = vector3(449.6, -986.4, 30.6),  authorizedJob = 'police', locked = true, x = -1.2, y = 0.0, z = -0.1 },
-    [2] = { name = 'v_ilev_ph_gendoor002', coords = vector3(447.2, -980.6, 30.6),  authorizedJob = 'police', locked = true, x = -1.2, y = 0.0, z = -0.1 },
-    [3] = { name = 'v_ilev_arm_secdoor',   coords = vector3(452.6, -982.7, 30.6),  authorizedJob = 'police', locked = true, x = -1.2, y = 0.0, z = -0.1 },
-    [4] = { name = 'v_ilev_arm_secdoor',   coords = vector3(461.2, -985.3, 30.8),  authorizedJob = 'police', locked = true, x = -1.2, y = 0.0, z = -0.1 },
-    [5] = { name = 'v_ilev_gtdoor02',      coords = vector3(464.3, -984.6, 43.8),  authorizedJob = 'police', locked = true, x =  1.2, y = 0.0, z =  0.1 },
-    [6] = { name = 'v_ilev_ph_gendoor005', coords = vector3(443.9, -989.0, 30.6),  authorizedJob = 'police', locked = true, x = -1.2, y = 0.0, z = -0.1 },
-    [7] = { name = 'v_ilev_ph_gendoor005', coords = vector3(445.3, -988.7, 30.6),  authorizedJob = 'police', locked = true, x = -1.2, y = 0.0, z = -0.1 },
-
-    -- ! Paleto Bay Station
-
-    [8]  = { name = 'v_ilev_bk_door2',      coords = vector3(-442.8, 6010.9, 31.8), authorizedJob = 'police', locked = true, x = -1.2, y = 0.0, z = -0.1 },
-    [9]  = { name = 'v_ilev_bk_door2',      coords = vector3(-440.9, 6012.7, 31.8), authorizedJob = 'police', locked = true, x = -1.2, y = 0.0, z = -0.1 },
-    [10] = { name = 'v_ilev_cf_officedoor', coords = vector3(-437.6, 6008.3, 31.8), authorizedJob = 'police', locked = true, x = -1.2, y = 0.0, z = -0.1 },
-    [11] = { name = 'v_ilev_cf_officedoor', coords = vector3(-441.0, 6004.9, 31.8), authorizedJob = 'police', locked = true, x = -1.2, y = 0.0, z = -0.1 },
-    [12] = { name = 'v_ilev_rc_door2',      coords = vector3(-449.7, 6015.4, 31.8), authorizedJob = 'police', locked = true, x =  1.2, y = 0.0, z =  0.1 },
-    [13] = { name = 'v_ilev_cd_entrydoor',  coords = vector3(-454.5, 6011.2, 31.8), authorizedJob = 'police', locked = true, x =  1.2, y = 0.0, z =  0.1 },
-    [14] = { name = 'v_ilev_ss_door8',      coords = vector3(-447.7, 6006.7, 31.8), authorizedJob = 'police', locked = true, x = -1.2, y = 0.0, z = -0.1 },
-    [15] = { name = 'v_ilev_ss_door7',      coords = vector3(-449.5, 6008.5, 31.8), authorizedJob = 'police', locked = true, x = -1.2, y = 0.0, z = -0.1 },
-    [16] = { name = 'v_ilev_gc_door01',     coords = vector3(-450.9, 6006.0, 31.9), authorizedJob = 'police', locked = true, x = -1.2, y = 0.0, z = -0.1 },
-    [17] = { name = 'v_ilev_gc_door01',     coords = vector3(-447.2, 6002.3, 31.8), authorizedJob = 'police', locked = true, x = -1.2, y = 0.0, z = -0.1 },
-    [18] = { name = 'v_ilev_ph_cellgate',   coords = vector3(-432.1, 5992.1, 31.8), authorizedJob = 'police', locked = true, x = -1.2, y = 0.0, z = -0.1 },
-    [19] = { name = 'v_ilev_ph_cellgate',   coords = vector3(-428.0, 5996.6, 31.8), authorizedJob = 'police', locked = true, x = -1.2, y = 0.0, z = -0.1 },
-    [20] = { name = 'v_ilev_ph_cellgate',   coords = vector3(-431.1, 5999.7, 31.8), authorizedJob = 'police', locked = true, x = -1.2, y = 0.0, z = -0.1 },
-    [21] = { name = 'v_ilev_fingate',       coords = vector3(-437.6, 5992.8, 31.9), authorizedJob = 'police', locked = true, x =  1.2, y = 0.0, z =  0.1 },
-
-    -- ! Hospital
-
-    [22] = { name = 'gabz_pillbox_singledoor', coords = vector3(313.4, -595.45, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z =  0.1 },
-    [23] = { name = 'gabz_pillbox_singledoor', coords = vector3(309.1, -597.75, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z =  0.1 },
-    [24] = { name = 'gabz_pillbox_singledoor', coords = vector3(303.9, -596.57, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z =  0.1 },
-    [25] = { name = 'gabz_pillbox_singledoor', coords = vector3(339.0, -586.70, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z =  0.1 },
-    [26] = { name = 'gabz_pillbox_singledoor', coords = vector3(336.8, -592.57, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z =  0.1 },
-    [27] = { name = 'gabz_pillbox_singledoor', coords = vector3(307.1, -569.56, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z =  0.1 },
-    [28] = { name = 'gabz_pillbox_singledoor', coords = vector3(303.9, -572.55, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z =  0.1 },
-    [29] = { name = 'gabz_pillbox_singledoor', coords = vector3(336.1, -580.14, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z =  0.1 },
-    [30] = { name = 'gabz_pillbox_singledoor', coords = vector3(340.7, -581.82, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z =  0.1 },
-    [31] = { name = 'gabz_pillbox_singledoor', coords = vector3(346.7, -584.00, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z =  0.1 },
-    [32] = { name = 'gabz_pillbox_singledoor', coords = vector3(346.8, -593.60, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z =  0.1 },
-    [33] = { name = 'gabz_pillbox_singledoor', coords = vector3(345.5, -597.35, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z =  0.1 },
-    [34] = { name = 'gabz_pillbox_singledoor', coords = vector3(352.1, -594.14, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z =  0.1 },
-    [35] = { name = 'gabz_pillbox_singledoor', coords = vector3(350.8, -597.89, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z =  0.1 },
-    [36] = { name = 'gabz_pillbox_singledoor', coords = vector3(356.1, -583.36, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z =  0.1 },
-    [37] = { name = 'gabz_pillbox_singledoor', coords = vector3(357.4, -579.61, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z =  0.1 },
-    [38] = { name = 'gabz_pillbox_singledoor', coords = vector3(358.7, -593.88, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z =  0.1 },
-    [39] = { name = 'gabz_pillbox_singledoor', coords = vector3(360.5, -588.99, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z =  0.1 },
-
-    [39] = { name = 'gabz_pillbox_doubledoor_r', coords = vector3(325.6, -576.30, 43.4), authorizedJob = 'medic', locked = true, x = -1.2, y = 0.0, z = 0.1 },
-    [40] = { name = 'gabz_pillbox_doubledoor_l', coords = vector3(323.2, -575.42, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z = 0.1 },
-    [41] = { name = 'gabz_pillbox_doubledoor_r', coords = vector3(320.2, -574.34, 43.4), authorizedJob = 'medic', locked = true, x = -1.2, y = 0.0, z = 0.1 },
-    [42] = { name = 'gabz_pillbox_doubledoor_l', coords = vector3(317.8, -573.46, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z = 0.1 },
-    [43] = { name = 'gabz_pillbox_doubledoor_r', coords = vector3(314.4, -572.22, 43.4), authorizedJob = 'medic', locked = true, x = -1.2, y = 0.0, z = 0.1 },
-    [44] = { name = 'gabz_pillbox_doubledoor_l', coords = vector3(312.0, -571.34, 43.4), authorizedJob = 'medic', locked = true, x =  1.2, y = 0.0, z = 0.1 },
-}
-
-local isActive, userJob = false, 'unemployed'
+exports['crp-lib']:createBoxZones({
+	{ coords = vector4(441.12, -977.61, 30.69, 0), length = 1.8, width = 1.55, minZ = 29.49, maxZ = 32.09, data = 1 }
+}, 'doorZone', GetCurrentResourceName(), false)
 
 Citizen.CreateThread(function()
-    local events = exports['crp-base']:getModule('Events')
+	doors = RPC:execute('fetchDoorsData')
 
-    events:Trigger('crp-doors:getDoorsInfo', nil, function(doorInfo)
-        for door, state in pairs(doorInfo) do
-			doorList[door].locked = state
+	Debug('All the doors are being registered in the system.')
+
+	for doorId, door in ipairs(doors) do
+		if door and not IsDoorRegisteredWithSystem(doorId) then
+			AddDoorToSystem(doorId, door.model, door.coords, false, false, false)
+			DoorSystemSetDoorState(doorId, (door.state), false, true)
+		end
+	end
+end)
+
+AddEventHandler('crp-doors:onPlayerInOut', function(isPointInside, zone)
+	if isPointInside then
+		local doorState = DoorSystemGetDoorState(zone.data) ~= 0 and true or false
+
+		currentDoorId = zone.data
+
+		ListenForKeys(zone.data)
+
+		exports['crp-ui']:toggleInteraction(true, ('[E] %s'):format(doorState and 'Trancada' or 'Destrancada'))
+	else
+		exports['crp-ui']:toggleInteraction(false)
+	end
+
+	isInsideZone = isPointInside
+end)
+
+function ListenForKeys(doorId)
+	Citizen.CreateThread(function()
+		while isInsideZone do
+			Citizen.Wait(0)
+
+			if IsControlJustReleased(0, 38) then
+				toggleDoorState(doorId)
+			end
 		end
 	end)
-end)
+end
 
-Citizen.CreateThread(function()
-	while true do
-        for _, door in ipairs(doorList) do
-            door.object = GetClosestObjectOfType(door.coords, 1.0, GetHashKey(door.name), false, false, false)
+RegisterNetEvent('crp-doors:changeDoorState')
+AddEventHandler('crp-doors:changeDoorState', function(doorId, state)
+	if doors and doors[doorId] then
+		doors[doorId].state = state
+
+		Debug(('Changed door (%s) to state: %s'):format(doorId, state))
+
+		DoorSystemSetAutomaticRate(doorId, 1.0, false, false)
+		DoorSystemSetDoorState(doorId, (state and 6 or 0), false, true)
+
+		if isInsideZone and currentDoorId == doorId then
+			exports['crp-ui']:toggleInteraction(true, ('[E] %s'):format(state and 'Trancada' or 'Destrancada'))
 		end
-
-		Citizen.Wait(1000)
 	end
 end)
 
-Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait(0)
-        local playerCoords = GetEntityCoords(PlayerPedId())
-        local closestDoor, closestDistance, closestTimer = 0, 1000, 500000
+function toggleDoorState(doorId)
+	local doorState, playerPed = DoorSystemGetDoorState(doorId) ~= 0 and true or false, PlayerPedId()
 
-		for k, door in ipairs(doorList) do
-            local distance = #(playerCoords - door.coords)
+	TriggerServerEvent('crp-doors:changeDoorState', doorId, not doorState)
 
-            if distance < closestTimer then
-                closestTimer = math.floor(distance)
-            end
+	TriggerServerEvent('crp-lib:playOnCoords', 2.5, 'doors', 0.1)
+	TaskPlayAnimation(playerPed, 'anim@heists@keycard@', 'exit', 8.0, 1.0, -1, 16, 0)
 
-            if distance < closestDistance and distance < 50 then
-                closestTimer = 0
+	Citizen.Wait(850)
 
-                local maxDistance, displayText = 1.55, 'Destrancada'
-
-                if door.distance then
-                    maxDistance = door.distance
-                end
-
-                FreezeEntityPosition(door.object, door.locked)
-
-                if distance < maxDistance then
-                    closestDoor, closestDistance = door, distance
-
-                    local isAuthorized = IsAuthorized(door)
-
-                    if door.locked then
-                        displayText = 'Trancada'
-                    end
-
-                    if isAuthorized then
-                        displayText = '[E] ' .. displayText
-                    end
-
-                    if (door.textcoords and not door.locked) or (not door.textcoords) then
-                        door.textcoords = GetOffsetFromEntityInWorldCoords(door.object, door.x, door.y, door.z)
-                    end
-
-                    DrawText3D(door.textcoords.x, door.textcoords.y, door.textcoords.z, displayText)
-
-                    if isAuthorized and IsControlJustReleased(0, 38) then
-                        TriggerAnimation()
-
-                        TriggerServerEvent('interact-sound:playWithinDistance', 2.5, 'doors', 0.1)
-
-                        if door.locked then
-                            local keepRunning, count = true, 0
-
-                            while keepRunning do
-                                Citizen.Wait(0)
-
-                                DrawText3D(door.textcoords.x, door.textcoords.y, door.textcoords.z, 'Destrancando')
-
-                                count = count + 1
-
-                                if count > 100 then
-                                    keepRunning = false
-                                end
-                            end
-                        else
-                            local keepRunning, count, swing = true, 0, 0
-
-                            while keepRunning do
-                                Citizen.Wait(0)
-
-                                local locked, heading = GetStateOfClosestDoorOfType(GetHashKey(door.name), door.coords.x, door.coords.y, door.coords.z)
-
-                                heading = math.ceil(heading * 100)
-
-                                local distance = GetDistanceBetweenCoords(GetEntityCoords(GetPlayerPed(-1)), door.coords.x, door.coords.y, door.coords.z, true)
-
-                                door.textcoords = GetOffsetFromEntityInWorldCoords(door.object, door.x, door.y, door.z)
-
-                                DrawText3D(door.textcoords.x, door.textcoords.y, door.textcoords.z, 'Trancando')
-
-                                count = count + 1
-
-                                if heading < 1.5 and heading > -1.5 then
-                                    swing = swing + 1
-                                end
-
-                                if distance > 150.0 or swing > 100 or count > 500 then
-                                    keepRunning = false
-                                end
-                            end
-                        end
-
-                        door.locked = not door.locked
-                        TriggerServerEvent('crp-doors:updateState', k, door.locked)
-                    end
-                end
-            end
-        end
-
-        if closestTimer > 50 and closestTimer ~= 500000 then
-            Citizen.Wait(math.ceil(closestTimer * 25))
-        end
-	end
-end)
-
-RegisterNetEvent('crp-doors:setState')
-AddEventHandler('crp-doors:setState', function(door, state)
-	doorList[door].locked = state
-end)
-
-AddEventHandler('crp-userinfo:updateJob', function(_job)
-    userJob = _job
-end)
-
-function IsAuthorized(door)
-    if door.authorizedJob == userJob then
-        return true
-    end
-
-	return false
-end
-
-function TriggerAnimation()
-    local playerPed, dictionary = GetPlayerPed(-1), 'anim@heists@keycard@'
-
-    ClearPedSecondaryTask(playerPed)
-
-    while (not HasAnimDictLoaded(dictionary)) do
-        RequestAnimDict(dictionary)
-
-        Citizen.Wait(5)
-    end
-
-    TaskPlayAnim(playerPed, dictionary, 'exit', 8.0, 1.0, -1, 16, 0, 0, 0, 0)
-
-    Citizen.Wait(850)
-
-    ClearPedTasks(playerPed)
-end
-
-function DrawText3D(x, y, z, text)
-    local onScreen, _x, _y = World3dToScreen2d(x, y, z)
-    local px, py, pz = table.unpack(GetGameplayCamCoords())
-
-    SetTextScale(0.35, 0.35)
-    SetTextFont(4)
-    SetTextProportional(1)
-    SetTextColour(255, 255, 255, 215)
-
-    SetTextEntry('STRING')
-    SetTextCentre(1)
-    AddTextComponentString(text)
-
-    DrawText(_x, _y)
-
-    local factor = (string.len(text)) / 370
-    DrawRect(_x, _y + 0.0125, 0.015 + factor, 0.03, 41, 11, 41, 68)
+	ClearPedTasks(playerPed)
 end
