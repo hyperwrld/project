@@ -9,9 +9,7 @@ client_scripts {
 	'client/main.lua'
 }
 
-shared_scripts {
-	'@crp-lib/shared/util.lua'
-}
+shared_script '@crp-lib/shared/util.lua'
 
 server_scripts {
 	'@crp-lib/server/rpc.lua',
