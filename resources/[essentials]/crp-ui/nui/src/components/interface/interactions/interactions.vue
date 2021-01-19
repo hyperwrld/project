@@ -12,9 +12,13 @@
             processMessage: function(message) {
 				const match = message.match(/\[(.*?)\]/g);
 
-				message = message.replace(match[0], '');
+				if (match && match[0]) {
+					message = message.replace(match[0], '');
 
-				return '<span>' + match[0].replace(/[[\]']+/g, '') + '</span><span>' + message.trim() + '</span>';
+					return `<span class='key'>` + match[0].replace(/[[\]']+/g, '') + `</span><span>` + message.trim() + `</span>`;
+				}
+
+				return '<span>' + message.trim() + '</span>';
 			}
         },
 		render (h) {

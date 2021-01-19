@@ -7,11 +7,11 @@ AddEventHandler('crp-lib:playSound', function(target, soundName, volume)
     TriggerClientEvent('crp-lib:playSound', target, soundName, volume)
 end)
 
-RegisterServerEvent('crp-sound:playOnCoords')
-AddEventHandler('crp-sound:playOnCoords', function(maxDistance, soundName, volume)
+RegisterServerEvent('crp-lib:playOnCoords')
+AddEventHandler('crp-lib:playOnCoords', function(maxDistance, soundName, volume)
 	local soundCoords = GetEntityCoords(GetPlayerPed(source))
 
-	for k, playerId in ipairs(GetPlayers()) don
+	for k, playerId in ipairs(GetPlayers()) do
 		local coords = GetEntityCoords(GetPlayerPed(playerId))
 
 		if #(soundCoords - coords) < maxDistance then

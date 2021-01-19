@@ -19,13 +19,8 @@ const mutations = {
 		state.state = data.state;
 
 		if (data.state) {
-			state.firstMessage = data.firstMessage;
-
-			if (data.secondMessage) {
-				state.secondMessage = data.secondMessage;
-			}
+			state.firstMessage = data.firstMessage, state.secondMessage = data.secondMessage ? data.secondMessage : '';
 		}
-
 	}
 }
 

@@ -19,7 +19,7 @@ function searchContainers(coords)
 end
 
 function GetVehicleInFront(coords)
-    local rayHandle = StartShapeTestRay(coords, GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 2.0, 0.0), 10, playerPed, 0)
+    local rayHandle = StartShapeTestRay(coords, GetOffsetFromEntityInWorldCoords(playerPed, 0.0, 2.0, 0.0), 2, playerPed, 0)
     local retval, hit, endCoords, surfaceNormal, entityHit = GetShapeTestResult(rayHandle)
 
     return entityHit
