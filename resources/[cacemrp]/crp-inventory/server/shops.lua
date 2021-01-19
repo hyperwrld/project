@@ -58,11 +58,11 @@ RPC:register('buyItem', function(source, current, future, currentSlot, futureSlo
 end)
 
 function openShop(source, type)
-	local character = exports['crp-base']:GetCharacter(source)
-	local characterName = 'character-' .. character.getCharacterID()
-	local firstInventory, shopInventory = loadInventory(characterName, 40, 100), loadShop(source, type)
+	local character = exports['crp-base']:getCharacter(source)
+	local characterName = 'character-' .. character.getCharacterId()
+	local first, shop = loadInventory(characterName, 40, 100), loadShop(source, type)
 
-	if not firstInventory or not shopInventory then
+	if not first or not shop then
 		return false
 	end
 
@@ -70,7 +70,11 @@ function openShop(source, type)
 		return false
 	end
 
-	return true, { player = firstInventory, secondary = shopInventory }
+	return true, {
+		firstName = first.name, firstItems = first.items,
+		secondItems = shop.items, secondName = shop.name, secondMaxWeight = shop.maxWeight,
+		maxSlots = shop.maxSlots, type = shop.type, shopType = shop.shopType
+	}
 end
 
 function loadShop(source, type)
@@ -152,9 +156,9 @@ function hasPermission(source, shopType)
 		return true
 	end
 
-	local character = exports['crp-base']:GetCharacter(source)
+	local character = exports['crp-base']:getCharacter(source)
 
-	if character.getJob().name == shopsData[shopType].permission then
+	if character.getJob() == shopsData[shopType].permission then
 		return true
 	end
 

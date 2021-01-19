@@ -94,7 +94,7 @@ function createInventory(name, slots, weight, type, items, coords)
 
 			self.items[index].count = count
 
-			local query = [[UPDATE inventory set count = ? WHERE name = ? AND item = ? AND slot = ?;]]
+			local query = [[UPDATE inventory SET count = ? WHERE name = ? AND item = ? AND slot = ?;]]
 
 			DB:Execute(query, count, self.name, name, slot)
 		end

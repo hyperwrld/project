@@ -41,7 +41,7 @@ function openInventory(source, type, name, data)
 end
 
 -- List of types:
--- 1 (drop) - 2 (trunk) - 3 (glove) - 4 (container) - 5(shop) - 6(...)
+-- 1 (drop) - 2 (trunk) - 3 (glove) - 4 (container) - 5(shop) - 6(locker)
 
 function loadInventories(source, type, name, data)
 	local maxSlots, maxWeight = 1000, 40
@@ -58,6 +58,8 @@ function loadInventories(source, type, name, data)
 		if vehicleWeights[data.vehicleName] then
 			maxWeight = vehicleWeights[data.vehicleName]
 		end
+	elseif type == 6 then
+		name = 'locker-' .. character.getCharacterId()
 	else
 		maxSlots, maxWeight = inventoryTypes[type].slots, inventoryTypes[type].weight
 	end
@@ -90,9 +92,11 @@ function canOpenInventories(source, firstName, secondName)
 		return false
 	end
 
-	local data = { state = true, source = source }
+	openInventories[firstName] = { state = true, source = source }
 
-	openInventories[firstName], openInventories[secondName] = data, data
+	if second then
+		openInventories[secondName] = { state = true, source = source }
+	end
 
 	return true
 end
