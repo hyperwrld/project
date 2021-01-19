@@ -11,6 +11,8 @@ function CRP.Spawn:InitializeMenu()
 
 	Citizen.Wait(500)
 
+	exports['crp-weather']:toggleDesync(true, 'CLEAR', 23, 0)
+
 	isInMenu = true
 
 	Citizen.CreateThread(function()
@@ -93,6 +95,8 @@ function CRP.Spawn:SpawnCharacter(data)
 	if not characterSkin then
 		TriggerEvent('crp-skincreator:openShop', 1)
 	end
+
+	exports['crp-weather']:toggleDesync(false)
 
 	if data.position then
 		SetEntityCoords(playerPed, data.position)
