@@ -19,6 +19,7 @@ shared_scripts {
 }
 
 server_scripts {
+	'@crp-lib/shared/array.lua',
 	'@crp-lib/server/database.lua',
 	'@crp-lib/server/rpc.lua',
 	'server/classes/inventory.lua',

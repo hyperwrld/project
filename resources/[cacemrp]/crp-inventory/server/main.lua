@@ -35,7 +35,7 @@ function openInventory(source, type, name, data)
 		return false
 	end
 
-	Debug('Inventories (character & ' .. name ..') loaded.')
+	Debug(('Inventories (character & %s) loaded.'):format(data.secondName))
 
 	return true, data
 end
@@ -299,3 +299,18 @@ function getItem(source, slot)
 
 	return true, data
 end
+
+function useItem(source, name, quantity)
+	local character = exports['crp-base']:getCharacter(source)
+	local characterName = 'character-' .. character.getCharacterId()
+
+	if not inventories[characterName] then
+		if not loadInventory(characterName, 40, 100) then
+			return false
+		end
+	end
+
+	return inventories[characterName].useItem(name, quantity)
+end
+
+exports('useItem', useItem)

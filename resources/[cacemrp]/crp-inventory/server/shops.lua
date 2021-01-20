@@ -91,7 +91,7 @@ function loadShop(source, type)
 end
 
 function buyItem(source, current, future, currentSlot, futureSlot, count, data)
-	if not data.shype == 5 or not inventories[future] then
+	if not data.type == 5 or not inventories[future] then
 		return false
 	end
 
@@ -119,9 +119,9 @@ function buyItem(source, current, future, currentSlot, futureSlot, count, data)
 	end
 
 	local itemPrice = (itemData.price * count)
-	local character = exports['crp-base']:GetCharacter(source)
+	local character = exports['crp-base']:getCharacter(source)
 
-	if not inventories[future].canCarry((current == future), itemData.item, count) or character.getMoney() < itemPrice then
+	if not inventories[future].canCarry((current == future), itemData.item, count) then
 		return false
 	end
 
@@ -133,22 +133,20 @@ function buyItem(source, current, future, currentSlot, futureSlot, count, data)
 	end
 
 	if _data then
-		if itemData.item ~= _data.item or not getItemData(itemData.item).canStack then
+		if itemData.item ~= _data.item or not getItemData(itemData.item).canStack or not inventories[future].useItem('CRP_DINHEIRO', itemPrice) then
 			return false
 		end
 
 		inventories[future].updateItem(itemData.item, futureSlot, (_data.count + count))
 	else
-		if not getItemData(itemData.item).canStack and count > 1 then
+		if (not getItemData(itemData.item).canStack and count > 1) or not inventories[future].useItem('CRP_DINHEIRO', itemPrice) then
 			return false
 		end
 
 		inventories[future].addItem(itemData.item, futureSlot, count, itemMeta, os.time(os.date("!*t")))
 	end
 
-	character.removeMoney(itemPrice)
-
-	return true, currentSlotData, inventories[future].getItemData(futureSlot)
+	return true, currentSlotData, inventories[future].items
 end
 
 function hasPermission(source, shopType)

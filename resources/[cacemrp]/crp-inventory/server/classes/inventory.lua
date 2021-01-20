@@ -160,5 +160,40 @@ function createInventory(name, slots, weight, type, items, coords)
         return items
 	end
 
+	self.getQuantity = function(name)
+		local quantity = 0
+
+		for i = 1, #self.items do
+			if self.items[i].item == name then
+				quantity = quantity + self.items[i].count
+			end
+		end
+
+		return quantity
+	end
+
+	self.useItem = function(name, quantity)
+		if self.getQuantity(name) < quantity then
+			return false
+		end
+
+        while quantity > 0 do
+            local items = Array(self.items)
+			local item = items:Find(function(data) return data.item == name end)
+
+			if item.count <= quantity then
+				quantity = quantity - item.count
+
+				self.removeItem(name, item.slot, false)
+			else
+				self.updateItem(name, item.slot, item.count - quantity)
+
+				quantity = 0
+			end
+		end
+
+		return true
+	end
+
 	return self
 end
