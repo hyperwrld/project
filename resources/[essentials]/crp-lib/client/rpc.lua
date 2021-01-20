@@ -12,7 +12,7 @@ function RPC:execute(name, ...)
     TriggerServerEvent('crp-lib:request', resourceName, name, callId, { ... })
 
     Citizen.SetTimeout(1000, function()
-        if not isSolved then
+		if not isSolved then
             promises[callId]:resolve({ nil })
         end
     end)

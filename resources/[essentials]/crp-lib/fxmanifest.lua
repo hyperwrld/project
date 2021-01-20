@@ -10,11 +10,17 @@ client_scripts {
 	'client/*.*'
 }
 
-shared_script 'shared/util.lua'
+shared_scripts {
+	'shared/util.lua'
+}
 
 server_scripts {
 	'server/database.lua',
 	'server/rpc.lua',
 	'server/polyzone.lua',
 	'server/sound.lua'
+}
+
+files {
+	'shared/array.lua'
 }
