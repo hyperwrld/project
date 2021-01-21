@@ -71,7 +71,7 @@ AddEventHandler('crp-vehicles:enteredVehicle', function(vehicle, currentSeat, ve
 		isCheckingTask = false
 	end
 
-	if not hasVehicleKey(vehicle) and not hasHotwiredVehicle(vehicle) then
+	if currentSeat == -1 and not hasVehicleKey(vehicle) and not hasHotwiredVehicle(vehicle) then
 		isShowingAction = true
 
 		exports['crp-ui']:toggleInteraction(true, '[G] Procurar', '[H] Ligação direta')
