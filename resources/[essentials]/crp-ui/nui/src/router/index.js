@@ -22,6 +22,7 @@ import messages from './../components/character/phone/apps/messages/messages.vue
 import contacts from './../components/character/phone/apps/contacts/contacts.vue';
 import twitter from './../components/character/phone/apps/twitter/twitter.vue';
 import adverts from './../components/character/phone/apps/adverts/adverts.vue';
+import jobs from './../components/character/phone/apps/jobs/jobs.vue';
 
 Vue.use(VueRouter);
 
@@ -80,6 +81,9 @@ export default new VueRouter({
 				},
 				{
 					path: 'adverts', name: 'adverts', component: adverts
+				},
+				{
+					path: 'jobs', name: 'jobs', component: jobs
 				}
 			]
 		}

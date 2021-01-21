@@ -1,9 +1,9 @@
 <script>
 	import { library } from '@fortawesome/fontawesome-svg-core';
-	import { faPhoneAlt, faCommentAlt, faUser, faCar, faAd, faCog, faMapPin, faCamera } from '@fortawesome/free-solid-svg-icons';
+	import { faPhoneAlt, faCommentAlt, faUser, faCar, faAd, faCog, faMapPin, faCamera, faBriefcase } from '@fortawesome/free-solid-svg-icons';
 	import { faTwitter } from '@fortawesome/free-brands-svg-icons';
 
-	library.add(faPhoneAlt, faCommentAlt, faUser, faCar, faTwitter, faAd, faCog, faMapPin, faCamera);
+	library.add(faPhoneAlt, faCommentAlt, faUser, faCar, faTwitter, faAd, faCog, faMapPin, faCamera, faBriefcase);
 
 	export default {
 		name: 'home',
@@ -50,6 +50,13 @@
 						name: 'Anúncios',
 						color: '#ffd300',
 						icon: 'ad',
+						iconType: 'fas'
+					},
+					{
+						code: 'jobs',
+						name: 'Trabalhos',
+						color: '#0737a2',
+						icon: 'briefcase',
 						iconType: 'fas'
 					},
 					{

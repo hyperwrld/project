@@ -82,16 +82,31 @@ const mutations = {
 				count: Number(data.quantity), data: { type: state.type, coords: state.coords }
 			}, nuiType = 'moveItem';
 
-			if (state.type == 5 && data.current == data.secondName) {
+			if (state.type == 5 && data.current == state.secondName) {
 				moveInfo.data.shopType = state.shopType, nuiType = 'buyItem';
 			}
 
 			send(nuiType, moveInfo).then(data => {
 				if (data.success) {
 					const currentSlot = data.current ? { itemId: data.current.item, quantity: data.current.count, durability: data.current.creation_time } : {};
-					const futureSlot = data.future ? { itemId: data.future.item, quantity: data.future.count, durability: data.future.creation_time } : {};
 
-					current.splice(moveInfo.currentIndex - 1, 1, currentSlot), future.splice(moveInfo.futureIndex - 1, 1, futureSlot);
+					current.splice(moveInfo.currentIndex - 1, 1, currentSlot);
+
+					if (nuiType == 'buyItem') {
+						for (let i = 0; i < 40; i++) {
+							let itemData = data.future.find(element => (element.slot - 1) == i), slotData = {};
+
+							if (itemData) {
+								slotData = { itemId: itemData.item, quantity: itemData.count, meta: itemData.meta, durability: itemData.creation_time };
+							}
+
+							future.splice(i, 1, slotData);
+						}
+					} else {
+						const futureSlot = data.future ? { itemId: data.future.item, quantity: data.future.count, durability: data.future.creation_time } : {};
+
+						future.splice(moveInfo.futureIndex - 1, 1, futureSlot);
+					}
 
 					this.commit('inventory/calculateWeight');
 				}
@@ -105,7 +120,7 @@ const mutations = {
 			if (state.firstItems[i].itemId) {
 				let item = state.itemsList.find(element => element.identifier == state.firstItems[i].itemId);
 
-				firstWeight = firstWeight + (item.weight * state.firstItems[i].quantity);
+				firstWeight += item.weight * state.firstItems[i].quantity;
 			}
 		}
 
@@ -113,7 +128,7 @@ const mutations = {
 			if (state.secondItems[i].itemId) {
 				let item = state.itemsList.find(element => element.identifier == state.secondItems[i].itemId);
 
-				secondWeight = secondWeight + (item.weight * state.secondItems[i].quantity);
+				secondWeight += item.weight * state.secondItems[i].quantity;
 			}
 		}
 

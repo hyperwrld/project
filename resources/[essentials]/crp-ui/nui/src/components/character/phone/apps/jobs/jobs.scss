@@ -1,0 +1,383 @@
+.jobs {
+	font-family: 'Quantico', sans-serif !important;
+
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+	grid-template-columns: 1fr;
+
+	background-color: white;
+	border-top: solid 1px #d6d6d6;
+	border-bottom: solid 1px #d6d6d6;
+	justify-content: flex-start;
+
+	overflow-y: scroll;
+	border-radius: 10px;
+	box-shadow: 0px 0px 5px 0px rgba(219, 219, 219, 1);
+
+	&::-webkit-scrollbar {
+		display: none;
+	}
+
+	&.empty {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+
+		.fa-sad-tear {
+			width: 100%;
+			height: 15%;
+		}
+
+		span {
+			text-align: center;
+			font-size: 0.9rem;
+			font-weight: bold;
+
+			margin-top: 5%;
+		}
+	}
+
+	.top {
+		display: flex;
+		text-align: center;
+		align-items: center;
+		justify-content: center;
+
+		background-color: lightgray;
+		border-bottom: solid 1px #d6d6d6;
+		box-shadow: 0px 0px 5px 0px #dbdbdb;
+
+		padding: 2%;
+		font-size: 0.7vw;
+		font-weight: bold;
+
+		span {
+			width: fit-content;
+			font-weight: bold;
+			font-size: 1rem;
+
+			&:first-child {
+				margin-right: 5px;
+			}
+
+			&:last-child {
+				width: fit-content;
+
+				background-color: #ffa500;
+				border-radius: 3px;
+
+				font-size: 0.7vw;
+				padding: 2px 5px;
+			}
+		}
+	}
+
+	.content {
+		display: grid;
+		align-items: center;
+		grid-template-rows: auto auto;
+
+		padding: 5% 2%;
+
+		.members {
+			display: grid;
+			grid-template-rows: repeat(4, auto);
+			width: 100%;
+			gap: 5px;
+
+			.member {
+				display: grid;
+				grid-template: [row1-start] 'name name' 1fr [row1-end] [row2-start] 'money button' auto [row2-end] / 1fr 1fr;
+				gap: 5px;
+
+				padding: 5px;
+				box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.75);
+				background: #222831;
+
+				color: ivory;
+				text-align: center;
+				border-radius: 3px;
+
+				.name {
+					grid-area: name;
+
+					color: ivory;
+					font-weight: bold;
+				}
+
+				.money {
+					grid-area: money;
+
+					background-color: #0c890a;
+					border-radius: 3px;
+					font-size: 1.2vh;
+				}
+
+				button {
+					font-family: 'Quantico', sans-serif !important;
+					grid-area: button;
+
+					padding: 0;
+					height: 100%;
+					border: none;
+					border-radius: 3px;
+					font-size: 1.2vh;
+					text-transform: uppercase;
+					background: #dddddd;
+
+					&.kick {
+						background-color: #f05454;
+						color: ivory;
+						outline: none;
+
+						&:hover {
+							background-color: ivory;
+							font-weight: bold;
+							color: black;
+						}
+					}
+				}
+			}
+		}
+
+		.informations {
+			display: grid;
+			grid-template-rows: auto 1fr;
+
+			gap: 5px;
+			padding: 5px;
+			border-radius: 3px;
+
+			font-weight: bold;
+			text-align: center;
+			color: ivory;
+
+			box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.75);
+			background: #222831;
+			color: black;
+
+			& > span {
+				color: #dddddd;
+			}
+
+			.information {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 5px;
+
+				font-size: 0.7em;
+				font-weight: normal;
+				color: ivory;
+
+				span {
+					background-color: #30475e;
+    				border-radius: 3px;
+				}
+			}
+		}
+	}
+
+	.bottom {
+		display: grid;
+		grid-template-rows: 25px;
+		gap: 5px;
+
+		background-color: lightgray;
+		border-bottom: solid 1px #d6d6d6;
+		box-shadow: 0px 0px 5px 0px #dbdbdb;
+
+		justify-content: center;
+		padding: 2%;
+
+		button {
+			font-family: 'Quantico', sans-serif;
+
+			box-shadow: 0px 0px 2.5px 0px black;
+			border-radius: 3px;
+			border: none;
+
+			text-transform: uppercase;
+			background-color: #ff0000;
+
+			outline: none;
+			width: fit-content;
+			color: ivory;
+
+			&:hover {
+				background-color: ivory;
+				font-weight: bold;
+				color: black;
+			}
+		}
+	}
+
+
+	.list {
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+		grid-template-columns: 1fr;
+
+		background-color: white;
+		border-top: solid 1px #d6d6d6;
+		border-bottom: solid 1px #d6d6d6;
+		justify-content: flex-start;
+
+		overflow-y: scroll;
+		border-radius: 10px;
+		box-shadow: 0px 0px 5px 0px rgba(219, 219, 219, 1);
+
+		&::-webkit-scrollbar {
+            display: none;
+		}
+
+		&.empty {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+
+			.fa-sad-tear {
+				width: 100%;
+				height: 15%;
+			}
+
+			span {
+				text-align: center;
+				font-size: 0.9rem;
+				font-weight: bold;
+
+				margin-top: 5%;
+			}
+		}
+
+		.top {
+			display: grid;
+			grid-template-columns: 1fr 55px;
+			grid-template-rows: 25px;
+			gap: 5px;
+
+			background-color: lightgray;
+			border-bottom: solid 1px #d6d6d6;
+			box-shadow: 0px 0px 5px 0px #dbdbdb;
+
+			padding: 2%;
+			font-size: 0.7vw;
+			font-weight: bold;
+
+			text-align: center;
+			align-items: center;
+
+			.bonus {
+				color: #188f10;
+			}
+
+			div:last-child {
+				margin: auto;
+				width: fit-content;
+				background-color: #ffa500;
+				border-radius: 3px;
+				padding: 2px 5px;
+			}
+		}
+
+		.content {
+			display: grid;
+			align-items: center;
+			grid-template-rows: auto auto;
+
+			padding: 5% 2%;
+
+			.members {
+				display: grid;
+				grid-template-rows: repeat(4, auto);
+				width: 100%;
+				gap: 5px;
+
+				.member {
+					display: grid;
+					grid-template: [row1-start] 'name name' 1fr [row1-end] [row2-start] 'money button' auto [row2-end] / 1fr 1fr;
+					gap: 5px;
+
+					padding: 5px;
+					box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.75);
+					background: #505050;
+
+					color: ivory;
+					text-align: center;
+
+					.name {
+						grid-area: name;
+
+						color: ivory;
+						font-weight: bold;
+					}
+
+					.money {
+						grid-area: money;
+
+						background-color: #0c890a;
+						border-radius: 3px;
+						font-size: 1.2vh;
+					}
+
+					button {
+						font-family: 'Quantico', sans-serif !important;
+						grid-area: button;
+
+						padding: 0;
+						height: 100%;
+						border: none;
+						border-radius: 3px;
+						font-size: 1.2vh;
+						text-transform: uppercase;
+
+						&.kick {
+							background-color: #7e0c0c;
+							color: ivory;
+							outline: none;
+
+							&:hover {
+								background-color: ivory;
+								font-weight: bold;
+								color: black;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		.bottom {
+			display: grid;
+			grid-template-rows: 25px;
+			gap: 5px;
+
+			background-color: lightgray;
+			border-bottom: solid 1px #d6d6d6;
+			box-shadow: 0px 0px 5px 0px #dbdbdb;
+
+			justify-content: center;
+			padding: 2%;
+
+			button {
+				font-family: 'Quantico', sans-serif;
+
+				box-shadow: 0px 0px 2.5px 0px black;
+				border-radius: 3px;
+				border: none;
+
+				text-transform: uppercase;
+				background-color: #ff0000;
+
+				outline: none;
+				width: fit-content;
+				color: ivory;
+
+				&:hover {
+					background-color: ivory;
+					font-weight: bold;
+					color: black;
+				}
+			}
+		}
+	}
+}
