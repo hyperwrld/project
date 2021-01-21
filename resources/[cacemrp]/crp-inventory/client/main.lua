@@ -3,11 +3,7 @@ local isLoggedIn = false
 dropInventories, playerPed = {}, PlayerPedId()
 actionBarState, isDoingAnimation, isUsing, isWeaponEquiped, weaponSlot = false, false, false, false, nil
 
-AddEventHandler('onClientResourceStart', function(resourceName)
-	if (GetCurrentResourceName() ~= resourceName) then
-	  	return
-	end
-
+Citizen.CreateThread(function()
 	Debug('Updated items list on the crp-ui.')
 
 	exports['crp-ui']:setItems(itemsList)
