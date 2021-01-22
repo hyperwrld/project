@@ -1,5 +1,5 @@
 const state = () => ({
-	currentNumber: undefined, history: [], messages: [], contacts: [], tweets: [], adverts: []
+	currentNumber: undefined, history: [], messages: [], contacts: [], tweets: [], adverts: [], jobList: [], jobGroup: {}
 })
 
 const getters = {
@@ -32,19 +32,31 @@ const getters = {
 	},
 	getAdverts: state => {
 		return state.adverts.sort((a, b) => b.id - a.id);
+	},
+	getJobList: state => {
+		return state.jobList;
+	},
+	getJobGroup: state => {
+		return state.jobGroup;
 	}
 }
 
 const actions = {
     setData(state, data) {
         state.commit('setData', data);
-    }
+	},
+	setJobList(state, data) {
+        state.commit('setJobList', data);
+    },
 }
 
 const mutations = {
 	setData(state, data) {
 
-    }
+	},
+	setJobList(state, data) {
+		state.jobList = data;
+	}
 }
 
 export default { namespaced: true, getters, state, actions, mutations }
