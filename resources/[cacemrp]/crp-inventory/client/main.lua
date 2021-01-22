@@ -191,6 +191,12 @@ function useItem(slot)
 	end
 end
 
+function hasItem(name, quantity)
+	return RPC:execute('hasItem', name, quantity)
+end
+
+exports('hasItem', hasItem)
+
 RegisterUICallback('moveItem', function(data, cb)
 	local success, current, future = RPC:execute('moveItem', data.current, data.future, data.currentIndex, data.futureIndex, data.count, data.data)
 

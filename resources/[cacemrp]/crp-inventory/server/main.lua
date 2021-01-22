@@ -300,6 +300,21 @@ function getItem(source, slot)
 	return true, data
 end
 
+function hasItem(source, name, quantity)
+	local character = exports['crp-base']:getCharacter(source)
+	local characterName = 'character-' .. character.getCharacterId()
+
+	if not inventories[characterName] then
+		if not loadInventory(characterName, 40, 100) then
+			return false
+		end
+	end
+
+	return inventories[characterName].getQuantity(name) >= quantity
+end
+
+RPC:register('hasItem', hasItem)
+
 function useItem(source, name, quantity)
 	local character = exports['crp-base']:getCharacter(source)
 	local characterName = 'character-' .. character.getCharacterId()
