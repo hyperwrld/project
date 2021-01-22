@@ -87,6 +87,7 @@
 									return (
 										<v-expansion-panel>
 											<v-expansion-panel-header>
+												<font-awesome-icon icon={ ['fas', 'phone-alt'] } class={ call.incoming ? 'incoming' : '' }/>
 												<div class='name'>{ call.name }</div>
 												<div class='time'>{ convertTime(call.time) }</div>
 											</v-expansion-panel-header>
