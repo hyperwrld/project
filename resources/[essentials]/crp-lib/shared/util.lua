@@ -22,6 +22,10 @@ function RoundNumber(number, decimalPlaces)
 	return math.floor(number * multiplier + 0.5) / multiplier
 end
 
+function GetCurrentTime()
+	return os.time(os.date('!*t'))
+end
+
 AddEventHandler('onResourceStart', function(resource)
 	if (GetCurrentResourceName() ~= resource) then
 	  	return
