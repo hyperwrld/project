@@ -7,16 +7,30 @@
 
 	export default {
 		name: 'phone',
+		props: ['closeMenu'],
 		methods: {
-			changeApp: function() {
+			changeApp() {
 				if (this.$route.name != 'home') {
 					this.$router.push({ path: '/phone/' });
 				}
+			},
+			closeEvent(event) {
+                if (event.keyCode == 27)  {
+					this.closeMenu({ appName: 'phone' });
+
+					event.preventDefault();
+				}
 			}
 		},
+		destroyed() {
+			window.removeEventListener('keydown', this.closeEvent, false);
+        },
+        mounted() {
+            window.addEventListener('keydown', this.closeEvent, false);
+        },
 		render(h) {
 			return (
-				<transition appear name='slideUp'>
+				<transition appear enter-active-class='fadeInUp' leave-active-class='fadeOutDown'>
 					<div class='phone'>
 						<div class='inner'/>
 						<div class='overflow'>
