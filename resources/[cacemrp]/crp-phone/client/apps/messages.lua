@@ -1,17 +1,16 @@
-RegisterUICallback('getConversations', function(data, cb)
-    local conversations = CRP.RPC:execute('crp-phone:getConversations')
-
-    cb(conversations)
-end)
-
 RegisterUICallback('getMessages', function(number, cb)
-    local success, messages = CRP.RPC:execute('crp-phone:getMessages', number)
+	local success, messages = RPC:execute('getMessages', number)
 
     cb({ state = success, messages = messages })
 end)
 
 RegisterUICallback('sendMessage', function(data, cb)
-    local success = CRP.RPC:execute('crp-phone:sendMessage', data)
+    local success, message = RPC:execute('sendMessage', data.number, data.message)
 
-    cb({ state = success })
+    cb({ state = success, message = message })
+end)
+
+RegisterNetEvent('crp-phone:receiveMessage')
+AddEventHandler('crp-phone:receiveMessage', function(number, message)
+	exports['crp-ui']:setMessage(number, message)
 end)

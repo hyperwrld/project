@@ -1,52 +1,53 @@
-function getConversations(source)
+function getLastMessages(source)
 	local query = [[
         SELECT sender, receiver, message, time FROM (SELECT MAX(id) AS id FROM messages WHERE ? IN (sender, receiver) GROUP BY IF (? = sender, receiver, sender)) AS latest LEFT JOIN messages USING(id) ORDER BY id DESC;
     ]]
 
-    local characterPhone = exports['crp-base']:GetCharacter(source).getPhoneNumber()
-	local result = Citizen.Await(CRP.DB:Execute(query, characterPhone, characterPhone))
+    local characterPhone = exports['crp-base']:getCharacter(source).getPhone()
+	local result = Citizen.Await(DB:Execute(query, characterPhone, characterPhone))
 
 	return result
 end
 
-function getMessages(targetNumber)
+function getMessages(source, targetNumber)
 	if not targetNumber or type(targetNumber) ~= 'number' then return false end
 
 	local query = [[
         SELECT sender, receiver, message, time FROM messages WHERE (sender = ? OR receiver = ?) AND (sender = ? or receiver = ?) AND sender != receiver ORDER BY id ASC;
     ]]
 
-	local characterPhone = exports['crp-base']:GetCharacter(source).getPhoneNumber()
-	local result = Citizen.Await(CRP.DB:Execute(query, characterPhone, characterPhone, targetNumber, targetNumber))
+	local characterPhone = exports['crp-base']:getCharacter(source).getPhone()
+	local result = Citizen.Await(DB:Execute(query, characterPhone, characterPhone, targetNumber, targetNumber))
 
 	return true, result
 end
 
-function sendMessage(targetNumber, message)
+RPC:register('getMessages', getMessages)
+
+function sendMessage(source, targetNumber, message)
     if not targetNumber or type(targetNumber) ~= 'number' then return false end
-    if not message or type(message) ~= 'string' then return false end
+	if not message or type(message) ~= 'string' then return false end
 
     local query = [[
         INSERT INTO messages (sender, receiver, message, time) VALUES (?, ?, ?, ?);
     ]]
 
-	local characterPhone = exports['crp-base']:GetCharacter(source).getPhoneNumber()
-	local result = Citizen.Await(CRP.DB:Execute(query, characterPhone, targetNumber, message, generateTime()))
+	local characterPhone, time = exports['crp-base']:getCharacter(source).getPhone(), GetCurrentTime()
+	local result = Citizen.Await(DB:Execute(query, characterPhone, targetNumber, message, time))
 
 	if result and result.affectedRows > 0 then
-		local characters = exports['crp-base']:GetAllCharacters()
+		local target = exports['crp-base']:getCharacterByPhone(targetNumber)
 
-		for i = 1, #characters, 1 do
-			local character = characters[i]
-
-			if character:getPhoneNumber() == targetNumber then
-				TriggerClientEvent('crp-phone:receiveMessage', character.source, { characterPhone, message })
-				break
-			end
+		if target then
+			TriggerClientEvent('crp-phone:receiveMessage', target.source, characterPhone, message)
 		end
 
-		return true
-	else
-		return false
+		return true, {
+			sender = characterPhone, receiver = targetNumber, message = message, time = time
+		}
 	end
+
+	return false
 end
+
+RPC:register('sendMessage', sendMessage)
