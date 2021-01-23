@@ -19,7 +19,7 @@
 		},
 		computed: {
 			...mapGetters('messages', {
-				messages: 'getMessages'
+				lastMessages: 'getLastMessages'
 			})
 		},
 		methods: {
@@ -27,13 +27,13 @@
 				const search = this.searchInput.toLowerCase().trim();
 
 				if (!search) {
-					return this.messages;
+					return this.lastMessages;
 				}
 
 				if (isNaN(this.searchInput)) {
-					return this.messages.filter(c => c.name.toLowerCase().indexOf(search) > -1);
+					return this.lastMessages.filter(c => c.name.toLowerCase().indexOf(search) > -1);
 				} else {
-					return this.messages.filter(c => c.name.toString().toLowerCase().indexOf(search) > -1);
+					return this.lastMessages.filter(c => c.name.toString().toLowerCase().indexOf(search) > -1);
 				}
 			},
 			getMessageColor(string) {
@@ -47,9 +47,9 @@
 			},
 			openMessage(name, number) {
 				send('getMessages', number).then(data => {
-					data.name = name, data.number = number;
+					this.$store.dispatch('messages/setMessages', data.messages);
 
-					this.$router.push({ name: 'message', params: { data: data } });
+					this.$router.push({ name: 'message', params: { data: { name: name, number: number }}});
 				});
 			}
 		},
@@ -68,7 +68,7 @@
 					<div class={`list ${ isNotEmpty ? '' : 'empty'}`}>
 						{ isNotEmpty ?
 							<fragment>
-								{ this.filterItems().map((message, index) => {
+								{ this.filterItems().map((message) => {
 									return (
 										<div class='message' onClick={ () => this.openMessage(message.name, message.number)}>
 											<v-avatar style={{ background: this.getMessageColor((message.name).toString().substring(0, 2)) }} size='30'>
