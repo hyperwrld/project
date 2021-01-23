@@ -87,9 +87,13 @@
 									return (
 										<v-expansion-panel>
 											<v-expansion-panel-header>
-												<font-awesome-icon icon={ ['fas', 'phone-alt'] } class={ call.incoming ? 'incoming' : '' }/>
-												<div class='name'>{ call.name }</div>
-												<div class='time'>{ convertTime(call.time) }</div>
+												<font-awesome-icon icon={ ['fas', 'phone-alt'] } class={ call.isIncoming ? 'incoming' : '' }/>
+												<div class='name'>
+													{ call.name }
+												</div>
+												<div class='time'>
+													{ convertTime(call.time) }
+												</div>
 											</v-expansion-panel-header>
 											<v-expansion-panel-content>
 												<font-awesome-icon icon={ ['fas', 'phone-alt'] } onClick={ () => this.addContact(call.number) }/>

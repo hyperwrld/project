@@ -19,6 +19,7 @@ import phone from './../components/character/phone/phone.vue';
 import home from './../components/character/phone/apps/home/home.vue';
 import history from './../components/character/phone/apps/history/history.vue';
 import messages from './../components/character/phone/apps/messages/messages.vue';
+import message from './../components/character/phone/apps/messages/message/message.vue';
 import contacts from './../components/character/phone/apps/contacts/contacts.vue';
 import twitter from './../components/character/phone/apps/twitter/twitter.vue';
 import adverts from './../components/character/phone/apps/adverts/adverts.vue';
@@ -72,6 +73,9 @@ export default new VueRouter({
 				},
 				{
 					path: 'messages', name: 'messages', component: messages
+				},
+				{
+					path: 'message', name: 'message', component: message, props: true
 				},
 				{
 					path: 'contacts', name: 'contacts', component: contacts
