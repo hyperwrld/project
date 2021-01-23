@@ -19,7 +19,7 @@
 			}
 		},
 		computed: {
-			...mapGetters('phone', {
+			...mapGetters('history', {
 				history: 'getHistory'
 			})
 		},

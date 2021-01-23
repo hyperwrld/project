@@ -18,7 +18,7 @@
 			}
 		},
 		computed: {
-			...mapGetters('phone', {
+			...mapGetters('contacts', {
 				contacts: 'getContacts'
 			})
 		},

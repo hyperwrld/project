@@ -12,7 +12,7 @@
 	export default {
 		name: 'jobs',
 		computed: {
-			...mapGetters('phone', {
+			...mapGetters('jobs', {
 				jobGroup: 'getJobGroup', jobList: 'getJobList'
 			})
 		},

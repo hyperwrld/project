@@ -18,7 +18,7 @@
 			images
 		},
 		computed: {
-			...mapGetters('phone', {
+			...mapGetters('twitter', {
 				tweets: 'getTweets'
 			})
 		},
