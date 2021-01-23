@@ -70,6 +70,7 @@
 				font-family: system-ui;
 				font-size: 0.8rem;
 				overflow-wrap: break-word;
+				word-break: break-word;
 
 				box-shadow: 0px 0px 5px 0px rgba(219, 219, 219, 1);
 				background: #222831;
@@ -96,27 +97,47 @@
 			}
 		}
 
-		.v-input {
-			margin: auto;
+		.bottom {
+			display: grid;
+			grid-template-columns: 165px auto;
 
-			::v-deep textarea {
-				font-size: 1rem;
-				border-radius: 3px;
-				padding: 3px;
+			align-items: center;
+			justify-content: center;
 
-				background-color: white;
-				border: 1px solid #d6d6d6;
-				box-shadow: 0px 0px 5px 0px rgba(219, 219, 219, 1);
+			padding: 2% 5%;
+			gap: 5%;
 
-				min-height: 5px;
-				max-height: 75px;
+			::v-deep .v-text-field__slot {
+				display: flex;
 
-				outline: none;
-				overflow: auto;
-				resize: none;
+				textarea {
+					font-size: 1rem;
+					border-radius: 5px;
+					padding: 3px;
 
-				&::-webkit-scrollbar {
-					display: none;
+					background-color: white;
+					border: 1px solid #d6d6d6;
+					box-shadow: 0px 0px 5px 0px rgba(219, 219, 219, 1);
+
+					min-height: 5px;
+					max-height: 75px;
+
+					outline: none;
+					overflow: auto;
+					resize: none;
+
+					&::-webkit-scrollbar {
+						display: none;
+					}
+				}
+			}
+
+			svg {
+				color: #222831;
+				font-size: 1.2rem;
+
+				&:hover {
+					color: #f05454;
 				}
 			}
 		}

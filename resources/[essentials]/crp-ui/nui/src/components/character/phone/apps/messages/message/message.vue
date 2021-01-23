@@ -2,21 +2,35 @@
 	import { mapGetters } from 'vuex';
 
 	import { library } from '@fortawesome/fontawesome-svg-core';
-	import { faUser, faSearch, faEnvelope, faSadTear } from '@fortawesome/free-solid-svg-icons';
+	import { faPaperPlane, faAngleLeft, faPhoneAlt } from '@fortawesome/free-solid-svg-icons';
+	import { convertTime, send } from './../../../../../../utils/lib.js';
 
-	import { convertTime } from './../../../../../../utils/lib.js';
-
-	// import dialogs from './../../dialogs/dialogs.js';
-
-	library.add(faSearch, faEnvelope, faUser, faSadTear);
+	library.add(faAngleLeft, faPhoneAlt, faPaperPlane);
 
 	export default {
 		name: 'message',
 		props: ['data'],
+		data() {
+			return {
+				messageText: ''
+			}
+		},
 		computed: {
 			...mapGetters('phone', {
-				messages: 'getMessages'
+				number: 'getNumber'
 			})
+		},
+		methods: {
+			goBack() {
+				this.$router.push({ name: 'messages' });
+			},
+			sendMessage() {
+				send('sendMessage', { number: this.data.number, message: this.messageText }).then(data => {
+					if (data.state) {
+						this.$store.dispatch('phone/setMessage', { number: this.number, receiver: this.data.number, message: this.messageText });
+					}
+				});
+			}
 		},
 		render(h) {
 			const data = this.data ? this.data : {};
@@ -24,7 +38,7 @@
 			return (
 				<div class='message'>
 					<div class='top'>
-						<font-awesome-icon icon={ 'fas', 'angle-left' }/>
+						<font-awesome-icon icon={ 'fas', 'angle-left' } onClick={ this.goBack }/>
 						<span>{ data.name }</span>
 						<font-awesome-icon icon={ 'fas', 'phone-alt' }/>
 					</div>
@@ -43,7 +57,10 @@
 								)
 							})}
 						</div>
-						<v-textarea auto-grow placeholder='Enviar mensagem...' rows={ 1 } row-height={ 10 } maxlength={ 255 }/>
+						<div class='bottom'>
+							<v-textarea auto-grow placeholder='Enviar mensagem...' v-model={ this.messageText } rows={ 1 } row-height={ 10 } maxlength={ 255 }/>
+							<font-awesome-icon icon={ 'fas', 'paper-plane' } onClick={ this.sendMessage }/>
+						</div>
 					</div>
 				</div>
 			);
