@@ -126,6 +126,9 @@
 					margin-top: 1%;
 					padding: 1%;
 
+					text-overflow: ellipsis;
+    				overflow: hidden;
+
 					font-size: 0.55rem;
 					color: rgb(138, 138, 138, 0.87);
 				}
