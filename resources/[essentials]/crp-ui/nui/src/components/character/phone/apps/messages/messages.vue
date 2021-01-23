@@ -4,7 +4,7 @@
 	import { library } from '@fortawesome/fontawesome-svg-core';
 	import { faUser, faSearch, faEnvelope, faSadTear } from '@fortawesome/free-solid-svg-icons';
 
-	import { fragment, convertTime } from './../../../../../utils/lib.js';
+	import { fragment, convertTime, send } from './../../../../../utils/lib.js';
 
 	import dialogs from './../../dialogs/dialogs.js';
 
@@ -36,7 +36,7 @@
 					return this.messages.filter(c => c.name.toString().toLowerCase().indexOf(search) > -1);
 				}
 			},
-			getMessageColor: function(string) {
+			getMessageColor(string) {
 				var hash = 0;
 
     			for (var i = 0; i < string.length; i++) {
@@ -44,6 +44,13 @@
 				}
 
     			return 'hsl(' + hash % 360 + ', 30%, 70%)';
+			},
+			openMessage(number) {
+				send('getMessages', number).then(data => {
+					data.number = number;
+
+					this.$router.push({ name: 'message', params: { data: data } });
+				});
 			}
 		},
 		render(h) {
@@ -61,20 +68,20 @@
 					<div class={`list ${ isNotEmpty ? '' : 'empty'}`}>
 						{ isNotEmpty ?
 							<fragment>
-								{ this.filterItems().map((call, index) => {
+								{ this.filterItems().map((message, index) => {
 									return (
-										<div class='message'>
-											<v-avatar style={{ background: this.getMessageColor((call.name).toString().substring(0, 2)) }} size='30'>
-												{ isNaN(call.name) ?
-													<span>{ (call.name).substring(0, 2).toUpperCase() }</span>
+										<div class='message' onClick={ () => this.openMessage(message.number)}>
+											<v-avatar style={{ background: this.getMessageColor((message.name).toString().substring(0, 2)) }} size='30'>
+												{ isNaN(message.name) ?
+													<span>{ (message.name).substring(0, 2).toUpperCase() }</span>
 													:
 													<font-awesome-icon icon={ ['fas', 'user'] }/>
 												}
 											</v-avatar>
 											<div class='information'>
-												<div class='name'>{ call.name }</div>
-												<div class='last-message'>{ call.message }</div>
-												<div class='time'>{ convertTime(call.time) }</div>
+												<div class='name'>{ message.name }</div>
+												<div class='last-message'>{ message.message }</div>
+												<div class='time'>{ convertTime(message.time) }</div>
 											</div>
 										</div>
 									)
