@@ -45,9 +45,9 @@
 
     			return 'hsl(' + hash % 360 + ', 30%, 70%)';
 			},
-			openMessage(number) {
+			openMessage(name, number) {
 				send('getMessages', number).then(data => {
-					data.number = number;
+					data.name = name, data.number = number;
 
 					this.$router.push({ name: 'message', params: { data: data } });
 				});
@@ -70,7 +70,7 @@
 							<fragment>
 								{ this.filterItems().map((message, index) => {
 									return (
-										<div class='message' onClick={ () => this.openMessage(message.number)}>
+										<div class='message' onClick={ () => this.openMessage(message.name, message.number)}>
 											<v-avatar style={{ background: this.getMessageColor((message.name).toString().substring(0, 2)) }} size='30'>
 												{ isNaN(message.name) ?
 													<span>{ (message.name).substring(0, 2).toUpperCase() }</span>
