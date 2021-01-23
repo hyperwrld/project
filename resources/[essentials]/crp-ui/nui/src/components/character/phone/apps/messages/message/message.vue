@@ -19,30 +19,30 @@
 			})
 		},
 		render(h) {
-			const data = this.data ? this.data : { messages: []};
+			const data = this.data ? this.data : {};
 
 			return (
 				<div class='message'>
 					<div class='top'>
 						<font-awesome-icon icon={ 'fas', 'angle-left' }/>
-						<span>Tim Almeida</span>
+						<span>{ data.name }</span>
 						<font-awesome-icon icon={ 'fas', 'phone-alt' }/>
 					</div>
-					<div class='messages'>
-						{ data.messages.map((message, index) => {
-							return (
-								<div class='message'>
-									<span class='message'>
-										{ message.message }
-									</span>
-									<div class='time'>
-										{ convertTime(message.time) }
+					<div class='content'>
+						<div class='messages'>
+							{ data.messages.map((message, index) => {
+								return (
+									<div class={`message ${ data.number != message.sender ? '' : 'other'}`}>
+										<span>
+											{ message.message }
+										</span>
+										<div class='time'>
+											{ convertTime(message.time) }
+										</div>
 									</div>
-								</div>
-							)
-						})}
-					</div>
-					<div class='bottom'>
+								)
+							})}
+						</div>
 						<v-textarea auto-grow placeholder='Enviar mensagem...' rows={ 1 } row-height={ 10 } maxlength={ 255 }/>
 					</div>
 				</div>
