@@ -46,11 +46,7 @@ const mutations = {
 		state.messages = data;
 	},
 	setMessage(state, data) {
-		let message = state.messages.find(element => (element.receiver == data.receiver) || (element.sender == data.receiver));
-
-		if (message) {
-			message.sender = message.number, message.receiver = data.receiver, message.message = data.message;
-		}
+		state.messages.push(data);
 	}
 }
 

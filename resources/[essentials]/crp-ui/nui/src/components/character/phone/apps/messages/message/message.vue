@@ -36,17 +36,20 @@
 
 				send('sendMessage', { number: this.data.number, message: this.messageText }).then(data => {
 					if (data.state) {
-						this.messageText = '', this.data.messages.push(data.message);
+						this.messageText = '';
 
-						this.$store.dispatch('messages/setMessage', { number: this.number, receiver: this.data.number, message: this.messageText });
-
-						setTimeout(() => {
-							this.scrollDown();
-						}, 500);
+						this.$store.dispatch('messages/setMessage', data.message);
 					}
 				});
 			}
 		},
+		watch: {
+     		'messages': function(newV, old) {
+				setTimeout(() => {
+					this.scrollDown();
+				}, 250);
+     		}
+   		},
 		mounted() {
 			this.scrollDown();
 		},

@@ -11,6 +11,6 @@ RegisterUICallback('sendMessage', function(data, cb)
 end)
 
 RegisterNetEvent('crp-phone:receiveMessage')
-AddEventHandler('crp-phone:receiveMessage', function(number, message)
-	exports['crp-ui']:setMessage(number, message)
+AddEventHandler('crp-phone:receiveMessage', function(data)
+	exports['crp-ui']:setMessage(data)
 end)

@@ -26,6 +26,16 @@ function GetCurrentTime()
 	return os.time(os.date('!*t'))
 end
 
+function GetRandomString(length)
+	local string = ''
+
+	for i = 1, length do
+		string = string .. string.char(GetRandomNumber(97, 122))
+	end
+
+	return string
+end
+
 AddEventHandler('onResourceStart', function(resource)
 	if (GetCurrentResourceName() ~= resource) then
 	  	return

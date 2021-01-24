@@ -36,15 +36,15 @@ function sendMessage(source, targetNumber, message)
 	local result = Citizen.Await(DB:Execute(query, characterPhone, targetNumber, message, time))
 
 	if result and result.affectedRows > 0 then
-		local target = exports['crp-base']:getCharacterByPhone(targetNumber)
-
-		if target then
-			TriggerClientEvent('crp-phone:receiveMessage', target.source, characterPhone, message)
-		end
-
-		return true, {
+		local target, data = exports['crp-base']:getCharacterByPhone(targetNumber), {
 			sender = characterPhone, receiver = targetNumber, message = message, time = time
 		}
+
+		if target then
+			TriggerClientEvent('crp-phone:receiveMessage', target.source, data)
+		end
+
+		return true, data
 	end
 
 	return false
