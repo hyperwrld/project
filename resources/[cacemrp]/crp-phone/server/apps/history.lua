@@ -1,30 +1,33 @@
-local history = {}
-
-history = {
-	[5] = {
+local history = {
+	[1] = {
 		{
 			number = 966831664,
 			time = 1584110467,
-			incoming = true
+			isIncoming = true
 		},
 		{
 			number = 967301022,
 			time = 1584110467,
-			incoming = false
+			isIncoming = false
 		}
 	}
 }
 
 function getHistory(source)
-	local character = exports['crp-base']:GetCharacter(source)
+	local character = exports['crp-base']:getCharacter(source)
 
-	return history[character:getCharacterID()]
+	return history[character:getCharacterId()]
 end
 
-function addCall(source, number, incoming)
-	local character = exports['crp-base']:GetCharacter(source)
+RPC:register('getHistory', getHistory)
 
-	history[character:getCharacterID()][#history[character:getCharacterID()] + 1] = { number = number, time = generateTime(), incoming = incoming }
+function addCall(source, number, isIncoming)
+	local character = exports['crp-base']:getCharacter(source)
+	local characterId = character:getCharacterId()
+
+	history[characterId][#history[characterId] + 1] = { number = number, time = GetCurrentTime(), isIncoming = isIncoming }
 
 	return true
 end
+
+RPC:register('addCall', addCall)

@@ -3,9 +3,9 @@ function getContacts(source)
 		SELECT id, name, number FROM contacts WHERE character_id = ?;
 	]]
 
-	local characterId = exports['crp-base']:GetCharacter(source).getCharacterID()
+	local character = exports['crp-base']:getCharacter(source)
 
-	return Citizen.Await(CRP.DB:Execute(query, characterId))
+	return Citizen.Await(DB:Execute(query, character.getCharacterId()))
 end
 
 function addContact(source, contactName, contactNumber)
@@ -16,15 +16,17 @@ function addContact(source, contactName, contactNumber)
 		INSERT INTO contacts (character_id, name, number) VALUES (?, ?, ?);
 	]]
 
-	local characterId = exports['crp-base']:GetCharacter(source).getCharacterID()
-	local result = Citizen.Await(CRP.DB:Execute(query, characterId, contactName, contactNumber))
+	local character = exports['crp-base']:getCharacter(source)
+	local result = Citizen.Await(DB:Execute(query, character.getCharacterId(), contactName, contactNumber))
 
 	if result and result.affectedRows > 0 then
 		return true, result.insertId
-	else
-		return false
 	end
+
+	return false
 end
+
+RPC:register('addContact', addContact)
 
 function deleteContact(source, contactId)
 	if not contactId or type(contactId) ~= 'number' then return false end
@@ -33,14 +35,16 @@ function deleteContact(source, contactId)
 		DELETE FROM contacts WHERE id = ?;
 	]]
 
-	local result = Citizen.Await(CRP.DB:Execute(query, contactId))
+	local result = Citizen.Await(DB:Execute(query, contactId))
 
 	if result and result.affectedRows > 0 then
 		return true
-	else
-		return false
 	end
+
+	return false
 end
+
+RPC:register('deleteContact', deleteContact)
 
 function editContact(source, contactId, contactName, contactNumber)
 	if not contactId or type(contactId) ~= 'number' then return false end
@@ -51,12 +55,14 @@ function editContact(source, contactId, contactName, contactNumber)
 		UPDATE contacts SET name = ?, number = ? WHERE id = ? AND character_id = ?;
 	]]
 
-	local characterId = exports['crp-base']:GetCharacter(source).getCharacterID()
-	local result = Citizen.Await(CRP.DB:Execute(query, contactName, contactNumber, contactId, characterId))
+	local character = exports['crp-base']:getCharacter(source)
+	local result = Citizen.Await(DB:Execute(query, contactName, contactNumber, contactId, character.getCharacterId()))
 
 	if result and result.affectedRows > 0 then
 		return true
-	else
-		return false
 	end
+
+	return false
 end
+
+RPC:register('editContact', editContact)

@@ -1,23 +1,17 @@
-RegisterUICallback('getContacts', function(data, cb)
-    local contactsData = CRP.RPC:execute('crp-phone:getContacts')
-
-    cb(contactsData)
-end)
-
 RegisterUICallback('addContact', function(contactData, cb)
-    local success, insertId = CRP.RPC:execute('crp-phone:addContact', contactData)
+    local success, insertId = RPC:execute('addContact', contactData)
 
     cb({ state = success, id = insertId })
 end)
 
 RegisterUICallback('deleteContact', function(contactData, cb)
-    local success = CRP.RPC:execute('crp-phone:deleteContact', contactData)
+    local success = RPC:execute('deleteContact', contactData)
 
     cb({ state = success })
 end)
 
 RegisterUICallback('editContact', function(contactData, cb)
-    local success = CRP.RPC:execute('crp-phone:editContact', contactData)
+    local success = RPC:execute('editContact', contactData)
 
     cb({ state = success })
 end)

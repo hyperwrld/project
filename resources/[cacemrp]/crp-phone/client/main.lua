@@ -1,38 +1,15 @@
-Citizen.CreateThread(function()
-    while true do
-        Citizen.Wait(0)
+function openPhone()
+	local success = exports['crp-inventory']:hasItem('CRP_TELEMOVEL', 1)
 
-		if IsControlJustReleased(0, 170) then
-			TriggerEvent('crp-ui:openMenu', 'phone')
-        end
-    end
-end)
-
-function RegisterUICallback(name, func)
-    TriggerEvent('crp-ui:registerNuiCallback', name, func)
-end
-
-function SendUIMessage(data)
-    TriggerEvent('crp-ui:sendNuiMessage', data)
+	if success then
+		exports['crp-ui']:openApp('phone')
+	end
 end
 
 RegisterNetEvent('crp-phone:updatePhone')
 AddEventHandler('crp-phone:updatePhone', function(data)
-	SendUIMessage({
-		eventName = 'phone/setData', eventData = data
-	})
+	exports['crp-ui']:setAppData('phone', data)
 end)
 
-RegisterNetEvent('crp-phone:receiveMessage')
-AddEventHandler('crp-phone:receiveMessage', function(data)
-	SendUIMessage({
-		eventName = 'phone/receiveMessage', eventData = data
-	})
-end)
-
-RegisterNetEvent('crp-phone:receiveTweet')
-AddEventHandler('crp-phone:receiveTweet', function(data)
-	SendUIMessage({
-		app = 'phone', event = 'receiveTweet', eventData = data
-	})
-end)
+RegisterCommand('+openPhone', openPhone, false)
+RegisterKeyMapping('+openPhone', 'Abrir o telemóvel', 'keyboard', 'f5')
