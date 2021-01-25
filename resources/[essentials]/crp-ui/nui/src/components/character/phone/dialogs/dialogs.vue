@@ -57,8 +57,8 @@
 		render(h) {
 			return (
 				<transition appear name='fade'>
-					<v-dialog v-model={ this.state } persistent max-width='290' attach={ this.attach } hide-overlay dark>
-						<v-card>
+					<v-dialog v-model={ this.state } persistent max-width='290' attach={ this.attach } hide-overlay>
+						<div class='card'>
 							{ this.loaderState ?
 								<div class={ `loader ${ this.loaderClass }` }>
 									<svg class='spinner' width='43px' height='43px' viewBox='0 0 44 44' xmlns='http://www.w3.org/2000/svg'>
@@ -67,9 +67,9 @@
 								</div>
 								:
 								<fragment>
-									<v-card-title class='headline'>{ this.title }</v-card-title>
+									<span class='title'>{ this.title }</span>
 									{ (this.choices && this.choices.length > 0) &&
-										<v-card-text>
+										<div class='content'>
 											{ this.choices.map((choice, index) => {
 												return (
 													<div class='choice'>
@@ -81,12 +81,12 @@
 													</div>
 												)
 											})}
-										</v-card-text>
+										</div>
 									}
-									<v-card-actions>
-										<v-btn color='red darken-1' text onClick={ this.cancelDialog }>Voltar</v-btn>
-										<v-btn color='green darken-1' text onClick={ this.submitDialog }>{ this.sendText }</v-btn>
-									</v-card-actions>
+									<div class='buttons'>
+										<button onClick={ this.cancelDialog }>Voltar</button>
+										<button onClick={ this.submitDialog }>{ this.sendText }</button>
+									</div>
 
 									{ (this.choices && this.errorsList.length > 0) &&
 										<div class='errors'>
@@ -101,7 +101,7 @@
 									}
 								</fragment>
 							}
-						</v-card>
+						</div>
 					</v-dialog>
 				</transition>
 			);

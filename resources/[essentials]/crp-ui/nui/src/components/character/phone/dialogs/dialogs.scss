@@ -3,23 +3,30 @@
 	font-family: 'Quantico', sans-serif;
 
 	position: absolute;
+	top: 50%;
+	left: 50%;
+
+	transform: translate(-50%, -50%);
+	width: 100%;
+	outline: none;
 
 	::v-deep .v-dialog {
+		background-color: #232323;
 		box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.55);
+		border-radius: 2px;
 		margin: 5% !important;
 
-		.v-card {
-			display: flex;
-			flex-direction: column;
-			align-items: center;
-			justify-content: center;
+		.card {
+			display: grid;
+			grid-template-rows: auto 1fr auto;
+			grid-template-columns: 1fr;
+
+			gap: 10px;
+			padding: 5%;
 
 			overflow: hidden;
 			min-height: 120px;
-
-			* {
-				width: 100%;
-			}
+			color: ivory;
 
 			.loader {
 				display: flex;
@@ -104,15 +111,13 @@
 				}
 			}
 
-			.v-card__title {
+			.title {
 				font-size: 1.3rem !important;
-				padding: 5%;
 
-				justify-content: center;
+				text-align: center;
 			}
 
-			.v-card__text {
-				padding: 0 10% 5%;
+			.content {
 				line-height: normal;
 
 				.choice:first-child {
@@ -120,7 +125,6 @@
 				}
 
 				input, textarea {
-					width: 100%;
 					padding: 3.5%;
 
 					border: 1px solid #1a1a1a;
@@ -138,17 +142,31 @@
 				}
 			}
 
-			.v-card__actions {
+			.buttons {
 				display: grid;
 				grid-template-columns: 1fr 1fr;
 				justify-content: center;
 				gap: 5px;
 
-				padding: 0 5% 5%;
-
-				* {
+				button {
 					font-size: 0.8rem;
 					margin: 0 !important;
+					padding: 0 5px;
+					font-family: "Quantico", sans-serif;
+					font-weight: bold;
+				}
+			}
+
+			.errors {
+				display: grid;
+				gap: 5px;
+
+				.error {
+					border: none;
+					background: none;
+
+					font-size: 0.7rem;
+					color: #f05454;
 				}
 			}
 		}
