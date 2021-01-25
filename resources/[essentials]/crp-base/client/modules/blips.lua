@@ -67,7 +67,7 @@ local blips = {
     { type = 361, coords = vector3(176.631, -1562.025, 29.263)  }, { type = 361, coords = vector3(-319.292, -1471.715, 30.549) }
 }
 
-function CRP.BlipsManager:CreateBlip(data)
+function createBlip(data)
 	local blip, blipData = AddBlipForCoord(data.coords), blipsType[data.type]
 
 	SetBlipSprite(blip, data.type)
@@ -77,13 +77,15 @@ function CRP.BlipsManager:CreateBlip(data)
 
     BeginTextCommandSetBlipName('STRING')
     AddTextComponentString(blipData.name)
-    EndTextCommandSetBlipName(blip)
+	EndTextCommandSetBlipName(blip)
+
+	blips[#blips + 1] = data
 end
 
-AddEventHandler('crp-base:onPlayerJoined', function()
-    Citizen.CreateThread(function()
-        for i = 1, #blips do
-            CRP.BlipsManager:CreateBlip(blips[i])
-        end
-    end)
+exports('createBlip', createBlip)
+
+Citizen.CreateThread(function()
+	for i = 1, #blips do
+		createBlip(blips[i])
+	end
 end)

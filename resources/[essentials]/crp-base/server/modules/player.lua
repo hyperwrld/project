@@ -65,7 +65,7 @@ function CRP.Player:CreateCharacter(source, data)
 		return self.job
 	end
 
-	self.getJobGrade = function()
+	self.getGrade = function()
 		return self.grade
 	end
 
