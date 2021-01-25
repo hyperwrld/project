@@ -1,91 +1,66 @@
-JobsList, JobService = {}, {}
+local inService, groups = {}, {}
 
-function getJobsList()
-	local result = DB:Execute([[SELECT * FROM jobs;]])
+function getJobList()
+	local result = Citizen.Await(DB:Execute([[SELECT * FROM jobs;]]))
 
 	for i = 1, #result do
-		local jobData = result[i]
+		local data = result[i]
+		local jobIndex = getJobIndex(data.name)
 
-		JobsList[jobData.name] = { label = jobData.label, maxgrade = jobData.maxgrade, salary = jobData.salary }
+		if jobIndex then
+			jobsList[jobIndex].maxGrade, jobsList[jobIndex].salary = data.maxgrade, data.salary
 
-		if jobData.service then
-			JobService[jobData.name] = {}
+			if data.service then
+				inService[data.name] = {}
+			end
 		end
 	end
 end
 
-function deliverPayChecks()
+getJobList()
+
+function deliverPaychecks()
 	local characters = exports['crp-base']:getAllCharacters()
 
 	for i = 1, #characters do
-		local character, currentJob = characters[i], characters.getJob()
+		local character, currentJob = characters[i], characters[i].getJob()
 
-		if JobService and not JobService[currentJob.name][character.source] then
-			return
+		if inService[currentJob] and not inService[currentJob][character.source] then
+			-- pay less
 		end
 
-		local salary = math.floor((JobsList[currentJob.name].salary) + (JobsList[currentJob.name].salary * (tonumber(currentJob.grade) / 10)))
+		local salary = jobsList[currentJob].salary + (jobsList[currentJob].salary * (tonumber(character.getGrade()) / 10))
 
-		character.addBank(salary)
+		character.addBank(RoundNumber(salary))
 	end
 
-	SetTimeout(5 * 60000, deliverPayChecks)
+	SetTimeout(30 * 60000, deliverPaychecks)
 end
 
-getJobsList()
-deliverPayChecks()
+deliverPaychecks()
 
-RegisterServerEvent('crp-jobs:updateService')
-AddEventHandler('crp-jobs:updateService', function(jobName, status)
-	if not JobService[jobName] then
-		return
-	end
+function createGroup(source)
+	local character, code = exports['crp-base']:getCharacter(source), getGroupCode()
 
-	if Characters[source].job ~= jobName then
-		return
-	end
+	groups[code] = {
+		[source] = {  }
+	}
 
-	JobService[name][source] = status
-
-	Citizen.Wait(1000)
-
-    TriggerClientEvent('crp-jobs:updateJobService', source, status)
-end)
-
-AddEventHandler('crp-base:playerDropped', function(source, character)
-	local characterJob = character.getJob()
-
-	if not JobService[characterJob] then
-		return
-	end
-
-	JobService[characterJob][source] = false
-end)
-
-function isJobValid(jobName, grade)
-	local jobData = JobsList[jobName]
-
-	if not jobData then
-		return false
-	end
-
-	if grade >= 0 and grade <= jobData.maxgrade then
-		return true
-	end
-
-	return false
+	return true
 end
 
-function canPromote(jobName, grade)
-	local jobData = JobsList[jobName]
+function getGroupCode()
+	while true do
+		local canContinue, code = true, GetRandomString(4)
 
-	if not jobData or jobData.maxgrade ~= 0 then
-		return false
+		for i = 1, #groups do
+			if groups[i].code == code then
+				canContinue = false
+			end
+		end
+
+		if canContinue then break end
 	end
 
-	if jobData.maxgrade == grade then
-		return true
-	end
-
-	return false
+	return code
 end
