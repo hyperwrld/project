@@ -102,7 +102,7 @@ function equipWeapon(weaponData, weaponAmmo)
 	GiveWeaponToPed(playerPed, weaponData.hash, weaponAmmo, 0, 1)
 	SetCurrentPedWeapon(playerPed, weaponData.hash, 1)
 
-	if weaponData.hash == `WEAPON_CARBINERIFLE_MK2` then
+	if weaponData.hash == 4208062921 then
 		GiveWeaponComponentToPed(playerPed, weaponData.hash, `COMPONENT_AT_AR_AFGRIP_02`)
 		GiveWeaponComponentToPed(playerPed, weaponData.hash, `COMPONENT_AT_AR_FLSH`)
 		GiveWeaponComponentToPed(playerPed, weaponData.hash, `COMPONENT_AT_CR_BARREL_02`)
