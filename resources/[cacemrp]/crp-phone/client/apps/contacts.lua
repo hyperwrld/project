@@ -1,17 +1,17 @@
-RegisterUICallback('addContact', function(contactData, cb)
-    local success, insertId = RPC:execute('addContact', contactData)
+RegisterUICallback('addContact', function(data, cb)
+    local success, insertId = RPC:execute('addContact', data.name, tonumber(data.number))
 
     cb({ state = success, id = insertId })
 end)
 
-RegisterUICallback('deleteContact', function(contactData, cb)
-    local success = RPC:execute('deleteContact', contactData)
+RegisterUICallback('deleteContact', function(data, cb)
+    local success = RPC:execute('deleteContact', data)
 
     cb({ state = success })
 end)
 
-RegisterUICallback('editContact', function(contactData, cb)
-    local success = RPC:execute('editContact', contactData)
+RegisterUICallback('editContact', function(data, cb)
+    local success = RPC:execute('editContact', data)
 
     cb({ state = success })
 end)

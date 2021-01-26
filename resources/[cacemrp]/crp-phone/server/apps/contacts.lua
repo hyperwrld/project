@@ -10,7 +10,7 @@ end
 
 function addContact(source, contactName, contactNumber)
 	if not contactName or type(contactName) ~= 'string' then return false end
-	if not contactNumber or type(contactNumber) ~= 'string' then return false end
+	if not contactNumber or type(contactNumber) ~= 'number' then return false end
 
 	local query = [[
 		INSERT INTO contacts (character_id, name, number) VALUES (?, ?, ?);
