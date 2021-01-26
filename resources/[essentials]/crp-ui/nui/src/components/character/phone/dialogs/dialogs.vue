@@ -1,9 +1,9 @@
 <script>
 	import { library } from '@fortawesome/fontawesome-svg-core';
-	import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
-	import { fragment } from '../../../../utils/lib';
+	import { faCheck, faExclamationCircle, faSpinner, faTimes } from '@fortawesome/free-solid-svg-icons';
+	import { fragment, send } from './../../../../utils/lib.js';
 
-	library.add(faExclamationCircle);
+	library.add(faSpinner, faTimes, faCheck, faExclamationCircle);
 
 	export default {
 		name: 'dialogs',
@@ -58,7 +58,7 @@
 			return (
 				<transition appear name='fade'>
 					<v-dialog v-model={ this.state } persistent max-width='290' attach={ this.attach } hide-overlay>
-						<div class='card'>
+						<div class={ `card ${ this.loaderState ? 'loading' : ''}` }>
 							{ this.loaderState ?
 								<div class={ `loader ${ this.loaderClass }` }>
 									<svg class='spinner' width='43px' height='43px' viewBox='0 0 44 44' xmlns='http://www.w3.org/2000/svg'>
@@ -70,15 +70,15 @@
 									<span class='title'>{ this.title }</span>
 									{ (this.choices && this.choices.length > 0) &&
 										<div class='content'>
-											{ this.choices.map((choice, index) => {
+											{ this.choices.map((choice) => {
 												return (
-													<div class='choice'>
+													<fragment>
 														{ choice.type ?
 															<input type={ choice.type } v-model={ choice.value } placeholder={ choice.placeholder } maxlength={ choice.max } required/>
 															:
 															<textarea type='text' v-model={ choice.value } placeholder={ choice.placeholder } required/>
 														}
-													</div>
+													</fragment>
 												)
 											})}
 										</div>
@@ -90,7 +90,7 @@
 
 									{ (this.choices && this.errorsList.length > 0) &&
 										<div class='errors'>
-											{ this.errorsList.map((error, index) => {
+											{ this.errorsList.map((error) => {
 												return (
 													<div class='error'>
 														<font-awesome-icon icon={ ['fas', 'exclamation-circle'] }/> { error }

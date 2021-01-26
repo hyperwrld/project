@@ -1,3 +1,4 @@
+@import 'https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css';
 
 .v-dialog__content {
 	font-family: 'Quantico', sans-serif;
@@ -28,6 +29,10 @@
 			min-height: 120px;
 			color: ivory;
 
+			&.loading {
+				grid-template-rows: 1fr;
+			}
+
 			.loader {
 				display: flex;
 				flex-direction: column;
@@ -41,9 +46,13 @@
 					font-family: FontAwesome;
 					content: '\f00c';
 
-					position: absolute;
 					font-size: 20px;
 					color: white;
+
+					position: absolute;
+					top: 50%;
+					left: 50%;
+					transform: translate(-50%, -50%);
 
 					opacity: 0;
 					transition: opacity 1s ease-in-out;
@@ -53,9 +62,13 @@
 					font-family: FontAwesome;
 					content: '\f00d';
 
-					position: absolute;
 					font-size: 20px;
 					color: white;
+
+					position: absolute;
+					top: 50%;
+					left: 50%;
+					transform: translate(-50%, -50%);
 
 					opacity: 0;
 					transition: opacity 1s ease-in-out;
@@ -118,11 +131,11 @@
 			}
 
 			.content {
-				line-height: normal;
+				display: grid;
+				grid-template-rows: auto;
+				gap: 5px;
 
-				.choice:first-child {
-					margin-bottom: 2.5%;
-				}
+				line-height: normal;
 
 				input, textarea {
 					padding: 3.5%;
