@@ -1,6 +1,6 @@
 CRP.DB = {}
 
-function CRP.DB:FetchCharacters(source)
+function CRP.DB.FetchCharacters(source)
 	local identifier = CRP.Util:GetPlayerIdentifier(source)
 
     if not identifier or identifier == '' then return false end
@@ -10,9 +10,9 @@ function CRP.DB:FetchCharacters(source)
     return Citizen.Await(DB:Execute(query, identifier))
 end
 
-RPC:register('fetchCharacters', CRP.DB:FetchCharacters)
+RPC:register('fetchCharacters', CRP.DB.FetchCharacters)
 
-function CRP.DB:DoesCharacterExist(firstname, lastname)
+function CRP.DB.DoesCharacterExist(firstname, lastname)
     if not firstname or type(firstname) ~= 'string' then return false end
     if not lastname or type(lastname) ~= 'string' then return false end
 
@@ -26,7 +26,7 @@ function CRP.DB:DoesCharacterExist(firstname, lastname)
     return false
 end
 
-function CRP.DB:CreateCharacter(source, data)
+function CRP.DB.CreateCharacter(source, data)
 	local identifier = CRP.Util:GetPlayerIdentifier(source)
 
 	if not identifier or identifier == '' then return false end
@@ -36,13 +36,13 @@ function CRP.DB:CreateCharacter(source, data)
 	if not data.dateOfBirth or type(data.dateOfBirth) ~= 'string' then return false end
 	if data.gender == nil or type(data.gender) ~= 'boolean' then return false end
 
-	local characterExist = CRP.DB:DoesCharacterExist(data.firstName, data.lastName)
+	local characterExist = CRP.DB.DoesCharacterExist(data.firstName, data.lastName)
 
 	if characterExist then
 		return false
 	end
 
-	local numCharacters = CRP.DB:GetCharactersTotal(identifier)
+	local numCharacters = CRP.DB.GetCharactersTotal(identifier)
 
 	if numCharacters >= 5 then
 		return false
@@ -63,9 +63,9 @@ function CRP.DB:CreateCharacter(source, data)
 	}
 end
 
-RPC:register('createCharacter', CRP.DB:CreateCharacter)
+RPC:register('createCharacter', CRP.DB.CreateCharacter)
 
-function CRP.DB:DeleteCharacter(source, data)
+function CRP.DB.DeleteCharacter(source, data)
 	local identifier = CRP.Util:GetPlayerIdentifier(source)
 
     if not identifier or identifier == '' then return false end
@@ -81,9 +81,9 @@ function CRP.DB:DeleteCharacter(source, data)
     return true
 end
 
-RPC:register('deleteCharacter', CRP.DB:DeleteCharacter)
+RPC:register('deleteCharacter', CRP.DB.DeleteCharacter)
 
-function CRP.DB:RetrieveCharacter(source, characterId)
+function CRP.DB.RetrieveCharacter(source, characterId)
 	local identifier = CRP.Util:GetPlayerIdentifier(source)
 
     if not identifier or identifier == '' then return false end
@@ -101,9 +101,9 @@ function CRP.DB:RetrieveCharacter(source, characterId)
     return true, result[1]
 end
 
-RPC:register('selectCharacter', CRP.DB:RetrieveCharacter)
+RPC:register('selectCharacter', CRP.DB.RetrieveCharacter)
 
-function CRP.DB:GetCharactersTotal(identifier)
+function CRP.DB.GetCharactersTotal(identifier)
     local query = [[SELECT COUNT(1) AS count FROM characters WHERE identifier = ?;]]
 	local result = Citizen.Await(DB:Execute(query, identifier))
 
