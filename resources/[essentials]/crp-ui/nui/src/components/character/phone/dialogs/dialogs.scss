@@ -175,8 +175,8 @@
 				gap: 5px;
 
 				.error {
-					border: none;
-					background: none;
+					border: none !important;
+					background: none !important;
 
 					font-size: 0.7rem;
 					color: #f05454;
