@@ -25,12 +25,12 @@ end
 RPC:register('getMessages', getMessages)
 
 function sendMessage(source, targetNumber, message)
-    if not targetNumber or type(targetNumber) ~= 'number' then return false end
+	if not targetNumber or type(targetNumber) ~= 'number' then return false end
 	if not message or type(message) ~= 'string' then return false end
 
     local query = [[
         INSERT INTO messages (sender, receiver, message, time) VALUES (?, ?, ?, ?);
-    ]]
+	]]
 
 	local characterPhone, time = exports['crp-base']:getCharacter(source).getPhone(), GetCurrentTime()
 	local result = Citizen.Await(DB:Execute(query, characterPhone, targetNumber, message, time))

@@ -5,7 +5,7 @@ RegisterUICallback('getMessages', function(number, cb)
 end)
 
 RegisterUICallback('sendMessage', function(data, cb)
-    local success, message = RPC:execute('sendMessage', data.number, data.message)
+    local success, message = RPC:execute('sendMessage', tonumber(data.number), data.message)
 
     cb({ state = success, message = message })
 end)
