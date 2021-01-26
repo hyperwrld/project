@@ -67,16 +67,14 @@
 					],
 					sendText: 'Enviar', nuiType: 'sendMessage', data: { number: contactNumber }
 				}).then(response => {
-					// if (response) {
-					// 	let found = this.contacts.find(element => element.id == contactId);
-
-					// 	found.name = response.choiceData.name, found.number = Number(response.choiceData.number);
-					// }
+					if (response) {
+						this.$store.dispatch('messages/setMessage', response.data.message);
+					}
       			})
 			},
 			editContact(contactId, contactName, contactNumber) {
 				dialogs.createDialog({
-					attach: '.contact-list', title: 'Editar contato',
+					attach: '.list', title: 'Editar contato',
 					choices: [
 						{ key: 'name', type: 'text', value: contactName, min: 1, max: 20, placeholder: 'Nome', errorText: 'Escolha um nome com o máximo de 20 caracteres.' },
 						{ key: 'number', type: 'number', value: contactNumber, min: 9, max: 9, placeholder: 'Número', errorText: 'Insira um número com 9 números.' }
@@ -92,7 +90,7 @@
 			},
 			deleteContact(contactId) {
 				dialogs.createDialog({
-					attach: '.contact-list', title: 'Remover contato', sendText: 'Remover', nuiType: 'deleteContact', data: { id: contactId }
+					attach: '.list', title: 'Remover contato', sendText: 'Remover', nuiType: 'deleteContact', data: { id: contactId }
 				}).then(response => {
 					if (response) {
 						let foundIndex = this.contacts.findIndex(element => element.id == contactId);
@@ -117,7 +115,7 @@
 					<div class={`list ${ isNotEmpty ? '' : 'empty'}`}>
 						{ isNotEmpty ?
 							<v-expansion-panels flat accordion>
-								{ this.filterItems().map((contact, index) => {
+								{ this.filterItems().map((contact) => {
 									return (
 										<v-expansion-panel>
 											<v-expansion-panel-header>
