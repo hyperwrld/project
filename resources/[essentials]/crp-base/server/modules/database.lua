@@ -10,6 +10,8 @@ function CRP.DB:FetchCharacters(source)
     return Citizen.Await(DB:Execute(query, identifier))
 end
 
+RPC:register('fetchCharacters', CRP.DB:FetchCharacters)
+
 function CRP.DB:DoesCharacterExist(firstname, lastname)
     if not firstname or type(firstname) ~= 'string' then return false end
     if not lastname or type(lastname) ~= 'string' then return false end
@@ -61,6 +63,8 @@ function CRP.DB:CreateCharacter(source, data)
 	}
 end
 
+RPC:register('createCharacter', CRP.DB:CreateCharacter)
+
 function CRP.DB:DeleteCharacter(source, data)
 	local identifier = CRP.Util:GetPlayerIdentifier(source)
 
@@ -76,6 +80,8 @@ function CRP.DB:DeleteCharacter(source, data)
 
     return true
 end
+
+RPC:register('deleteCharacter', CRP.DB:DeleteCharacter)
 
 function CRP.DB:RetrieveCharacter(source, characterId)
 	local identifier = CRP.Util:GetPlayerIdentifier(source)
@@ -94,6 +100,8 @@ function CRP.DB:RetrieveCharacter(source, characterId)
 
     return true, result[1]
 end
+
+RPC:register('selectCharacter', CRP.DB:RetrieveCharacter)
 
 function CRP.DB:GetCharactersTotal(identifier)
     local query = [[SELECT COUNT(1) AS count FROM characters WHERE identifier = ?;]]

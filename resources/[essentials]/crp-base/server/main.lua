@@ -3,13 +3,11 @@ AddEventHandler('crp-base:disconnectUser', function()
 	DropPlayer(source, 'Foste desconectado do servidor.')
 end)
 
-function getAllCharacters(source)
-	return CRP.Characters
-end
-
 function getCharacter(source)
 	return CRP.Characters[source]
 end
+
+exports('getCharacter', getCharacter)
 
 function getCharacterByPhone(number)
 	for i = 1, #CRP.Characters do
@@ -21,22 +19,10 @@ function getCharacterByPhone(number)
 	return false
 end
 
-RPC:register('fetchCharacters', function(source)
-	return CRP.DB:FetchCharacters(source)
-end)
+exports('getCharacterByPhone', getCharacterByPhone)
 
-RPC:register('createCharacter', function(source, data)
-	return CRP.DB:CreateCharacter(source, data)
-end)
-
-RPC:register('deleteCharacter', function(source, data)
-	return CRP.DB:DeleteCharacter(source, data)
-end)
-
-RPC:register('selectCharacter', function(source, characterId)
-	return CRP.DB:RetrieveCharacter(source, characterId)
-end)
+function getAllCharacters(source)
+	return CRP.Characters
+end
 
 exports('getAllCharacters', getAllCharacters)
-exports('getCharacter', getCharacter)
-exports('getCharacterByPhone', getCharacterByPhone)
