@@ -44,7 +44,7 @@
 			}
 		},
 		watch: {
-     		'messages': function(newV, old) {
+     		'messages': function() {
 				setTimeout(() => {
 					this.scrollDown();
 				}, 250);

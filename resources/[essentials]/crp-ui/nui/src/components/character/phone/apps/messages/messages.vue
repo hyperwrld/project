@@ -51,6 +51,20 @@
 
 					this.$router.push({ name: 'message', params: { data: { name: name, number: number }}});
 				});
+			},
+			sendMessage() {
+				dialogs.createDialog({
+					attach: '.list', title: 'Enviar Mensagem',
+					choices: [
+						{ key: 'number', type: 'number', placeholder: 'Número', max: 9, errorText: 'Insira um número com 9 números.' },
+						{ key: 'message', placeholder: 'Mensagem', errorText: 'Insira uma mensagem para mandar a um número.' }
+					],
+					sendText: 'Enviar', nuiType: 'sendMessage'
+				}).then(response => {
+					if (response) {
+						this.$store.dispatch('messages/setMessage', response.data.message);
+					}
+      			})
 			}
 		},
 		render(h) {
@@ -63,7 +77,7 @@
 							<input type='text' v-model={ this.searchInput } placeholder='Procurar...'/>
 							<font-awesome-icon icon={ ['fas', 'search'] }/>
 						</div>
-						<font-awesome-icon icon={ ['fas', 'envelope'] }/>
+						<font-awesome-icon icon={ ['fas', 'envelope'] } onClick={ this.sendMessage }/>
 					</div>
 					<div class={`list ${ isNotEmpty ? '' : 'empty'}`}>
 						{ isNotEmpty ?
