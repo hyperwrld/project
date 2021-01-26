@@ -46,6 +46,10 @@ const mutations = {
 		state.messages = data;
 	},
 	setMessage(state, data) {
+		let messageIndex = state.lastMessages.findIndex(element => (element.receiver == data.receiver || element.sender == data.receiver));
+
+		messageIndex == -1 ? state.lastMessages.push(data) : state.lastMessages.splice(messageIndex, 1, data);
+
 		state.messages.push(data);
 	}
 }
