@@ -26,11 +26,14 @@
 			padding: 5%;
 
 			overflow: hidden;
-			min-height: 120px;
 			color: ivory;
 
 			&.loading {
 				grid-template-rows: 1fr;
+			}
+
+			&.empty {
+				grid-template-rows: auto auto;
 			}
 
 			.loader {

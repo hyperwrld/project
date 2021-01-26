@@ -58,7 +58,7 @@
 			return (
 				<transition appear name='fade'>
 					<v-dialog v-model={ this.state } persistent max-width='290' attach={ this.attach } hide-overlay>
-						<div class={ `card ${ this.loaderState ? 'loading' : ''}` }>
+						<div class={ `card ${ this.loaderState ? 'loading' : (!this.choices || this.choices.length <= 0) ? 'empty' : '' }` }>
 							{ this.loaderState ?
 								<div class={ `loader ${ this.loaderClass }` }>
 									<svg class='spinner' width='43px' height='43px' viewBox='0 0 44 44' xmlns='http://www.w3.org/2000/svg'>
