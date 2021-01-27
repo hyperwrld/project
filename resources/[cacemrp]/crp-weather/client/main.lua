@@ -99,10 +99,10 @@ end
 
 exports('toggleDesync', toggleDesync)
 
-AddEventHandler('playerSpawned', function()
+Citizen.CreateThread(function()
 	local data = RPC:execute('requestSync')
 
-	if success then
+	if data then
 		currentWeather, baseTime, timeOffset = data.weather, data.baseTime, data.timeOffset
 	end
 end)
