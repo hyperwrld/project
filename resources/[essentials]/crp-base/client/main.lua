@@ -1,15 +1,15 @@
 Citizen.CreateThread(function()
 	while true do
-		Citizen.Wait(0)
+		Citizen.Wait(50)
 
-        if NetworkIsPlayerActive(PlayerId()) then
-			TriggerEvent('crp-base:playerJoined')
+		if NetworkIsPlayerActive(PlayerId()) then
+			exports['spawnmanager']:spawnPlayer(vector4(409.8483, -1001.0, -100.0, 5.39))
 			break
 		end
 	end
 end)
 
-AddEventHandler('crp-base:playerJoined', function()
+AddEventHandler('playerSpawned', function()
     CRP.Spawn:InitializeMenu()
 end)
 
