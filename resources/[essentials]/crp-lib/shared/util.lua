@@ -27,13 +27,13 @@ function GetCurrentTime()
 end
 
 function GetRandomString(length)
-	local string = ''
-
-	for i = 1, length do
-		string = string .. string.char(GetRandomNumber(97, 122))
+	if not length or length <= 0 then
+		return ''
 	end
 
-	return string
+	math.randomseed(os.clock() ^ 5)
+
+	return GetRandomString(length - 1) .. string.char(math.random(65, 90))
 end
 
 AddEventHandler('onResourceStart', function(resource)
