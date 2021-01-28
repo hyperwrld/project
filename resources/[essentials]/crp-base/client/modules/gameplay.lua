@@ -35,7 +35,7 @@ function CRP.Gameplay:InitializeNatives()
 		local previousCoords = vector3(0, 0, 0)
 
 		while true do
-			Citizen.Wait(150000)
+			Citizen.Wait(15000)
 
 			local coords = GetEntityCoords(playerPed)
 
