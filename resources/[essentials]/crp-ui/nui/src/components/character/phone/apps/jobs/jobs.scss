@@ -76,6 +76,7 @@
 
 					svg {
 						font-size: 1.25rem;
+						outline: none;
 					}
 				}
 			}
@@ -99,8 +100,8 @@
 
 		.content {
 			display: grid;
-			align-items: center;
-			grid-template-rows: auto auto;
+			align-items: start;
+			grid-template-rows: 1fr auto;
 
 			.members {
 				display: grid;
@@ -143,6 +144,7 @@
 
 						border: none;
 						border-radius: 3px;
+						outline: none;
 
 						font-size: 1.2vh;
 						text-transform: uppercase;

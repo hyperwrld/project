@@ -3,7 +3,7 @@
 
 	import { library } from '@fortawesome/fontawesome-svg-core';
 	import { faBriefcase, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
-	import { fragment } from './../../../../../utils/lib.js';
+	import { fragment, send } from './../../../../../utils/lib.js';
 
 	import dialogs from './../../dialogs/dialogs.js';
 
@@ -17,10 +17,29 @@
 			})
 		},
 		methods: {
-
+			createGroup(identifier) {
+				send('createGroup', identifier).then(data => {
+					if (data.state) {
+						this.$store.dispatch('jobs/setGroupData', data.group);
+					}
+				});
+			},
+			joinGroup() {
+				dialogs.createDialog({
+					attach: '.app', title: 'Entrar num grupo',
+					choices: [
+						{ key: 'code', type: 'text', placeholder: 'Código', max: 4, errorText: 'Insira um código com 4 caracteres.' }
+					],
+					sendText: 'Entrar', nuiType: 'joinGroup'
+				}).then(response => {
+					if (response) {
+						this.$store.dispatch('jobs/setGroupData', response.data.group);
+					}
+      			})
+			}
 		},
 		render(h) {
-			let hasGroup = this.jobGroup.length > 0 ? true : false;
+			let hasGroup = Object.keys(this.jobGroup).length > 0 ? true : false;
 
 			return (
 				<div class='jobs'>
@@ -35,18 +54,17 @@
 							<fragment>
 								<div class='content'>
 									<div class='members'>
-										{ this.jobGroup.members.map((member, index) => {
+										{ this.jobGroup.members.map((member) => {
 											return (
 												<div class='member'>
 													<div class='name'>
 														<span class='name'>{ member.name }</span>
 													</div>
-													<span class='money'>{ member.money + '€'}</span>
-
-													{ this.jobGroup.isLeader ?
-														<button class='kick'>Expulsar</button>
-													: member.isMember ?
-														<button>Membro</button> : <button>Líder</button>
+													<span class='money'>
+														{ member.value + '€'}
+													</span>
+													{ !member.isMember ?
+														<button>Líder</button> : this.jobGroup.isLeader ? <button class='kick'>Expulsar</button> : <button>Membro</button>
 													}
 												</div>
 											)
@@ -57,7 +75,7 @@
 										<div class='information'>
 											<span>{ this.jobGroup.members.length + '/4' }</span>
 											<span>Código: { this.jobGroup.code }</span>
-											<span>Valor total: { this.jobGroup.totalMoney + '€'}</span>
+											<span>Valor total: { this.jobGroup.value + '€'}</span>
 										</div>
 									</div>
 								</div>
@@ -68,16 +86,16 @@
 							:
 							<fragment>
 								<div class='list'>
-									{ this.jobList.map((job, index) => {
+									{ this.jobList.map((job) => {
 										return (
 											<div class='job'>
 												<span>{ job.label }</span>
-												<font-awesome-icon icon={ ['fas', 'sign-in-alt'] }/>
+												<font-awesome-icon icon={ ['fas', 'sign-in-alt'] } onClick={ () => this.createGroup(job.identifier) }/>
 											</div>
 										)
 									})}
 								</div>
-								<button>Entrar num grupo</button>
+								<button onClick={ this.joinGroup }>Entrar num grupo</button>
 							</fragment>
 						}
 					</div>
