@@ -78,10 +78,16 @@ function leaveGroup(source, code)
 			table.remove(groups[code].members, k)
 
 			if groups[code].leader == source then
-				groups[code].leader, groups[code].members[1].isMember = groups[code].members[1].source, false
+				if #groups[code].members > 0 then
+					groups[code].leader, groups[code].members[1].isMember = groups[code].members[1].source, false
+
+					updateGroupMembers(source, code)
+				else
+					groups[code] = nil
+				end
 			end
 
-			return true, updateGroupMembers(source, code)
+			return true
 		end
 	end
 
