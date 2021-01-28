@@ -16,7 +16,7 @@ const actions = {
 
 const mutations = {
 	setData(state, data) {
-		state.userCharacters = data
+		state.userCharacters = data;
 
 		for (var i = state.userCharacters.length; i < 5; i++) {
 			state.userCharacters.push({});

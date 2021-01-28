@@ -3,7 +3,7 @@ const state = () => ({
 })
 
 const getters = {
-	getHistory: (state) => {
+	getAdverts: (state) => {
 		return state.adverts.sort((a, b) => b.id - a.id);
 	}
 }
