@@ -1,3 +1,9 @@
+AddEventHandler('crp-base:playerDisconnected', function(character)
+	if not inService[character.getJob()] then
+		character.setJob('unemployed', 0)
+	end
+end)
+
 function deliverPaychecks()
 	local characters = exports['crp-base']:getAllCharacters()
 

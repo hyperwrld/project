@@ -1,10 +1,14 @@
 local groups = {}
 
-function createGroup(source)
+function createGroup(source, jobIdentifier)
 	local character, code = exports['crp-base']:getCharacter(source), getGroupCode()
 
+	if inService[character.getJob()] then
+		return false
+	end
+
 	groups[code] = {
-		code = code, leader = source, members = {}, value = 0
+		code = code, job = jobIdentifier, leader = source, members = {}, value = 0
 	}
 
 	if joinGroup(source, code, false) then
@@ -23,13 +27,11 @@ function joinGroup(source, code, isMember)
 		return false
 	end
 
-	local length = #groups[code].members
+	local length, character = #groups[code].members, exports['crp-base']:getCharacter(source)
 
-	if length >= 4 then
+	if length >= 4 or inService[character.getJob()] then
 		return false
 	end
-
-	local character = exports['crp-base']:getCharacter(source)
 
 	groups[code].members[length + 1] = {
 		source = source, isMember = isMember, name = character.firstname .. ' ' .. character.lastname, value = 0
@@ -38,6 +40,8 @@ function joinGroup(source, code, isMember)
 	if not isLeader then
 		updateGroupMembers(source, code)
 	end
+
+	character.setJob(groups[code].job, 0)
 
 	return true
 end
