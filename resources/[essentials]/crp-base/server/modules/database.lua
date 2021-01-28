@@ -103,15 +103,15 @@ end
 
 RPC:register('selectCharacter', CRP.DB.RetrieveCharacter)
 
-function CRP.DB:SaveCharacterData(source, characterId, bank, position)
+function CRP.DB:SaveCharacterData(source, characterId, bank, job, grade, position)
 	local identifier = CRP.Util:GetPlayerIdentifier(source)
 
     if not identifier or identifier == '' then return false end
 	if not characterId or type(characterId) ~= 'number' then return false end
 
-	local query = [[UPDATE characters SET bank = ?, position = ? WHERE identifier = ? AND id = ?;]]
+	local query = [[UPDATE characters SET bank = ?, job = ?, grade = ?, position = ? WHERE identifier = ? AND id = ?;]]
 
-	DB:Execute(query, bank, position, identifier, characterId)
+	DB:Execute(query, bank, job, grade, position, identifier, characterId)
 end
 
 function CRP.DB.GetCharactersTotal(identifier)
