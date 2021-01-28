@@ -89,7 +89,7 @@ function CRP.DB.RetrieveCharacter(source, characterId)
     if not identifier or identifier == '' then return false end
 	if not characterId or type(characterId) ~= 'number' then return false end
 
-    local query = [[SELECT id, identifier, firstname, lastname, bank, job, grade, phone, dateofbirth, gender, skin FROM characters WHERE identifier = ? AND id = ?;]]
+    local query = [[SELECT id, identifier, firstname, lastname, bank, job, grade, phone, dateofbirth, gender, skin, position FROM characters WHERE identifier = ? AND id = ?;]]
     local result = Citizen.Await(DB:Execute(query, identifier, characterId))
 
 	if #result == 0 then
@@ -102,6 +102,17 @@ function CRP.DB.RetrieveCharacter(source, characterId)
 end
 
 RPC:register('selectCharacter', CRP.DB.RetrieveCharacter)
+
+function CRP.DB:SaveCharacterData(source, characterId, bank, position)
+	local identifier = CRP.Util:GetPlayerIdentifier(source)
+
+    if not identifier or identifier == '' then return false end
+	if not characterId or type(characterId) ~= 'number' then return false end
+
+	local query = [[UPDATE characters SET bank = ?, position = ? WHERE identifier = ? AND id = ?;]]
+
+	DB:Execute(query, bank, position, identifier, characterId)
+end
 
 function CRP.DB.GetCharactersTotal(identifier)
     local query = [[SELECT COUNT(1) AS count FROM characters WHERE identifier = ?;]]

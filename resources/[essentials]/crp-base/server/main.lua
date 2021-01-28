@@ -1,3 +1,28 @@
+AddEventHandler('playerDropped', function()
+	local _source, character = source, CRP.Characters[source]
+
+	if CRP.Characters[_source] then
+		TriggerEvent('crp-base:playerDisconnected', character)
+
+		CRP.DB:SaveCharacterData(_source, character.getCharacterId(), character.getBank(), character.getPosition())
+
+		CRP.Characters[_source] = nil
+
+		Debug('Player disconnected | Character data saved successfully.')
+	end
+end)
+
+RegisterNetEvent('crp-base:updatePosition')
+AddEventHandler('crp-base:updatePosition', function(coords)
+	local character = CRP.Characters[source]
+
+	if character then
+		character.setPosition(coords)
+
+		Debug('Character current position saved.')
+	end
+end)
+
 RegisterNetEvent('crp-base:disconnectUser')
 AddEventHandler('crp-base:disconnectUser', function()
 	DropPlayer(source, 'Foste desconectado do servidor.')
