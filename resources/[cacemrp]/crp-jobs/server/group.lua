@@ -46,6 +46,28 @@ RPC:register('joinGroup', function(source, code)
 	return joinGroup(source, code, true), returnGroup(source, code)
 end)
 
+function kickMember(source, code, target)
+	if not groups[code] or groups[code].leader ~= source then
+		return false
+	end
+
+	for k, v in ipairs(groups[code].members) do
+		if v.source == target then
+			table.remove(groups[code].members, k)
+
+			TriggerClientEvent('crp-jobs:updateGroup', target, {})
+
+			updateGroupMembers(source, code)
+
+			return true, returnGroup(source, code)
+		end
+	end
+
+	return false
+end
+
+RPC:register('kickMember', kickMember)
+
 function leaveGroup(source, code)
 	if not groups[code] then
 		return false

@@ -36,6 +36,27 @@
 						this.$store.dispatch('jobs/setGroupData', response.data.group);
 					}
       			})
+			},
+			leaveGroup() {
+				dialogs.createDialog({
+					attach: '.app', title: 'Tens a certeza?', sendText: 'Sair', nuiType: 'leaveGroup', data: { code: this.jobGroup.code }
+				}).then(response => {
+					if (response) {
+						this.$store.dispatch('jobs/setGroupData', {});
+					}
+      			})
+			},
+			kickMember(source) {
+				if (!this.jobGroup.isLeader) return
+
+				dialogs.createDialog({
+					attach: '.app', title: 'Tens a certeza?', sendText: 'Sair', nuiType: 'kickMember', data: { code: this.jobGroup.code, member: source }
+				}).then(response => {
+					console.log(response)
+					if (response) {
+						this.$store.dispatch('jobs/setGroupData', response.data.group);
+					}
+      			})
 			}
 		},
 		render(h) {
@@ -64,7 +85,7 @@
 														{ member.value + '€'}
 													</span>
 													{ !member.isMember ?
-														<button>Líder</button> : this.jobGroup.isLeader ? <button class='kick'>Expulsar</button> : <button>Membro</button>
+														<button>Líder</button> : this.jobGroup.isLeader ? <button class='kick' onClick={ () => this.kickMember(member.source) }>Expulsar</button> : <button>Membro</button>
 													}
 												</div>
 											)
@@ -80,7 +101,7 @@
 									</div>
 								</div>
 								<div class='bottom'>
-									<button>Sair do grupo</button>
+									<button onClick={ this.leaveGroup }>Sair do grupo</button>
 								</div>
 							</fragment>
 							:

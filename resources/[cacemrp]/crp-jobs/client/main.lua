@@ -18,6 +18,12 @@ RegisterUICallback('joinGroup', function(data, cb)
     cb({ state = success, group = data })
 end)
 
+RegisterUICallback('kickMember', function(data, cb)
+	local success, data = RPC:execute('kickMember', data.code, data.member)
+
+    cb({ state = success, group = data })
+end)
+
 RegisterUICallback('leaveGroup', function(data, cb)
 	local success = RPC:execute('leaveGroup', data.code)
 
