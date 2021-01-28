@@ -11,7 +11,7 @@ RegisterUICallback('deleteContact', function(data, cb)
 end)
 
 RegisterUICallback('editContact', function(data, cb)
-    local success = RPC:execute('editContact', data)
+    local success = RPC:execute('editContact', tonumber(data.id), data.name, tonumber(data.number))
 
     cb({ state = success })
 end)
