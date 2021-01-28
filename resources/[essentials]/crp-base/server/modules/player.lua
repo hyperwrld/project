@@ -28,6 +28,7 @@ function CRP.Player:CreateCharacter(source, data)
 	self.phone          = data.phone
 	self.dateofbirth    = data.dateofbirth
 	self.gender         = data.gender
+	self.position       = data.position
 
 	self.getCharacterId = function()
 		return self.id
@@ -75,6 +76,14 @@ function CRP.Player:CreateCharacter(source, data)
 
 			TriggerClientEvent('crp-base:updateJob', self.source, self.job, CRP.JobsList[self.job])
 		end
+	end
+
+	self.getPosition = function()
+		return self.position
+	end
+
+	self.setPosition = function(coords)
+		self.position = coords
 	end
 
 	return self
