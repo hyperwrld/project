@@ -36,11 +36,7 @@ function joinGroup(source, code, isMember)
 	}
 
 	if not isLeader then
-		for k, v in ipairs(groups[code].members) do
-			if v.source ~= source then
-				TriggerClientEvent('crp-jobs:updateGroup', v.source, returnGroup(v.source, code))
-			end
-		end
+		updateGroupMembers(source, code)
 	end
 
 	return true
@@ -49,6 +45,28 @@ end
 RPC:register('joinGroup', function(source, code)
 	return joinGroup(source, code, true), returnGroup(source, code)
 end)
+
+function leaveGroup(source, code)
+	if not groups[code] then
+		return false
+	end
+
+	for k, v in ipairs(groups[code].members) do
+		if v.source == source then
+			table.remove(groups[code].members, k)
+
+			if groups[code].leader == source then
+				groups[code].leader, groups[code].members[1].isMember = groups[code].members[1].source, false
+			end
+
+			return true, updateGroupMembers(source, code)
+		end
+	end
+
+	return false
+end
+
+RPC:register('leaveGroup', leaveGroup)
 
 function returnGroup(source, code)
 	if not groups[code] then
@@ -82,4 +100,12 @@ function getGroupCode()
 	end
 
 	return code
+end
+
+function updateGroupMembers(source, code)
+	for k, v in ipairs(groups[code].members) do
+		if v.source ~= source then
+			TriggerClientEvent('crp-jobs:updateGroup', v.source, returnGroup(v.source, code))
+		end
+	end
 end

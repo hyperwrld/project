@@ -18,6 +18,12 @@ RegisterUICallback('joinGroup', function(data, cb)
     cb({ state = success, group = data })
 end)
 
+RegisterUICallback('leaveGroup', function(data, cb)
+	local success = RPC:execute('leaveGroup', data.code)
+
+    cb({ state = success })
+end)
+
 RegisterNetEvent('crp-jobs:updateGroup')
 AddEventHandler('crp-jobs:updateGroup', function(data)
 	exports['crp-ui']:setGroupData(data)
