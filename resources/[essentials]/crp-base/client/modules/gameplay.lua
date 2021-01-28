@@ -32,7 +32,7 @@ function CRP.Gameplay:InitializeNatives()
 	end)
 
 	Citizen.CreateThread(function()
-		local previousCoords = vector(0, 0, 0)
+		local previousCoords = vector3(0, 0, 0)
 
 		while true do
 			Citizen.Wait(150000)

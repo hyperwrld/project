@@ -98,12 +98,25 @@ function CRP.Spawn:SpawnCharacter(data)
 
 	exports['crp-weather']:toggleDesync(false)
 
+	DoScreenFadeOut(1000)
+
+	Citizen.Wait(1500)
+
+	DestroyAllCams(true)
+	RenderScriptCams(false, false, 2000, true, true)
+
+	Citizen.Wait(1000)
+
 	if data.position then
-		SetEntityCoords(playerPed, data.position)
+		local coords = json.decode(data.position)
+
+		SetEntityCoords(playerPed, coords.x, coords.y, coords.z)
 
 		isInMenu = false
 
 		setConcealStatus(false)
+
+		DoScreenFadeIn(500)
 	elseif characterSkin then
 		spawnNewCharacter(playerPed)
 	end

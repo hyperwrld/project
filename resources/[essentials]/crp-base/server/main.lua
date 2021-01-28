@@ -4,7 +4,7 @@ AddEventHandler('playerDropped', function()
 	if CRP.Characters[_source] then
 		TriggerEvent('crp-base:playerDisconnected', character)
 
-		CRP.DB:SaveCharacterData(_source, character.getCharacterId(), character.getBank(), character.getPosition())
+		CRP.DB:SaveCharacterData(_source, character.getCharacterId(), character.getBank(), json.encode(character.getPosition()))
 
 		CRP.Characters[_source] = nil
 

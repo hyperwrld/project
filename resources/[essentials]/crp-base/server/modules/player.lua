@@ -83,7 +83,7 @@ function CRP.Player:CreateCharacter(source, data)
 	end
 
 	self.setPosition = function(coords)
-		self.position = coords
+		self.position = { x = coords.x, y = coords.y, z = coords.z }
 	end
 
 	return self
