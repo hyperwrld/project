@@ -1,15 +1,13 @@
-local resourceName, promises, callIdentifier = GetCurrentResourceName(), {}, 0
+local resourceName, promises = GetCurrentResourceName(), {}
 
 RPC = {}
 
 function RPC:execute(name, ...)
-    local callId, isSolved = callIdentifier, false
-
-    callIdentifier = callIdentifier + 1
+    local callId, isSolved = GetRandomString(12), false
 
     promises[callId] = promise:new()
 
-    TriggerServerEvent('crp-lib:request', resourceName, name, callId, { ... })
+    TriggerServerEvent('crp-lib:request', resourceName, name, callId, {...})
 
     Citizen.SetTimeout(1000, function()
 		if not isSolved then
