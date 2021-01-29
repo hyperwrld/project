@@ -13,7 +13,10 @@ client_scripts {
 	'client/jobs/*.lua'
 }
 
-shared_script '@crp-lib/shared/util.lua'
+shared_scripts {
+	'@crp-lib/shared/util.lua',
+	'crp-jobs/shared/jobs.lua'
+}
 
 server_scripts {
 	'@crp-lib/server/database.lua',

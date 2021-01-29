@@ -1,7 +1,7 @@
-Citizen.CreateThread(function()
-	local data = RPC:execute('fetchJobs')
+local currentJob = 'unemployed'
 
-	exports['crp-ui']:setJobList(data)
+Citizen.CreateThread(function()
+	exports['crp-ui']:setJobList(jobs)
 
 	Debug('Updated jobs list on the crp-ui.')
 end)
@@ -28,6 +28,17 @@ RegisterUICallback('leaveGroup', function(data, cb)
 	local success = RPC:execute('leaveGroup', data.code)
 
     cb({ state = success })
+end)
+
+function getJob()
+	return currentJob
+end
+
+exports('getJob', getJob)
+
+RegisterNetEvent('crp-jobs:updateJob')
+AddEventHandler('crp-jobs:updateJob', function(jobName)
+	currentJob = jobName
 end)
 
 RegisterNetEvent('crp-jobs:updateGroup')

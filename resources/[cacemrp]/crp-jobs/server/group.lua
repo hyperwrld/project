@@ -1,14 +1,14 @@
 local groups = {}
 
-function createGroup(source, jobIdentifier)
+function createGroup(source, jobName)
 	local character, code = exports['crp-base']:getCharacter(source), getGroupCode()
 
-	if inService[character.getJob()] then
+	if inService[character.getJob()] and not getJobIndex(jobsList, jobName) then
 		return false
 	end
 
 	groups[code] = {
-		code = code, job = jobIdentifier, leader = source, members = {}, value = 0
+		code = code, job = jobName, leader = source, members = {}, value = 0
 	}
 
 	if joinGroup(source, code, false) then
