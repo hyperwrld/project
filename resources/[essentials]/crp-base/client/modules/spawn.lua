@@ -117,6 +117,8 @@ function CRP.Spawn:SpawnCharacter(data)
 		setConcealStatus(false)
 
 		DoScreenFadeIn(500)
+
+		CRP.Gameplay:InitializeThreads()
 	elseif characterSkin then
 		spawnNewCharacter(playerPed)
 	end
@@ -183,4 +185,6 @@ function spawnNewCharacter(playerPed)
 	end
 
 	isInMenu = false
+
+	CRP.Gameplay:InitializeThreads()
 end

@@ -30,7 +30,9 @@ function CRP.Gameplay:InitializeNatives()
 			SetPedSuffersCriticalHits(playerPed, false) -- Disable Headshot Damage
 		end
 	end)
+end
 
+function CRP.Gameplay:InitializeThreads()
 	Citizen.CreateThread(function()
 		local previousCoords = vector3(0, 0, 0)
 
@@ -39,7 +41,7 @@ function CRP.Gameplay:InitializeNatives()
 
 			local coords = GetEntityCoords(playerPed)
 
-			if #(coords - previousCoords) then
+			if #(coords - previousCoords) > 5.0 then
 				TriggerServerEvent('crp-base:updatePosition', coords)
 
 				previousCoords = coords
