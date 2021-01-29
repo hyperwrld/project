@@ -2,8 +2,6 @@
 	import { mapGetters } from 'vuex';
 	import { Drag, Drop } from 'vue-easy-dnd';
 
-	import { send } from './../../../utils/lib';
-
 	import item from './item/item.vue';
 
 	export default {
@@ -23,7 +21,16 @@
             }
 		},
 		methods: {
-			returnData: function(data) {
+			getSecondName() {
+				if (this.secondName.includes('drop')) {
+					return 'Chão';
+				} else if (this.secondName.includes('container')) {
+					return 'Contentor';
+				} else {
+					return this.data.secondName;
+				}
+			},
+			returnData(data) {
 				const quantity = Number((this.itemCount != 0 && this.itemCount <= data.quantity) ? this.itemCount : data.quantity);
 
 				return {
@@ -31,7 +38,7 @@
 					durability: data.durability, price: data.price
 				};
 			},
-			onDrop: function(event, inventory, index) {
+			onDrop(event, inventory, index) {
 				const currentIndex = event.source.$el.offsetParent.dataset.slot, currentInventory = event.source.$el.offsetParent.dataset.type;
 
 				if (inventory == 'use') {
@@ -40,7 +47,7 @@
 					this.$store.dispatch('inventory/moveItem', { current: currentInventory, future: inventory, index: currentIndex, futureIndex: index, quantity: this.itemCount });
 				}
 			},
-			checkInput: function(event) {
+			checkInput(event) {
 				event = (event) ? event : window.event;
 
                 if (event.keyCode >= 48 && event.keyCode <= 57)
@@ -49,10 +56,10 @@
                     event.preventDefault();
                 }
 			},
-			close: function() {
+			close() {
 				this.closeMenu({ appName: 'inventory', first: this.inventoryData.firstName, second: this.inventoryData.secondName });
 			},
-			closeEvent: function(event) {
+			closeEvent(event) {
                 if (event.keyCode == 27)  {
 					this.close();
 
@@ -103,11 +110,12 @@
 						<div class='controls'>
 							<input class='count' v-model={ this.itemCount } on-keypress={ (event) => this.checkInput(event) }/>
                     		<drop class='use' on-drop={ (event) => this.onDrop(event, 'use') }>Usar</drop>
-                    		<div class='close' on-click={ this.close }>Fechar</div>
+							<div class='close' on-click={ this.close }>Fechar</div>
+							<div class='information'></div>
 						</div>
 						<div class='container'>
 							<div class='information'>
-								<span>{ data.secondName }</span>
+								<span>{ this.getSecondName() }</span>
 								<span>{ data.secondWeight + ' / ' + data.secondMaxWeight }</span>
 							</div>
 							<div class='slots'>
