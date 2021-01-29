@@ -4,10 +4,6 @@ const state = () => ({
 
 const getters = {
 	getJobList: state => {
-		if (state.list.length > 0) {
-			return state.list.filter(element => (element.maxGrade == 0 && element.identifier != 'unemployed'));
-		}
-
 		return state.list;
 	},
 	getJobGroup: state => {

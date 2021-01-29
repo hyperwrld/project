@@ -111,7 +111,7 @@
 										return (
 											<div class='job'>
 												<span>{ job.label }</span>
-												<font-awesome-icon icon={ ['fas', 'sign-in-alt'] } onClick={ () => this.createGroup(job.identifier) }/>
+												<font-awesome-icon icon={ ['fas', 'sign-in-alt'] } onClick={ () => this.createGroup(job.name) }/>
 											</div>
 										)
 									})}

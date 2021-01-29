@@ -1,7 +1,7 @@
 local currentJob = 'unemployed'
 
 Citizen.CreateThread(function()
-	exports['crp-ui']:setJobList(jobs)
+	exports['crp-ui']:setJobList(jobsList)
 
 	Debug('Updated jobs list on the crp-ui.')
 end)

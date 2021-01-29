@@ -15,7 +15,7 @@ client_scripts {
 
 shared_scripts {
 	'@crp-lib/shared/util.lua',
-	'crp-jobs/shared/jobs.lua'
+	'shared/jobs.lua'
 }
 
 server_scripts {
