@@ -30,6 +30,10 @@ function CRP.Player:CreateCharacter(source, data)
 	self.gender         = data.gender
 	self.position       = data.position
 
+	if self.position then
+		self.position = json.decode(self.position)
+	end
+
 	self.getCharacterId = function()
 		return self.id
 	end

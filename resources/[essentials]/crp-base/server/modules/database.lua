@@ -109,9 +109,13 @@ function CRP.DB:SaveCharacterData(source, characterId, bank, job, grade, positio
     if not identifier or identifier == '' then return false end
 	if not characterId or type(characterId) ~= 'number' then return false end
 
-	local query = [[UPDATE characters SET bank = ?, job = ?, grade = ?, position = ? WHERE identifier = ? AND id = ?;]]
+	if position then
+		position = "'" .. json.encode(position) .. "'"
+	end
 
-	DB:Execute(query, bank, job, grade, position, identifier, characterId)
+	local query = [[UPDATE characters SET bank = ?, job = ?, grade = ?, position = ]] .. (position and position or 'NULL') .. [[ WHERE identifier = ? AND id = ?;]]
+
+	DB:Execute(query, bank, job, grade, identifier, characterId)
 end
 
 function CRP.DB.GetCharactersTotal(identifier)
