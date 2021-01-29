@@ -34,6 +34,8 @@ function CRP.Player:CreateCharacter(source, data)
 		self.position = json.decode(self.position)
 	end
 
+	TriggerClientEvent('crp-jobs:updateJob', self.source, self.job)
+
 	self.getCharacterId = function()
 		return self.id
 	end
@@ -75,11 +77,9 @@ function CRP.Player:CreateCharacter(source, data)
 	end
 
 	self.setJob = function(jobName, grade)
-		if isJobValid(jobName, grade) then
-			self.job, self.grade = jobName, grade
+		self.job, self.grade = jobName, grade
 
-			TriggerClientEvent('crp-base:updateJob', self.source, self.job, CRP.JobsList[self.job])
-		end
+		TriggerClientEvent('crp-jobs:updateJob', self.source, self.job)
 	end
 
 	self.getPosition = function()
