@@ -16,7 +16,7 @@ function getJobList()
 			name = data.name, label = data.label, maxGrade = data.maxgrade, salary = data.salary
 		}
 
-		if data.service then
+		if data.service ~= 0 then
 			inService[data.name] = {}
 		end
 	end
