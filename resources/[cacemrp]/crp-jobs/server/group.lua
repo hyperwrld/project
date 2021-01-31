@@ -112,7 +112,7 @@ function returnGroup(source, code)
 	end
 
 	return {
-		code = code, source = source, members = groups[code].members, isLeader = isLeader, value = groups[code].value
+		code = code, source = source, job = groups[code].job, members = groups[code].members, isLeader = isLeader, value = groups[code].value
 	}
 end
 
