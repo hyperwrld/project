@@ -2,7 +2,7 @@ local isInsideZone = false
 
 Citizen.CreateThread(function()
 	for k, shop in pairs(shops) do
-		if shop.data.isPublic then
+		if shop.isPublic then
 			exports['crp-base']:createBlip('shop' .. k, shop.coords, 52, 2, 0.75, 'Loja')
 		end
 	end
@@ -12,7 +12,7 @@ end)
 
 AddEventHandler('crp-shops:onPlayerInOut', function(isPointInside, zone)
 	if isPointInside then
-		ListenForKeys(zone.data.type)
+		ListenForKeys(zone.data)
 
 		exports['crp-ui']:toggleInteraction(true, '[E] para abrir a loja')
 	else
