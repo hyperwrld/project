@@ -2,6 +2,24 @@ playerPed, menuType, camera, zPos, fov, startPosition, startCamPosition = Player
 
 local oldSkin, currentTattos, clothing = {}, {}, {}
 
+Citizen.CreateThread(function()
+	for k, shop in pairs(shops) do
+		if shop.isPublic then
+			local shopName = 'Loja de roupa'
+
+			if shop.data == 3 then
+				shopName = 'Barbearia'
+			elseif shop.data == 4 then
+				shopName = 'Loja de tatuagens'
+			end
+
+			exports['crp-base']:createBlip('skinShop' .. k, vector3(shop.coords), 75, 1, 0.75, shopName)
+		end
+	end
+
+	exports['crp-lib']:createBoxZones(shops, 'skinZone', GetCurrentResourceName())
+end)
+
 AddEventHandler('crp-skincreator:openShop', function(type) 	-- type: 1 (all), 2 (clothing), 3 (hairshop), 4 (tattoos)
 	playerPed, oldSkin, menuType = PlayerPedId(), getCurrentSkin(), type
 
