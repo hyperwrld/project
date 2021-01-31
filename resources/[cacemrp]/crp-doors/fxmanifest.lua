@@ -2,7 +2,9 @@ fx_version 'cerulean'
 
 game 'gta5'
 
-dependecie 'crp-lib'
+dependecies {
+	'crp-lib', 'crp-jobs'
+}
 
 client_scripts {
     '@crp-lib/client/main.lua',

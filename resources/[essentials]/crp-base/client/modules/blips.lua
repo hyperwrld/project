@@ -1,6 +1,10 @@
 CRP.Blips = {}
 
 function createBlip(blipId, coords, type, color, scale, name)
+	if CRP.Blips[blipId] then
+		return
+	end
+
 	local blip = AddBlipForCoord(coords)
 
 	SetBlipSprite(blip, type)
