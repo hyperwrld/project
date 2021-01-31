@@ -1,3 +1,17 @@
+function createCircleZone(zoneName, coords, radius, eventName)
+	local circleZone = CircleZone:Create(coords, radius, { name = zoneName, useZ = true })
+
+	circleZone:onPlayerInOut(function(isPointInside, point, zone)
+		TriggerEvent(eventName .. ':onPlayerInOut', isPointInside, zone)
+	end)
+
+	Debug('Created zone (' .. zoneName .. ') successfully.')
+
+	return circleZone
+end
+
+exports('createCircleZone', createCircleZone)
+
 function createCircleZones(points, radius, useZ, zoneName, eventName, canLog)
 	local zones = {}
 
@@ -14,6 +28,20 @@ end
 
 exports('createCircleZones', createCircleZones)
 
+function createBoxZone(zoneName, coords, length, width, minZ, maxZ, data, eventName)
+	local boxZone = BoxZone:Create(coords.xyz, length, width, { name = zoneName, heading = coords.w, minZ = minZ, maxZ = maxZ, data = data, debugPoly = true })
+
+	boxZone:onPlayerInOut(function(isPointInside, point, zone)
+		TriggerEvent(eventName .. ':onPlayerInOut', isPointInside, zone)
+	end)
+
+	Debug('Created zone (' .. zoneName .. ') successfully.')
+
+	return boxZone
+end
+
+exports('createBoxZone', createBoxZone)
+
 function createBoxZones(points, zoneName, eventName, canLog)
 	local zones = {}
 
@@ -23,7 +51,7 @@ function createBoxZones(points, zoneName, eventName, canLog)
 		name = 'boxZone-' .. tostring(i)
 
 		zones[#zones + 1] = BoxZone:Create(points[i].coords.xyz, points[i].length, points[i].width, {
-			name = name, heading = points[i].coords.w, minZ = points[i].minZ, maxZ = points[i].maxZ, data = points[i].data, debugPoly = false
+			name = name, heading = points[i].coords.w, minZ = points[i].minZ, maxZ = points[i].maxZ, data = points[i].data, debugPoly = true
 		})
 	end
 
