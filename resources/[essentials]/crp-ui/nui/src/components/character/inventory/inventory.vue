@@ -21,13 +21,13 @@
             }
 		},
 		methods: {
-			getSecondName() {
-				if (this.secondName.includes('drop')) {
+			getSecondName(name) {
+				if (name.includes('drop')) {
 					return 'Chão';
-				} else if (this.secondName.includes('container')) {
+				} else if (name.includes('container')) {
 					return 'Contentor';
 				} else {
-					return this.data.secondName;
+					return name;
 				}
 			},
 			returnData(data) {
@@ -115,7 +115,7 @@
 						</div>
 						<div class='container'>
 							<div class='information'>
-								<span>{ this.getSecondName() }</span>
+								<span>{ this.getSecondName(data.secondName) }</span>
 								<span>{ data.secondWeight + ' / ' + data.secondMaxWeight }</span>
 							</div>
 							<div class='slots'>
