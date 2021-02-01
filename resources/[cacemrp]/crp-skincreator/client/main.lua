@@ -1,24 +1,48 @@
 playerPed, menuType, camera, zPos, fov, startPosition, startCamPosition = PlayerPedId(), 1, nil, 0, 90.0
 
-local oldSkin, currentTattos, clothing = {}, {}, {}
+local oldSkin, currentTattos, clothing, isInsideZone = {}, {}, {}, false
 
 Citizen.CreateThread(function()
 	for k, shop in pairs(shops) do
 		if shop.isPublic then
-			local shopName = 'Loja de roupa'
+			local shopName, icon, color, size = 'Loja de roupa', 73, 3, 0.65
 
 			if shop.data == 3 then
-				shopName = 'Barbearia'
+				shopName, icon, color, size = 'Barbearia', 71, 1, 0.75
 			elseif shop.data == 4 then
-				shopName = 'Loja de tatuagens'
+				shopName, icon, color, size = 'Loja de tatuagens', 75, 1, 0.75
 			end
 
-			exports['crp-base']:createBlip('skinShop' .. k, vector3(shop.coords), 75, 1, 0.75, shopName)
+			exports['crp-base']:createBlip('skinShop' .. k, shop.coords, icon, color, size, shopName)
 		end
 	end
 
 	exports['crp-lib']:createBoxZones(shops, 'skinZone', GetCurrentResourceName())
 end)
+
+AddEventHandler('crp-skincreator:onPlayerInOut', function(isPointInside, zone)
+	if isPointInside then
+		ListenForKeys(zone.data)
+
+		exports['crp-ui']:toggleInteraction(true, '[E] para abrir a loja')
+	else
+		exports['crp-ui']:toggleInteraction(false)
+	end
+
+	isInsideZone = isPointInside
+end)
+
+function ListenForKeys(type)
+	Citizen.CreateThread(function()
+		while isInsideZone do
+			Citizen.Wait(0)
+
+			if IsControlJustReleased(0, 38) then
+				TriggerEvent('crp-skincreator:openShop', type)
+			end
+		end
+	end)
+end
 
 AddEventHandler('crp-skincreator:openShop', function(type) 	-- type: 1 (all), 2 (clothing), 3 (hairshop), 4 (tattoos)
 	playerPed, oldSkin, menuType = PlayerPedId(), getCurrentSkin(), type
