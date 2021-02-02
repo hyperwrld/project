@@ -9,12 +9,12 @@
 		name: 'phone',
 		props: ['closeMenu'],
 		methods: {
-			changeApp() {
+			changeApp: function() {
 				if (this.$route.name != 'home') {
 					this.$router.push({ path: '/phone/' });
 				}
 			},
-			closeEvent(event) {
+			closeEvent: function(event) {
                 if (event.keyCode == 27)  {
 					this.closeMenu({ appName: 'phone' });
 
@@ -28,13 +28,13 @@
         mounted() {
             window.addEventListener('keydown', this.closeEvent, false);
         },
-		render(h) {
+		render() {
 			return (
 				<transition appear enter-active-class='fadeInUp' leave-active-class='fadeOutDown'>
 					<div class='phone'>
 						<div class='inner'/>
 						<div class='overflow'>
-                			<div class='shadow'/>
+							<div class='shadow'/>
 						</div>
 						<div class='camera'/>
 						<div class='screen'>

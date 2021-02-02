@@ -25,71 +25,78 @@ import twitter from './../components/character/phone/apps/twitter/twitter.vue';
 import adverts from './../components/character/phone/apps/adverts/adverts.vue';
 import jobs from './../components/character/phone/apps/jobs/jobs.vue';
 
-Vue.use(VueRouter);
+import garage from './../components/menus/garage/garage.vue';
 
-export default new VueRouter({
-	routes: [
-		{
-			path: '/selection', name: 'selection', component: selection
-		},
-		{
-			path: '/skincreator', name: 'skincreator', component: skincreator, children: [
-				{
-					path: 'ped', name: 'ped', component: ped
-				},
-				{
-					path: 'headBlend', name: 'headBlend', component: headBlend
-				},
-				{
-					path: 'faceFeatures', name: 'faceFeatures', component: faceFeatures
-				},
-				{
-					path: 'headOverlays', name: 'headOverlays', component: headOverlays
-				},
-				{
-					path: 'bodyFeatures', name: 'bodyFeatures', component: bodyFeatures
-				},
-				{
-					path: 'clothing', name: 'clothing', component: clothing
-				},
-				{
-					path: 'accessories', name: 'accessories', component: accessories
-				}
-			]
-		},
-		{
-			path: '/inventory', name: 'inventory', component: inventory
-		},
-		{
-			path: '/actionbar', name: 'actionbar', component: actionbar
-		},
-		{
-			path: '/phone', name: 'phone', component: phone, children: [
-				{
-					path: '', name: 'home', component: home
-				},
-				{
-					path: 'history', name: 'history', component: history
-				},
-				{
-					path: 'messages', name: 'messages', component: messages
-				},
-				{
-					path: 'message', name: 'message', component: message, props: true
-				},
-				{
-					path: 'contacts', name: 'contacts', component: contacts
-				},
-				{
-					path: 'twitter', name: 'twitter', component: twitter
-				},
-				{
-					path: 'adverts', name: 'adverts', component: adverts
-				},
-				{
-					path: 'jobs', name: 'jobs', component: jobs
-				}
-			]
-		}
-	]
-})
+Vue.use(VueRouter)
+
+const routes = [
+	{
+		path: '/selection', name: 'selection', component: selection
+	},
+	{
+		path: '/skincreator', name: 'skincreator', component: skincreator, children: [
+			{
+				path: 'ped', name: 'ped', component: ped
+			},
+			{
+				path: 'headBlend', name: 'headBlend', component: headBlend
+			},
+			{
+				path: 'faceFeatures', name: 'faceFeatures', component: faceFeatures
+			},
+			{
+				path: 'headOverlays', name: 'headOverlays', component: headOverlays
+			},
+			{
+				path: 'bodyFeatures', name: 'bodyFeatures', component: bodyFeatures
+			},
+			{
+				path: 'clothing', name: 'clothing', component: clothing
+			},
+			{
+				path: 'accessories', name: 'accessories', component: accessories
+			}
+		]
+	},
+	{
+		path: '/inventory', name: 'inventory', component: inventory
+	},
+	{
+		path: '/actionbar', name: 'actionbar', component: actionbar
+	},
+	{
+		path: '/phone', name: 'phone', component: phone, children: [
+			{
+				path: '', name: 'home', component: home
+			},
+			{
+				path: 'history', name: 'history', component: history
+			},
+			{
+				path: 'messages', name: 'messages', component: messages
+			},
+			{
+				path: 'message', name: 'message', component: message, props: true
+			},
+			{
+				path: 'contacts', name: 'contacts', component: contacts
+			},
+			{
+				path: 'twitter', name: 'twitter', component: twitter
+			},
+			{
+				path: 'adverts', name: 'adverts', component: adverts
+			},
+			{
+				path: 'jobs', name: 'jobs', component: jobs
+			}
+		]
+	},
+	{
+		path: '/garage', name: 'garage', component: garage
+	}
+]
+
+const router = new VueRouter({ routes })
+
+export default router

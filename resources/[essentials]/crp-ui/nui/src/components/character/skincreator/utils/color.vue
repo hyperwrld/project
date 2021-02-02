@@ -19,10 +19,10 @@
 				canShow: false
 			}
 		},
-		render (h) {
+		render() {
 			return (
 				<div class='option color'>
- 					<div class='label-container' onClick={ () => this.toggleColors() }>
+					<div class='label-container' onClick={ () => this.toggleColors() }>
 						<span class='label'>{ this.data.title }</span>
 					</div>
 					{ this.canShow &&

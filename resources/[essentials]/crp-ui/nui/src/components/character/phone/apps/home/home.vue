@@ -10,7 +10,7 @@
 		data() {
 			return {
 				apps: [
-        			{
+					{
 						code: 'history',
 						name: 'Telefone',
 						color: '#13b86c',
@@ -24,7 +24,7 @@
 						icon: 'comment-alt',
 						iconType: 'fas'
 					},
-        			{
+					{
 						code: 'contacts',
 						name: 'Contactos',
 						color: '#fc7b20',
@@ -38,7 +38,7 @@
 						icon: 'car',
 						iconType: 'fas'
 					},
-        			{
+					{
 						code: 'twitter',
 						name: 'Twitter',
 						color: '#1DA1F2',
@@ -87,18 +87,18 @@
 						icon: 'cog',
 						iconType: 'fas'
 					}
-    			],
+				],
 			}
 		},
 		methods: {
-			openApp(appName) {
+			openApp: function(appName) {
 				this.$router.push({ path: '/phone/' + appName });
 			}
 		},
-		render(h) {
+		render() {
 			return (
 				<div class='home'>
-					{ this.apps.map((app, index) => {
+					{ this.apps.map((app) => {
 						return (
 							<div class='app' style={{ backgroundColor: app.color }} onClick={ () => this.openApp(app.code) }>
 								<v-tooltip top content-class='tooltip' nudge-top={ 2 } scopedSlots={{ activator: ({on}) => <font-awesome-icon {...{ on }} icon={ [app.iconType, app.icon ] }/> }}>

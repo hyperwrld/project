@@ -24,7 +24,7 @@ AddEventHandler('crp-skincreator:onPlayerInOut', function(isPointInside, zone)
 	if isPointInside then
 		ListenForKeys(zone.data)
 
-		exports['crp-ui']:toggleInteraction(true, '[E] para abrir a loja')
+		exports['crp-ui']:toggleInteraction(true, '[E] mudar de roupa')
 	else
 		exports['crp-ui']:toggleInteraction(false)
 	end

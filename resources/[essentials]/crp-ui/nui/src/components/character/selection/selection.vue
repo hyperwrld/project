@@ -13,32 +13,32 @@
 	export default {
 		name: 'selection',
 		props: ['closeMenu'],
-  		data () {
-    		return {
+		data () {
+			return {
 				currentItem: 0, isLoading: false, isUsingMenu: false
-    		}
-  		},
+			}
+		},
 		computed: {
 			...mapGetters('selection', {
 				charactersData: 'getCharactersData'
 			})
 		},
 		methods: {
-			formatDate(date) {
+			formatDate: function(date) {
                 if (!date) return null
 
                 const [year, month, day] = date.split('-')
 
                 return `${day}/${month}/${year}`
             },
-			changeCurrentItem(futureIndex) {
+			changeCurrentItem: function(futureIndex) {
 				if (this.isLoading || this.isUsingMenu || this.currentItem == futureIndex) return;
 
 				this.currentItem = futureIndex;
 
 				send('changedCharacter', this.charactersData[this.currentItem]);
 			},
-			selectCharacter() {
+			selectCharacter: function() {
 				if (this.isLoading || this.isUsingMenu) return;
 
 				this.isLoading = true;
@@ -51,7 +51,7 @@
 					}, 5000);
 				});
 			},
-			deleteCharacter() {
+			deleteCharacter: function() {
 				if (this.isLoading || this.isUsingMenu) return;
 
 				this.isUsingMenu = true;
@@ -66,7 +66,7 @@
 					this.isUsingMenu = false;
 				})
 			},
-			createCharacter() {
+			createCharacter: function() {
 				if (this.isLoading || this.isUsingMenu) return;
 
 				this.isUsingMenu = true;
@@ -91,13 +91,13 @@
 					this.isUsingMenu = false;
 				})
 			},
-            handleDisconnect() {
+            handleDisconnect: function() {
 				if (this.isLoading || this.isUsingMenu) return;
 
                 send('disconnectUser');
             }
         },
-		render (h) {
+		render() {
 			return (
 				<transition appear name='fade'>
 					<div class='selection'>

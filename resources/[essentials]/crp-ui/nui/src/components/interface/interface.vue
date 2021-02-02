@@ -10,7 +10,7 @@
 		components: {
 			hud, interactions, notifications, taskbar, queue
 		},
-		render (h) {
+		render() {
 			return (
 				<div class='interface'>
 					<hud/><interactions/><notifications/><taskbar/><queue/>

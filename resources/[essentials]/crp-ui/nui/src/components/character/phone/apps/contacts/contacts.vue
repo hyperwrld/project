@@ -23,7 +23,7 @@
 			})
 		},
 		methods: {
-			filterItems() {
+			filterItems: function() {
 				const search = this.searchInput.toLowerCase().trim();
 
 				if (!search) {
@@ -36,16 +36,16 @@
 					return this.contacts.filter(c => c.name.toString().toLowerCase().indexOf(search) > -1);
 				}
 			},
-			getContactColor(string) {
+			getContactColor: function(string) {
 				var hash = 0;
 
-    			for (var i = 0; i < string.length; i++) {
-      				hash = string.charCodeAt(i) + ((hash << 5) - hash);
+				for (var i = 0; i < string.length; i++) {
+					hash = string.charCodeAt(i) + ((hash << 5) - hash);
 				}
 
-    			return 'hsl(' + hash % 360 + ', 30%, 70%)';
+				return 'hsl(' + hash % 360 + ', 30%, 70%)';
 			},
-			addContact() {
+			addContact: function() {
 				dialogs.createDialog({
 					attach: '.list', title: 'Adicionar contato',
 					choices: [
@@ -57,9 +57,9 @@
 					if (response) {
 						this.contacts.push({ id: response.data.id, name: response.choiceData.name, number: Number(response.choiceData.number) });
 					}
-      			})
+				})
 			},
-			sendMessage(contactNumber) {
+			sendMessage: function(contactNumber) {
 				dialogs.createDialog({
 					attach: '.list', title: 'Enviar Mensagem',
 					choices: [
@@ -70,9 +70,9 @@
 					if (response) {
 						this.$store.dispatch('messages/setMessage', response.data.message);
 					}
-      			})
+				})
 			},
-			editContact(contactId, contactName, contactNumber) {
+			editContact: function(contactId, contactName, contactNumber) {
 				dialogs.createDialog({
 					attach: '.list', title: 'Editar contato',
 					choices: [
@@ -86,9 +86,9 @@
 
 						found.name = response.choiceData.name, found.number = Number(response.choiceData.number);
 					}
-      			})
+				})
 			},
-			deleteContact(contactId) {
+			deleteContact: function(contactId) {
 				dialogs.createDialog({
 					attach: '.list', title: 'Remover contato', sendText: 'Remover', nuiType: 'deleteContact', data: { id: contactId }
 				}).then(response => {
@@ -97,16 +97,16 @@
 
 						this.contacts.splice(foundIndex, 1);
 					}
-      			})
+				})
 			}
 		},
-		render(h) {
+		render() {
 			const isNotEmpty = this.filterItems().length > 0 ? true : false;
 
 			return (
 				<div class='contacts'>
 					<div class='top'>
-					    <div class='search-wrapper'>
+						<div class='search-wrapper'>
 							<input type='text' v-model={ this.searchInput } placeholder='Procurar...'/>
 							<font-awesome-icon icon={ ['fas', 'search'] }/>
 						</div>
@@ -136,7 +136,7 @@
 										</v-expansion-panel>
 									)
 								})}
-            				</v-expansion-panels>
+							</v-expansion-panels>
 							:
 							<fragment>
 								<font-awesome-icon icon={ ['fas', 'sad-tear'] }/>

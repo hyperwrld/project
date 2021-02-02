@@ -3,7 +3,7 @@ import Dialog from './dialog.vue';
 
 export default {
 	createDialog(propsData = {}) {
-		return new Promise((resolve, reject) => {
+		return new Promise((resolve) => {
 			let dialog = new (Vue.extend(Dialog)) ({
 				el: document.createElement('div'), propsData
 			});
@@ -18,7 +18,7 @@ export default {
 			});
 
 			dialog.$on('cancel', () => {
-				reject();
+				resolve();
 
 				dialog.$el.parentNode.removeChild(dialog.$el);
 				dialog.$destroy();

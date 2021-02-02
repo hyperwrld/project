@@ -24,7 +24,7 @@
 			})
 		},
 		methods: {
-			filterItems() {
+			filterItems: function() {
 				const search = this.searchInput.toLowerCase().trim();
 
 				if (!search) {
@@ -37,7 +37,7 @@
 					return this.history.filter(c => c.name.toString().toLowerCase().indexOf(search) > -1);
 				}
 			},
-			sendMessage(contactNumber) {
+			sendMessage: function(contactNumber) {
 				dialogs.createDialog({
 					attach: '.list', title: 'Enviar Mensagem',
 					choices: [
@@ -45,12 +45,12 @@
 					],
 					sendText: 'Enviar', nuiType: 'sendMessage', data: { number: contactNumber }
 				}).then(response => {
-					// if (response) {
+					if (response) {
 					// 	let found = this.contacts.find(element => element.id == contactId);
 
 					// 	found.name = response.choiceData.name, found.number = Number(response.choiceData.number);
-					// }
-      			})
+					}
+				})
 			},
 			addContact: function(contactNumber) {
 				dialogs.createDialog({
@@ -60,21 +60,21 @@
 					],
 					sendText: 'Adicionar', nuiType: 'addContact', data: { number: contactNumber }
 				}).then(response => {
-					// if (response) {
+					if (response) {
 						// let found = this.contacts.find(element => element.id == contactId);
 
 						// found.name = response.choiceData.name, found.number = Number(response.choiceData.number);
-					// }
-      			})
+					}
+				})
 			}
 		},
-		render(h) {
+		render() {
 			const isNotEmpty = this.filterItems().length > 0 ? true : false;
 
 			return (
 				<div class='history'>
 					<div class='top'>
-					    <div class='search-wrapper'>
+						<div class='search-wrapper'>
 							<input type='text' v-model={ this.searchInput } placeholder='Procurar...'/>
 							<font-awesome-icon icon={ ['fas', 'search'] }/>
 						</div>
@@ -83,7 +83,7 @@
 					<div class={`list ${ isNotEmpty ? '' : 'empty'}`}>
 						{ isNotEmpty ?
 							<v-expansion-panels flat accordion>
-								{ this.filterItems().map((call, index) => {
+								{ this.filterItems().map((call) => {
 									return (
 										<v-expansion-panel>
 											<v-expansion-panel-header>
@@ -105,7 +105,7 @@
 										</v-expansion-panel>
 									)
 								})}
-            				</v-expansion-panels>
+							</v-expansion-panels>
 							:
 							<fragment>
 								<font-awesome-icon icon={ ['fas', 'sad-tear'] }/>

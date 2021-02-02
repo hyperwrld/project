@@ -28,7 +28,7 @@
 				});
 			}
 		},
-		render (h) {
+		render() {
 			let options = [];
 
 			for (let i = 0; i < this.accessories.length; i++) {

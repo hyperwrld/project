@@ -13,7 +13,7 @@
 				items: 'getItems'
 			})
 		},
-		render(h) {
+		render() {
 			return (
 				<transition appear name='fade'>
 					<div class='actionbar'>

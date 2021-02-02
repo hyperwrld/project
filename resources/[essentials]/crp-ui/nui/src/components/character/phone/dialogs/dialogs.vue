@@ -17,10 +17,10 @@
 			sendText: String, nuiType: String, data: Object
 		},
 		methods: {
-			cancelDialog() {
+			cancelDialog: function() {
 				this.$emit('cancel');
 			},
-			submitDialog() {
+			submitDialog: function() {
 				const choiceData = typeof(this.data) == 'object' ? this.data : {};
 
 				if (this.choices && this.choices.length > 0) {
@@ -54,7 +54,7 @@
 				}
 			}
 		},
-		render(h) {
+		render() {
 			return (
 				<transition appear name='fade'>
 					<v-dialog v-model={ this.state } persistent max-width='290' attach={ this.attach } hide-overlay>

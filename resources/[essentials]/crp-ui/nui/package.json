@@ -7,32 +7,48 @@
 		"build": "vue-cli-service build"
 	},
 	"dependencies": {
-		"@fortawesome/fontawesome-svg-core": "^1.2.29",
-		"@fortawesome/free-brands-svg-icons": "^5.14.0",
-		"@fortawesome/free-regular-svg-icons": "^5.14.0",
-		"@fortawesome/free-solid-svg-icons": "^5.13.1",
-		"@fortawesome/vue-fontawesome": "^0.1.10",
-		"@vue/babel-helper-vue-jsx-merge-props": "^1.0.0",
-		"@vue/babel-preset-jsx": "^1.1.2",
-		"@vue/cli": "^4.5.7",
+		"@fortawesome/fontawesome-svg-core": "^1.2.31",
+		"@fortawesome/free-brands-svg-icons": "^5.15.2",
+		"@fortawesome/free-regular-svg-icons": "^5.15.2",
+		"@fortawesome/free-solid-svg-icons": "^5.15.0",
+		"@fortawesome/vue-fontawesome": "^2.0.0",
 		"core-js": "^3.6.5",
-		"moment": "^2.27.0",
+		"moment": "^2.29.1",
 		"vue": "^2.6.11",
-		"vue-easy-dnd": "^1.8.4",
+		"vue-easy-dnd": "^1.10.2",
 		"vue-router": "^3.2.0",
-		"vuetify": "^2.3.4",
-		"vuex": "^3.5.1"
+		"vuetify": "^2.4.0",
+		"vuex": "^3.4.0"
 	},
 	"devDependencies": {
-		"@vue/cli-plugin-babel": "^4.5.7",
-		"@vue/cli-plugin-router": "^4.5.7",
-		"@vue/cli-plugin-vuex": "^4.5.7",
-		"@vue/cli-service": "^4.5.7",
-		"sass": "^1.26.10",
-		"sass-loader": "^8.0.2",
-		"vue-cli-plugin-vuetify": "^2.0.7",
+		"@vue/cli-plugin-babel": "~4.5.0",
+		"@vue/cli-plugin-eslint": "~4.5.0",
+		"@vue/cli-plugin-router": "^4.5.11",
+		"@vue/cli-plugin-vuex": "^4.5.11",
+		"@vue/cli-service": "~4.5.0",
+		"babel-eslint": "^10.1.0",
+		"eslint": "^6.7.2",
+		"eslint-plugin-vue": "^6.2.2",
+		"sass": "^1.32.6",
+		"sass-loader": "^10.0.0",
+		"vue-cli-plugin-fontawesome": "~0.3.1",
+		"vue-cli-plugin-vuetify": "~2.1.0",
 		"vue-template-compiler": "^2.6.11",
-		"vuetify-loader": "^1.6.0"
+		"vuetify-loader": "^1.5.0"
+	},
+	"eslintConfig": {
+		"root": true,
+		"env": {
+			"node": true
+		},
+		"extends": [
+			"plugin:vue/essential",
+			"eslint:recommended"
+		],
+		"parserOptions": {
+			"parser": "babel-eslint"
+		},
+		"rules": {}
 	},
 	"browserslist": [
 		"> 1%",

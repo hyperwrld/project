@@ -23,7 +23,7 @@
 			})
 		},
 		methods: {
-			filterItems() {
+			filterItems: function() {
 				const search = this.searchInput.toLowerCase().trim();
 
 				if (!search) {
@@ -36,7 +36,7 @@
 					return this.adverts.filter(c => c.name.toString().toLowerCase().indexOf(search) > -1);
 				}
 			},
-			postAdvert() {
+			postAdvert: function() {
 				dialogs.createDialog({
 					attach: '.list', title: 'Insira um anúncio',
 					choices: [
@@ -50,21 +50,21 @@
 							number: response.data.advertData.number, message: response.data.advertData.message
 						});
 					}
-      			});
+				});
 			},
-			removeAdvert(advertId) {
+			removeAdvert: function(advertId) {
 				dialogs.createDialog({
 					attach: '.list', title: 'Queres apagar o anúncio?', sendText: 'Remover', nuiType: 'removeAdvert', data: { advertId: advertId }
 				});
 			}
 		},
-		render(h) {
+		render() {
 			const isNotEmpty = this.filterItems().length > 0 ? true : false;
 
 			return (
 				<div class='adverts'>
 					<div class='top'>
-					    <div class='search-wrapper'>
+						<div class='search-wrapper'>
 							<input type='text' v-model={ this.searchInput } placeholder='Procurar...'/>
 							<font-awesome-icon icon={ ['fas', 'search'] }/>
 						</div>
@@ -73,7 +73,7 @@
 					<div class={`list ${ isNotEmpty ? '' : 'empty'}`}>
 						{ isNotEmpty ?
 							<fragment>
-								{ this.filterItems().map((advert, index) => {
+								{ this.filterItems().map((advert) => {
 									return (
 										<div class='advert' onClick={ () => this.removeAdvert(advert.id) }>
 											<div class='content'>

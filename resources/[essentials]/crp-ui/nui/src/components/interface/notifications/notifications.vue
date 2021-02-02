@@ -8,10 +8,10 @@
 				notificationsData: 'getNotifications'
 			})
 		},
-		render (h) {
+		render() {
 			return (
 				<div class='notifications'>
-					{ this.notificationsData.map((notification, index) => {
+					{ this.notificationsData.map((notification) => {
 						return (
 							<transition name='fade' appear>
 								<div class={ 'notification ' + notification.type }>

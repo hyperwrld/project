@@ -19,7 +19,7 @@
 				send('modifyFaceFeature', { index: index, scale: this.faceFeatures[index].value });
             }
         },
-		render (h) {
+		render() {
 			let ranges = [], faceFeatures = this.faceFeatures;
 
 			for (let i = 1; i < faceFeatures.length; i += 2) {

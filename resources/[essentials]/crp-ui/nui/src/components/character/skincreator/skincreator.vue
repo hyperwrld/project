@@ -9,7 +9,7 @@
 
 	import { mapGetters } from 'vuex';
 	import { send } from './../../../utils/lib.js';
-	import { camera, footerButtons } from './../../../utils/data.js';
+	import { camera } from './../../../utils/data.js';
 
 	import optionRange from './utils/range.vue';
 
@@ -17,7 +17,6 @@
 
 	import { library } from '@fortawesome/fontawesome-svg-core';
 	import { faAngleLeft, faAngleRight, faFlushed, faSocks, faTshirt, faChild } from '@fortawesome/free-solid-svg-icons';
-	import { faRedhat } from '@fortawesome/free-brands-svg-icons';
 
 	library.add(faAngleLeft, faAngleRight, faTshirt, faFlushed, faSocks, faChild);
 
@@ -25,7 +24,7 @@
 		name: 'skincreator',
 		props: ['closeMenu'],
 		components: {
-			ped, headBlend, faceFeatures, headOverlays, bodyFeatures,clothing, accessories
+			ped, headBlend, faceFeatures, headOverlays, bodyFeatures, clothing, accessories
 		},
 		computed: {
 			...mapGetters('skincreator', {
@@ -33,7 +32,7 @@
 			})
 		},
 		methods: {
-            handleSwitchCategory(appName) {
+            handleSwitchCategory: function(appName) {
 				this.currentCategory = appName;
 
 				this.$router.push('/skincreator/' + appName).catch(error => {
@@ -42,24 +41,26 @@
 					}
 				});
 			},
-			modifyCameraValue(index) {
+			modifyCameraValue: function(index) {
 				send('modifyCameraValue', { type: camera[index].id, value: Number(camera[index].value) });
 			},
-			toggleClothing(type) {
+			toggleClothing: function(type) {
 				send('toggleClothing', type);
 			},
-			toggleAnimation() {
+			toggleAnimation: function() {
 				send('toggleAnimation');
 			},
-			openDialog(event) {
+			openDialog: function(event) {
 				if (event.keyCode == 27 && !this.isDialogOpen) {
 					this.isDialogOpen = true;
 
 					dialog.createDialog().then(response => {
-						send('saveSkin', response);
+						if (response) {
+							send('saveSkin', response);
 
-						this.closeMenu({ appName: 'skincreator' });
-					}).catch(error => {
+							this.closeMenu({ appName: 'skincreator' });
+						}
+
 						this.isDialogOpen = false;
 					});
                 }
@@ -78,11 +79,11 @@
 
 			this.handleSwitchCategory(this.categories[0].name);
         },
-		render (h) {
+		render() {
 			return (
 				<div class='skincreator'>
 					<div class='categories'>
-						{ this.categories.map((menu, index) => {
+						{ this.categories.map((menu) => {
 							return (
 								<button class={ this.currentCategory == menu.name ? 'active' : '' } onClick={ () => this.handleSwitchCategory(menu.name) }>{ menu.title }</button>
 							)
@@ -98,10 +99,10 @@
 						</div>
 					</div>
 					<div class='footer'>
-						{ this.camera.map((buttonData, index) => {
+						{ this.camera.map((data) => {
 							return (
 								<div class='footer-container'>
-									<optionRange data={ buttonData } click={ this.modifyCameraValue }/>
+									<optionRange data={ data } click={ this.modifyCameraValue }/>
 								</div>
 							)
 						})}

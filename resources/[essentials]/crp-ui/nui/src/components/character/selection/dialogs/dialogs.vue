@@ -1,6 +1,4 @@
 <script>
-	import { mapGetters } from 'vuex';
-
 	import { library } from '@fortawesome/fontawesome-svg-core';
 	import { faCircleNotch } from '@fortawesome/free-solid-svg-icons';
 
@@ -14,10 +12,10 @@
 			title: String, type: Boolean, choices: Array, sendButton: String, nuiType: String, additionalData: Object
 		},
 		methods: {
-			closeDialog() {
+			closeDialog: function() {
 				this.$emit('cancel');
 			},
-			submitDialog() {
+			submitDialog: function() {
 				if (this.isLoading) return;
 
 				let choicesData = typeof(this.additionalData) == 'object' ? this.additionalData : {}, errorCount = 0;
@@ -58,20 +56,20 @@
 				isLoading: false
 			}
 		},
-		render (h) {
+		render() {
 			return (
 				<transition appear name='fade'>
 					<div class='dialogs'>
 						<h3>{ this.title }</h3>
 						{ this.choices && this.choices.length > 0 &&
 							<div class='inputs-container'>
-								{ this.choices.map((choice, index) => {
+								{ this.choices.map((choice) => {
 									return (
 										<div class={ choice.key + (choice.error ? ' error' : '') }>
 											<span>{ choice.placeholder + ':' }</span>
 											{ choice.type == 'select' ?
 												<select name={ choice.key } v-model={ choice.value }>
-													{ choice.options.map((option, index) => {
+													{ choice.options.map((option) => {
 														return <option value={ option.value }>{ option.text }</option>
 													})}
 												</select> : <input v-model={ choice.value } type={ choice.type } maxlength={ choice.max } max='2000-01-01'/>

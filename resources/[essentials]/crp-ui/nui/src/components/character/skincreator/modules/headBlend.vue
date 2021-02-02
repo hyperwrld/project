@@ -16,7 +16,7 @@
 			})
 		},
 		methods: {
-			modifyHeadBlend: function(index) {
+			modifyHeadBlend: function() {
 				let data = [];
 
 				for (let i = 0; i < this.headBlend.length; i++) {
@@ -28,7 +28,7 @@
                 send('modifyHeadBlend', data);
             }
 		},
-		render (h) {
+		render() {
 			let inputs = [], headBlend = this.headBlend;
 
 			for (var i = 0; i < 9; i++) {

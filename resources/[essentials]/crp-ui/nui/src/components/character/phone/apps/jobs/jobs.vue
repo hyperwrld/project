@@ -17,14 +17,14 @@
 			})
 		},
 		methods: {
-			createGroup(identifier) {
+			createGroup: function(identifier) {
 				send('createGroup', identifier).then(data => {
 					if (data.state) {
 						this.$store.dispatch('jobs/setGroupData', data.group);
 					}
 				});
 			},
-			joinGroup() {
+			joinGroup: function() {
 				dialogs.createDialog({
 					attach: '.app', title: 'Entrar num grupo',
 					choices: [
@@ -35,31 +35,30 @@
 					if (response) {
 						this.$store.dispatch('jobs/setGroupData', response.data.group);
 					}
-      			})
+				})
 			},
-			leaveGroup() {
+			leaveGroup: function() {
 				dialogs.createDialog({
 					attach: '.app', title: 'Tens a certeza?', sendText: 'Sair', nuiType: 'leaveGroup', data: { code: this.jobGroup.code }
 				}).then(response => {
 					if (response) {
 						this.$store.dispatch('jobs/setGroupData', {});
 					}
-      			})
+				})
 			},
-			kickMember(source) {
+			kickMember: function(source) {
 				if (!this.jobGroup.isLeader) return
 
 				dialogs.createDialog({
 					attach: '.app', title: 'Tens a certeza?', sendText: 'Sair', nuiType: 'kickMember', data: { code: this.jobGroup.code, member: source }
 				}).then(response => {
-					console.log(response)
 					if (response) {
 						this.$store.dispatch('jobs/setGroupData', response.data.group);
 					}
-      			})
+				})
 			}
 		},
-		render(h) {
+		render() {
 			let hasGroup = Object.keys(this.jobGroup).length > 0 ? true : false;
 
 			return (

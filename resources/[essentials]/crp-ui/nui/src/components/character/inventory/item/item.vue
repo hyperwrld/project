@@ -12,7 +12,7 @@
 				itemsList: 'getItemsList'
 			})
 		},
-		render (h) {
+		render() {
 			let itemData = this.itemsList.find(element => element.identifier == this.item.itemId);
 			let itemPercentage = itemData.decayRate != 0.0 && this.item.durability ?
 				100 - Math.ceil((((Date.now() - new Date(this.item.durability * 1000).getTime()) / (2419200000 * itemData.decayRate)) * 100)) : 100;

@@ -21,7 +21,7 @@
 				return '<span>' + message.trim() + '</span>';
 			}
         },
-		render (h) {
+		render() {
 			let data = this.interactionsData;
 
 			return (

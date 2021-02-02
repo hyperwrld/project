@@ -19,11 +19,11 @@
 				}
             }
         },
-		render (h) {
+		render() {
 			let data = this.hudData, characterData = [];
 
 			if (!data.hideState) {
-				Object.keys(this.icons).map((key, index) => {
+				Object.keys(this.icons).map((key) => {
 					const value = data[key];
 
 					characterData.push(

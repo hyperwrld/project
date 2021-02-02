@@ -8,10 +8,10 @@
 				queueData: 'getQueueData'
 			})
 		},
-		render(h) {
+		render() {
 			return (
 				<div class='queue'>
-					{ this.queueData.map((item, index) => {
+					{ this.queueData.map((item) => {
 						return (
 							<transition appear name='fade'>
 								<div class='slot'>

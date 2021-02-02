@@ -14,7 +14,7 @@
 		props: {
 			images: Array
 		},
-		render(h) {
+		render() {
 			let images = this.images;
 
 			return (
@@ -28,7 +28,7 @@
 								<p>Clica para ver</p>
 							</div>
 						}
-						{ images.map((image, i) => (
+						{ images.map((image) => (
 							<div class={`image ${ this.showImage ? '' : 'blur' }`} onClick={ () => this.showImage = false }>
 								<img src={ image }/>
 							</div>

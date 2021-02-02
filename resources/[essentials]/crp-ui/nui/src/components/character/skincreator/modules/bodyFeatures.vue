@@ -43,7 +43,7 @@
 				send('modifyFeatureColor', data);
 			}
 		},
-		render (h) {
+		render() {
 			let options = [], bodyFeatures = this.bodyFeatures;
 
 			for (let i = 0; i < bodyFeatures.length; i++) {

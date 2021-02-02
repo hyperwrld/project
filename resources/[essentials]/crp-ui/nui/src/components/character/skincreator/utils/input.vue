@@ -37,8 +37,8 @@
 					this.click(this.data.id, this.data.isMain, this.data.isProp);
 				}
 			}
-    	},
-		render (h) {
+		},
+		render() {
 			const data = this.data;
 
 			return (

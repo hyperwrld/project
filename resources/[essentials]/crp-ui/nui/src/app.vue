@@ -34,7 +34,7 @@
 
 					audio.volume = info.data.volume;
 
-   					audio.play();
+					audio.play();
 				} else {
 					if (info.event != undefined) {
 						this.$store.dispatch(info.app + '/' + info.event, info.data);
@@ -50,7 +50,7 @@
 				}
 			});
         },
-		render(h) {
+		render() {
 			return (
 				<v-app>
 					<userInterface/>

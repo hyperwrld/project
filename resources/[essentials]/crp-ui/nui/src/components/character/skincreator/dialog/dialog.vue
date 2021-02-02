@@ -9,7 +9,7 @@
 				this.$emit('submit', boolean);
 			}
 		},
-		render (h) {
+		render() {
 			return (
 				<div class='dialog'>
 					<h3>Deseja comprar esta roupa?</h3>

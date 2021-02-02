@@ -6,7 +6,6 @@
 
 	import { library } from '@fortawesome/fontawesome-svg-core';
 	import { faAngleLeft, faAngleRight, faFlushed, faGlasses, faHatCowboy, faSocks, faTshirt, faUserTie } from '@fortawesome/free-solid-svg-icons';
-	import { faRedhat } from '@fortawesome/free-brands-svg-icons';
 
 	library.add(faAngleLeft, faAngleRight, faHatCowboy, faGlasses, faTshirt, faFlushed, faUserTie, faSocks);
 
@@ -40,17 +39,17 @@
 
 				this.selectPedSkin(data);
 			},
-			changeSkin: function(index) {
+			changeSkin: function() {
 				this.selectPedSkin({ sex: this.pedInfo.sex, index: Number((this.pedInfo.sex ? this.pedData[0].value : this.pedData[1].value)) });
 			},
-			changeSkinValue: function(index) {
+			changeSkinValue: function() {
 				send('modifyAccessories', { index: 0, value: this.pedData[2].value, secondValue: this.pedData[3].value });
 			},
             resetSkin: function() {
                 send('saveSkin', false);
             }
 		},
-		render (h) {
+		render() {
 			let inputs = [], pedData = this.pedData;
 
 			if (this.pedInfo.type) {

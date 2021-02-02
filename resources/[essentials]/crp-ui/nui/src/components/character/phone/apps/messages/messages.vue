@@ -23,7 +23,7 @@
 			})
 		},
 		methods: {
-			filterItems() {
+			filterItems: function() {
 				const search = this.searchInput.toLowerCase().trim();
 
 				if (!search) {
@@ -36,23 +36,23 @@
 					return this.lastMessages.filter(c => c.name.toString().toLowerCase().indexOf(search) > -1);
 				}
 			},
-			getMessageColor(string) {
+			getMessageColor: function(string) {
 				var hash = 0;
 
-    			for (var i = 0; i < string.length; i++) {
-      				hash = string.charCodeAt(i) + ((hash << 5) - hash);
+				for (var i = 0; i < string.length; i++) {
+					hash = string.charCodeAt(i) + ((hash << 5) - hash);
 				}
 
-    			return 'hsl(' + hash % 360 + ', 30%, 70%)';
+				return 'hsl(' + hash % 360 + ', 30%, 70%)';
 			},
-			openMessage(name, number) {
+			openMessage: function(name, number) {
 				send('getMessages', number).then(data => {
 					this.$store.dispatch('messages/setMessages', data.messages);
 
 					this.$router.push({ name: 'message', params: { data: { name: name, number: number }}});
 				});
 			},
-			sendMessage() {
+			sendMessage: function() {
 				dialogs.createDialog({
 					attach: '.list', title: 'Enviar Mensagem',
 					choices: [
@@ -64,16 +64,16 @@
 					if (response) {
 						this.$store.dispatch('messages/setMessage', response.data.message);
 					}
-      			})
+				})
 			}
 		},
-		render(h) {
+		render() {
 			const isNotEmpty = this.filterItems().length > 0 ? true : false;
 
 			return (
 				<div class='messages'>
 					<div class='top'>
-					    <div class='search-wrapper'>
+						<div class='search-wrapper'>
 							<input type='text' v-model={ this.searchInput } placeholder='Procurar...'/>
 							<font-awesome-icon icon={ ['fas', 'search'] }/>
 						</div>

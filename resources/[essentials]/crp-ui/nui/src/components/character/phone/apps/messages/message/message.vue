@@ -44,16 +44,16 @@
 			}
 		},
 		watch: {
-     		'messages': function() {
+			'messages': function() {
 				setTimeout(() => {
 					this.scrollDown();
 				}, 250);
-     		}
-   		},
+			}
+		},
 		mounted() {
 			this.scrollDown();
 		},
-		render(h) {
+		render() {
 			return (
 				<div class='message'>
 					<div class='top'>

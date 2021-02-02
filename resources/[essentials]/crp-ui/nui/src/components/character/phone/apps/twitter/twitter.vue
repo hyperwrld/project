@@ -23,7 +23,7 @@
 			})
 		},
 		methods: {
-			sendTweet() {
+			sendTweet: function() {
 				dialogs.createDialog({
 					attach: '.list', title: 'Envie um tweet',
 					choices: [
@@ -32,7 +32,7 @@
 					sendText: 'Enviar', nuiType: 'sendTweet'
 				});
 			},
-			replyTweet(name) {
+			replyTweet: function(name) {
 				dialogs.createDialog({
 					attach: '.tweets-list', title: 'Envie um tweet',
 					choices: [
@@ -41,14 +41,14 @@
 					sendText: 'Enviar', nuiType: 'sendTweet'
 				});
 			},
-			sendRetweet(tweetId) {
+			sendRetweet: function(tweetId) {
 				dialogs.createDialog({
 					attach: '.tweets-list', title: 'Tens a certeza que queres retweetar?',
 					sendText: 'Retweetar', nuiType: 'sendRetweet', data: { tweetId: tweetId }
 				});
 			}
 		},
-		render(h) {
+		render() {
 			return (
 				<div class='twitter'>
 					<div class='top'>
@@ -58,7 +58,7 @@
 					<div class={`list ${ this.tweets.length > 0 ? '' : 'empty'}`}>
 						{ this.tweets.length > 0 ?
 							<fragment>
-								{ this.tweets.map((tweet, index) => {
+								{ this.tweets.map((tweet) => {
 									let { message: message, imgs } = processMessage(tweet.message);
 									const matches = message.match(/(^|\s)(#[a-z\d-_]+)/ig);
 

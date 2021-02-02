@@ -11,7 +11,7 @@
 				this.click(this.data.id);
 			}
 		},
-		render (h) {
+		render() {
 			const data = this.data;
 
 			if (!data.step) {

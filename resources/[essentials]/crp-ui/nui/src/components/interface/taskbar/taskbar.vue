@@ -8,7 +8,7 @@
 				taskbarData: 'getTaskbarData'
 			})
 		},
-		render (h) {
+		render() {
 			let data = this.taskbarData;
 
 			return (

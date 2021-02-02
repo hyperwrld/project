@@ -22,7 +22,7 @@
 				send('modifyHeadOverlay', { index: index, value: data[arrayIndex].value, opacity: data[arrayIndex + 1].value });
             }
         },
-		render (h) {
+		render() {
 			let options = [], headOverlays = this.headOverlays;
 
 			for (let i = 0; i < headOverlays.length; i += 2) {
