@@ -82,7 +82,7 @@
 						<div class='container'>
 							<div class='information'>
 								<span>Inventário Pessoal</span>
-								<span>{ data.firstWeight + ' / ' + data.firstMaxWeight }</span>
+								<div style={{ width: ((data.firstWeight / data.firstMaxWeight) * 100) + '%'}}/>
 							</div>
 							<div class='slots'>
 								{ data.firstItems.map((slot, index) => {
@@ -111,12 +111,11 @@
 							<input class='count' v-model={ this.itemCount } on-keypress={ (event) => this.checkInput(event) }/>
 							<drop class='use' on-drop={ (event) => this.onDrop(event, 'use') }>Usar</drop>
 							<div class='close' on-click={ this.close }>Fechar</div>
-							<div class='information'></div>
 						</div>
 						<div class='container'>
 							<div class='information'>
 								<span>{ this.getSecondName(data.secondName) }</span>
-								<span>{ data.secondWeight + ' / ' + data.secondMaxWeight }</span>
+								<div style={{ width: ((data.secondWeight / data.secondMaxWeight) * 100) + '%'}}/>
 							</div>
 							<div class='slots'>
 								{ data.secondItems.map((slot, index) => {

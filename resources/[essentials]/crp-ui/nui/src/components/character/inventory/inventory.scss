@@ -28,15 +28,24 @@
 
 		.information {
 			display: grid;
-			grid-template-columns: 1fr 1fr;
-			padding: 0 1%;
+			grid-template-rows: 90% 10%;
 
 			font-size: 0.8em;
 			background-color: rgba(0, 0, 0, 0.8);
 			align-items: center;
 
-			span:last-child {
-				margin-left: auto;
+			span {
+				padding: 0 1%;
+			}
+
+			div {
+				height: 100%;
+				background: #f05454;
+
+				-webkit-transition: all 2s 0s ease-in-out;
+				-moz-transition: all 2s 0s ease-in-out;
+				-o-transition: all 2s 0s ease-in-out;
+				transition: all 2s 0s ease-in-out;
 			}
 		}
 
@@ -135,7 +144,7 @@
 		}
 
 		.count:focus {
-			outline: #fca503 solid 1px !important;
+			outline: #f05454 solid 1px !important;
 		}
 
 		&:last-child {
