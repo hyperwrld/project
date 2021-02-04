@@ -68,11 +68,15 @@
 	html, body {
 		font-family: 'Quantico', sans-serif;
 
-        background-color: transparent;
+        background: transparent;
         user-select: none;
 		overflow: hidden;
 
 		height: 100%;
 		margin: 0;
+
+		#app {
+			background: transparent;
+		}
     }
 </style>
