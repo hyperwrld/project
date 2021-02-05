@@ -1,24 +1,21 @@
-fx_version 'adamant'
+fx_version 'cerulean'
 
 game 'gta5'
 
-ui_page 'nui/dist/index.html'
+dependecies {
+	'crp-ui', 'crp-lib'
+}
 
 client_scripts {
-    '@crp-rpc/client/main.lua',
-    'client/main.lua'
+	'@crp-lib/client/main.lua',
+	'@crp-lib/client/rpc.lua',
+    'client/*.lua'
 }
+
+shared_script '@crp-lib/shared/util.lua'
 
 server_scripts {
-    '@crp-rpc/server/main.lua',
-	'server/main.lua'
-}
-
-files {
-    'nui/dist/index.html',
-    'nui/dist/js/app.362cdc34.js',
-    'nui/dist/js/app.362cdc34.js.map',
-    'nui/dist/js/chunk-vendors.e92ed4a8.js',
-    'nui/dist/js/chunk-vendors.e92ed4a8.js.map',
-    'nui/dist/css/app.0f36b37d.css',
+	'@crp-lib/server/database.lua',
+	'@crp-lib/server/rpc.lua',
+	'server/*.lua'
 }
