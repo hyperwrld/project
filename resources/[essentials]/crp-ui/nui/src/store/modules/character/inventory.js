@@ -136,13 +136,16 @@ const mutations = {
 	},
 	addQueue(state, data) {
 		const item = state.itemsList.find(element => element.identifier == data.itemId);
-		const message = item.hash ? (data.state ? 'EQUIPADO' : 'DESEQUIPADO') : (data.state ? 'USOU ' : 'REMOVIDO ') + data.quantity + 'X';
 
-		state.queue.push({ message: message, image: item.image, name: item.name });
+		if (item) {
+			const message = item.hash ? (data.state ? 'EQUIPADO' : 'DESEQUIPADO') : (data.state ? 'USOU ' : 'REMOVIDO ') + data.quantity + 'X';
 
-		setTimeout(() => {
-            state.queue.splice(0, 1);
-        }, 2500);
+			state.queue.push({ message: message, image: item.image, name: item.name });
+
+			setTimeout(() => {
+				state.queue.splice(0, 1);
+			}, 2500);
+		}
 	}
 }
 
