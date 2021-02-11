@@ -5,8 +5,8 @@ game 'gta5'
 client_scripts {
 	'@crp-lib/client/main.lua',
 	'@crp-lib/client/rpc.lua',
-	'client/keys.lua',
-	'client/main.lua'
+	'client/main.lua',
+	'client/modules/*.lua'
 }
 
 shared_script '@crp-lib/shared/util.lua'
