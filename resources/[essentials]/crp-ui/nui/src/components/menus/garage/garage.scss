@@ -1,0 +1,78 @@
+html, body {
+	.garage {
+		font-family: 'Quantico', sans-serif;
+		position: absolute;
+		animation-duration: 1.0s;
+
+		width: 17.5%;
+		max-height: 55%;
+
+		right: 1.5%;
+		top: 50%;
+		transform: translateY(-50%);
+
+		text-transform: uppercase;
+		color: ivory;
+
+		background-color: transparent;
+		border-radius: 5px;
+		padding: 5px;
+
+		.v-expansion-panel {
+			background: #222831;
+			color: #dddddd;
+			box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
+
+			.v-expansion-panel-header {
+				display: grid;
+				grid-template-columns: 1fr auto;
+
+				.information {
+					display: grid;
+					grid-template-rows: 1fr auto;
+					gap: 5px;
+
+					span:last-child {
+						font-size: 0.6rem;
+						color: #f05454;
+					}
+				}
+
+				svg {
+					font-size: 1.5rem;
+					outline: none;
+
+					&:hover {
+						color: #f05454;
+					}
+				}
+			}
+
+			.v-expansion-panel-content {
+				display: grid;
+				grid-template-columns: 1fr auto;
+
+				.title {
+					font-size: 0.6rem;
+				}
+			}
+		}
+	}
+
+	.tooltip {
+		position: absolute;
+		width: auto;
+
+		padding: 3px 4.5px;
+		font-size: 0.7rem;
+		line-height: normal;
+
+		border-radius: 4px;
+		background: #f05454;
+		color: #dddddd;
+
+		font-weight: bold;
+		text-transform: uppercase;
+		pointer-events: none;
+	}
+}
