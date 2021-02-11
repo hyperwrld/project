@@ -1,16 +1,30 @@
-function createCircleZone(zoneName, coords, radius, eventName)
-	local circleZone = CircleZone:Create(coords, radius, { name = zoneName, useZ = true })
+local zones = {}
 
-	circleZone:onPlayerInOut(function(isPointInside, point, zone)
+function createCircleZone(zoneName, coords, radius, eventName)
+	if zones[zoneName] and not zones[zoneName].destroyed then
+		return
+	end
+
+	zones[zoneName] = CircleZone:Create(coords, radius, { name = zoneName, useZ = true, debugPoly = true })
+
+	zones[zoneName]:onPlayerInOut(function(isPointInside, point, zone)
 		TriggerEvent(eventName .. ':onPlayerInOut', isPointInside, zone)
 	end)
-
-	Debug('Created zone (' .. zoneName .. ') successfully.')
-
-	return circleZone
 end
 
 exports('createCircleZone', createCircleZone)
+
+function destroyZone(zoneName)
+	if not zones[zoneName] or zones[zoneName].destroyed then
+		return false
+	end
+
+	zones[zoneName]:destroy()
+
+	return true
+end
+
+exports('destroyZone', destroyZone)
 
 function createCircleZones(points, radius, useZ, zoneName, eventName, canLog)
 	local zones = {}
