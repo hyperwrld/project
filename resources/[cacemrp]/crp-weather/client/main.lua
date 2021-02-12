@@ -1,6 +1,19 @@
 local currentWeather, lastWeather, desyncState = 'CLEAR', 'CLEAR', false
 local baseTime, timeOffset, timer, hour, minute = 8, 0, 0, 0, 0
 
+SetScenarioTypeEnabled('WORLD_VEHICLE_STREETRACE', false)
+SetScenarioTypeEnabled('WORLD_VEHICLE_SALTON', false)
+SetScenarioTypeEnabled('WORLD_VEHICLE_SALTON_DIRT_BIKE', false)
+SetScenarioTypeEnabled('WORLD_VEHICLE_POLICE_BIKE', false)
+SetScenarioTypeEnabled('WORLD_VEHICLE_POLICE_CAR', false)
+SetScenarioTypeEnabled('WORLD_VEHICLE_POLICE_NEXT_TO_CAR', false)
+SetScenarioTypeEnabled('WORLD_VEHICLE_STREETRACE', false)
+SetScenarioTypeEnabled('WORLD_VEHICLE_MILITARY_PLANES_BIG', false)
+SetScenarioTypeEnabled('WORLD_VEHICLE_MILITARY_PLANES_SMALL', false)
+SetScenarioTypeEnabled('WORLD_VEHICLE_MECHANIC', false)
+SetScenarioTypeEnabled('WORLD_VEHICLE_BUSINESSMEN', false)
+SetScenarioTypeEnabled('WORLD_VEHICLE_BIKE_OFF_ROAD_RACE', false)
+
 function startSync()
 	Citizen.CreateThread(function()
 		while not desyncState do
