@@ -1,0 +1,33 @@
+.target {
+	font-family: 'Quantico', sans-serif;
+	position: absolute;
+	height: 3vh;
+
+    font-size: 3vh;
+	top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+	svg {
+		display: block;
+		margin: auto;
+
+		color: rgba(221, 221, 221, 0.5);
+		filter: drop-shadow(0px 0px 2.5px black);
+
+		&.active {
+			color: rgba(240, 84, 84, 0.8);
+		}
+	}
+
+	.options {
+		position: relative;
+		margin-top: 2%;
+
+		display: grid;
+		grid-template-rows: auto;
+
+		text-align: center;
+		font-size: 1.5vh;
+	}
+}
