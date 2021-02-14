@@ -1,6 +1,6 @@
 local isAppOpen, events = false, {}
 
-function openApp(appName, data, hasFocus, hasCursor, canDisable)
+function openApp(appName, data, hasFocus, hasCursor, keepInput, canDisable)
 	isAppOpen = true
 
 	if hasFocus == nil then
@@ -11,7 +11,12 @@ function openApp(appName, data, hasFocus, hasCursor, canDisable)
 		hasCursor = true
 	end
 
+	if keepInput == nil then
+		keepInput = false
+	end
+
 	SetNuiFocus(hasFocus, hasCursor)
+	SetNuiFocusKeepInput(keepInput)
 
 	if canDisable then
 		Citizen.CreateThread(function()
@@ -50,6 +55,13 @@ function setAppData(appName, data)
 end
 
 exports('setAppData', setAppData)
+
+function setNuiFocus(hasFocus, hasCursor, keepInput)
+	SetNuiFocus(hasFocus, hasCursor)
+	SetNuiFocusKeepInput(keepInput)
+end
+
+exports('setNuiFocus', setNuiFocus)
 
 RegisterNUICallback('closeMenu', function(data, cb)
 	SetNuiFocus(false, false)

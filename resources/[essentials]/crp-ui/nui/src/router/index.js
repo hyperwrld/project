@@ -26,6 +26,8 @@ import adverts from './../components/character/phone/apps/adverts/adverts.vue';
 import jobs from './../components/character/phone/apps/jobs/jobs.vue';
 
 import garage from './../components/menus/garage/garage.vue';
+import menu from './../components/menus/menu/menu.vue';
+import target from './../components/menus/target/target.vue';
 
 Vue.use(VueRouter)
 
@@ -94,6 +96,12 @@ const routes = [
 	},
 	{
 		path: '/garage', name: 'garage', component: garage
+	},
+	{
+		path: '/menu', name: 'menu', component: menu
+	},
+	{
+		path: '/target', name: 'target', component: target
 	}
 ]
 

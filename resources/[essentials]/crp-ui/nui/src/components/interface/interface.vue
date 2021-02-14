@@ -4,17 +4,16 @@
 	import notifications from './notifications/notifications.vue';
 	import taskbar from './taskbar/taskbar.vue';
 	import queue from './queue/queue.vue';
-	import target from './target/target.vue';
 
 	export default {
 		name: 'interface',
 		components: {
-			hud, interactions, notifications, taskbar, queue, target
+			hud, interactions, notifications, taskbar, queue
 		},
 		render() {
 			return (
 				<div class='interface'>
-					<hud/><interactions/><notifications/><taskbar/><queue/><target/>
+					<hud/><interactions/><notifications/><taskbar/><queue/>
 				</div>
 			);
 		}

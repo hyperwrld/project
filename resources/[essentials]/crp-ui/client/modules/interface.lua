@@ -40,12 +40,6 @@ function triggerSound(soundName, volume)
 	})
 end
 
-function toggleTarget(hideState, activeState, options)
-	SendNUIMessage({
-		app = 'target', event = 'setData', data = { hideState = hideState, activeState = activeState, options = options }
-	})
-end
-
 exports('updateMinimap', updateMinimap)
 exports('setHudHideState', setHudHideState)
 exports('setData', setData)

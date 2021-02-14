@@ -2,14 +2,15 @@
 	import { mapGetters } from 'vuex';
 
 	import { library } from '@fortawesome/fontawesome-svg-core';
-	import { faEye, faShoppingBasket } from '@fortawesome/free-solid-svg-icons';
+	import { faBriefcase, faEye, faShoppingBasket } from '@fortawesome/free-solid-svg-icons';
 
-	import { fragment } from '../../../utils/lib';
+	import { fragment, send} from '../../../utils/lib';
 
-	library.add(faEye, faShoppingBasket);
+	library.add(faEye, faShoppingBasket, faBriefcase);
 
 	export default {
 		name: 'target',
+		props: ['closeMenu'],
 		computed: {
 			...mapGetters('target', {
 				data: 'getData'
@@ -18,10 +19,15 @@
 		data() {
             return {
 				icons: [
-					'shopping-basket'
+					'shopping-basket', 'briefcase'
 				]
             }
         },
+		methods: {
+			startEvent: function(id) {
+				send('startEvent', id);
+			}
+		},
 		render() {
 			const data = this.data;
 
@@ -35,7 +41,8 @@
 									{ data.options.map(option => {
 										return (
 											<div class='option'>
-												<font-awesome-icon icon={ this.icons[option.type - 1] }/><span>{ option.label }</span>
+												<font-awesome-icon icon={ this.icons[option.type - 1] }/>
+												<span onClick={ () => this.startEvent(option.id) }>{ option.label }</span>
 											</div>
 										)
 									})}
