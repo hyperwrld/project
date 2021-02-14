@@ -10,7 +10,6 @@
 
 	export default {
 		name: 'target',
-		props: ['closeMenu'],
 		computed: {
 			...mapGetters('target', {
 				data: 'getData'
