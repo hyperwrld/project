@@ -1,5 +1,5 @@
 const state = () => ({
-	hideState: true, activeState: false, options: [{label: 'Abrir o ATM'}, { label: 'Entrar de servico' }]
+	hideState: false, activeState: false, options: []
 })
 
 const getters = {
@@ -16,7 +16,9 @@ const actions = {
 
 const mutations = {
     setData(state, data) {
-        state.hideState = data.state;
+		for (var name in data) {
+			state[name] = data[name];
+		}
     }
 }
 
