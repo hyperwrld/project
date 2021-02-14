@@ -1,60 +1,97 @@
-local isScanning, zones = false, {}
+local canScan, isLookingAt, canSelect, zones, playerPed = false, false, false, {}, PlayerPedId()
 
 function scanTarget()
-	isScanning = not isScanning
+	canScan = not canScan
 
-	if isScanning then
-		Citizen.CreateThread(function()
-			while isScanning do
-				local playerPed, found, data = PlayerPedId(), false, {}
-				local coords, cameraRotation, cameraPosition = GetEntityCoords(playerPed), GetGameplayCamRot(), GetGameplayCamCoord()
+	if not canScan then
+		isLookingAt, canSelect = false, false
+	end
 
-				local direction = RotationToDirection(cameraRotation)
-				local destination = {
-					x = cameraPosition.x + direction.x * 2.5, y = cameraPosition.y + direction.y * 2.5, z = cameraPosition.z + direction.z * 2.5
-				}
+	exports['crp-ui']:toggleTarget(canScan, isLookingAt)
 
-				local rayHandle = StartShapeTestRay(cameraPosition.x, cameraPosition.y, cameraPosition.z, destination.x, destination.y, destination.z, -1, playerPed, 7)
-				local retval, hit, endCoords, surfaceNormal, entityHit = GetShapeTestResult(rayHandle)
+	if not canScan then
+		return
+	end
 
-				DisablePlayerFiring(playerPed, true)
+	Citizen.CreateThread(function()
+		while canScan do
+			Citizen.Wait(5000)
 
-				if hit == 1 then
-					local entityModel = GetEntityModel(entityHit)
+			playerPed = PlayerPedId()
+		end
+	end)
 
-					-- print(entityModel)
+	Citizen.CreateThread(function()
+		while canScan do
+			Citizen.Wait(250)
 
-					if objectList[entityModel] then
-						local objectData = objectList[entityModel]
+			local coords, cameraRotation, cameraPosition = GetEntityCoords(playerPed), GetGameplayCamRot(), GetGameplayCamCoord()
 
-						found, data = true, {{ type = objectData.type, label = objectData.label }}
+			local direction = RotationToDirection(cameraRotation)
+			local destination = {
+				x = cameraPosition.x + direction.x * 2.5, y = cameraPosition.y + direction.y * 2.5, z = cameraPosition.z + direction.z * 2.5
+			}
 
-						if IsDisabledControlJustPressed(0, 69) then
-							exports['crp-ui']:setNuiFocus(true, true)
-						end
+			local rayHandle = StartShapeTestRay(cameraPosition.x, cameraPosition.y, cameraPosition.z, destination.x, destination.y, destination.z, -1, playerPed, 7)
+			local retval, hit, endCoords, surfaceNormal, entityHit = GetShapeTestResult(rayHandle)
 
-						--TriggerEvent(objectList[entityModel].eventName, table.unpack(objectList[entityModel].data))
-						print('sssss', json.encode(objectList[entityModel]))
-					end
+			if hit == 1 then
+				local isInsideZone, eventName = isPointInsideZone(endCoords)
 
-					-- DrawLine(coords.x, coords.y, coords.z, endCoords.x, endCoords.y, endCoords.z, 255, 0, 0, 255)
-					-- DrawMarker(28, endCoords.x, endCoords.y, endCoords.z, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 0.2, 0.2, 0.2, 255, 128, 0, 50, false, true, 2, nil, nil, false)
+				if not isInsideZone and GetEntityType(entityHit) ~= 0 then
+					eventName = GetEntityModel(entityHit)
 				end
 
-				exports['crp-ui']:toggleTarget(isScanning, found, data)
+				local eventData = eventList[eventName]
 
-				Citizen.Wait(0)
+				if not eventData and isLookingAt then
+					isLookingAt = false
+
+					exports['crp-ui']:toggleTarget(canScan, isLookingAt)
+				else
+					if eventData and not isLookingAt and canScan then
+						isLookingAt, data = true, {{
+							type = eventData.type, label = eventData.label
+						}}
+
+						exports['crp-ui']:toggleTarget(canScan, isLookingAt, data)
+
+						TriggerEvent('crp-target:listenForKey')
+					end
+				end
+			else
+				if isLookingAt then
+					isLookingAt = false
+
+					exports['crp-ui']:toggleTarget(canScan, isLookingAt)
+				end
 			end
-		end)
-	else
-		exports['crp-ui']:setNuiFocus(false, false)
-
-		exports['crp-ui']:toggleTarget(false, false)
-	end
+		end
+	end)
 end
 
+AddEventHandler('crp-target:listenForKey', function()
+	Citizen.CreateThread(function()
+		while isLookingAt do
+			Citizen.Wait(0)
+
+			if canSelect then
+				DisableAllControlActions(0)
+			else
+				DisableControlAction(0, 24, true)
+
+				if IsDisabledControlJustReleased(0, 24) then
+					canSelect = true
+
+					exports['crp-ui']:setNuiFocus(true, true, true)
+				end
+			end
+		end
+	end)
+end)
+
 function createTarget(zoneName, coords, length, width, minZ, maxZ, data)
-	zones[#zones + 1] = BoxZone:Create(coords.xyz, length, width, { name = zoneName, heading = coords.w, minZ = minZ, maxZ = maxZ, data = data, debugPoly = true })
+	zones[#zones + 1] = BoxZone:Create(coords.xyz, length, width, { name = zoneName, heading = coords.w, minZ = minZ, maxZ = maxZ, data = data })
 
 	Debug('Created target zone (' .. zoneName .. ') successfully.')
 end
@@ -65,9 +102,8 @@ exports('createTarget', createTarget)
 
 function isPointInsideZone(point)
 	for k, v in ipairs(zones) do
-		print(point)
 		if v:isPointInside(point) then
-			return true, v.name, v.data
+			return true, v.name
 		end
 	end
 

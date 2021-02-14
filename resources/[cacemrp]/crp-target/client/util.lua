@@ -1,4 +1,7 @@
-objectList = {
+eventList = {
+	['mrpd_service'] = {
+		eventName = 'crp-inventory:openShop', type = 1, label = 'Máquina de vendas', data = { 3 }
+	},
     [`prop_vend_coffe_01`] = {
         eventName = 'crp-inventory:openShop', type = 1, label = 'Máquina de vendas', data = { 3 }
     }
