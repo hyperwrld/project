@@ -1,17 +1,26 @@
-local canScan, isLookingAt, canSelect, zones, playerPed = false, false, false, {}, PlayerPedId()
+local canScan, isLookingAt, canSelect, hasWait, zones, playerPed = false, false, false, false, {}, PlayerPedId()
+
+local scanRange = {
+    2.7, 3.0, 3.5, 0.0, 2.3  -- [0] Third Person Close / [1] Third Person Mid / [2] Third Person Far / [4] First Person
+}
 
 function scanTarget()
+	if hasWait then
+		return
+	end
+
 	canScan = not canScan
 
 	if not canScan then
 		isLookingAt, canSelect = false, false
 	end
 
-	exports['crp-ui']:toggleTarget(canScan, isLookingAt)
-
 	if not canScan then
+		exports['crp-ui']:closeApp('target')
 		return
 	end
+
+	exports['crp-ui']:openApp('target', { hideState = canScan, activeState = isLookingAt }, false, false)
 
 	Citizen.CreateThread(function()
 		while canScan do
@@ -27,9 +36,9 @@ function scanTarget()
 
 			local coords, cameraRotation, cameraPosition = GetEntityCoords(playerPed), GetGameplayCamRot(), GetGameplayCamCoord()
 
-			local direction = RotationToDirection(cameraRotation)
+			local direction, range = RotationToDirection(cameraRotation), scanRange[GetFollowPedCamViewMode() + 1]
 			local destination = {
-				x = cameraPosition.x + direction.x * 2.5, y = cameraPosition.y + direction.y * 2.5, z = cameraPosition.z + direction.z * 2.5
+				x = cameraPosition.x + direction.x * range, y = cameraPosition.y + direction.y * range, z = cameraPosition.z + direction.z * range
 			}
 
 			local rayHandle = StartShapeTestRay(cameraPosition.x, cameraPosition.y, cameraPosition.z, destination.x, destination.y, destination.z, -1, playerPed, 7)
@@ -47,23 +56,33 @@ function scanTarget()
 				if not eventData and isLookingAt then
 					isLookingAt = false
 
-					exports['crp-ui']:toggleTarget(canScan, isLookingAt)
+					exports['crp-ui']:setAppData('target', { hideState = canScan, activeState = isLookingAt })
 				else
-					if eventData and not isLookingAt and canScan then
-						isLookingAt, data = true, {{
-							type = eventData.type, label = eventData.label
-						}}
+					if not isLookingAt and canScan then
+						if eventData then
+							local data = {}
 
-						exports['crp-ui']:toggleTarget(canScan, isLookingAt, data)
+							isLookingAt = true
 
-						TriggerEvent('crp-target:listenForKey')
+							if eventData then
+								data = {{
+									id = eventName, type = eventData.type, label = eventData.label
+								}}
+							else
+
+							end
+
+							exports['crp-ui']:setAppData('target', { hideState = canScan, activeState = isLookingAt, options = data })
+
+							TriggerEvent('crp-target:listenForKey')
+						end
 					end
 				end
 			else
 				if isLookingAt then
 					isLookingAt = false
 
-					exports['crp-ui']:toggleTarget(canScan, isLookingAt)
+					exports['crp-ui']:setAppData('target', { hideState = canScan, activeState = isLookingAt })
 				end
 			end
 		end
@@ -88,6 +107,20 @@ AddEventHandler('crp-target:listenForKey', function()
 			end
 		end
 	end)
+end)
+
+RegisterUICallback('startEvent', function(data, cb)
+	canScan, isLookingAt, canSelect, hasWait = false, false, false, true
+
+	if eventList[data] then
+		TriggerEvent(eventList[data].eventName, table.unpack(eventList[data].data))
+	end
+
+	Citizen.Wait(2000)
+
+	hasWait = false
+
+	cb({ state = true })
 end)
 
 function createTarget(zoneName, coords, length, width, minZ, maxZ, data)
