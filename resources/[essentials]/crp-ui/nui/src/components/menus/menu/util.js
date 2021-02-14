@@ -1,5 +1,3 @@
-'use strict';
-
 function degreesToRadians(degree) {
 	return degree * (Math.PI / 180);
 }
@@ -82,8 +80,7 @@ function getIndexOffset(items, sectorCount) {
 }
 
 function calculateScale(sectorSpace, sectorCount, radius) {
-	let totalSpace = sectorSpace * sectorCount;
-    let circleLength = Math.PI * 2 * radius;
+	let totalSpace = sectorSpace * sectorCount, circleLength = Math.PI * 2 * radius;
 	let radiusDelta = radius - (circleLength - totalSpace) / (Math.PI * 2);
 
     return (radius - radiusDelta) / radius;

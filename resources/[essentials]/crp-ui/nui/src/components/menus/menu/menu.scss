@@ -1,0 +1,66 @@
+.menu {
+	font-family: 'Quantico', sans-serif;
+	position: relative;
+	animation-duration: 1.0s;
+
+	width: 450px;
+	height: 450px;
+
+	margin: auto;
+	user-select: none;
+
+	.container {
+		position: absolute;
+		overflow: visible;
+		transition: 0.2s;
+		transition-timing-function: ease-out;
+
+		&.inner {
+			transform: scale(0.66) rotate(-10deg);
+			opacity: 0;
+			visibility: hidden;
+		}
+
+		&.outer {
+			transform: scale(1.5) rotate(10deg);
+			opacity: 0;
+			visibility: hidden;
+		}
+
+		g > path {
+			fill: rgba(0, 0, 0, 0.4);
+		}
+
+		g.sector {
+			&.selected > path {
+				fill: rgba(218, 45, 57, 0.6) !important;
+			}
+
+			path {
+				cursor: pointer;
+			}
+
+			text, use {
+				cursor: pointer;
+				color: white;
+				font-size: 0.3vh;
+			}
+		}
+
+		g.center {
+			&:hover > circle {
+				fill: rgba(218, 45, 57, 0.6);
+			}
+
+			circle {
+				cursor: pointer;
+				fill: rgba(0, 0, 0, 0.4);
+			}
+
+			use {
+				cursor: pointer;
+				color: white;
+			}
+		}
+	}
+}

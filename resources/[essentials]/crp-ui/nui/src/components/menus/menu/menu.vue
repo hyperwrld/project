@@ -1,47 +1,120 @@
-<template>
-    <div class='container container--fluid' id='menu'>
-		<div class='main-menu'>
-			<svg class='icons'>
-				<font-awesome-icon id='close' icon='times'/>
-				<font-awesome-icon id='return' icon='undo'/>
-				<font-awesome-icon :id='menu.id' :icon='menu.icon' v-for='(menu, index) in menuItems'/>
-			</svg>
-			<svg class='container' :id='"level" + menu.level'  :class='{ inner: menu.inner, outer: menu.outer }' viewBox='-50 -50 100 100' v-for='(menu, index) in openMenuList'>
-				<g @click='sectorClick'  @mouseover='sectorHover' :class='{ sector: sector.id, dummy: !sector.id, selected: menu.selectedIndex == sector.itemIndex }' v-for='(sector, index) in menu.sectors' :data-id='sector.id' :data-index='index' :transform='sector.transform' :data-item-index='sector.itemIndex'>
-					<path :d='sector.d'/>
-					<text v-if='sector.label' text-anchor='middle' font-size='38%' :x='sector.centerX' :y='sector.centerY' :transform='sector.textTransform'>{{sector.label}}</text>
-					<use v-if='sector.id' :xlink:href='"#" +  sector.id' :x='sector.centerX' :y='sector.centerY' :transform='sector.useTransform' width='10' height='10' fill='white'/>
-				</g>
-				<g class='center' @click='centerClick'>
-					<circle :r='menu.centerRadius'/>
-					<use :xlink:href='menu.centerIcon' :transform='menu.centerTransform' :width='menu.centerSize' :height='menu.centerSize'/>
-				</g>
-			</svg>
-		</div>
-	</div>
-</template>
-
 <script>
-	import { mapGetters } from 'vuex';
+	import { library } from '@fortawesome/fontawesome-svg-core';
+	import { faTimes } from '@fortawesome/free-solid-svg-icons';
+
+	library.add(faTimes);
 
 	import {
-		degreesToRadians, getDegreePosition, pointToString,
+		getDegreePosition, pointToString,
 		numberToString, resolveLoopIndex, waitForTransitionEnd,
 		nextTick, getIndexOffset, calculateScale
-	} from './menu';
+	} from './util.js';
+	import { fragment } from '../../../utils/lib.js';
 
-	import { library } from '@fortawesome/fontawesome-svg-core';
-	import { faTimes, faUndo, faGlobeEurope, faShieldAlt, faWalking, faTheaterMasks, faLink } from '@fortawesome/free-solid-svg-icons';
-
-	library.add(faTimes, faUndo, faGlobeEurope, faShieldAlt, faWalking, faTheaterMasks, faLink);
-
-    export default {
+	export default {
 		name: 'menu',
 		props: ['closeMenu'],
 		data () {
-    		return {
-				isOpen: true, openMenuList: []
-    		}
+			return {
+				isOpen: true,
+				menuList: [],
+				menuItems: [
+				{
+					id   : 'walk',
+					title: 'Walk',
+					icon: '#walk'
+				},
+				{
+					id   : 'run',
+					title: 'Run',
+					icon: '#run'
+				},
+				{
+					id   : 'drive',
+					title: 'Drive',
+					icon: '#drive'
+				},
+				{
+					id   : 'figth',
+					title: 'Fight',
+					icon: '#fight'
+				},
+				{
+					id   : 'more',
+					title: 'More...',
+					icon: '#more',
+					items: [
+						{
+							id   : 'eat',
+							title: 'Eat',
+							icon: '#eat'
+						},
+						{
+							id   : 'sleep',
+							title: 'Sleep',
+							icon: '#sleep'
+						},
+						{
+							id   : 'shower',
+							title: 'Take Shower',
+							icon: '#shower'
+						},
+						{
+							id   : 'workout',
+							icon : '#workout',
+							title: 'Work Out'
+						}
+					]
+				},
+				{
+					id: 'weapon',
+					title: 'Weapon...',
+					icon: '#weapon',
+					items: [
+						{
+							id: 'firearm',
+							icon: '#firearm',
+							title: 'Firearm...',
+							items: [
+								{
+									id: 'glock',
+									title: 'Glock 22'
+								},
+								{
+									id: 'beretta',
+									title: 'Beretta M9'
+								},
+								{
+									id: 'tt',
+									title: 'TT'
+								},
+								{
+									id: 'm16',
+									title: 'M16 A2'
+								},
+								{
+									id: 'ak47',
+									title: 'AK 47'
+								}
+							]
+						},
+						{
+							id: 'knife',
+							icon: '#knife',
+							title: 'Knife'
+						},
+						{
+							id: 'machete',
+							icon: '#machete',
+							title: 'Machete'
+						}, {
+							id: 'grenade',
+							icon: '#grenade',
+							title: 'Grenade'
+						}
+					]
+				}]
+			}
 		},
 		created() {
 			this.radius = 50;
@@ -50,7 +123,7 @@
 
 			let layerInfo = this.createMenuLayer(this.menuItems, 0);
 
-			this.openMenuList.push(layerInfo);
+			this.menuList.push(layerInfo);
 
 			nextTick(function () {
 				layerInfo.inner = false;
@@ -63,11 +136,6 @@
 		beforeDestroy: function () {
 			document.removeEventListener('keydown', this.keyDown);
 			document.removeEventListener('wheel', this.mouseWheel);
-		},
-		computed: {
-			...mapGetters('menu', {
-				menuItems: 'getMenuItems'
-			})
 		},
 		methods: {
 			mouseWheel: function(event) {
@@ -99,6 +167,7 @@
 					default:
 						break;
 				}
+
 				event.preventDefault();
 			},
 			createMenuLayer: function(items, level) {
@@ -138,24 +207,24 @@
 
 				return info;
 			},
-			centerClick: function(event) {
-            	if (this.openMenuList.length > 1) {
-                	let childMenu = this.getCurrentMenu();
-                	let parentMenu = this.openMenuList[this.openMenuList.length - 2];
+			centerClick: function() {
+				if (this.openMenuList.length > 1) {
+					let childMenu = this.getCurrentMenu();
+					let parentMenu = this.openMenuList[this.openMenuList.length - 2];
 					let svgNode = document.getElementById('level' + childMenu.level);
 
-                	waitForTransitionEnd(svgNode, 'visibility').then(() => {
-                   	 	this.openMenuList.pop();
+					waitForTransitionEnd(svgNode, 'visibility').then(() => {
+						this.openMenuList.pop();
 					});
 
-                	childMenu.inner = true, parentMenu.outer = false;
+					childMenu.inner = true, parentMenu.outer = false;
 				} else {
 					this.closeMenu({ appName: 'menu' });
 				}
 			},
 			getCurrentMenu: function() {
-            	return this.openMenuList[this.openMenuList.length - 1];
-        	},
+				return this.openMenuList[this.openMenuList.length - 1];
+			},
 			sectorHover: function(event) {
 				if (event.target.parentNode.classList.contains('sector')) {
 					let dataset = event.target.parentNode.dataset;
@@ -170,9 +239,9 @@
 			getSelectedItem: function() {
 				let currentMenu = this.getCurrentMenu();
 
-            	return currentMenu.levelItems[currentMenu.selectedIndex];
-        	},
-        	selectDelta: function(indexDelta) {
+				return currentMenu.levelItems[currentMenu.selectedIndex];
+			},
+			selectDelta: function(indexDelta) {
 				let currentMenu = this.getCurrentMenu();
 				let selectedIndex = currentMenu.selectedIndex + indexDelta;
 
@@ -233,8 +302,7 @@
 				info.d = this.getSectorPathCmd(startAngleDeg, endAngleDeg, scale);
 
 				if (item) {
-					info.className = 'sector';
-					info.id = item.id;
+					info.className = 'sector', info.id = item.id;
 
 					if (item.label) {
 						info.label = item.label;
@@ -277,10 +345,49 @@
 				return path;
 			},
 			getSectorCenter: function(startAngleDeg, endAngleDeg) {
-            	return getDegreePosition((startAngleDeg + endAngleDeg) / 2, this.innerRadius + (this.radius - this.innerRadius) / 2);
-        	}
-        }
-    };
+				return getDegreePosition((startAngleDeg + endAngleDeg) / 2, this.innerRadius + (this.radius - this.innerRadius) / 2);
+			}
+        },
+		render() {
+			console.log(this.menuList)
+			return (
+				<transition appear name='fade'>
+					<div class='menu'>
+						{ this.menuList.map((menu) => {
+							return (
+								<svg id={ 'level' + menu.level } class={ `container ${ menu.inner ? 'inner' : '', menu.outer ? 'outer' : '' }` } viewBox='-50 -50 100 100'>
+									{ menu.sectors.map((sector, index) => {
+										console.log(sector, index, 'zzzz')
+										return (
+											<fragment>
+												<g
+													class={{ sector: sector.id, dummy: !sector.id, selected: menu.selectedIndex == sector.itemIndex }}
+													data-id={ sector.id } data-index={ index } transform={ sector.transform } data-item-index={ sector.itemIndex }
+												>
+													<path d={ sector.d }/>
+													{ sector.label &&
+														<text text-anchor='middle' font-size='38%' x={ sector.centerX } y={ sector.centerY } transform={ sector.textTransform }>
+															{ sector.label }
+														</text>
+													}
+												</g>
+												<g class='center'>
+													<circle r={ menu.centerRadius }/>
+													<use transform={ menu.centerTransform } width={ menu.centerSize } height={ menu.centerSize }>
+														<font-awesome-icon icon='times'/>
+													</use>
+												</g>
+											</fragment>
+										)
+									})}
+								</svg>
+							)
+						})}
+					</div>
+				</transition>
+			);
+		}
+	}
 </script>
 
 <style scoped lang='scss'>
