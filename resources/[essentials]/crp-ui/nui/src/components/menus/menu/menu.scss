@@ -3,8 +3,8 @@
 	position: relative;
 	animation-duration: 1.0s;
 
-	width: 25%;
-	height: 25%;
+	width: 350px;
+	height: 350px;
 
 	margin: auto;
 	user-select: none;
@@ -36,8 +36,8 @@
 		}
 
 		g.sector {
-			&.selected > path {
-				fill: rgba(218, 45, 57, 0.6) !important;
+			&:hover > path {
+				fill: rgba(48, 71, 94, 0.6) !important;
 			}
 
 			path {
@@ -47,13 +47,14 @@
 			text, use {
 				cursor: pointer;
 				color: white;
+				fill: white;
 				font-size: 0.3vh;
 			}
 		}
 
 		g.center {
 			&:hover > circle {
-				fill: rgba(218, 45, 57, 0.6);
+				fill: rgba(48, 71, 94, 0.6);
 			}
 
 			circle {
