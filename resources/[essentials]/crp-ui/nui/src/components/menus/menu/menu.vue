@@ -1,119 +1,29 @@
 <script>
+	import { mapGetters } from 'vuex';
 	import { library } from '@fortawesome/fontawesome-svg-core';
-	import { faTimes } from '@fortawesome/free-solid-svg-icons';
+	import { faRunning, faTimes, faWalking } from '@fortawesome/free-solid-svg-icons';
 
-	library.add(faTimes);
+	library.add(faTimes, faWalking, faRunning);
 
 	import {
 		getDegreePosition, pointToString,
 		numberToString, resolveLoopIndex, waitForTransitionEnd,
 		nextTick, getIndexOffset, calculateScale
 	} from './util.js';
+
 	import { fragment } from '../../../utils/lib.js';
 
 	export default {
 		name: 'menu',
 		props: ['closeMenu'],
+		computed: {
+			...mapGetters('menu', {
+				menuItems: 'getMenuItems'
+			})
+		},
 		data () {
 			return {
-				isOpen: true,
-				menuList: [],
-				menuItems: [
-				{
-					id   : 'walk',
-					title: 'Walk',
-					icon: '#walk'
-				},
-				{
-					id   : 'run',
-					title: 'Run',
-					icon: '#run'
-				},
-				{
-					id   : 'drive',
-					title: 'Drive',
-					icon: '#drive'
-				},
-				{
-					id   : 'figth',
-					title: 'Fight',
-					icon: '#fight'
-				},
-				{
-					id   : 'more',
-					title: 'More...',
-					icon: '#more',
-					items: [
-						{
-							id   : 'eat',
-							title: 'Eat',
-							icon: '#eat'
-						},
-						{
-							id   : 'sleep',
-							title: 'Sleep',
-							icon: '#sleep'
-						},
-						{
-							id   : 'shower',
-							title: 'Take Shower',
-							icon: '#shower'
-						},
-						{
-							id   : 'workout',
-							icon : '#workout',
-							title: 'Work Out'
-						}
-					]
-				},
-				{
-					id: 'weapon',
-					title: 'Weapon...',
-					icon: '#weapon',
-					items: [
-						{
-							id: 'firearm',
-							icon: '#firearm',
-							title: 'Firearm...',
-							items: [
-								{
-									id: 'glock',
-									title: 'Glock 22'
-								},
-								{
-									id: 'beretta',
-									title: 'Beretta M9'
-								},
-								{
-									id: 'tt',
-									title: 'TT'
-								},
-								{
-									id: 'm16',
-									title: 'M16 A2'
-								},
-								{
-									id: 'ak47',
-									title: 'AK 47'
-								}
-							]
-						},
-						{
-							id: 'knife',
-							icon: '#knife',
-							title: 'Knife'
-						},
-						{
-							id: 'machete',
-							icon: '#machete',
-							title: 'Machete'
-						}, {
-							id: 'grenade',
-							icon: '#grenade',
-							title: 'Grenade'
-						}
-					]
-				}]
+				isOpen: true, menuList: []
 			}
 		},
 		created() {
@@ -349,15 +259,22 @@
 			}
         },
 		render() {
-			console.log(this.menuList)
 			return (
 				<transition appear name='fade'>
 					<div class='menu'>
+						<svg class='icons'>
+							<font-awesome-icon id='close' icon='times'/>
+							<font-awesome-icon id='return' icon='undo'/>
+							{ this.menuItems.map((menu) => {
+								return (
+									<font-awesome-icon id={ menu.id } icon={ menu.icon }/>
+								)
+							})}
+						</svg>
 						{ this.menuList.map((menu) => {
 							return (
 								<svg id={ 'level' + menu.level } class={ `container ${ menu.inner ? 'inner' : '', menu.outer ? 'outer' : '' }` } viewBox='-50 -50 100 100'>
 									{ menu.sectors.map((sector, index) => {
-										console.log(sector, index, 'zzzz')
 										return (
 											<fragment>
 												<g
@@ -370,13 +287,14 @@
 															{ sector.label }
 														</text>
 													}
+													<use href={ sector.icon } x={ sector.centerX } y={ sector.centerY } transform={ sector.useTransform } width='10' height='10' fill='white'/>
 												</g>
-												<g class='center'>
-													<circle r={ menu.centerRadius }/>
-													<use transform={ menu.centerTransform } width={ menu.centerSize } height={ menu.centerSize }>
-														<font-awesome-icon icon='times'/>
-													</use>
-												</g>
+												{ index == 0 &&
+													<g class='center'>
+														<circle r={ menu.centerRadius }/>
+														<use href={ menu.centerIcon } transform={ menu.centerTransform } width={ menu.centerSize } height={ menu.centerSize }/>
+													</g>
+												}
 											</fragment>
 										)
 									})}
