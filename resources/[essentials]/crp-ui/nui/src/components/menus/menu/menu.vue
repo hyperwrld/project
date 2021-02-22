@@ -74,13 +74,13 @@
 				return info;
 			},
 			centerClick: function() {
-				if (this.openMenuList.length > 1) {
+				if (this.menuList.length > 1) {
 					let childMenu = this.getCurrentMenu();
-					let parentMenu = this.openMenuList[this.openMenuList.length - 2];
+					let parentMenu = this.menuList[this.menuList.length - 2];
 					let svgNode = document.getElementById('level' + childMenu.level);
 
 					waitForTransitionEnd(svgNode, 'visibility').then(() => {
-						this.openMenuList.pop();
+						this.menuList.pop();
 					});
 
 					childMenu.inner = true, parentMenu.outer = false;
@@ -89,12 +89,13 @@
 				}
 			},
 			getCurrentMenu: function() {
-				return this.openMenuList[this.openMenuList.length - 1];
+				return this.menuList[this.menuList.length - 1];
 			},
 			menuClick: function(item) {
 				if (item.items) {
 					this.openNestedMenu(item);
 				} else {
+					console.log(item)
 					this.$emit('clicked', item);
 
 					if (this.closeOnClick) {
@@ -116,10 +117,10 @@
 			},
 			openNestedMenu: function(item) {
 				let parentMenu = this.getCurrentMenu();
-				let newMenu = this.createMenuLayer(item.items, this.openMenuList.length);
+				let newMenu = this.createMenuLayer(item.items, this.menuList.length);
 
 				parentMenu.outer = true;
-				this.openMenuList.push(newMenu);
+				this.menuList.push(newMenu);
 
 				nextTick(function () {
 					newMenu.inner = false;
@@ -205,7 +206,7 @@
 									{ menu.sectors.map((sector, index) => {
 										return (
 											<g
-												class={{ sector: sector.id, dummy: !sector.id }}
+												onClick={ (event) =>  this.sectorClick(event) } class={{ sector: sector.id, dummy: !sector.id }}
 												data-id={ sector.id } data-index={ index } transform={ sector.transform } data-item-index={ sector.itemIndex }
 											>
 												<path d={ sector.d }/>
@@ -218,7 +219,7 @@
 											</g>
 										)
 									})}
-									<g class='center'>
+									<g class='center' onClick={ this.centerClick }>
 										<circle r={ menu.centerRadius }/>
 										<use href={ menu.centerIcon } transform={ menu.centerTransform } width={ menu.centerSize } height={ menu.centerSize }/>
 									</g>
