@@ -7,9 +7,11 @@
 
 	import {
 		getDegreePosition, pointToString,
-		numberToString, resolveLoopIndex, waitForTransitionEnd,
-		nextTick, getIndexOffset, calculateScale
+		numberToString, resolveLoopIndex, nextTick,
+		getIndexOffset, calculateScale, waitForTransitionEnd
 	} from './util.js';
+
+	import { send } from './../../../utils/lib.js';
 
 	export default {
 		name: 'menu',
@@ -95,12 +97,9 @@
 				if (item.items) {
 					this.openNestedMenu(item);
 				} else {
-					console.log(item)
-					this.$emit('clicked', item);
+					send('clickedItem', item);
 
-					if (this.closeOnClick) {
-						this.closeMenu({ appName: 'menu' });
-					}
+					this.closeMenu({ appName: 'menu' });
 				}
 			},
 			sectorClick: function(event) {
@@ -202,7 +201,7 @@
 						</svg>
 						{ this.menuList.map((menu) => {
 							return (
-								<svg id={ 'level' + menu.level } class={ `container ${ menu.inner ? 'inner' : '', menu.outer ? 'outer' : '' }` } viewBox='-50 -50 100 100'>
+								<svg id={ 'level' + menu.level } class={ `container ${ menu.inner ? 'inner' : '' } ${ menu.outer ? 'outer' : '' }` } viewBox='-50 -50 100 100'>
 									{ menu.sectors.map((sector, index) => {
 										return (
 											<g
