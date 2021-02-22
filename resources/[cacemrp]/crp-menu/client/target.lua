@@ -131,7 +131,7 @@ end
 
 createTarget('mrpd_service', vector4(441.8, -981.9, 30.69, 0), 0.6, 0.4, 30.69, 30.89, nil)
 
-exports('createTarget', createTarget)\
+exports('createTarget', createTarget)
 
 function RotationToDirection(rotation)
 	local adjustedRotation = {
