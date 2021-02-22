@@ -17,6 +17,7 @@ function openApp(appName, data, hasFocus, hasCursor, keepInput, canDisable)
 
 	SetNuiFocus(hasFocus, hasCursor)
 	SetNuiFocusKeepInput(keepInput)
+	SetCursorLocation(0.5, 0.5)
 
 	if canDisable then
 		Citizen.CreateThread(function()
