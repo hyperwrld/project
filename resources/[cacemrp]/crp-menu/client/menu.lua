@@ -1,4 +1,13 @@
+local isOpen = false
+
 function openMenu()
+	isOpen = not isOpen
+
+	if not isOpen then
+		exports['crp-ui']:closeApp('menu')
+		return
+	end
+
 	local data = {}
 
 	for k, v in ipairs(menuList) do
@@ -50,8 +59,9 @@ function openMenu()
 		end
 	end
 
-	exports['crp-ui']:openApp('menu', data)
+	exports['crp-ui']:openApp('menu', data, true, true, true, true)
 end
 
 RegisterCommand('+openMenu', openMenu, false)
+RegisterCommand('-openMenu', openMenu, false)
 RegisterKeyMapping('+openMenu', 'Abrir o menu', 'keyboard', 'f1')
