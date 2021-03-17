@@ -5,6 +5,7 @@ local debug = debug
 local coroutine_close = coroutine.close or (function(c) end) -- 5.3 compatibility
 local hadThread = false
 local curTime = 0
+local isDuplicityVersion = IsDuplicityVersion()
 
 -- setup msgpack compat
 msgpack.set_string('string_compat')
@@ -154,10 +155,7 @@ CreateThread = Citizen.CreateThread
 function Citizen.CreateThreadNow(threadFunction, name)
 	local bid = boundaryIdx + 1
 	boundaryIdx = boundaryIdx + 1
-
-	if not hadThread then
-		curTime = GetGameTimer()
-	end
+	curTime = GetGameTimer()
 	
 	local di = debug.getinfo(threadFunction, 'S')
 	name = name or ('thread_now %s[%d..%d]'):format(di.short_src, di.linedefined, di.lastlinedefined)
@@ -268,11 +266,6 @@ end)
 
 ]]
 
-local alwaysSafeEvents = {
-	["playerDropped"] = true,
-	["playerConnecting"] = true
-}
-
 local eventHandlers = {}
 local deserializingNetEvent = false
 
@@ -283,21 +276,25 @@ Citizen.SetEventRoutine(function(eventName, eventPayload, eventSource)
 
 	-- try finding an event handler for the event
 	local eventHandlerEntry = eventHandlers[eventName]
-	
+
 	-- deserialize the event structure (so that we end up adding references to delete later on)
 	local data = msgpack.unpack(eventPayload)
 
 	if eventHandlerEntry and eventHandlerEntry.handlers then
 		-- if this is a net event and we don't allow this event to be triggered from the network, return
 		if eventSource:sub(1, 3) == 'net' then
-			if not eventHandlerEntry.safeForNet and not alwaysSafeEvents[eventName] then
+			if not eventHandlerEntry.safeForNet then
 				Citizen.Trace('event ' .. eventName .. " was not safe for net\n")
 
+				_G.source = lastSource
 				return
 			end
 
 			deserializingNetEvent = { source = eventSource }
 			_G.source = tonumber(eventSource:sub(5))
+		elseif isDuplicityVersion and eventSource:sub(1, 12) == 'internal-net' then
+			deserializingNetEvent = { source = eventSource:sub(10) }
+			_G.source = tonumber(eventSource:sub(14))
 		end
 
 		-- return an empty table if the data is nil
@@ -312,7 +309,14 @@ Citizen.SetEventRoutine(function(eventName, eventPayload, eventSource)
 		if type(data) == 'table' then
 			-- loop through all the event handlers
 			for k, handler in pairs(eventHandlerEntry.handlers) do
-				local di = debug.getinfo(handler)
+				local handlerFn = handler
+				local handlerMT = getmetatable(handlerFn)
+
+				if handlerMT and handlerMT.__call then
+					handlerFn = handlerMT.__call
+				end
+
+				local di = debug.getinfo(handlerFn)
 			
 				Citizen.CreateThreadNow(function()
 					handler(table.unpack(data))
@@ -430,7 +434,7 @@ function RemoveEventHandler(eventData)
 	eventHandlers[eventData.name].handlers[eventData.key] = nil
 end
 
-function RegisterNetEvent(eventName)
+function RegisterNetEvent(eventName, cb)
 	local tableEntry = eventHandlers[eventName]
 
 	if not tableEntry then
@@ -440,6 +444,10 @@ function RegisterNetEvent(eventName)
 	end
 
 	tableEntry.safeForNet = true
+
+	if cb then
+		return AddEventHandler(eventName, cb)
+	end
 end
 
 function TriggerEvent(eventName, ...)
@@ -450,7 +458,7 @@ function TriggerEvent(eventName, ...)
 	end)
 end
 
-if IsDuplicityVersion() then
+if isDuplicityVersion then
 	function TriggerClientEvent(eventName, playerId, ...)
 		local payload = msgpack.pack({...})
 
@@ -579,7 +587,7 @@ Citizen.SetCallRefRoutine(function(refId, argsSerialized)
 	if not refPtr then
 		Citizen.Trace('Invalid ref call attempt: ' .. refId .. "\n")
 
-		return msgpack.pack({})
+		return msgpack.pack(nil)
 	end
 	
 	local ref = refPtr.func
@@ -665,7 +673,7 @@ if GetCurrentResourceName() == 'sessionmanager' then
 
 		local eventTriggerFn = TriggerServerEvent
 		
-		if IsDuplicityVersion() then
+		if isDuplicityVersion then
 			eventTriggerFn = function(name, ...)
 				TriggerClientEvent(name, source, ...)
 			end
@@ -737,7 +745,7 @@ AddEventHandler(repName, function(retId, args, err)
 	end
 end)
 
-if IsDuplicityVersion() then
+if isDuplicityVersion then
 	AddEventHandler('playerDropped', function(reason)
 		local source = source
 
@@ -770,7 +778,7 @@ InvokeRpcEvent = function(source, ref, args)
 
 	local eventTriggerFn = TriggerServerEvent
 
-	if IsDuplicityVersion() then
+	if isDuplicityVersion then
 		eventTriggerFn = function(name, ...)
 			TriggerClientEvent(name, src, ...)
 		end
@@ -895,7 +903,7 @@ end
 -- callback cache to avoid extra call to serialization / deserialization process at each time getting an export
 local exportsCallbackCache = {}
 
-local exportKey = (IsDuplicityVersion() and 'server_export' or 'export')
+local exportKey = (isDuplicityVersion and 'server_export' or 'export')
 
 do
 	local resource = GetCurrentResourceName()
@@ -916,7 +924,7 @@ end
 
 -- Remove cache when resource stop to avoid calling unexisting exports
 local function lazyEventHandler() -- lazy initializer so we don't add an event we don't need
-	AddEventHandler(('on%sResourceStop'):format(IsDuplicityVersion() and 'Server' or 'Client'), function(resource)
+	AddEventHandler(('on%sResourceStop'):format(isDuplicityVersion and 'Server' or 'Client'), function(resource)
 		exportsCallbackCache[resource] = {}
 	end)
 
@@ -977,7 +985,7 @@ setmetatable(exports, {
 })
 
 -- NUI callbacks
-if not IsDuplicityVersion() then
+if not isDuplicityVersion then
 	function RegisterNUICallback(type, callback)
 		RegisterNuiCallbackType(type)
 
@@ -1006,8 +1014,6 @@ local EXT_PLAYER = 42
 msgpack.extend_clear(EXT_ENTITY, EXT_PLAYER)
 
 local function NewStateBag(es)
-	local sv = IsDuplicityVersion()
-
 	return setmetatable({}, {
 		__index = function(_, s)
 			if s == 'set' then
@@ -1022,7 +1028,7 @@ local function NewStateBag(es)
 		
 		__newindex = function(_, s, v)
 			local payload = msgpack.pack(v)
-			SetStateBagValue(es, s, payload, payload:len(), sv)
+			SetStateBagValue(es, s, payload, payload:len(), isDuplicityVersion)
 		end
 	})
 end
@@ -1034,7 +1040,7 @@ local entityTM = {
 		if s == 'state' then
 			local es = ('entity:%d'):format(NetworkGetNetworkIdFromEntity(t.__data))
 			
-			if IsDuplicityVersion() then
+			if isDuplicityVersion then
 				EnsureEntityStateBag(t.__data)
 			end
 		
@@ -1123,6 +1129,6 @@ function Player(ent)
 	return ent
 end
 
-if not IsDuplicityVersion() then
+if not isDuplicityVersion then
 	LocalPlayer = Player(-1)
 end
