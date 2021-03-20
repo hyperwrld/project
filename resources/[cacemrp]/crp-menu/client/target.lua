@@ -4,26 +4,22 @@ local scanRange = {
     2.7, 3.0, 3.5, 0.0, 2.3  -- [0] Third Person Close / [1] Third Person Mid / [2] Third Person Far / [4] First Person
 }
 
-function scanTarget()
+function toggleScan()
 	if hasWait then
+		return
+	end
+
+	if canScan then
+		hasWait = true
+
+		exports['crp-ui']:closeApp('target')
 		return
 	end
 
 	canScan = not canScan
 
-	if not canScan then
-		isLookingAt, canSelect = false, false
-	end
-
-	if not canScan then
-		exports['crp-ui']:closeApp('target')
-		return
-	end
-
-	exports['crp-ui']:openApp('target', { hideState = canScan, activeState = isLookingAt }, false, false)
-
 	Citizen.CreateThread(function()
-		while canScan do
+		while canScan and not canSelect do
 			Citizen.Wait(5000)
 
 			playerPed = PlayerPedId()
@@ -31,7 +27,7 @@ function scanTarget()
 	end)
 
 	Citizen.CreateThread(function()
-		while canScan do
+		while canScan and not canSelect do
 			Citizen.Wait(250)
 
 			local coords, cameraRotation, cameraPosition = GetEntityCoords(playerPed), GetGameplayCamRot(), GetGameplayCamCoord()
@@ -53,74 +49,72 @@ function scanTarget()
 
 				local eventData = eventList[eventName]
 
-				if not eventData and isLookingAt then
-					isLookingAt = false
+				if eventData and not isLookingAt and canScan then
+					local data = {}
 
-					exports['crp-ui']:setAppData('target', { hideState = canScan, activeState = isLookingAt })
-				else
-					if not isLookingAt and canScan then
-						if eventData then
-							local data = {}
+					isLookingAt = true
 
-							isLookingAt = true
+					if eventData then
+						data = {{
+							id = eventName, type = eventData.type, label = eventData.label
+						}}
+					else
 
-							if eventData then
-								data = {{
-									id = eventName, type = eventData.type, label = eventData.label
-								}}
-							else
-
-							end
-
-							exports['crp-ui']:setAppData('target', { hideState = canScan, activeState = isLookingAt, options = data })
-
-							TriggerEvent('crp-target:listenForKey')
-						end
 					end
-				end
-			else
-				if isLookingAt then
-					isLookingAt = false
 
-					exports['crp-ui']:setAppData('target', { hideState = canScan, activeState = isLookingAt })
+					exports['crp-ui']:setAppData('target', { hideState = canScan, activeState = isLookingAt, options = data })
+
+					Citizen.CreateThread(function()
+						while canScan and isLookingAt do
+							Citizen.Wait(0)
+
+							if not canSelect then
+								DisablePlayerFiring(playerPed, true)
+
+								if IsDisabledControlJustReleased(0, 24) then
+									TriggerEvent('crp-target:selectOption')
+								end
+							else
+								DisableAllControlActions(0)
+							end
+						end
+					end)
 				end
+			elseif isLookingAt then
+				isLookingAt = false
+
+				exports['crp-ui']:setAppData('target', { hideState = canScan, activeState = isLookingAt })
 			end
 		end
 	end)
+
+	exports['crp-ui']:openApp('target', { hideState = canScan, activeState = isLookingAt }, false, false, true)
 end
 
-AddEventHandler('crp-target:listenForKey', function()
-	Citizen.CreateThread(function()
-		while isLookingAt do
-			Citizen.Wait(0)
-
-			if canSelect then
-				DisableAllControlActions(0)
-			else
-				DisableControlAction(0, 24, true)
-
-				if IsDisabledControlJustReleased(0, 24) then
-					canSelect = true
-
-					exports['crp-ui']:setNuiFocus(true, true, true)
-				end
-			end
-		end
-	end)
-end)
-
-RegisterUICallback('startEvent', function(data, cb)
-	canScan, isLookingAt, canSelect, hasWait = false, false, false, true
-
-	if eventList[data] then
-		TriggerEvent(eventList[data].eventName, table.unpack(eventList[data].data))
+AddEventHandler('crp-ui:closedMenu', function(name, data)
+	if name ~= 'target' and not canScan then
+		return
 	end
 
-	Citizen.Wait(2000)
+	canScan, isLookingAt, canSelect = false, false, false
+
+	Debug('Target scan closed.')
+
+	Citizen.Wait(100)
 
 	hasWait = false
+end)
 
-	cb({ state = true })
+AddEventHandler('crp-target:selectOption', function()
+	canSelect, hasWait = true, true
+
+	SetCursorLocation(0.5, 0.5)
+
+	exports['crp-ui']:setNuiFocus(true, true, true)
+
+	Citizen.Wait(50)
+
+	hasWait = false
 end)
 
 function createTarget(zoneName, coords, length, width, minZ, maxZ, data)
@@ -153,6 +147,6 @@ function isPointInsideZone(point)
 	return false
 end
 
-RegisterCommand('+scanTarget', scanTarget, false)
-RegisterCommand('-scanTarget', scanTarget, false)
-RegisterKeyMapping('+scanTarget', 'Abrir o menu', 'keyboard', 'LMENU')
+RegisterCommand('+toggleScan', toggleScan, false)
+RegisterCommand('-toggleScan', toggleScan, false)
+RegisterKeyMapping('+toggleScan', 'Ativar/Desativar o target scan', 'keyboard', 'LMENU')

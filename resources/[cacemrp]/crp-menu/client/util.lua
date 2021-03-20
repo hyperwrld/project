@@ -85,6 +85,15 @@ menuList = {
 			return true
 		end,
 		functionName = 'crp-police:cuff'
+	},
+	{
+		id = 'garage',
+		label = 'Garagem',
+		icon = 'parking',
+		enableSector = function()
+			return true
+		end,
+		functionName = 'crp-garage:openGarage'
 	}
 }
 

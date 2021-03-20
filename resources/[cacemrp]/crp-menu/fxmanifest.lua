@@ -11,7 +11,8 @@ client_scripts {
 	'@polyzone/client/BoxZone.lua',
 	'@crp-lib/client/main.lua',
 	'client/util.lua',
-    'client/*.lua'
+    'client/menu.lua',
+	'client/target.lua'
 }
 
 shared_script '@crp-lib/shared/util.lua'

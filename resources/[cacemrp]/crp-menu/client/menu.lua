@@ -6,6 +6,8 @@ function toggleMenu()
 	end
 
 	if isOpen then
+		hasWait = true
+
 		exports['crp-ui']:closeApp('menu')
 		return
 	end
@@ -79,7 +81,7 @@ AddEventHandler('crp-ui:closedMenu', function(name, data)
 		return
 	end
 
-	hasWait, isOpen = true, false
+	isOpen = false
 
 	Debug('Radial menu closed.')
 
