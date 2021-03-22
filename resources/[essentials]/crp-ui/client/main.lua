@@ -1,7 +1,13 @@
-local isAppOpen, events = false, {}
+local isAppOpen, currentApp, events = false, '', {}
 
 function openApp(appName, data, hasFocus, hasCursor, keepInput, canDisable)
-	isAppOpen = true
+	if isAppOpen then
+		closeApp(currentApp)
+
+		Citizen.Wait(1000)
+	end
+
+	isAppOpen, currentApp = true, appName
 
 	if hasFocus == nil then
 		hasFocus = true
@@ -37,7 +43,7 @@ end
 exports('openApp', openApp)
 
 function closeApp(appName)
-	isAppOpen = false
+	isAppOpen, currentApp = false, ''
 
 	SetNuiFocus(false, false)
 	SetNuiFocusKeepInput(false)
@@ -72,7 +78,7 @@ RegisterNUICallback('closeMenu', function(data, cb)
 
 	Citizen.Wait(300)
 
-	isAppOpen = false
+	isAppOpen, currentApp = false, ''
 
     cb(true)
 end)
