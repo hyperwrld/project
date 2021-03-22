@@ -1,18 +1,12 @@
-local isOpen, hasWait = false, false
+local isOpen = false
 
-function toggleMenu()
-	if hasWait then
-		return
-	end
-
-	if isOpen then
-		hasWait = true
-
+function toggleMenu(state)
+	if not state then
 		exports['crp-ui']:closeApp('menu')
 		return
 	end
 
-	isOpen = not isOpen
+	isOpen = state
 
 	local data = {}
 
@@ -86,12 +80,6 @@ AddEventHandler('crp-ui:closedMenu', function(name, data)
 	Debug('Radial menu closed.')
 
 	PlaySoundFrontend(-1, 'NAV', 'HUD_AMMO_SHOP_SOUNDSET', 1)
-
-	Citizen.Wait(250)
-
-	hasWait = false
 end)
 
-RegisterCommand('+toggleMenu', toggleMenu, false)
-RegisterCommand('-toggleMenu', toggleMenu, false)
-RegisterKeyMapping('+toggleMenu', 'Abrir/Fechar o menu', 'keyboard', 'f1')
+exports['crp-binds']:RegisterHoldKeybind('toggleMenu', 'Abrir/Fechar o menu', 'F1', toggleMenu, 0)
