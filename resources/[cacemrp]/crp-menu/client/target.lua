@@ -1,22 +1,16 @@
-local canScan, isLookingAt, canSelect, hasWait, zones, playerPed = false, false, false, false, {}, PlayerPedId()
+local canScan, isLookingAt, canSelect, zones, playerPed = false, false, false, {}, PlayerPedId()
 
 local scanRange = {
     2.7, 3.0, 3.5, 0.0, 2.3  -- [0] Third Person Close / [1] Third Person Mid / [2] Third Person Far / [4] First Person
 }
 
-function toggleScan()
-	if hasWait then
-		return
-	end
-
-	if canScan then
-		hasWait = true
-
+function toggleScan(state)
+	if not state then
 		exports['crp-ui']:closeApp('target')
 		return
 	end
 
-	canScan = not canScan
+	canScan = state
 
 	Citizen.CreateThread(function()
 		while canScan and not canSelect do
@@ -91,30 +85,33 @@ function toggleScan()
 	exports['crp-ui']:openApp('target', { hideState = canScan, activeState = isLookingAt }, false, false, true)
 end
 
+AddEventHandler('crp-target:selectOption', function()
+	canSelect = true
+
+	SetCursorLocation(0.5, 0.5)
+
+	exports['crp-ui']:setNuiFocus(true, true, true)
+end)
+
+RegisterUICallback('startEvent', function(data, cb)
+	exports['crp-ui']:closeApp('target')
+
+	if eventList[data] then
+		TriggerEvent(eventList[data].eventName, table.unpack(eventList[data].data))
+	end
+
+	cb({ state = true })
+end)
+
+
 AddEventHandler('crp-ui:closedMenu', function(name, data)
 	if name ~= 'target' and not canScan then
 		return
 	end
 
-	canScan, isLookingAt, canSelect = false, false, false
+	isLookingAt, canSelect = false, false
 
 	Debug('Target scan closed.')
-
-	Citizen.Wait(100)
-
-	hasWait = false
-end)
-
-AddEventHandler('crp-target:selectOption', function()
-	canSelect, hasWait = true, true
-
-	SetCursorLocation(0.5, 0.5)
-
-	exports['crp-ui']:setNuiFocus(true, true, true)
-
-	Citizen.Wait(50)
-
-	hasWait = false
 end)
 
 function createTarget(zoneName, coords, length, width, minZ, maxZ, data)
@@ -147,6 +144,4 @@ function isPointInsideZone(point)
 	return false
 end
 
-RegisterCommand('+toggleScan', toggleScan, false)
-RegisterCommand('-toggleScan', toggleScan, false)
-RegisterKeyMapping('+toggleScan', 'Ativar/Desativar o target scan', 'keyboard', 'LMENU')
+exports['crp-binds']:RegisterHoldKeybind('toggleScan', 'Ativar/Desativar o target scan', 'LMENU', toggleScan, 0)
