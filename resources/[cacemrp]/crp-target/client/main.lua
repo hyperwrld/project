@@ -1,4 +1,4 @@
-local canScan, isLookingAt, canSelect, zones, playerPed = false, false, false, {}, PlayerPedId()
+local canScan, isLookingAt, canSelect, playerPed = false, false, false, PlayerPedId()
 
 local scanRange = {
     2.7, 3.0, 3.5, 0.0, 2.3  -- [0] Third Person Close / [1] Third Person Mid / [2] Third Person Far / [4] First Person
@@ -103,7 +103,6 @@ RegisterUICallback('startEvent', function(data, cb)
 	cb({ state = true })
 end)
 
-
 AddEventHandler('crp-ui:closedMenu', function(name, data)
 	if name ~= 'target' and not canScan then
 		return
@@ -113,35 +112,5 @@ AddEventHandler('crp-ui:closedMenu', function(name, data)
 
 	Debug('Target scan closed.')
 end)
-
-function createTarget(zoneName, coords, length, width, minZ, maxZ, data)
-	zones[#zones + 1] = BoxZone:Create(coords.xyz, length, width, { name = zoneName, heading = coords.w, minZ = minZ, maxZ = maxZ, data = data })
-
-	Debug('Created target zone (' .. zoneName .. ') successfully.')
-end
-
-createTarget('mrpd_service', vector4(441.8, -981.9, 30.69, 0), 0.6, 0.4, 30.69, 30.89, nil)
-
-exports('createTarget', createTarget)
-
-function RotationToDirection(rotation)
-	local adjustedRotation = {
-		x = (math.pi / 180) * rotation.x, y = (math.pi / 180) * rotation.y, z = (math.pi / 180) * rotation.z
-	}
-
-	return {
-		x = -math.sin(adjustedRotation.z) * math.abs(math.cos(adjustedRotation.x)), y = math.cos(adjustedRotation.z) * math.abs(math.cos(adjustedRotation.x)), z = math.sin(adjustedRotation.x)
-	}
-end
-
-function isPointInsideZone(point)
-	for k, v in ipairs(zones) do
-		if v:isPointInside(point) then
-			return true, v.name
-		end
-	end
-
-	return false
-end
 
 exports['crp-binds']:RegisterHoldKeybind('toggleScan', 'Ativar/Desativar o target scan', 'LMENU', toggleScan, 0)

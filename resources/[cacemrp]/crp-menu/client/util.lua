@@ -96,15 +96,3 @@ menuList = {
 		functionName = 'crp-garage:openGarage'
 	}
 }
-
-eventList = {
-	['mrpd_service'] = {
-		type = 2,
-		label = 'Entrar/Sair de serviço',
-		eventName = 'crp-inventory:openShop',
-		data = { 3 }
-	},
-    [`prop_vend_coffe_01`] = {
-        eventName = 'crp-inventory:openShop', type = 1, label = 'Máquina de vendas', data = { 3 }
-    }
-}
