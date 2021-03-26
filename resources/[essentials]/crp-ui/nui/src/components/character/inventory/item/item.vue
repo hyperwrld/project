@@ -19,16 +19,11 @@
 
 			if (itemPercentage < 0) itemPercentage = 0;
 
-			const durabilityLabel = itemPercentage >= 10 ? itemPercentage : (itemPercentage <= 0 ? 'Destruído' : 'Quase destruído');
-
 			return (
 				<div class='item'>
 					<div class='item-info'>{ this.item.quantity } [{ itemData.weight.toFixed(2) }]</div>
 					<div class='item-image'>
 						<img src={ require('./../../../../assets/' + itemData.image) }/>
-					</div>
-					<div class='item-durability' style={ itemPercentage >= 10 ? { width: itemPercentage + '%' } : { width: '100%', backgroundColor: '#a60505' }}>
-						{ durabilityLabel }
 					</div>
 					<div class='item-name'>
 						{ this.item.price ?
@@ -41,6 +36,7 @@
 							</fragment>
 						}
 					</div>
+					<div class='item-durability' style={ itemPercentage >= 10 ? { width: itemPercentage + '%' } : { width: '100%', backgroundColor: '#a60505' }}/>
 				</div>
 			);
 		}
