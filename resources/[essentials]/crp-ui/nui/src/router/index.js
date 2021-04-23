@@ -28,6 +28,7 @@ import jobs from './../components/character/phone/apps/jobs/jobs.vue';
 import garage from './../components/menus/garage/garage.vue';
 import menu from './../components/menus/menu/menu.vue';
 import target from './../components/menus/target/target.vue';
+import banking from './../components/menus/banking/banking.vue';
 
 Vue.use(VueRouter)
 
@@ -102,6 +103,9 @@ const routes = [
 	},
 	{
 		path: '/target', name: 'target', component: target
+	},
+	{
+		path: '/banking', name: 'banking', component: banking
 	}
 ]
 

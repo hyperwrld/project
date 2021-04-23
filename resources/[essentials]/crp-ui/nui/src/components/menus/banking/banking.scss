@@ -1,0 +1,196 @@
+.banking {
+	font-family: 'Quantico', sans-serif;
+	position: absolute;
+	animation-duration: 1.0s;
+
+	display: grid;
+	grid-template-columns: 0.35fr 1fr;
+	gap: 10px;
+
+	width: 50%;
+    height: 50%;
+
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	color: ivory;
+
+	.accounts, .transactions {
+		background-color: rgba(35, 35, 35, 1);
+		box-shadow: 0px 0px 5px 0px black;
+		border-radius: 3px;
+		padding: 3px;
+	}
+
+	.accounts {
+		display: grid;
+		grid-template-rows: repeat(auto-fill, 125px);
+
+		.account {
+			padding: 3px;
+			background-color: rgba(0, 0, 0, 0.5);
+			border-radius: 3px;
+
+			display: grid;
+			grid-template-rows: 1fr auto;
+			gap: 3px;
+
+			.information {
+				position: relative;
+
+				display: grid;
+    			grid-template-rows: auto 1fr;
+
+				padding: 3px;
+				border-radius: 3px;
+				background-color: rgba(255, 255, 255, 0.2);
+
+				.data {
+					font-weight: bold;
+    				text-transform: uppercase;
+				}
+
+				.type {
+					font-size: 0.7rem;
+				}
+
+				.owner {
+					font-size: 0.7rem;
+				}
+
+				.money {
+					position: absolute;
+					display: flex;
+					flex-direction: column;
+
+					bottom: 5px;
+					right: 5px;
+					text-align: end;
+					font-size: 1.25rem;
+					color: #42bd42;
+
+					span {
+						margin-right: 5px;
+						line-height: 0.7rem;
+						font-size: 0.7rem;
+						color: white;
+					}
+				}
+			}
+
+			.buttons {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 3px;
+
+				button {
+					font-family: 'Quantico', sans-serif;
+
+					background-color: rgba(29, 132, 230, 1.0);
+					color: rgba(255, 255, 255, 0.75);
+					border-radius: 3px;
+
+					box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.5);
+					text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+					border: none;
+
+					display: flex;
+					justify-content: center;
+
+					text-transform: uppercase;
+					outline: none;
+
+					flex: 1 1 0;
+					padding: 2.5px 5px;
+
+					&.active {
+						background-color: rgba(29, 132, 230, 1.0);
+					}
+
+					img {
+						width: 16px;
+						height: 16px;
+					}
+				}
+			}
+		}
+	}
+
+	.transactions {
+		display: grid;
+		grid-template-rows: repeat(auto-fill, 125px);
+		gap: 3px;
+
+		.border {
+			padding: 3px;
+			background-color: rgba(0, 0, 0, 0.5);
+			border-radius: 3px;
+
+			.transaction {
+				height: 100%;
+				display: grid;
+				grid-template-rows: auto 1fr auto;
+				gap: 5px;
+
+				padding: 5px;
+				border-radius: 3px;
+				background-color: rgba(255, 255, 255, 0.2);
+
+				.information {
+					display: grid;
+					grid-template-columns: 1fr auto;
+					gap: 5px;
+
+					border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+    				padding-bottom: 3px;
+
+					.account {
+						text-transform: uppercase;
+						font-weight: bold;
+						font-size: 0.9rem;
+						line-height: 0.9rem;
+					}
+
+					.id {
+						font-size: 0.7rem;
+						line-height: 0.9rem;
+					}
+				}
+
+				.data {
+					display: grid;
+					grid-template-columns: repeat(3, 1fr);
+					gap: 5px;
+
+					border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+    				padding-bottom: 3px;
+
+					* {
+						display: flex;
+						flex-direction: column;
+						justify-content: center;
+					}
+
+					.time, .account {
+						font-size: 0.8rem;
+						line-height: 0.8rem;
+					}
+
+					.money {
+						text-align: center;
+						color: #42bd42;
+					}
+
+					.receiver {
+						text-align: end;
+					}
+				}
+
+				.message {
+					font-size: 0.7rem;
+					opacity: 0.5;
+				}
+			}
+		}
+	}
+}
