@@ -55,7 +55,7 @@ function CRP.DB.CreateCharacter(source, data)
 		return false
 	end
 
-	addLicenses(result.insertId)
+	TriggerEvent('crp-base:createdCharacter', result.insertId)
 
 	return true, {
 		id = result.insertId,
@@ -97,6 +97,10 @@ function CRP.DB.RetrieveCharacter(source, characterId)
 	end
 
 	CRP.Player:LoadCharacter(source, result[1])
+
+	if result[i] then
+
+	end
 
     return true, result[1]
 end

@@ -12,3 +12,7 @@ exports('getHeadBlend', (playerPed) => {
 		arrayInt[10], arrayFloat[12], arrayFloat[14], arrayFloat[16]
 	];
 });
+
+exports('getUnixTime', () => {
+	return Date.now();
+})

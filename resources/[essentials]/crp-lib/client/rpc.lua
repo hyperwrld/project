@@ -3,7 +3,7 @@ local resourceName, promises = GetCurrentResourceName(), {}
 RPC = {}
 
 function RPC:execute(name, ...)
-    local callId, isSolved = GetRandomString(12), false
+    local callId, isSolved = GetRandomId(), false
 
     promises[callId] = promise:new()
 
@@ -32,3 +32,20 @@ AddEventHandler('crp-lib:response', function(callId, response)
         promises[callId]:resolve(response)
     end
 end)
+
+function GetRandomId(length)
+    local chars, randomString = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', ''
+	local charTable, unixTime = {}, math.floor(exports['crp-lib']:getUnixTime() + 0.5)
+
+    for char in chars:gmatch'.' do
+        charTable[#charTable + 1] = char
+    end
+
+	math.randomseed(tonumber(tostring(unixTime):reverse():sub(1, 6)))
+
+	for i = 1, 12 do
+        randomString = randomString .. charTable[math.random(1, #charTable)]
+    end
+
+    return randomString
+end
