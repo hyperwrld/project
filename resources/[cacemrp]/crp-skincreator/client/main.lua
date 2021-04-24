@@ -177,7 +177,7 @@ RegisterUICallback('modifyClothing', function(data, cb)
 	else
 		SetPedComponentVariation(playerPed, data.index, data.value, data.secondValue, 2)
 
-        callbackData = { GetNumberOfPedTextureVariations(playerPed, data.index, data.value) }
+		callbackData = { GetNumberOfPedTextureVariations(playerPed, data.index, data.value) }
 	end
 
 	cb(callbackData)
@@ -197,7 +197,7 @@ RegisterUICallback('modifyAccessories', function(data, cb)
 	else
 		SetPedComponentVariation(playerPed, data.index, data.value, data.secondValue, 2)
 
-        callbackData = { GetNumberOfPedTextureVariations(playerPed, data.index, data.value) }
+		callbackData = { GetNumberOfPedTextureVariations(playerPed, data.index, data.value) }
 	end
 
 	cb(callbackData)

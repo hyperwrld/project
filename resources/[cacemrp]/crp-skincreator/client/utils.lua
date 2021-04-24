@@ -6,10 +6,10 @@ function getFaceFeatures()
 	local data = {}
 
 	for i = 1, 20, 1 do
-        data[i] = GetPedFaceFeature(playerPed, i - 1)
-    end
+		data[i] = GetPedFaceFeature(playerPed, i - 1)
+	end
 
-    return data
+	return data
 end
 
 function getHeadOverlays()
@@ -32,13 +32,13 @@ function getColors()
 	for i = 1, GetNumHairColors() do
 		local r, g, b = GetPedHairRgbColor(i - 1)
 
-        hairColors[i] = { r, g, b }
+		hairColors[i] = { r, g, b }
 	end
 
 	for i = 1, GetNumMakeupColors() do
 		local r, g, b = GetPedMakeupRgbColor(i - 1)
 
-        makeupColors[i] = { r, g, b }
+		makeupColors[i] = { r, g, b }
 	end
 
 	return {
@@ -194,9 +194,9 @@ function setClothing(drawables, props, drawablesTextures, propsTextures)
 end
 
 function setFaceFeatures(data)
-    for i = 1, #data do
-        SetPedFaceFeature(playerPed, i - 1, data[i])
-    end
+	for i = 1, #data do
+		SetPedFaceFeature(playerPed, i - 1, data[i])
+	end
 end
 
 function setHeadOverlays(data)
@@ -212,8 +212,8 @@ end
 function triggerCustomCamera()
 	startPosition = GetEntityCoords(playerPed)
 
-    if not camera then
-        FreezeEntityPosition(playerPed, true)
+	if not camera then
+		FreezeEntityPosition(playerPed, true)
 
 		local forwardVector = GetEntityForwardVector(playerPed)
 		local forwardCameraPosition = vector3(startPosition.x + forwardVector.x * 1.2, startPosition.y + forwardVector.y * 1.2, startPosition.z + zPos)
@@ -240,12 +240,12 @@ function changeCameraHeight(value)
 			zPos = -0.8
 		end
 
-        SetCamCoord(camera, startCamPosition.x, startCamPosition.y, startCamPosition.z + zPos)
-        PointCamAtCoord(camera, startCamPosition.x, startCamPosition.y, startCamPosition.z + zPos)
+		SetCamCoord(camera, startCamPosition.x, startCamPosition.y, startCamPosition.z + zPos)
+		PointCamAtCoord(camera, startCamPosition.x, startCamPosition.y, startCamPosition.z + zPos)
 
-        SetCamActive(camera, true)
-        RenderScriptCams(true, false, 0, true, false)
-    end
+		SetCamActive(camera, true)
+		RenderScriptCams(true, false, 0, true, false)
+	end
 end
 
 function changeCameraZoom(value)
@@ -260,10 +260,10 @@ function changeCameraZoom(value)
 			fov = 10.0
 		end
 
-        SetCamFov(camera, RoundNumber(fov, 1))
-        SetCamActive(camera, true)
-        RenderScriptCams(true, false, 0, true, false)
-    end
+		SetCamFov(camera, RoundNumber(fov, 1))
+		SetCamActive(camera, true)
+		RenderScriptCams(true, false, 0, true, false)
+	end
 end
 
 function updateData()

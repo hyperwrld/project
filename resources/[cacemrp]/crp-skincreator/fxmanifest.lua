@@ -3,8 +3,7 @@ fx_version 'cerulean'
 game 'gta5'
 
 dependecies {
-	'crp-ui',
-	'crp-lib'
+	'crp-ui', 'crp-lib'
 }
 
 shared_scripts {
@@ -14,6 +13,7 @@ shared_scripts {
 client_scripts {
 	'@crp-lib/client/main.lua',
 	'@crp-lib/client/rpc.lua',
+	'client/data/*.lua',
 	'client/*.lua'
 }
 
