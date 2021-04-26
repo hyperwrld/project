@@ -3,7 +3,7 @@ AddEventHandler('crp-base:createdCharacter', function(characterId)
 end)
 
 RPC:register('fetchBank', function(source)
-    return fetchBank(source)
+	return fetchBank(source)
 end)
 
 function createAccount(accountType, characterId, accountName, startingMoney)
@@ -13,7 +13,7 @@ function createAccount(accountType, characterId, accountName, startingMoney)
 	if not startingMoney or type(startingMoney) ~= 'number' then return false end
 
 	local query = [[INSERT INTO accounts (type, owner, name, money) VALUES (?, ?, ?, ?);]]
-    local result = Citizen.Await(DB:Execute(query, accountType, characterId, accountName, startingMoney))
+	local result = Citizen.Await(DB:Execute(query, accountType, characterId, accountName, startingMoney))
 
 	if not result.changedRows then
 		return false
@@ -40,13 +40,50 @@ function fetchBank(source)
 	  	GROUP BY accounts.id
 	  	ORDER BY FIELD(accounts.owner, ?) DESC;
 	]]
-    local result = Citizen.Await(DB:Execute(query, characterId, characterId, characterId))
+	local result = Citizen.Await(DB:Execute(query, characterId, characterId, characterId))
 
-	if #result == 0 then
+	if not result or #result == 0 then
 		return false
 	end
 
-	return true, characterId, result
+	return true, characterId, result, fetchTransactions(result[1].id)
 end
 
-exports('createAccount', createAccount)
+function fetchTransactions(accountId)
+	if not accountId or type(accountId) ~= 'number' then return false end
+
+	local query = [[
+		SELECT
+			LCASE(CONCAT_WS('-',
+				HEX(SUBSTR(transactions.id, 5, 4)), HEX(SUBSTR(transactions.id, 3, 2)),
+				HEX(SUBSTR(transactions.id, 1, 2)), HEX(SUBSTR(transactions.id, 9, 2)), HEX(SUBSTR(transactions.id, 11))
+			)) AS id,
+			transactions.account AS sender_id,
+			accounts.name AS sender_name,
+			transactions.sender AS receiver_id,
+			receiver.name AS receiver_name,
+			CONCAT(characters.firstname, ' ', characters.lastname) AS sender_fullname,
+			transactions.time,
+			transactions.money,
+			transactions.comment
+		FROM transactions
+			INNER JOIN accounts
+				ON transactions.account = accounts.id
+			INNER JOIN accounts receiver
+				ON transactions.receiver = receiver.id
+			INNER JOIN characters
+				ON transactions.sender = characters.id
+			INNER JOIN transactions_type type
+				ON transactions.type = type.id
+		WHERE transactions.account = ?
+		OR transactions.receiver = ?;]]
+	local result = Citizen.Await(DB:Execute(query, accountId, accountId))
+
+	if not result then
+		return {}
+	end
+
+	return result
+end
+
+-- INSERT INTO transactions (id, account, sender, receiver, money, type, time, comment) VALUES (UuidToBin(UUID()), 3, 2, 1, 500, 3, UNIX_TIMESTAMP(), 'BOM DIAAAA')

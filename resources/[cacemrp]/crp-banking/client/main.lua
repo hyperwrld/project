@@ -26,13 +26,12 @@ AddEventHandler('crp-banking:onPlayerInOut', function(isPointInside, zone)
 end)
 
 AddEventHandler('crp-banking:openBank', function(type)
-	local success, characterId, accounts = RPC:execute('fetchBank')
+	local success, characterId, accounts, transactions = RPC:execute('fetchBank')
 
 	if success then
 		exports['crp-ui']:openApp('banking', {
-			type = type,
-			characterId = characterId,
-			accounts = accounts
+			type = type, characterId = characterId,
+			accounts = accounts, transactions = transactions
 		})
 	end
 end)

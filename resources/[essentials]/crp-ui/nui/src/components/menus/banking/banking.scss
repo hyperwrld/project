@@ -179,6 +179,10 @@
 					.money {
 						text-align: center;
 						color: #42bd42;
+
+						&.removed {
+							color: #f05454;
+						}
 					}
 
 					.receiver {
