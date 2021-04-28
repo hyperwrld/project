@@ -2,8 +2,9 @@
 	import { library } from '@fortawesome/fontawesome-svg-core';
 	import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
-	import { convertTime } from './../../../utils/lib.js';
+	import dialogs from './dialogs/dialogs.js';
 
+	import { convertTime } from './../../../utils/lib.js';
 	import { mapGetters } from 'vuex';
 
 	library.add(faSignOutAlt);
@@ -31,6 +32,17 @@
 
 				return [otherId, otherName, currentId, currentName, receivedMoney];
             },
+			depositMoney() {
+				console.log('sdsddssdds')
+				dialogs.createDialog({
+					title: 'Depositar dinheiro',
+					choices: [
+						{ key: 'name', type: 'text', min: 1, max: 20, placeholder: 'Nome', errorText: 'Escolha um nome com o máximo de 20 caracteres.' },
+						{ key: 'number', type: 'number', min: 9, max: 9, placeholder: 'Número', errorText: 'Insira um número com 9 números.' }
+					],
+					sendText: 'Adicionar', nuiType: 'addContact'
+				})
+			}
 		},
 		render() {
 			let data = this.data;
@@ -52,9 +64,9 @@
 											</div>
 										</div>
 										<div class='buttons'>
-											<button><img src={ require('./../../../assets/withdraw.png') }/></button>
-											<button><img src={ require('./../../../assets/deposit.png') }/></button>
-											<button><img src={ require('./../../../assets/transfer.png') }/></button>
+											<button>RETIRAR</button>
+											<button onClick={ this.depositMoney }>DEPOSITAR</button>
+											<button>TRANSFERIR</button>
 										</div>
 									</div>
 								)
