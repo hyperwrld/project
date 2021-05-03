@@ -1,17 +1,20 @@
-## TODO v3.4
-- [x] change chart awaiting data message
-- [x] check if the "custom template" was modified at all
-- [x] add master username to the `{{addPrincipalsMaster}}` `server.cfg` placeholder to prevent confusion
-- [x] validate if the database config is working before running the deployer
-- [x] preventing VPS lag / DDoS to cause server restarts, and add freeze stats for the diagnostics page
-- [x] update packages
-- [x] setup: add automatic config file suggestion, with wrong extension check
-- [x] simplify the start messages
-- [ ] test on latest + version bump
+## TODO v3.7.0
+- [x] added italian locale
+- [x] solve the invalid session issue
+- [x] dashboard: add selector for the thread and make it auto refresh
+- [x] massive linting!
+- [x] hot-patch for the unicode in ansi fxmanifest issue
+- [x] added events for kick, warns, bans and whitelists (@TasoOneAsia)
 
+
+Quickie:
+- crash replace 45 > 90?
+- ctx.ip overwrite with xff?
+- make warns revokable?
 
 > ASAP!:
-- [ ] disable server auto-start when no admins configured
+- [ ] a way to create admins file without cfx.re 
+- [ ] rename authenticator pra adminVault
 - [ ] consolidate the log pages
 - [ ] add discord group whitelist (whitelist switch becomes a select box that will enable guildID and roleID)
         - Manual Approval (default)
@@ -21,8 +24,6 @@
         - this will trigger a big status message to be sent in that channel
         - this message id can be stored in the config file
         - if discord id is present, use that instead of name (careful with the pings!)
-- [ ] send log via FD3
-- [ ] add `.editorconfig`
 - [ ] create auto backup of the database
 - [ ] ignore key bindings commands  https://discord.com/channels/577993482761928734/766868363041046589/795420910713831446
 - [ ] add custom event for broadcast
@@ -206,17 +207,53 @@ TODO: Bot commands (in dev order):
 ## CLTR+C+V
 ```bash
 # run
-cd /e/FiveM/builds/3247/citizen/system_resources/monitor
-nodemon +set txAdminFakePlayerlist yesplzx +set txAdminVerbose truex
+export CURR_FX_VERSION="3247"
+alias cdmon="cd /e/FiveM/builds/$CURR_FX_VERSION/citizen/system_resources/monitor"
+
+nodemon +set txDebugPlayerlistGenerator truex +set txAdminVerbose truex
+nodemon +set txDebugPlayerlistGenerator true +set txAdminRTS "deadbeef00deadbeef00deadbeef00deadbeef00deadbeef" +set txAdminVerbose truex
+nodemon +set txDebugPlayerlistGenerator true +set txDebugExternalSource "x.x.x.x:30120" +set txAdminVerbose truex
 
 # build
-rm -rf dist
-npm run build
+rm -rf dist && npm run build && explorer dist
+# fix this command later, the zip generated is too big and malformed
+rm -rf dist && npm run build && tar.exe -cvf dist/monitor.zip dist/* && explorer dist
 
 # other stuff
 export TXADMIN_DEFAULT_LICENSE="YourKeyYourKeyYourKeyYourKeyYour"
 npm-upgrade
 con_miniconChannels script:monitor*
+
+# eslint stuff
+npx eslint ./src/**
+npx eslint ./src/** -f ./lint-formatter.js
+npx eslint ./src/** --fix
+```
+
+```json
+{
+    "interface": "192.168.0.123",
+    "fxServerPort": 30120,
+    "txAdminPort": 40120,
+    "loginPageLogo": "https://github.com/tabarra/txAdmin/raw/master/docs/banner.png",
+    "defaults": {
+        "license": "YourKeyYourKeyYourKeyYourKeyYour",
+        "maxClients": 10,
+        "mysqlHost": "mysql-mariadb-20-104.zap-hosting.com",
+        "mysqlUser": "xxxxxxxxxx",
+        "mysqlPassword": "xxxxxxxxxx",
+        "mysqlDatabase": "xxxxxxxxxx"
+    },
+    "customer": {
+        "name": "tabarra",
+        "password_hash": "$2y$12$WNuN6IxozL4CjgScsLvmGOmxtskg8EcPe67HtUw0ENeCCSaZ.z3AW"
+    },
+
+    "interface-": false,
+    "loginPageLogo-": false,
+    "customer-": false
+}
+
 ```
 
 =======================================

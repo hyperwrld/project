@@ -75,6 +75,7 @@
                                     <option value="fi" {{it.global.language=='fi'|isSelected}}>Finnish</option>
                                     <option value="fr" {{it.global.language=='fr'|isSelected}}>French</option>
                                     <option value="hu" {{it.global.language=='hu'|isSelected}}>Hungarian</option>
+                                    <option value="it" {{it.global.language=='it'|isSelected}}>Italian</option>
                                     <option value="lt" {{it.global.language=='lt'|isSelected}}>Lithuanian</option>
                                     <option value="lv" {{it.global.language=='lv'|isSelected}}>Latvian</option>
                                     <option value="nl" {{it.global.language=='nl'|isSelected}}>Dutch</option>
@@ -116,8 +117,10 @@
                                     placeholder="C:/Users/Admin/Desktop/server01" {{it.readOnly|isDisabled}}>
                                 <span class="form-text text-muted">
                                     The folder that <strong>contains</strong> the <code>resources</code> and
-                                    <code>cache</code> folders, usually it's where you put your
-                                    <code>server.cfg</code>.
+                                    <code>cache</code> folders, usually it's where you put your <code>server.cfg</code>. <br>
+                                    {{@if(it.isZapHosting)}}
+                                        <span class="font-weight-bold">Zap-Hosting warning: this path must start with <code>{{it.txDataPath}}</code>.</span>
+                                    {{/if}}
                                 </span>
                             </div>
                         </div>
@@ -159,7 +162,7 @@
                                     <option value="on" {{it.fxserver.onesync=='on'|isSelected}}>On (with infinity)</option>
                                 </select>
                                 <span class="form-text text-muted">
-                                    Required if your server has more than 32 slots. <br>
+                                    Required if your server has more than 48 slots. <br>
                                     <b>Note:</b> Setting to <code>on</code> will override <code>onesync_enableInfinity</code> if set as an Additional Argument above.
                                 </span>
                             </div>
@@ -460,7 +463,7 @@
                     <!-- Backup Database -->
                     <div class="row text-center pt-2">
                         <div class="col-lg-9 text-lg-left mb-2">
-                            <h5>Backup Database <span class="badge badge-info">NEW</span></h5>
+                            <h5>Backup Database</h5>
                             Download a copy of the <code>playersDB.json</code> file containing all players and actions (bans, warns and whitelists).  
                             You should do this every once in a while.
                         </div>
@@ -473,7 +476,7 @@
                     <!-- Import bans -->
                     <div class="row text-center pt-2">
                         <div class="col-lg-9 text-lg-left mb-2">
-                            <h5>Import Bans <span class="badge badge-info">NEW</span></h5>
+                            <h5>Import Bans</h5>
                             If you wish to migrate from another ban system, use this tool to import existing bans. <br>
                             Supported systems: EasyAdmin, BanSQL, vMenu, vRP, el_bwh.
                         </div>
