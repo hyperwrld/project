@@ -1,7 +1,5 @@
-local isLoggedIn = false
-
 dropInventories, playerPed = {}, PlayerPedId()
-actionBarState, isDoingAnimation, isUsing, isWeaponEquiped, weaponSlot = false, false, false, false, nil
+isDoingAnimation, isUsing, isWeaponEquiped, weaponSlot = false, false, false, nil
 
 Citizen.CreateThread(function()
 	Debug('Updated items list on the crp-ui.')
@@ -9,81 +7,52 @@ Citizen.CreateThread(function()
 	exports['crp-ui']:setItems(itemsList)
 end)
 
-AddEventHandler('crp-base:characterSpawned', function()
-	startThreads()
+playerPed = PlayerPedId()
+
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(5000)
+
+		playerPed = PlayerPedId()
+	end
 end)
 
-function startThreads()
-	if isLoggedIn then
-		return
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(0)
+
+		local coords, letSleep = GetEntityCoords(playerPed), true
+
+		for i = 1, #dropInventories, 1 do
+			local distance = #(dropInventories[i].coords - coords)
+
+			if distance < 20.0 then
+				DrawMarker(20, dropInventories[i].coords.x, dropInventories[i].coords.y, dropInventories[i].coords.z - 0.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.25, 0.25, 0.25, 255, 255, 255, 100, false, true, 2, false, false, false, false)
+
+				letSleep = false
+			end
+		end
+
+		if letSleep then
+			Citizen.Wait(1500)
+		end
 	end
+end)
 
-	isLoggedIn = true
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(0)
 
-	playerPed = PlayerPedId()
-
-	Citizen.CreateThread(function()
-		while isLoggedIn do
-			Citizen.Wait(5000)
-
-			playerPed = PlayerPedId()
-		end
-	end)
-
-	Citizen.CreateThread(function()
-		while isLoggedIn do
-			Citizen.Wait(0)
-
-			local coords, letSleep = GetEntityCoords(playerPed), true
-
-			for i = 1, #dropInventories, 1 do
-				local distance = #(dropInventories[i].coords - coords)
-
-				if distance < 20.0 then
-					DrawMarker(20, dropInventories[i].coords.x, dropInventories[i].coords.y, dropInventories[i].coords.z - 0.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.25, 0.25, 0.25, 255, 255, 255, 100, false, true, 2, false, false, false, false)
-
-					letSleep = false
-				end
-			end
-
-			if letSleep then
-				Citizen.Wait(1500)
-			end
-		end
-	end)
-
-	Citizen.CreateThread(function()
-		while isLoggedIn do
-			Citizen.Wait(0)
-
-			DisableControlAction(0, 14, true)
-			DisableControlAction(0, 15, true)
-			DisableControlAction(0, 16, true)
-			DisableControlAction(0, 17, true)
-			DisableControlAction(0, 99, true)
-
-			DisableControlAction(0, 100, true)
-			DisableControlAction(0, 115, true)
-			DisableControlAction(0, 116, true)
-
-			if IsControlJustPressed(0, 157) or IsDisabledControlJustReleased(0, 157) then
-				useItem(1)
-			end
-
-			if IsControlJustPressed(0, 158) or IsDisabledControlJustReleased(0, 158) then
-				useItem(2)
-			end
-
-			if IsControlJustPressed(0, 160) or IsDisabledControlJustReleased(0, 160) then
-				useItem(3)
-			end
-
-			if IsControlJustPressed(0, 164) or IsDisabledControlJustReleased(0, 164) then
-				useItem(4)
-			end
-		end
-	end)
-end
+		DisableControlAction(0, 14, true)
+		DisableControlAction(0, 15, true)
+		DisableControlAction(0, 16, true)
+		DisableControlAction(0, 17, true)
+		DisableControlAction(0, 99, true)
+		DisableControlAction(0, 100, true)
+		DisableControlAction(0, 115, true)
+		DisableControlAction(0, 116, true)
+	end
+end)
 
 function openInventory()
 	playerPed = PlayerPedId()
@@ -140,10 +109,8 @@ function openInventory()
 	end
 end
 
-function toggleActionBar()
-	actionBarState = not actionBarState
-
-	if actionBarState then
+function toggleActionBar(state)
+	if state then
 		exports['crp-ui']:openApp('actionbar', RPC:execute('getActionBarItems'), false, false)
 	else
 		exports['crp-ui']:closeApp('actionbar')
@@ -178,7 +145,6 @@ function useItem(slot)
 		isWeaponEquiped, weaponSlot = true, slot
 
 		equipWeapon(itemData, data.meta.ammo)
-
 		return
 	end
 
@@ -198,9 +164,9 @@ end
 exports('hasItem', hasItem)
 
 RegisterUICallback('moveItem', function(data, cb)
-	local success, current, future = RPC:execute('moveItem', data.current, data.future, data.currentIndex, data.futureIndex, data.count, data.data)
+	local success, current, future, canCraft, craftTimer = RPC:execute('moveItem', data.current, data.future, data.currentIndex, data.futureIndex, data.count, data.data)
 
-    cb({ success = success, current = current, future = future })
+    cb({ success = success, current = current, future = future, canCraft = canCraft, craftTimer = craftTimer })
 end)
 
 RegisterUICallback('buyItem', function(data, cb)
@@ -247,9 +213,10 @@ AddEventHandler('crp-inventory:usedItem', function()
 	isUsingItem = false
 end)
 
-RegisterCommand('+openInventory', openInventory, false)
-RegisterKeyMapping('+openInventory', 'Abrir o inventário', 'keyboard', 'i')
+exports['crp-binds']:RegisterKeybind('inventory', '[Inventário] Abrir', 'i', openInventory)
+exports['crp-binds']:RegisterHoldKeybind('actionbar', '[Actionbar] Mostrar/Ocultar', 'Tab', toggleActionBar, 200)
 
-RegisterCommand('+showAction', toggleActionBar, false)
-RegisterCommand('-showAction', toggleActionBar, false)
-RegisterKeyMapping('+showAction', 'Mostrar a actionbar', 'keyboard', 'Tab')
+exports['crp-binds']:RegisterKeybind('useItem1', '[Inventário] Usar item - 1', '1', useItem, 1)
+exports['crp-binds']:RegisterKeybind('useItem2', '[Inventário] Usar item - 2', '2', useItem, 2)
+exports['crp-binds']:RegisterKeybind('useItem3', '[Inventário] Usar item - 3', '3', useItem, 3)
+exports['crp-binds']:RegisterKeybind('useItem4', '[Inventário] Usar item - 4', '4', useItem, 4)
