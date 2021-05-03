@@ -104,6 +104,22 @@ AddEventHandler('crp-vehicles:leftVehicle', function()
 	end
 end)
 
+AddEventHandler('crp-hud:receiveArmor', function(data)
+	local playerPed = PlayerPedId()
+
+	TaskPlayAnimation(playerPed, 'clothingtie', 'try_tie_negative_a', -1, -1, -1, 49, 0.0)
+
+	local success = exports['crp-ui']:setTaskbar('Colocar colete', 5, true, true)
+
+	if success then
+		SetPedArmour(playerPed, 100)
+	end
+
+	StopAnimTask(playerPed, 'clothingtie', 'try_tie_negative_a', 1.0)
+
+	TriggerEvent('crp-inventory:usedItem', success, data.item)
+end)
+
 function startVehicleThreads()
 	Citizen.CreateThread(function()
 		while isWatchOn or isVehicleEngineOn do

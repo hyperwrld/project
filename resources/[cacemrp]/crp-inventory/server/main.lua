@@ -329,3 +329,4 @@ function useItem(source, name, quantity)
 end
 
 exports('useItem', useItem)
+RPC:register('useItem', useItem)

@@ -7,8 +7,6 @@ Citizen.CreateThread(function()
 	exports['crp-ui']:setItems(itemsList)
 end)
 
-playerPed = PlayerPedId()
-
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(5000)
@@ -209,7 +207,15 @@ AddEventHandler('crp-ui:closedMenu', function(name, data)
 	ClearPedTasks(playerPed)
 end)
 
-AddEventHandler('crp-inventory:usedItem', function()
+AddEventHandler('crp-inventory:usedItem', function(success, itemName)
+	if success then
+		local usedItem = RPC:execute('useItem', itemName, 1)
+
+		if usedItem then
+			exports['crp-ui']:addQueue(itemName, 1, false)
+		end
+	end
+
 	isUsingItem = false
 end)
 
