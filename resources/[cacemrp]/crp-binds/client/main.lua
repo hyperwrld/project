@@ -1,8 +1,8 @@
 local keybinds = {}
 
-function RegisterKeybind(name, description, key, func)
+function RegisterKeybind(name, description, key, func, data)
 	RegisterCommand(name, function(source, args)
-        func()
+        func(data)
     end, false)
 
     RegisterKeyMapping(name, description, 'keyboard', key)
