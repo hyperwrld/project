@@ -1,16 +1,16 @@
-local canScan, isLookingAt, canSelect, playerPed = false, false, false, PlayerPedId()
+local playerPed, canScan, isLookingAt, canSelect = PlayerPedId(), false, false, false
 
 local scanRange = {
     2.7, 3.0, 3.5, 0.0, 2.3  -- [0] Third Person Close / [1] Third Person Mid / [2] Third Person Far / [4] First Person
 }
 
 function toggleScan(state)
-	if not state then
+	canScan = state
+
+	if not state and not canSelect then
 		exports['crp-ui']:closeApp('target')
 		return
 	end
-
-	canScan = state
 
 	Citizen.CreateThread(function()
 		while canScan and not canSelect do
@@ -25,13 +25,10 @@ function toggleScan(state)
 			Citizen.Wait(250)
 
 			local coords, cameraRotation, cameraPosition = GetEntityCoords(playerPed), GetGameplayCamRot(), GetGameplayCamCoord()
-
 			local direction, range = RotationToDirection(cameraRotation), scanRange[GetFollowPedCamViewMode() + 1]
-			local destination = {
-				x = cameraPosition.x + direction.x * range, y = cameraPosition.y + direction.y * range, z = cameraPosition.z + direction.z * range
-			}
 
-			local rayHandle = StartShapeTestRay(cameraPosition.x, cameraPosition.y, cameraPosition.z, destination.x, destination.y, destination.z, -1, playerPed, 7)
+			local destination = vector3((cameraPosition.x + direction.x * range), (cameraPosition.y + direction.y * range), (cameraPosition.z + direction.z * range))
+			local rayHandle = StartShapeTestRay(cameraPosition, destination, -1, playerPed, 7)
 			local retval, hit, endCoords, surfaceNormal, entityHit = GetShapeTestResult(rayHandle)
 
 			if hit == 1 then
@@ -44,19 +41,9 @@ function toggleScan(state)
 				local eventData = eventList[eventName]
 
 				if eventData and not isLookingAt and canScan then
-					local data = {}
-
 					isLookingAt = true
 
-					if eventData then
-						data = {{
-							id = eventName, type = eventData.type, label = eventData.label
-						}}
-					else
-
-					end
-
-					exports['crp-ui']:setAppData('target', { hideState = canScan, activeState = isLookingAt, options = data })
+					exports['crp-ui']:setAppData('target', { hideState = canScan, activeState = isLookingAt, options = { id = eventName, type = eventData.type, label = eventData.label } })
 
 					Citizen.CreateThread(function()
 						while canScan and isLookingAt do
@@ -113,4 +100,4 @@ AddEventHandler('crp-ui:closedMenu', function(name, data)
 	Debug('Target scan closed.')
 end)
 
-exports['crp-binds']:RegisterHoldKeybind('toggleScan', 'Ativar/Desativar o target scan', 'LMENU', toggleScan, 0)
+exports['crp-binds']:RegisterHoldKeybind('toggleScan', '[Target] Mostrar/Ocultar', 'LMENU', toggleScan, 0)
