@@ -13,6 +13,9 @@ shared_scripts {
 }
 
 client_scripts {
+	'@polyzone/client/main.lua',
+	'@polyzone/client/CircleZone.lua',
+	'@polyzone/client/ComboZone.lua',
 	'@crp-lib/client/main.lua',
 	'@crp-lib/client/rpc.lua',
     'client/*.lua'

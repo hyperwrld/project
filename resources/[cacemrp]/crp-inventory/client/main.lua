@@ -1,8 +1,26 @@
-dropInventories, playerPed = {}, PlayerPedId()
+playerPed, dropsList, zones, dropsZone, isInsideZone = PlayerPedId(), {}, {}, nil, false
 isDoingAnimation, isUsing, isWeaponEquiped, weaponSlot = false, false, false, nil
 
 Citizen.CreateThread(function()
-	Debug('Updated items list on the crp-ui.')
+	dropsList = RPC:execute('fetchDropsData')
+
+	for dropId, drop in ipairs(dropsList) do
+		if drop then
+			drop.zone = createZone(drop.coords, drop.name)
+		end
+	end
+
+	dropsZone = ComboZone:Create(zones, { name = 'dropsZone', debugPoly = false })
+
+	dropsZone:onPlayerInOut(function(isPointInside, point, zone)
+		if zone then
+			if isPointInside then
+				createMarkers()
+			end
+
+			isInsideZone = isPointInside
+		end
+	end)
 
 	exports['crp-ui']:setItems(itemsList)
 end)
@@ -12,28 +30,6 @@ Citizen.CreateThread(function()
 		Citizen.Wait(5000)
 
 		playerPed = PlayerPedId()
-	end
-end)
-
-Citizen.CreateThread(function()
-	while true do
-		Citizen.Wait(0)
-
-		local coords, letSleep = GetEntityCoords(playerPed), true
-
-		for i = 1, #dropInventories, 1 do
-			local distance = #(dropInventories[i].coords - coords)
-
-			if distance < 20.0 then
-				DrawMarker(20, dropInventories[i].coords.x, dropInventories[i].coords.y, dropInventories[i].coords.z - 0.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.25, 0.25, 0.25, 255, 255, 255, 100, false, true, 2, false, false, false, false)
-
-				letSleep = false
-			end
-		end
-
-		if letSleep then
-			Citizen.Wait(1500)
-		end
 	end
 end)
 
@@ -157,6 +153,20 @@ end
 
 function hasItem(name, quantity)
 	return RPC:execute('hasItem', name, quantity)
+end
+
+function createMarkers()
+	Citizen.CreateThread(function()
+		while isInsideZone do
+			Citizen.Wait(0)
+
+			for i = 1, #dropsList do
+				if zone.name == dropsList[i].zone.name then
+					DrawMarker(20, dropsList[i].coords.x, dropsList[i].coords.y, dropsList[i].coords.z - 0.8, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.25, 0.25, 0.25, 255, 255, 255, 100, false, true, 2, false, false, false, false)
+				end
+			end
+		end
+	end)
 end
 
 exports('hasItem', hasItem)

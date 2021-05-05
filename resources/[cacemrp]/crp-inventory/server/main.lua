@@ -10,6 +10,10 @@ AddEventHandler('onResourceStart', function(resourceName)
 	DB:Execute([[DELETE FROM inventory WHERE name LIKE 'drop%' OR name LIKE 'container%';]])
 end)
 
+RPC:register('fetchDropsData', function(source)
+	return dropInventories
+end)
+
 RPC:register('openInventory', function(source, type, name, data)
     return openInventory(source, type, name, data)
 end)
@@ -92,11 +96,11 @@ function canOpenInventories(source, firstName, secondName)
 		return false
 	end
 
-	openInventories[firstName] = { state = true, source = source }
+	local data = {
+		state = true, source = source
+	}
 
-	if second then
-		openInventories[secondName] = { state = true, source = source }
-	end
+	openInventories[firstName], openInventories[secondName] = data, data
 
 	return true
 end
@@ -245,7 +249,7 @@ end
 function addDropInventory(name, coords)
 	table.insert(dropInventories, { name = name, coords = coords })
 
-	TriggerClientEvent('crp-inventory:addDropInventory', -1, name, coords)
+	TriggerClientEvent('crp-inventory:addDrop', -1, name, coords)
 end
 
 function removeDropInventory(name)
@@ -255,7 +259,7 @@ function removeDropInventory(name)
 
 			inventories[name] = nil
 
-			TriggerClientEvent('crp-inventory:removeDropInventory', -1, name)
+			TriggerClientEvent('crp-inventory:deleteDrop', -1, name)
 			break
 		end
 	end

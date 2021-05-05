@@ -28,12 +28,12 @@ end
 function searchDropInventories(coords)
 	local currentName, currentDistance, currentCoords
 
-	for i = 1, #dropInventories, 1 do
-		local distance = #(coords - dropInventories[i].coords)
+	for i = 1, #dropsList, 1 do
+		local distance = #(coords - dropsList[i].coords)
 
 		if distance <= 2.0 and (currentName == nil or currentDistance < distance) then
-			currentName, currentDistance = dropInventories[i].name, distance
-			currentCoords = dropInventories[i].coords
+			currentName, currentDistance = dropsList[i].name, distance
+			currentCoords = dropsList[i].coords
 		end
 	end
 
@@ -51,8 +51,8 @@ function searchDropInventories(coords)
 end
 
 function doesInventoryExist(name)
-	for i = 1, #dropInventories, 1 do
-        if dropInventories[i].name == name then
+	for i = 1, #dropsList, 1 do
+        if dropsList[i].name == name then
             return true
         end
     end
@@ -140,16 +140,43 @@ function playAnimation(dictionary, animation)
 	TaskPlayAnimation(playerPed, dictionary, animation, 1.0, 1.0, -1, 50, 0)
 end
 
-RegisterNetEvent('crp-inventory:addDropInventory')
-AddEventHandler('crp-inventory:addDropInventory', function(name, coords)
-	dropInventories[#dropInventories + 1] = { name = name, coords = coords }
+function createZone(coords, name)
+	for zoneId, zone in ipairs(zones) do
+		if zone and zone:isPointInside(coords) then
+			foundZone = zone
+			return zone
+		end
+	end
+
+	local zone = CircleZone:Create(coords, 3.0, { name = name, useZ = true, debugPoly = false })
+
+	zones[#zones + 1] = zone
+
+	return zone
+end
+
+RegisterNetEvent('crp-inventory:addDrop')
+AddEventHandler('crp-inventory:addDrop', function(name, coords)
+	local zone = createZone(coords, name)
+
+	dropsList[#dropsList + 1] = { name = name, coords = coords, zone = zone }
+
+	dropsZone:AddZone(zone)
+
+	for dropId, drop in ipairs(dropsList) do
+		if drop then
+			drop.zone = createZone(drop.coords, drop.name)
+		end
+	end
 end)
 
-RegisterNetEvent('crp-inventory:removeDropInventory')
-AddEventHandler('crp-inventory:removeDropInventory', function(name)
-	for i = 1, #dropInventories, 1 do
-		if dropInventories[i].name == name then
-			table.remove(dropInventories, i)
+RegisterNetEvent('crp-inventory:deleteDrop')
+AddEventHandler('crp-inventory:deleteDrop', function(name)
+	for dropId, drop in ipairs(dropsList) do
+		if drop and drop.name == name then
+			drop.zone:destroy()
+
+			table.remove(dropsList, dropId)
 			break
 		end
 	end
