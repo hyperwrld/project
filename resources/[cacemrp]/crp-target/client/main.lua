@@ -26,7 +26,6 @@ function toggleScan(state)
 
 			local coords, cameraRotation, cameraPosition = GetEntityCoords(playerPed), GetGameplayCamRot(), GetGameplayCamCoord()
 			local direction, range = RotationToDirection(cameraRotation), scanRange[GetFollowPedCamViewMode() + 1]
-
 			local destination = vector3((cameraPosition.x + direction.x * range), (cameraPosition.y + direction.y * range), (cameraPosition.z + direction.z * range))
 			local rayHandle = StartShapeTestRay(cameraPosition, destination, -1, playerPed, 7)
 			local retval, hit, endCoords, surfaceNormal, entityHit = GetShapeTestResult(rayHandle)
@@ -69,7 +68,7 @@ function toggleScan(state)
 		end
 	end)
 
-	exports['crp-ui']:openApp('target', { hideState = canScan, activeState = isLookingAt }, false, false, true)
+	exports['crp-ui']:openApp('target', { hideState = canScan, activeState = isLookingAt }, false, false)
 end
 
 AddEventHandler('crp-target:selectOption', function()
@@ -100,4 +99,4 @@ AddEventHandler('crp-ui:closedMenu', function(name, data)
 	Debug('Target scan closed.')
 end)
 
-exports['crp-binds']:RegisterHoldKeybind('toggleScan', '[Target] Mostrar/Ocultar', 'LMENU', toggleScan, 0)
+exports['crp-binds']:RegisterHoldKeybind('toggleScan', '[Target] Mostrar/Ocultar', '', toggleScan, 200) -- ALT Key has problems (probably FiveM related)
