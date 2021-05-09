@@ -2,3 +2,9 @@ cache/
 crashes/
 resources/[cacemrp]/CoordsSaver
 node_modules/
+resources/[essentials]/crp-ui/nui/public/favicon.ico
+resources/[essentials]/crp-ui/nui/public/icons
+resources/[essentials]/crp-ui/nui/public/icons/favicon-16x16.png
+resources/[essentials]/crp-ui/nui/public/icons/favicon-32x32.png
+resources/[essentials]/crp-ui/nui/public/icons/favicon-96x96.png
+resources/[essentials]/crp-ui/nui/public/icons/favicon-128x128.png
