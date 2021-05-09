@@ -11,11 +11,5 @@ client_scripts {
 
 files {
     'nui/dist/index.html',
-	'nui/dist/fonts/pdown.ttf',
-
-	'nui/dist/js/*.js',
-    'nui/dist/css/*.css',
-
-	'nui/dist/img/*.*',
-	'nui/dist/media/*.ogg'
+	'nui/dist/**.*'
 }

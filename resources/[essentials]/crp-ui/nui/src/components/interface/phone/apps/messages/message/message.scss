@@ -1,0 +1,145 @@
+.message {
+	font-family: 'Quantico', sans-serif;
+
+	display: grid;
+	grid-template-rows: auto 1fr;
+	gap: 5px;
+
+	.top {
+		display: grid;
+		grid-template-columns: auto 1fr auto;
+		padding: 0 6%;
+
+		gap: 5px;
+		font-size: 0.9rem;
+		font-weight: bold;
+
+		align-items: center;
+		justify-content: center;
+		text-align: center;
+
+		svg {
+			font-size: 2vh;
+
+			&:last-child {
+				font-size: 1.35vh;
+			}
+		}
+	}
+
+	.content {
+		display: grid;
+		grid-template-rows: 1fr auto;
+		grid-template-columns: 1fr;
+		gap: 5px;
+
+		background-color: white;
+		border-top: solid 1px #d6d6d6;
+		border-bottom: solid 1px #d6d6d6;
+		justify-content: flex-start;
+		overflow: hidden;
+
+		border-radius: 10px;
+		box-shadow: 0px 0px 5px 0px rgba(219, 219, 219, 1);
+
+		.messages {
+			display: flex;
+			flex-wrap: nowrap;
+			flex-direction: column;
+			padding: 2%;
+
+			flex-flow: column;
+			overflow-y: scroll;
+			max-height: 344.5px;
+
+			&::-webkit-scrollbar {
+				display: none;
+			}
+
+			.message {
+				display: grid;
+				grid-template-rows: 1fr auto;
+				gap: 0;
+
+				min-width: 70px;
+				max-width: 80%;
+
+				border-radius: 5px;
+				margin: 0 0 5% auto;
+
+				font-family: system-ui;
+				font-size: 0.8rem;
+				overflow-wrap: break-word;
+				word-break: break-word;
+
+				box-shadow: 0px 0px 5px 0px rgba(219, 219, 219, 1);
+				background: #222831;
+				padding: 2% 4%;
+				color: #dddddd;
+
+				&:last-child {
+					margin-bottom: 0;
+				}
+
+				&.other {
+					margin: 0 auto 5% 0;
+
+					background: #dddddd;
+					color: #222831;
+				}
+
+				.time {
+					font-size: 0.6rem;
+					text-align: right;
+
+					color: #f05454;
+				}
+			}
+		}
+
+		.bottom {
+			display: grid;
+			grid-template-columns: 165px auto;
+
+			align-items: center;
+			justify-content: center;
+
+			padding: 2% 5%;
+			gap: 5%;
+
+			::v-deep .v-text-field__slot {
+				display: flex;
+
+				textarea {
+					font-size: 1rem;
+					border-radius: 5px;
+					padding: 3px;
+
+					background-color: white;
+					border: 1px solid #d6d6d6;
+					box-shadow: 0px 0px 5px 0px rgba(219, 219, 219, 1);
+
+					min-height: 5px;
+					max-height: 75px;
+
+					outline: none;
+					overflow: auto;
+					resize: none;
+
+					&::-webkit-scrollbar {
+						display: none;
+					}
+				}
+			}
+
+			svg {
+				color: #222831;
+				font-size: 1.2rem;
+
+				&:hover {
+					color: #f05454;
+				}
+			}
+		}
+	}
+}

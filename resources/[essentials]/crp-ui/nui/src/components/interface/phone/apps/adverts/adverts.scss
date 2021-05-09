@@ -1,0 +1,150 @@
+.adverts {
+	font-family: 'Quantico', sans-serif;
+
+	display: grid;
+	grid-template-rows: auto 1fr;
+	gap: 5px;
+
+	.top {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		padding: 0 6%;
+
+		gap: 5px;
+		font-size: 0.9rem;
+		font-weight: bold;
+
+		align-items: center;
+		justify-content: center;
+
+		.search-wrapper {
+			display: flex;
+			align-items: center;
+
+			input {
+				font-family: 'Quantico', sans-serif;
+
+				outline: none;
+				width: 90%;
+				padding: 0 1%;
+
+				color: black;
+				font-weight: bold;
+
+				background-color: transparent;
+				border: none;
+
+				&::placeholder,
+				&:focus {
+					color: black;
+				}
+			}
+		}
+
+		.fa-plus-circle:hover {
+			color: #f05454;
+		}
+	}
+
+	.list {
+		display: flex;
+		flex-direction: column;
+		flex-flow: column;
+		flex-wrap: nowrap;
+
+		background-color: white;
+		border-top: solid 1px #d6d6d6;
+		border-bottom: solid 1px #d6d6d6;
+		justify-content: flex-start;
+
+		overflow-y: scroll;
+		padding: 5%;
+		border-radius: 10px;
+		box-shadow: 0px 0px 5px 0px rgba(219, 219, 219, 1);
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
+
+		&.empty {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+
+			svg {
+				width: 100%;
+				height: 15%;
+			}
+
+			span {
+				text-align: center;
+				font-size: 0.9rem;
+				font-weight: bold;
+
+				margin-top: 5%;
+			}
+		}
+
+		.advert {
+			position: relative;
+
+			display: grid;
+			grid-template-rows: 1fr auto;
+			gap: 2.5px;
+
+			align-items: center;
+			flex-direction: column;
+
+			padding: 3%;
+			border-radius: 2px;
+			box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.75);
+
+			background: #505050;
+			color: white;
+			margin-bottom: 2.5%;
+
+			.content {
+				font-size: 0.7rem;
+
+				overflow: hidden;
+				word-break: break-word;
+
+				-webkit-user-select: text;
+				user-select: text;
+			}
+
+			.information {
+				display: grid;
+				grid-template-columns: 1fr auto;
+				align-items: center;
+				gap: 3%;
+
+				font-size: 0.6rem;
+				border-top: solid 1px grey !important;
+				padding-top: 3%;
+
+				span {
+					display: flex;
+					justify-content: center;
+					align-items: center;
+
+					background-color: grey;
+					border: 1px solid transparent;
+					border-radius: 2px;
+
+					text-overflow: ellipsis;
+					white-space: nowrap;
+					overflow: hidden;
+					font-weight: bold;
+
+					-webkit-user-select: text;
+					user-select: text;
+
+					&:last-child {
+						min-width: 65px;
+					}
+				}
+			}
+		}
+	}
+}

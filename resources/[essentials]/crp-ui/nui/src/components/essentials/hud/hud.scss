@@ -1,0 +1,188 @@
+.hud {
+	font-family: 'Quantico', sans-serif;
+
+	position: absolute;
+	color: ivory;
+
+	.character-data {
+		display: grid;
+		position: absolute;
+
+		grid-template-columns: repeat(2, 1fr) repeat(4, 0.5fr);
+		align-items: center;
+		gap: 2px;
+
+		height: 12.823529411%;
+		left: 2.725%;
+		right: 2.725%;
+		bottom: -3.570588235%;
+
+		div[class*='-container'] {
+			position: relative;
+			display: flex;
+			align-items: center;
+			overflow: hidden;
+
+			height: 100%;
+			border: 2px solid rgba(54, 52, 52, 0.8);
+			background-color: rgba(84, 84, 84, 1);
+
+			svg {
+				position: absolute;
+				z-index: 999;
+				font-size: 0.8vw;
+			}
+
+			&[class*='health-'],
+			&[class*='armour-'] {
+				svg {
+					margin-left: 7.5%;
+				}
+
+				div:last-child {
+					height: 100%;
+					max-width: 100%;
+
+					&.health {
+						background-color: rgba(115, 190, 115, 1);
+					}
+
+					&.armour {
+						background-color: rgba(106, 137, 204, 1);
+					}
+				}
+			}
+
+			&:not([class*='health-']):not([class*='armour-']) {
+				justify-content: center;
+
+				div:last-child {
+					position: absolute;
+					max-height: 100%;
+					width: 100%;
+
+					-webkit-transition: all 0.2s 0s ease-in-out;
+					-moz-transition: all 0.2s 0s ease-in-out;
+					-o-transition: all 0.2s 0s ease-in-out;
+					transition: all 0.2s 0s ease-in-out;
+
+					&.hunger {
+						background-color: rgba(246, 185, 59, 1);
+					}
+
+					&.thirst {
+						background-color: rgba(77, 121, 255, 1);
+					}
+
+					&.breath {
+						background-color: rgba(130, 210, 255, 0.9);
+					}
+
+					&.stress {
+						background-color: rgba(199, 0, 57, 1);
+					}
+				}
+			}
+		}
+	}
+
+	.vehicle-data {
+		position: absolute;
+		left: 105.725%;
+		bottom: 0;
+
+		display: grid;
+		grid-template-rows: repeat(3, auto);
+		gap: 5px;
+		text-shadow: 0px 0px 2px #000, 0px 0px 3px #000, 0px 0px 3px #000,
+			0px 0px 3px #000;
+
+		.top,
+		.middle,
+		.bottom {
+			display: grid;
+		}
+
+		.top > span {
+			font-size: 0.7em;
+
+			&.center {
+				width: 100px;
+				text-align: center;
+			}
+		}
+
+		.bottom {
+			grid-template-columns: repeat(2, 1fr);
+			gap: 20px;
+
+			.direction {
+				width: 100px;
+				height: 23px;
+				overflow: hidden;
+
+				.image {
+					height: 100%;
+					background-position: center center;
+					background-size: 400px;
+					background-repeat: repeat;
+					width: 800%;
+					z-index: 1;
+					background-image: url('./../../../assets/compass.png');
+				}
+			}
+
+			.vehicle-info {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 20px;
+
+				.fuel,
+				.speed {
+					display: grid;
+					grid-template-columns: repeat(2, auto);
+					gap: 5px;
+
+					height: fit-content;
+					justify-content: center;
+					align-items: center;
+
+					&.low {
+						color: rgba(255, 77, 64, 1);
+					}
+
+					span:last-child {
+						font-size: 0.6em;
+					}
+				}
+
+				.warnings {
+					display: grid;
+					grid-template-columns: repeat(3, auto);
+					gap: 20px;
+
+					justify-content: center;
+					align-items: center;
+
+					svg {
+						font-size: 1em;
+						width: 1.3em;
+					}
+
+					img {
+						font-size: 1em;
+						width: 1.2em;
+					}
+
+					.fa-gas-pump {
+						color: red;
+					}
+
+					.fa-tachometer-alt {
+						color: orange;
+					}
+				}
+			}
+		}
+	}
+}
