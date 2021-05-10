@@ -46,7 +46,7 @@
 
 				send('selectCharacter', this.charactersData[this.currentItem].id).then(
 					(data) => {
-						if (data.status)
+						if (data.state)
 							this.closeMenu({
 								appName: 'selection',
 								characterData: data.characterData,
