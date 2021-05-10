@@ -5,7 +5,7 @@ function CRP.DB.FetchCharacters(source)
 
     if not identifier or identifier == '' then return false end
 
-	local query = [[SELECT id, firstname, lastname, gender, dateofbirth, job, bank, skin FROM characters WHERE identifier = ?;]]
+	local query = [[SELECT id, firstname, lastname, gender, dateofbirth, job, bank, skin FROM characters WHERE identifier = ? AND deleted = FALSE;]]
 
     return Citizen.Await(DB:Execute(query, identifier))
 end
@@ -68,7 +68,7 @@ function CRP.DB.DeleteCharacter(source, data)
     if not identifier or identifier == '' then return false end
     if not data.characterId or type(data.characterId) ~= 'number' then return false end
 
-    local query = [[DELETE FROM characters WHERE identifier = ? AND id = ?;]]
+    local query = [[UPDATE characters SET deleted = TRUE WHERE identifier = ? AND id = ?;]]
     local result = Citizen.Await(DB:Execute(query, identifier, data.characterId))
 
     if not result.changedRows then

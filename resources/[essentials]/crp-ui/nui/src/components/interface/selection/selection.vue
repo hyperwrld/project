@@ -78,7 +78,6 @@
 						this.$set(this.charactersData, this.currentItem, {});
 					})
 					.onDismiss(() => {
-						console.log('sssssssssssssssssssssssss');
 						this.isUsingMenu = false;
 					});
 			},
@@ -141,7 +140,6 @@
 						});
 					})
 					.onDismiss(() => {
-						console.log('sdsdsdsdds');
 						this.isUsingMenu = false;
 					});
 			},
