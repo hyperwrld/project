@@ -1,4 +1,6 @@
 <script>
+	import Vue from 'vue';
+
 	export default {
 		name: 'rangeOption',
 		props: {

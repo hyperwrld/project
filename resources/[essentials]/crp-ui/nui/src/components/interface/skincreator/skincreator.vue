@@ -5,7 +5,7 @@
 
 	import optionRange from './utils/range.vue';
 
-	import dialog from './dialog/dialog.js';
+	import dialogs from './dialogs/dialogs.vue';
 
 	export default {
 		name: 'skincreator',
@@ -47,16 +47,22 @@
 				if (event.keyCode == 27 && !this.isDialogOpen) {
 					this.isDialogOpen = true;
 
-					dialog.createDialog().then((response) => {
-						if (response) {
-							send('saveSkin', response);
+					this.$q
+						.dialog({
+							component: dialogs,
+							parent: this,
+						})
+						.onOk((state) => {
+							send('saveSkin', state);
 
 							this.closeMenu({ appName: 'skincreator' });
-						}
-
-						this.isDialogOpen = false;
-					});
+						})
+						.onDismiss(() => {
+							this.isDialogOpen = false;
+						});
 				}
+
+				event.preventDefault();
 			},
 		},
 		data() {
@@ -71,7 +77,9 @@
 		mounted() {
 			window.addEventListener('keydown', this.openDialog, false);
 
-			this.handleSwitchCategory(this.categories[0].name);
+			if (this.categories[0]) {
+				this.handleSwitchCategory(this.categories[0].name);
+			}
 		},
 		render() {
 			return (
