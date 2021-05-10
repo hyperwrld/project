@@ -1,4 +1,5 @@
 $primary: rgba(9, 10, 14, 1);
+$secondary: #1976d2;
 
 .selection {
 	font-family: 'Quantico', sans-serif;
@@ -47,8 +48,8 @@ $primary: rgba(9, 10, 14, 1);
 			}
 
 			&:hover {
-				border-top: 2px solid rgba(239, 0, 0, 0.7);
-				border-bottom: 2px solid rgba(239, 0, 0, 0.7);
+				border-top: 2px solid $secondary;
+				border-bottom: 2px solid $secondary;
 			}
 
 			&.active {
@@ -90,7 +91,7 @@ $primary: rgba(9, 10, 14, 1);
 		button {
 			font-family: 'Quantico', sans-serif;
 
-			font-size: 0.6em;
+			font-size: 0.8em;
 			outline: none;
 			color: ivory;
 

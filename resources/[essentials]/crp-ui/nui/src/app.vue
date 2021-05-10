@@ -6,7 +6,7 @@
 	export default {
 		name: 'app',
 		components: {
-			essentials
+			essentials,
 		},
 		methods: {
 			closeMenu: function(appName) {
@@ -60,7 +60,7 @@
 		render() {
 			return (
 				<div id='q-app'>
-					<essentials/>
+					<essentials />
 					<router-view closeMenu={this.closeMenu} />
 				</div>
 			);

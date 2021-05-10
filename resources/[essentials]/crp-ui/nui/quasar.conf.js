@@ -26,18 +26,7 @@ module.exports = function() {
 		css: [],
 
 		// https://github.com/quasarframework/quasar/tree/dev/extras
-		extras: [
-			// 'ionicons-v4',
-			// 'mdi-v5',
-			'fontawesome-v5',
-			// 'eva-icons',
-			// 'themify',
-			// 'line-awesome',
-			// 'roboto-font-latin-ext', // this or either 'roboto-font', NEVER both!
-
-			'roboto-font', // optional, you are not bound to it
-			'material-icons', // optional, you are not bound to it
-		],
+		extras: ['fontawesome-v5', 'roboto-font', 'material-icons'],
 		// Full list of options: https://v1.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
 		build: {
 			vueRouterMode: 'hash', // available values: 'hash', 'history'
@@ -94,11 +83,11 @@ module.exports = function() {
 			// directives: [],
 
 			// Quasar plugins
-			plugins: [],
+			plugins: ['Dialog', 'Notify'],
 		},
 		// animations: 'all', // --- includes all animations
 		// https://v1.quasar.dev/options/animations
-		animations: [],
+		animations: 'all',
 		// https://v1.quasar.dev/quasar-cli/developing-ssr/configuring-ssr
 		ssr: {
 			pwa: false,

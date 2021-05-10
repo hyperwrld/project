@@ -57,10 +57,7 @@ function CRP.DB.CreateCharacter(source, data)
 
 	TriggerEvent('crp-base:createdCharacter', result.insertId)
 
-	return true, {
-		id = result.insertId,
-		money = 500, bank = 5000
-	}
+	return true, result.insertId
 end
 
 RPC:register('createCharacter', CRP.DB.CreateCharacter)

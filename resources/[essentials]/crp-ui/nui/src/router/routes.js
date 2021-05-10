@@ -14,51 +14,52 @@ const routes = [
 			{
 				path: '',
 				name: 'ped',
-				component: import(
-					'./../components/interface/skincreator/modules/ped.vue'
-				),
+				component: () =>
+					import('./../components/interface/skincreator/modules/ped.vue'),
 			},
 			{
 				path: 'headBlend',
 				name: 'headBlend',
-				component: import(
-					'./../components/interface/skincreator/modules/headBlend.vue'
-				),
+				component: () =>
+					import('./../components/interface/skincreator/modules/headBlend.vue'),
 			},
 			{
 				path: 'faceFeatures',
 				name: 'faceFeatures',
-				component: import(
-					'./../components/interface/skincreator/modules/faceFeatures.vue'
-				),
+				component: () =>
+					import(
+						'./../components/interface/skincreator/modules/faceFeatures.vue'
+					),
 			},
 			{
 				path: 'headOverlays',
 				name: 'headOverlays',
-				component: import(
-					'./../components/interface/skincreator/modules/headOverlays.vue'
-				),
+				component: () =>
+					import(
+						'./../components/interface/skincreator/modules/headOverlays.vue'
+					),
 			},
 			{
 				path: 'bodyFeatures',
 				name: 'bodyFeatures',
-				component: import(
-					'./../components/interface/skincreator/modules/bodyFeatures.vue'
-				),
+				component: () =>
+					import(
+						'./../components/interface/skincreator/modules/bodyFeatures.vue'
+					),
 			},
 			{
 				path: 'clothing',
 				name: 'clothing',
-				component: import(
-					'./../components/interface/skincreator/modules/clothing.vue'
-				),
+				component: () =>
+					import('./../components/interface/skincreator/modules/clothing.vue'),
 			},
 			{
 				path: 'accessories',
 				name: 'accessories',
-				component: import(
-					'./../components/interface/skincreator/modules/accessories.vue'
-				),
+				component: () =>
+					import(
+						'./../components/interface/skincreator/modules/accessories.vue'
+					),
 			},
 		],
 	},
@@ -82,56 +83,59 @@ const routes = [
 			{
 				path: '',
 				name: 'home',
-				component: import('./../components/interface/phone/apps/home/home.vue'),
+				component: () =>
+					import('./../components/interface/phone/apps/home/home.vue'),
 			},
 			{
 				path: 'history',
 				name: 'history',
-				component: import(
-					'./../components/interface/phone/apps/history/history.vue'
-				),
+				component: () =>
+					import('./../components/interface/phone/apps/history/history.vue'),
 			},
 			{
 				path: 'messages',
 				name: 'messages',
-				component: import(
-					'./../components/interface/phone/apps/messages/messages.vue'
-				),
+				component: () =>
+					import('./../components/interface/phone/apps/messages/messages.vue'),
 			},
 			{
 				path: 'message',
 				name: 'message',
-				component: import(
-					'./../components/interface/phone/apps/messages/message/message.vue'
-				),
+				component: () =>
+					import(
+						'./../components/interface/phone/apps/messages/message/message.vue'
+					),
 			},
 			{
 				path: 'contacts',
 				name: 'contacts',
-				component: import(
-					'./../components/interface/phone/apps/contacts/contacts.vue'
-				),
+				component: () =>
+					import('./../components/interface/phone/apps/contacts/contacts.vue'),
 			},
 			{
 				path: 'twitter',
 				name: 'twitter',
-				component: import(
-					'./../components/interface/phone/apps/twitter/twitter.vue'
-				),
+				component: () =>
+					import('./../components/interface/phone/apps/twitter/twitter.vue'),
 			},
 			{
 				path: 'adverts',
 				name: 'adverts',
-				component: import(
-					'./../components/interface/phone/apps/adverts/adverts.vue'
-				),
+				component: () =>
+					import('./../components/interface/phone/apps/adverts/adverts.vue'),
 			},
 			{
 				path: 'jobs',
 				name: 'jobs',
-				component: import('./../components/interface/phone/apps/jobs/jobs.vue'),
+				component: () =>
+					import('./../components/interface/phone/apps/jobs/jobs.vue'),
 			},
 		],
+	},
+	{
+		path: '/banking',
+		name: 'banking',
+		component: () => import('./../components/menus/banking/banking.vue'),
 	},
 	// {
 	// 	path: '/',

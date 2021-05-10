@@ -2,7 +2,7 @@
 	import { mapGetters } from 'vuex';
 	import { send } from './../../../utils/lib';
 
-	import dialogs from './dialogs/dialogs.js';
+	import dialogs from './dialogs/dialogs.vue';
 
 	export default {
 		name: 'selection',
@@ -63,20 +63,22 @@
 
 				this.isUsingMenu = true;
 
-				dialogs
-					.createDialog({
+				this.$q
+					.dialog({
+						component: dialogs,
+						parent: this,
 						title: 'Apagar o personagem',
-						sendButton: 'Apagar',
+						buttonLabel: 'Apagar',
 						nuiType: 'deleteCharacter',
 						additionalData: {
 							characterId: this.charactersData[this.currentItem].id,
 						},
 					})
-					.then((response) => {
-						if (response) {
-							this.$set(this.charactersData, this.currentItem, {});
-						}
-
+					.onOk(() => {
+						this.$set(this.charactersData, this.currentItem, {});
+					})
+					.onDismiss(() => {
+						console.log('sssssssssssssssssssssssss');
 						this.isUsingMenu = false;
 					});
 			},
@@ -85,58 +87,61 @@
 
 				this.isUsingMenu = true;
 
-				dialogs
-					.createDialog({
+				this.$q
+					.dialog({
+						component: dialogs,
+						parent: this,
 						title: 'Criação de personagem',
-						sendButton: 'Enviar',
-						nuiType: 'createCharacter',
 						choices: [
 							{
 								key: 'firstName',
 								type: 'text',
-								min: 1,
+								min: 3,
 								max: 10,
-								placeholder: 'Primeiro nome',
+								label: 'Primeiro nome',
 							},
 							{
 								key: 'lastName',
 								type: 'text',
-								min: 1,
+								min: 3,
 								max: 10,
-								placeholder: 'Último nome',
+								label: 'Último nome',
 							},
 							{
 								key: 'dateOfBirth',
 								type: 'date',
-								placeholder: 'Data de nascimento',
+								label: 'Data de nascimento',
 							},
 							{
 								key: 'gender',
 								type: 'select',
-								placeholder: 'Sexo',
 								options: [
-									{ text: 'Masculino', value: false },
-									{ text: 'Feminino', value: true },
+									{
+										label: 'Masculino',
+										value: false,
+									},
+									{
+										label: 'Feminino',
+										value: true,
+									},
 								],
 							},
 						],
+						buttonLabel: 'Criar',
+						nuiType: 'createCharacter',
 					})
-					.then((response) => {
-						if (response) {
-							let characterData = response.choicesData;
-
-							this.$set(this.charactersData, this.currentItem, {
-								id: response.data.characterData.id,
-								firstname: characterData.firstName,
-								lastname: characterData.lastName,
-								dateofbirth: this.formatDate(characterData.dateOfBirth),
-								gender: characterData.gender,
-								job: 'unemployed',
-								money: response.data.characterData.money,
-								bank: response.data.characterData.bank,
-							});
-						}
-
+					.onOk((characterData) => {
+						this.$set(this.charactersData, this.currentItem, {
+							id: characterData.data,
+							firstname: characterData.sendData.firstName,
+							lastname: characterData.sendData.lastName,
+							dateofbirth: this.formatDate(characterData.sendData.dateOfBirth),
+							gender: characterData.sendData.gender,
+							job: 'Desempregado',
+						});
+					})
+					.onDismiss(() => {
+						console.log('sdsdsdsdds');
 						this.isUsingMenu = false;
 					});
 			},
@@ -148,7 +153,11 @@
 		},
 		render() {
 			return (
-				<transition appear name='fade'>
+				<transition
+					appear
+					enter-active-class='animated fadeIn'
+					leave-active-class='animated fadeOut'
+				>
 					<div class='selection'>
 						<div class='character-list'>
 							{this.charactersData.map((character, index) => {
