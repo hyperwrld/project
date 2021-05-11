@@ -1,4 +1,4 @@
-.item {
+.item-container {
 	position: absolute;
 
 	width: 100%;
@@ -11,7 +11,7 @@
 		grid-template-rows: 85.5% 14.5%;
 	}
 
-	.item-info {
+	.info {
 		position: absolute;
 		top: 0px;
 		right: 2px;
@@ -19,7 +19,7 @@
 		color: white;
 	}
 
-	.item-image {
+	.image {
 		width: 85%;
 		height: 100%;
 		margin: 0 auto;
@@ -30,7 +30,7 @@
 		}
 	}
 
-	.item-durability {
+	.durability {
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -43,7 +43,7 @@
 		background-color: green;
 	}
 
-	.item-name {
+	.name {
 		display: flex;
 		justify-content: center;
 		align-items: center;

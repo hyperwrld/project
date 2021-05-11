@@ -20,7 +20,7 @@ const state = () => ({
 });
 
 const getters = {
-	getInventoryData: (state) => {
+	getData: (state) => {
 		return state;
 	},
 	getItemsList: (state) => {
