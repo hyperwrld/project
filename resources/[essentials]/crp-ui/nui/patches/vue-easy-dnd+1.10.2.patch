@@ -1,0 +1,202 @@
+diff --git a/node_modules/vue-easy-dnd/README.md b/node_modules/vue-easy-dnd/README.md
+index 6dd1b36..20ad0d5 100644
+--- a/node_modules/vue-easy-dnd/README.md
++++ b/node_modules/vue-easy-dnd/README.md
+@@ -215,7 +215,7 @@ https://codesandbox.io/s/nested-drop-lists-nw605
+ 
+ ## Tags
+ 
+-Drag and Drop components support the `tag` prop that can be used to control the HTML tag (or Vue component) that will serve as root of the template. In case of tags that are Vue components, all props, listeners and slots function as they normally would.
++Drag and Drop components support the `tag` prop that can be used to control the HTML tag (or Vue component) that will serve as root of the template. In case of tags that are Vue components, all props, listeners and slots function as they normally would. When using Vue components as tags, make sure their templates have a default slot defined (`<slot/>`).
+ 
+ ## DragAwareMixin
+ 
+@@ -258,7 +258,7 @@ Yes.
+ 
+ ## Does it support SSR ?
+ 
+-Not at the moment.
++Yes.
+ 
+ 
+ 
+diff --git a/node_modules/vue-easy-dnd/dist/vue-easy-dnd.esm.js b/node_modules/vue-easy-dnd/dist/vue-easy-dnd.esm.js
+index 6ec11c6..5e1fe11 100644
+--- a/node_modules/vue-easy-dnd/dist/vue-easy-dnd.esm.js
++++ b/node_modules/vue-easy-dnd/dist/vue-easy-dnd.esm.js
+@@ -519,8 +519,8 @@ var DragMixin = /** @class */ (function (_super) {
+         }
+         else {
+             image = createDragImage(this.$el);
+-            image.style.transform = selfTransform;
+         }
++        image.style.transform = selfTransform;
+         image['__opacity'] = this.dragImageOpacity;
+         return image;
+     };
+diff --git a/node_modules/vue-easy-dnd/dist/vue-easy-dnd.js b/node_modules/vue-easy-dnd/dist/vue-easy-dnd.js
+index c3d905b..3b36c33 100644
+--- a/node_modules/vue-easy-dnd/dist/vue-easy-dnd.js
++++ b/node_modules/vue-easy-dnd/dist/vue-easy-dnd.js
+@@ -519,8 +519,8 @@ var VueEasyDnD = (function (exports, reflectMetadata, vuePropertyDecorator) {
+             }
+             else {
+                 image = createDragImage(this.$el);
+-                image.style.transform = selfTransform;
+             }
++            image.style.transform = selfTransform;
+             image['__opacity'] = this.dragImageOpacity;
+             return image;
+         };
+diff --git a/node_modules/vue-easy-dnd/dist/vue-easy-dnd.ssr.js b/node_modules/vue-easy-dnd/dist/vue-easy-dnd.ssr.js
+index 8acaaf1..f56ac2b 100644
+--- a/node_modules/vue-easy-dnd/dist/vue-easy-dnd.ssr.js
++++ b/node_modules/vue-easy-dnd/dist/vue-easy-dnd.ssr.js
+@@ -523,8 +523,8 @@ var DragMixin = /** @class */ (function (_super) {
+         }
+         else {
+             image = createDragImage(this.$el);
+-            image.style.transform = selfTransform;
+         }
++        image.style.transform = selfTransform;
+         image['__opacity'] = this.dragImageOpacity;
+         return image;
+     };
+diff --git a/node_modules/vue-easy-dnd/rollup.config.js b/node_modules/vue-easy-dnd/rollup.config.js
+new file mode 100644
+index 0000000..4d56ed5
+--- /dev/null
++++ b/node_modules/vue-easy-dnd/rollup.config.js
+@@ -0,0 +1,74 @@
++import vue from 'rollup-plugin-vue'
++import typescript from "rollup-plugin-typescript2";
++import commonjs from 'rollup-plugin-commonjs'
++import sass from 'rollup-plugin-sass';
++import buble from "rollup-plugin-buble";
++import copy from "rollup-plugin-cpy";
++import pkg from './package.json';
++
++const path = require('path');
++
++// On reprend le nom du module à partir de package.json :
++const name = pkg.name;
++
++// Par défaut (tant que rollup-plugin-node-resolve n'est pas utilisé), rollup laisse les dépendances externes
++// sous forme d'import MAIS il affiche un warning lors du build avec la liste des dépendances externes. Pour faire
++// disparaitre le warning, il faut lister explicitement les packages dont il est normal qu'ils soient traités
++// de la sorte. En général, cette liste est déduite des dépendances dans package.json :
++const external = Object.keys(pkg.dependencies || {});
++
++const input = path.resolve(__dirname, './src/index.ts');
++
++const plugins = [
++    commonjs(),
++    typescript({clean: true, tsconfig: path.resolve(__dirname, './tsconfig.json')}),
++    sass(),
++    buble({transforms: {dangerousForOf: true}, objectAssign: 'Object.assign'}),
++    copy({
++        files: [path.resolve(__dirname, '../README.md')],
++        dest: __dirname
++    })
++];
++
++export default [
++    {
++        input,
++        external,
++        plugins: [
++            vue(),
++            ...plugins
++        ],
++        output: {
++            format: 'esm',
++            file: path.resolve(__dirname, './dist/' + name + '.esm.js'),
++        },
++    },
++    {
++        input,
++        external,
++        plugins: [
++            vue({template: {optimizeSSR: true}}),
++            ...plugins
++        ],
++        output: {
++            format: 'cjs',
++            file: path.resolve(__dirname, './dist/' + name + '.ssr.js'),
++        },
++    },
++    {
++        input,
++        external,
++        plugins: [
++            vue(),
++            ...plugins
++        ],
++        output: {
++            format: 'iife',
++            name: "VueEasyDnD",
++            globals: {
++                'vue-property-decorator': 'VuePropertyDecorator',
++            },
++            file: path.resolve(__dirname, './dist/' + name + '.js'),
++        }
++    }
++]
+\ No newline at end of file
+diff --git a/node_modules/vue-easy-dnd/src/mixins/DragMixin.ts b/node_modules/vue-easy-dnd/src/mixins/DragMixin.ts
+index da9a694..6a22fdf 100644
+--- a/node_modules/vue-easy-dnd/src/mixins/DragMixin.ts
++++ b/node_modules/vue-easy-dnd/src/mixins/DragMixin.ts
+@@ -258,8 +258,8 @@ export default class DragMixin extends DragAwareMixin {
+             }
+         } else {
+             image = createDragImage(this.$el as HTMLElement);
+-            image.style.transform = selfTransform;
+         }
++        image.style.transform = selfTransform;
+         image['__opacity'] = this.dragImageOpacity;
+         return image;
+     }
+diff --git a/node_modules/vue-easy-dnd/tsconfig.json b/node_modules/vue-easy-dnd/tsconfig.json
+new file mode 100644
+index 0000000..63171ab
+--- /dev/null
++++ b/node_modules/vue-easy-dnd/tsconfig.json
+@@ -0,0 +1,37 @@
++{
++  "compilerOptions": {
++    "declaration": true,
++    "target": "ES5",
++    "downlevelIteration": true,
++    "module": "esnext",
++    "strict": false,
++    "jsx": "preserve",
++    "importHelpers": true,
++    "moduleResolution": "node",
++    "experimentalDecorators": true,
++    "emitDecoratorMetadata": true,
++    "esModuleInterop": true,
++    "allowSyntheticDefaultImports": true,
++    "sourceMap": true,
++    "baseUrl": ".",
++    "types": [
++      "webpack-env"
++    ],
++    "lib": [
++      "esnext",
++      "dom",
++      "dom.iterable",
++      "scripthost"
++    ]
++  },
++  "include": [
++    "src/**/*.ts",
++    "src/**/*.tsx",
++    "src/**/*.vue",
++    "tests/**/*.ts",
++    "tests/**/*.tsx"
++  ],
++  "exclude": [
++    "node_modules"
++  ]
++}
