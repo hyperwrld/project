@@ -83,50 +83,56 @@
 		},
 		render() {
 			return (
-				<div class='skincreator'>
-					<div class='categories'>
-						{this.categories.map((menu) => {
-							return (
-								<button
-									class={this.currentCategory == menu.name ? 'active' : ''}
-									onClick={() => this.handleSwitchCategory(menu.name)}
-								>
-									{menu.title}
-								</button>
-							);
-						})}
-					</div>
-					<div class='container'>
-						<router-view />
-						<div class='buttons'>
-							<q-icon
-								name='fas fa-flushed'
-								onClick={() => this.toggleClothing(1)}
-							/>
-							<q-icon
-								name='fas fa-tshirt'
-								onClick={() => this.toggleClothing(2)}
-							/>
-							<q-icon
-								name='fas fa-socks'
-								onClick={() => this.toggleClothing(3)}
-							/>
-							<q-icon
-								name='fas fa-child'
-								onClick={() => this.toggleAnimation()}
-							/>
+				<transition
+					appear
+					enter-active-class='animated fadeIn'
+					leave-active-class='animated fadeOut'
+				>
+					<div class='skincreator'>
+						<div class='categories'>
+							{this.categories.map((menu) => {
+								return (
+									<button
+										class={this.currentCategory == menu.name ? 'active' : ''}
+										onClick={() => this.handleSwitchCategory(menu.name)}
+									>
+										{menu.title}
+									</button>
+								);
+							})}
+						</div>
+						<div class='container'>
+							<router-view />
+							<div class='buttons'>
+								<q-icon
+									name='fas fa-flushed'
+									onClick={() => this.toggleClothing(1)}
+								/>
+								<q-icon
+									name='fas fa-tshirt'
+									onClick={() => this.toggleClothing(2)}
+								/>
+								<q-icon
+									name='fas fa-socks'
+									onClick={() => this.toggleClothing(3)}
+								/>
+								<q-icon
+									name='fas fa-child'
+									onClick={() => this.toggleAnimation()}
+								/>
+							</div>
+						</div>
+						<div class='footer'>
+							{this.camera.map((data) => {
+								return (
+									<div class='footer-container'>
+										<optionRange data={data} click={this.modifyCameraValue} />
+									</div>
+								);
+							})}
 						</div>
 					</div>
-					<div class='footer'>
-						{this.camera.map((data) => {
-							return (
-								<div class='footer-container'>
-									<optionRange data={data} click={this.modifyCameraValue} />
-								</div>
-							);
-						})}
-					</div>
-				</div>
+				</transition>
 			);
 		},
 	};
