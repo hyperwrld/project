@@ -1,4 +1,4 @@
-import { send } from '../../../utils/lib';
+import { send } from './../../../utils/lib';
 
 const state = () => ({
 	itemsList: [],

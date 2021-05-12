@@ -8,8 +8,9 @@
 			item,
 		},
 		computed: {
-			...mapGetters('actionbar', {
-				items: 'getItems',
+			...mapGetters({
+				items: 'actionbar/getItems',
+				itemsList: 'inventory/getItemsList',
 			}),
 		},
 		render() {
@@ -17,10 +18,16 @@
 				<transition appear name='fade'>
 					<div class='actionbar'>
 						{this.items.map((data, index) => {
+							if (data.itemId) {
+								var itemInfo = this.itemsList.find(
+									(element) => element.identifier == data.itemId
+								);
+							}
+
 							return (
 								<div class='slot'>
 									<div class='id'>{index + 1}</div>
-									{data.itemId && <item item={data} />}
+									{data.itemId && <item item={data} itemInfo={itemInfo} />}
 								</div>
 							);
 						})}
