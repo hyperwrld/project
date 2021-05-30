@@ -48,7 +48,7 @@ RegisterUICallback('deleteCharacter', function(data, cb)
 end)
 
 RegisterUICallback('createCharacter', function(data, cb)
-	local success, characterData = RPC:execute('createCharacter', data)
+	local success, characterId = RPC:execute('createCharacter', data)
 
-	cb({ state = success, characterData = characterData })
+	cb({ state = success, characterId = characterId })
 end)

@@ -120,7 +120,7 @@ function CRP.DB:SaveCharacterData(source, characterId, bank, job, grade, positio
 end
 
 function CRP.DB.GetCharactersTotal(identifier)
-    local query = [[SELECT COUNT(1) AS count FROM characters WHERE identifier = ?;]]
+    local query = [[SELECT COUNT(1) AS count FROM characters WHERE identifier = ? AND deleted = FALSE;]]
 	local result = Citizen.Await(DB:Execute(query, identifier))
 
 	return result[1].count
