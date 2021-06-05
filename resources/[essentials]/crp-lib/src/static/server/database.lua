@@ -15,3 +15,11 @@ function DB:Scalar(query, ...)
 
     return scalarPromise
 end
+
+function DB:Transaction(query, ...)
+	local transaction = promise:new()
+
+	exports.ghmattimysql:transaction(query, { ... }, function(result) transaction:resolve(result) end)
+
+    return transaction
+end

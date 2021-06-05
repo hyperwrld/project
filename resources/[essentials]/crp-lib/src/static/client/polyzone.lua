@@ -77,7 +77,7 @@ exports('createBoxZones', createBoxZones)
 function createPolyZone(points, minZ, maxZ, zoneName, eventName)
 	Debug('Trying to create zone (' .. zoneName .. ' - type: poly).')
 
-	local polyZone = PolyZone:Create(points, { name = zoneName, minZ = minZ, maxZ = maxZ, debugGrid = true })
+	local polyZone = PolyZone:Create(points, { name = zoneName, minZ = minZ, maxZ = maxZ, debugGrid = false })
 
 	polyZone:onPlayerInOut(function(isPointInside, point, zone)
 		TriggerEvent(eventName .. ':onPlayerInOut', isPointInside, zone)

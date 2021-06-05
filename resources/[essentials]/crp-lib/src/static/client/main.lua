@@ -28,7 +28,7 @@ function LoadAnimationSet(setName)
 	RequestAnimSet(setName)
 
 	while not HasAnimSetLoaded(setName) do
-	  	Citizen.Wait(0)
+		Citizen.Wait(0)
 	end
 end
 
@@ -54,16 +54,12 @@ function LoadModel(modelHash)
 	end
 end
 
-function CreateEntity(type, modelHash, coords, isNetwork, netMissionEntity, pedType)
+function CreateEntity(pedType, modelHash, coords, isNetwork, netMissionEntity)
 	if not HasModelLoaded(modelHash) then
 		LoadModel(modelHash)
 	end
 
-	local entity = 0
-
-	if type == 1 then
-		entity = CreatePed(pedType, modelHash, coords, isNetwork, netMissionEntity)
-	end
+	local entity = CreatePed(pedType, modelHash, coords, isNetwork, netMissionEntity)
 
 	SetModelAsNoLongerNeeded(modelHash)
 
