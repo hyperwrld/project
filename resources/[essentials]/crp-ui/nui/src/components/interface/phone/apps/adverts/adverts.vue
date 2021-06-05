@@ -1,76 +1,40 @@
 <script>
 	import { mapGetters } from 'vuex';
-	import { fragment } from './../../../../../utils/lib.js';
-	import dialogs from './../../dialogs/dialogs.js';
+	import { fragment, convertTime } from './../../../../../utils/lib.js';
 
 	export default {
 		name: 'adverts',
+		computed: {
+			...mapGetters('adverts', {
+				data: 'getData',
+			}),
+		},
 		data() {
 			return {
 				searchInput: '',
 			};
-		},
-		computed: {
-			...mapGetters('adverts', {
-				adverts: 'getAdverts',
-			}),
 		},
 		methods: {
 			filterItems: function() {
 				const search = this.searchInput.toLowerCase().trim();
 
 				if (!search) {
-					return this.adverts;
+					return this.data;
 				}
 
 				if (isNaN(this.searchInput)) {
-					return this.adverts.filter(
+					return this.data.filter(
 						(c) => c.name.toLowerCase().indexOf(search) > -1
 					);
-				} else {
-					return this.adverts.filter(
-						(c) =>
-							c.name
-								.toString()
-								.toLowerCase()
-								.indexOf(search) > -1
-					);
 				}
-			},
-			postAdvert: function() {
-				dialogs
-					.createDialog({
-						attach: '.list',
-						title: 'Insira um anúncio',
-						choices: [
-							{
-								key: 'message',
-								placeholder: 'Mensagem',
-								errorText: 'Escolha uma mensagem para colocar no anúncio.',
-							},
-						],
-						sendText: 'Enviar',
-						nuiType: 'postAdvert',
-					})
-					.then((response) => {
-						if (response) {
-							this.adverts.push({
-								id: response.data.advertData.id,
-								name: response.data.advertData.name,
-								number: response.data.advertData.number,
-								message: response.data.advertData.message,
-							});
-						}
-					});
-			},
-			removeAdvert: function(advertId) {
-				dialogs.createDialog({
-					attach: '.list',
-					title: 'Queres apagar o anúncio?',
-					sendText: 'Remover',
-					nuiType: 'removeAdvert',
-					data: { advertId: advertId },
-				});
+
+				return this.data.filter(
+					(c) =>
+						c.name
+							.toString()
+							.toLowerCase()
+							.indexOf(search) > -1
+				);
 			},
 		},
 		render() {
@@ -78,35 +42,101 @@
 
 			return (
 				<div class='adverts'>
-					<div class='top'>
-						<div class='search-wrapper'>
-							<input
-								type='text'
-								v-model={this.searchInput}
-								placeholder='Procurar...'
-							/>
-							<q-icon name='fas fa-search' />
-						</div>
-						<q-icon name='fas fa-plus-circle' onClick={this.postAdvert} />
-					</div>
-					<div class={`list ${isNotEmpty ? '' : 'empty'}`}>
+					<q-toolbar>
+						<q-input
+							v-model={this.searchInput}
+							debounce='500'
+							filled
+							placeholder='Procurar...'
+							dark
+							dense
+						>
+							<template slot='append'>
+								<q-icon name='fas fa-search' />
+							</template>
+						</q-input>
+						<q-icon name='fas fa-plus-circle'>
+							<q-tooltip
+								anchor='center left'
+								self='center right'
+								transition-show='scale'
+								transition-hide='scale'
+								offset={[10, 10]}
+								content-style={{
+									backgroundColor: 'rgba(97, 97, 97, 0.9)',
+									padding: '2px 5px',
+								}}
+							>
+								Publicar anúncio
+							</q-tooltip>
+						</q-icon>
+					</q-toolbar>
+					<div class={`content ${isNotEmpty ? '' : 'empty'}`}>
 						{isNotEmpty ? (
-							<fragment>
+							<q-list dense dark>
 								{this.filterItems().map((advert) => {
 									return (
-										<div
-											class='advert'
-											onClick={() => this.removeAdvert(advert.id)}
-										>
-											<div class='content'>{advert.message}</div>
-											<div class='information'>
-												<span>{advert.name}</span>
-												<span>{advert.number}</span>
-											</div>
-										</div>
+										<q-expansion-item group='contacts' dark>
+											<template slot='header'>
+												<span class='message'>
+													🔧Hayes Auto Repair🔧 Top Quality Repairs | Lock picks
+													| Buying Materials
+												</span>
+												<span class='name'>Tiago Guerreiro</span>
+											</template>
+											<q-card dark>
+												<q-card-actions align='around'>
+													<q-icon name='fas fa-phone-alt'>
+														<q-tooltip
+															anchor='bottom middle'
+															self='top middle'
+															transition-show='scale'
+															transition-hide='scale'
+															offset={[10, 10]}
+															content-style={{
+																backgroundColor: 'rgba(97, 97, 97, 0.9)',
+																padding: '2px 5px',
+															}}
+														>
+															Telefonar
+														</q-tooltip>
+													</q-icon>
+													<q-icon name='fas fa-comment-alt'>
+														<q-tooltip
+															anchor='bottom middle'
+															self='top middle'
+															transition-show='scale'
+															transition-hide='scale'
+															offset={[10, 10]}
+															content-style={{
+																backgroundColor: 'rgba(97, 97, 97, 0.9)',
+																padding: '2px 5px',
+															}}
+														>
+															Mandar mensagem
+														</q-tooltip>
+													</q-icon>
+													<q-icon name='fas fa-clipboard'>
+														<q-tooltip
+															anchor='bottom middle'
+															self='top middle'
+															transition-show='scale'
+															transition-hide='scale'
+															offset={[10, 10]}
+															content-style={{
+																backgroundColor: 'rgba(97, 97, 97, 0.9)',
+																padding: '2px 5px',
+															}}
+														>
+															Copiar número
+														</q-tooltip>
+													</q-icon>
+												</q-card-actions>
+											</q-card>
+										</q-expansion-item>
 									);
 								})}
-							</fragment>
+							</q-list>
 						) : (
 							<fragment>
 								<q-icon name='fas fa-sad-tear' />

@@ -20,13 +20,13 @@ module.exports = function() {
 		// app boot file (/src/boot)
 		// --> boot files are part of "main.js"
 		// https://v1.quasar.dev/quasar-cli/boot-files
-		boot: [],
+		boot: ['fontawesome-pro'],
 
 		// https://v1.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
 		css: [],
 
 		// https://github.com/quasarframework/quasar/tree/dev/extras
-		extras: ['fontawesome-v5', 'roboto-font', 'material-icons'],
+		extras: ['roboto-font'],
 		// Full list of options: https://v1.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
 		build: {
 			vueRouterMode: 'hash', // available values: 'hash', 'history'
@@ -66,7 +66,7 @@ module.exports = function() {
 		},
 		// https://v1.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
 		framework: {
-			iconSet: 'material-icons', // Quasar icon set
+			iconSet: 'fontawesome-v5-pro', // Quasar icon set
 			lang: 'en-us', // Quasar language pack
 			config: {},
 

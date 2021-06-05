@@ -1,6 +1,5 @@
 <script>
 	import { send } from './utils/lib.js';
-
 	import essentials from './components/essentials/essentials.vue';
 
 	export default {

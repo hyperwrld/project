@@ -1,129 +1,147 @@
 <script>
 	import { mapGetters } from 'vuex';
-	import {
-		fragment,
-		convertTime,
-		processMessage,
-	} from './../../../../../utils/lib.js';
-	import dialogs from './../../dialogs/dialogs.js';
-	import images from './../../images/images.vue';
+	import { fragment, convertTime } from './../../../../../utils/lib.js';
 
 	export default {
 		name: 'twitter',
-		components: {
-			images,
-		},
 		computed: {
 			...mapGetters('twitter', {
-				tweets: 'getTweets',
+				data: 'getData',
 			}),
 		},
+		data() {
+			return {
+				searchInput: '',
+			};
+		},
 		methods: {
-			sendTweet: function() {
-				dialogs.createDialog({
-					attach: '.list',
-					title: 'Envie um tweet',
-					choices: [
-						{
-							key: 'message',
-							placeholder: 'Mensagem',
-							errorText: 'Escolha uma mensagem para colocar no seu tweet.',
-						},
-					],
-					sendText: 'Enviar',
-					nuiType: 'sendTweet',
-				});
-			},
-			replyTweet: function(name) {
-				dialogs.createDialog({
-					attach: '.tweets-list',
-					title: 'Envie um tweet',
-					choices: [
-						{
-							key: 'message',
-							value: '@' + name + ' ',
-							placeholder: 'Mensagem',
-							errorText: 'Escolha uma mensagem para colocar no seu tweet.',
-						},
-					],
-					sendText: 'Enviar',
-					nuiType: 'sendTweet',
-				});
-			},
-			sendRetweet: function(tweetId) {
-				dialogs.createDialog({
-					attach: '.tweets-list',
-					title: 'Tens a certeza que queres retweetar?',
-					sendText: 'Retweetar',
-					nuiType: 'sendRetweet',
-					data: { tweetId: tweetId },
-				});
+			filterItems: function() {
+				const search = this.searchInput.toLowerCase().trim();
+
+				if (!search) {
+					return this.data;
+				}
+
+				if (isNaN(this.searchInput)) {
+					return this.data.filter(
+						(c) => c.name.toLowerCase().indexOf(search) > -1
+					);
+				}
+
+				return this.data.filter(
+					(c) =>
+						c.name
+							.toString()
+							.toLowerCase()
+							.indexOf(search) > -1
+				);
 			},
 		},
 		render() {
+			const isNotEmpty = this.filterItems().length > 0 ? true : false;
+
 			return (
 				<div class='twitter'>
-					<div class='top'>
-						<q-icon name='fab fa-twitter' />
-						<span>Twitter</span>
-					</div>
-					<div class={`list ${this.tweets.length > 0 ? '' : 'empty'}`}>
-						{this.tweets.length > 0 ? (
-							<fragment>
-								{this.tweets.map((tweet) => {
-									let { message: message, imgs } = processMessage(
-										tweet.message
-									);
-									const matches = message.match(/(^|\s)(#[a-z\d-_]+)/gi);
-
-									if (matches) {
-										matches.forEach(
-											(element) =>
-												(message = message.replace(
-													element,
-													`<span class='hashtag'>${element}</span>`
-												))
-										);
-									}
-
+					<q-toolbar>
+						<q-input
+							v-model={this.searchInput}
+							debounce='500'
+							filled
+							placeholder='Procurar...'
+							dark
+							dense
+						>
+							<template slot='append'>
+								<q-icon name='fas fa-search' />
+							</template>
+						</q-input>
+						<q-icon name='fas fa-feather-alt'>
+							<q-tooltip
+								anchor='center left'
+								self='center right'
+								transition-show='scale'
+								transition-hide='scale'
+								offset={[10, 10]}
+								content-style={{
+									backgroundColor: 'rgba(97, 97, 97, 0.9)',
+									padding: '2px 5px',
+								}}
+							>
+								Tweetar
+							</q-tooltip>
+						</q-icon>
+					</q-toolbar>
+					<div class={`content ${isNotEmpty ? '' : 'empty'}`}>
+						{isNotEmpty ? (
+							<q-list dense dark>
+								{this.filterItems().map((tweet) => {
 									return (
 										<div class='tweet'>
-											{tweet.retweeter && (
-												<div class='retweet'>
-													<q-icon name='fas fa-retweet' />
-													<span>{tweet.retweeter + ' retweetou'}</span>
-												</div>
-											)}
 											<div class='information'>
-												{tweet.name}{' '}
-												<span>@{tweet.name.replace(/\s/g, '')}</span>
+												<span class='name'>Tiago Guerreiro</span>
+												<span class='time'> • há 5 dias</span>
 											</div>
-											<div class='content'>
-												<div domPropsInnerHTML={message} />
-												{imgs.length > 0 && <images images={imgs} />}
-											</div>
-											<div class='bottom'>
-												<q-icon
-													name='fas fa-reply'
-													onClick={() => this.replyTweet(tweet.name)}
-												/>
-												<q-icon
-													name='fas fa-retweet'
-													onClick={() => this.sendRetweet(tweet.id)}
-												/>
-												<div>{convertTime(tweet.time)}</div>
+											<div class='message'>Bom dia Los Santos</div>
+											<div class='footer'>
+												<q-icon name='fas fa-reply'>
+													<q-tooltip
+														anchor='top middle'
+														self='bottom middle'
+														transition-show='scale'
+														transition-hide='scale'
+														offset={[10, 10]}
+														content-style={{
+															backgroundColor: 'rgba(97, 97, 97, 0.9)',
+															padding: '2px 5px',
+														}}
+													>
+														Responder
+													</q-tooltip>
+												</q-icon>
+												<q-icon name='fas fa-retweet'>
+													<q-tooltip
+														anchor='top middle'
+														self='bottom middle'
+														transition-show='scale'
+														transition-hide='scale'
+														offset={[10, 10]}
+														content-style={{
+															backgroundColor: 'rgba(97, 97, 97, 0.9)',
+															padding: '2px 5px',
+														}}
+													>
+														Retweetar
+													</q-tooltip>
+												</q-icon>
+												<div class='likes'>
+													<q-icon name='fas fa-heart'>
+														<q-tooltip
+															anchor='top middle'
+															self='bottom middle'
+															transition-show='scale'
+															transition-hide='scale'
+															offset={[10, 10]}
+															content-style={{
+																backgroundColor: 'rgba(97, 97, 97, 0.9)',
+																padding: '2px 5px',
+															}}
+														>
+															Like
+														</q-tooltip>
+													</q-icon>
+													<span>50</span>
+												</div>
 											</div>
 										</div>
 									);
 								})}
-							</fragment>
+							</q-list>
 						) : (
 							<fragment>
 								<q-icon name='fas fa-sad-tear' />
 								<span>Não foi encontrado nenhum tweet.</span>
 							</fragment>
 						)}
-						<q-icon name='fas fa-feather-alt' onClick={this.sendTweet} />
 					</div>
 				</div>
 			);

@@ -1,7 +1,7 @@
 import store from './../../index.js';
 
 const state = () => ({
-	compactMode: true,
+	compactMode: false,
 	currentNumber: undefined,
 });
 

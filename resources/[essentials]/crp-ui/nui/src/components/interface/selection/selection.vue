@@ -129,13 +129,13 @@
 						buttonLabel: 'Criar',
 						nuiType: 'createCharacter',
 					})
-					.onOk((characterData) => {
+					.onOk((data) => {
 						this.$set(this.charactersData, this.currentItem, {
-							id: characterData.data,
-							firstname: characterData.sendData.firstName,
-							lastname: characterData.sendData.lastName,
-							dateofbirth: this.formatDate(characterData.sendData.dateOfBirth),
-							gender: characterData.sendData.gender,
+							id: data.characterId,
+							firstname: data.firstName,
+							lastname: data.lastName,
+							dateofbirth: this.formatDate(data.dateOfBirth),
+							gender: data.gender,
 							job: 'Desempregado',
 						});
 					})

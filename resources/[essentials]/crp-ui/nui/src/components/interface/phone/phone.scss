@@ -1,5 +1,5 @@
 .phone {
-	font-family: 'Quantico', sans-serif;
+	// font-family: 'Quantico', sans-serif;
 
 	position: absolute;
 	height: 504px;
@@ -83,7 +83,7 @@
 			height: 100%;
 
 			display: grid;
-			grid-template-rows: 4.5% 89% 5.5%;
+			grid-template-rows: 4.5% 88.5% 6%;
 			gap: 0.5%;
 
 			overflow: hidden;
@@ -91,14 +91,22 @@
 			// opacity: 0;
 
 			transition: 0.5s opacity;
-			background-image: linear-gradient(45deg, #fbda61 0%, #ff5acd 100%);
+			background-color: #ff3cac;
+			background-image: url('https://4.bp.blogspot.com/-AqlJ9uWhed0/Xc4FcpIE2nI/AAAAAAAAJdw/LmwOWLWbVg0q2l82ufISLDTdiGFdCK4-wCLcBGAsYHQ/d/A%2Bbeautiful%2Bphone%2Bwallpaper%2B4%2Bart%2Bby%2BMattia%2BLau.png');
+			// background-image: linear-gradient(
+			// 	225deg,
+			// 	#ff3cac 0%,
+			// 	#784ba0 50%,
+			// 	#2b86c5 100%
+			// );
+			background-repeat: round;
 
 			&:hover {
 				opacity: 1;
 			}
 
 			&.onApp {
-				background: #f2f2f2;
+				background: #212121;
 			}
 
 			.header {
@@ -110,6 +118,11 @@
 				padding: 0 10%;
 
 				color: white;
+				filter: drop-shadow(0px 0px 1px black);
+
+				font-size: 0.6rem;
+				font-weight: 400;
+				line-height: 1.2rem;
 
 				.camera {
 					height: 10px;
@@ -130,13 +143,7 @@
 
 					height: 100%;
 					width: min-content;
-					font-size: 0.7rem;
 					align-items: center;
-					// font-weight: bold;
-
-					svg {
-						font-size: 0.65rem;
-					}
 
 					&.right {
 						margin-left: auto;
@@ -144,22 +151,18 @@
 				}
 			}
 
-			.notifications {
-				position: absolute;
-				margin: 0 5%;
-				z-index: 999;
-
-				background: red;
-
-				padding: 0% 5%;
-
-				padding: auto;
-				width: 75%;
-				height: 50px;
-			}
-
 			.app-screen {
 				position: relative;
+
+				&.component-fade-enter-active,
+				&.component-fade-leave-active {
+					transition: opacity 0.3s ease;
+				}
+
+				&.component-fade-enter,
+				&.component-fade-leave-to {
+					opacity: 0;
+				}
 			}
 
 			.footer {
@@ -169,8 +172,16 @@
 				color: white;
 				gap: 5px;
 
-				svg {
-					filter: drop-shadow(0px 0px 1px white);
+				z-index: 999;
+
+				&.onApp {
+					background: #181818;
+					-webkit-box-shadow: 0px 0px 5px 2px #000000;
+					box-shadow: 0px 0px 5px 2px #000000;
+				}
+
+				i {
+					filter: drop-shadow(0px 0px 1px black);
 					margin: auto;
 					font-size: 0.75rem;
 

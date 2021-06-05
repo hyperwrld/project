@@ -1,9 +1,9 @@
 const state = () => ({
-	tweets: [],
+	tweets: [{}, {}],
 });
 
 const getters = {
-	getTweets: (state) => {
+	getData: (state) => {
 		return state.tweets.sort((a, b) => b.id - a.id);
 	},
 };

@@ -9,7 +9,7 @@ export default {
 				propsData,
 			});
 
-			document.querySelector('#app').appendChild(dialog.$el);
+			document.querySelector(propsData.attach).appendChild(dialog.$el);
 
 			dialog.$on('submit', (data) => {
 				resolve(data);

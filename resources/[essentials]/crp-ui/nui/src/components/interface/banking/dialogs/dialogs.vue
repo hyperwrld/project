@@ -57,7 +57,9 @@
 							this.$q.notify({
 								type: 'negative',
 								timeout: 2500,
-								message: `Ocorreu um erro, se este erro persistir contacte um administrador.`,
+								message: data.message
+									? data.message
+									: 'Ocorreu um erro, se este erro persistir contacte um administrador.',
 							});
 						}
 
@@ -93,9 +95,7 @@
 															v-model={choice.value}
 															options={choice.options}
 															lazy-rules
-															rules={[
-																(val) => val != null || 'Campo obrigatório',
-															]}
+															rules={choice.rules}
 															emit-value
 															map-options
 															stack-label
@@ -113,11 +113,8 @@
 															filled
 															stack-label
 															lazy-rules
-															rules={[
-																(val) =>
-																	(val && val.length > 0) ||
-																	'Campo obrigatório',
-															]}
+															autogrow
+															rules={choice.rules}
 															maxlength={choice.max}
 															max='2000-01-01'
 															label={choice.label}
@@ -154,27 +151,38 @@
 
 <style scoped lang="scss">
 	.q-dialog-plugin {
-		width: 100%;
-		max-width: 500px;
 		font-family: 'Quantico', sans-serif;
-		background-color: rgba(9, 10, 14, 1);
+		width: fit-content;
+		max-width: 500px;
+
+		background: #212121;
 		color: ivory;
 
-		::-webkit-calendar-picker-indicator {
-			filter: invert(1);
+		.q-card__section {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+
+			.text-h5 {
+				text-transform: uppercase;
+				margin-bottom: 30px;
+				font-weight: bold;
+			}
+
+			.column {
+				display: grid;
+				gap: 15px;
+				width: 205px;
+			}
 		}
 
-		.text-h5 {
-			text-transform: uppercase;
-			margin-bottom: 30px;
-			font-weight: bold;
-		}
-
-		.column {
-			display: grid;
-			grid-template-columns: repeat(2, 1fr);
-			gap: 15px;
-			column-gap: 50px;
+		&::v-deep {
+			input::-webkit-outer-spin-button,
+			input::-webkit-inner-spin-button {
+				-webkit-appearance: none;
+				margin: 0;
+			}
 		}
 	}
 </style>

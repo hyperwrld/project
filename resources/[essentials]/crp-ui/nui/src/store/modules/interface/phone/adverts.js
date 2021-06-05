@@ -1,9 +1,9 @@
 const state = () => ({
-	adverts: [],
+	adverts: [{}],
 });
 
 const getters = {
-	getAdverts: (state) => {
+	getData: (state) => {
 		return state.adverts.sort((a, b) => b.id - a.id);
 	},
 };

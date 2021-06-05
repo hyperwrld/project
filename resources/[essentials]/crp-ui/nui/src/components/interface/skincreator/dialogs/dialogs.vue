@@ -21,7 +21,12 @@
 		},
 		render() {
 			return (
-				<q-dialog no-backdrop-dismiss noEscDismiss ref='dialog' onHide={this.onDialogHide}>
+				<q-dialog
+					no-backdrop-dismiss
+					noEscDismiss
+					ref='dialog'
+					onHide={this.onDialogHide}
+				>
 					<q-card class='q-dialog-plugin'>
 						<q-card-section class='q-px-xl'>
 							<div class='text-h5 text-center'>Deseja comprar esta roupa?</div>

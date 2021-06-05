@@ -1,10 +1,13 @@
 const state = () => ({
-	contacts: [{ name: 'Tiago Guerreiro', number: 3333434 }],
+	isLoading: false,
+	characterId: null,
+	accounts: [],
+	transactions: [],
 });
 
 const getters = {
 	getData: (state) => {
-		return state.contacts.sort((a, b) => a.name.localeCompare(b.name));
+		return state;
 	},
 };
 
@@ -16,7 +19,10 @@ const actions = {
 
 const mutations = {
 	setData(state, data) {
-		state.contacts = data;
+		console.log(data);
+		for (var name in data) {
+			state[name] = data[name];
+		}
 	},
 };
 

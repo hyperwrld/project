@@ -1,81 +1,71 @@
 <script>
 	import { mapGetters } from 'vuex';
-	import { fragment, convertTime, send } from './../../../../../utils/lib.js';
-	import dialogs from './../../dialogs/dialogs.js';
+	import { fragment, convertTime } from './../../../../../utils/lib.js';
+
+	import dialogs from './../../modules/dialogs/dialogs.js';
 
 	export default {
 		name: 'messages',
+		computed: {
+			...mapGetters('messages', {
+				data: 'getData',
+			}),
+		},
 		data() {
 			return {
 				searchInput: '',
 			};
-		},
-		computed: {
-			...mapGetters('messages', {
-				lastMessages: 'getLastMessages',
-			}),
 		},
 		methods: {
 			filterItems: function() {
 				const search = this.searchInput.toLowerCase().trim();
 
 				if (!search) {
-					return this.lastMessages;
+					return this.data;
 				}
 
 				if (isNaN(this.searchInput)) {
-					return this.lastMessages.filter(
+					return this.data.filter(
 						(c) => c.name.toLowerCase().indexOf(search) > -1
 					);
-				} else {
-					return this.lastMessages.filter(
-						(c) =>
-							c.name
-								.toString()
-								.toLowerCase()
-								.indexOf(search) > -1
-					);
-				}
-			},
-			getMessageColor: function(string) {
-				var hash = 0;
-
-				for (var i = 0; i < string.length; i++) {
-					hash = string.charCodeAt(i) + ((hash << 5) - hash);
 				}
 
-				return 'hsl(' + (hash % 360) + ', 30%, 70%)';
-			},
-			openMessage: function(name, number) {
-				send('getMessages', number).then((data) => {
-					this.$store.dispatch('messages/setMessages', data.messages);
-
-					this.$router.push({
-						name: 'message',
-						params: { data: { name: name, number: number } },
-					});
-				});
+				return this.data.filter(
+					(c) =>
+						c.name
+							.toString()
+							.toLowerCase()
+							.indexOf(search) > -1
+				);
 			},
 			sendMessage: function() {
 				dialogs
 					.createDialog({
-						attach: '.list',
+						attach: '.messages',
 						title: 'Enviar Mensagem',
 						choices: [
 							{
 								key: 'number',
 								type: 'number',
-								placeholder: 'Número',
-								max: 9,
-								errorText: 'Insira um número com 9 números.',
+								label: 'Número',
+								rules: [
+									(val) => (val && val.length > 0) || 'Campo obrigatório',
+									(val) =>
+										(val && val.length <= 9) ||
+										'Insere um número com 9 caracteres',
+								],
 							},
 							{
 								key: 'message',
-								placeholder: 'Mensagem',
-								errorText: 'Insira uma mensagem para mandar a um número.',
+								type: 'textarea',
+								max: 255,
+								label: 'Mensagem',
+								rules: [
+									(val) => (val && val.length > 0) || 'Campo obrigatório',
+								],
 							},
 						],
-						sendText: 'Enviar',
+						buttonLabel: 'Enviar',
 						nuiType: 'sendMessage',
 					})
 					.then((response) => {
@@ -93,53 +83,52 @@
 
 			return (
 				<div class='messages'>
-					<div class='top'>
-						<div class='search-wrapper'>
-							<input
-								type='text'
-								v-model={this.searchInput}
-								placeholder='Procurar...'
-							/>
-							<q-icon name='fas fa-search' />
-						</div>
-						<q-icon name='fas fa-envelope' onClick={this.sendMessage} />
-					</div>
-					<div class={`list ${isNotEmpty ? '' : 'empty'}`}>
+					<q-toolbar>
+						<q-input
+							v-model={this.searchInput}
+							debounce='500'
+							filled
+							placeholder='Procurar...'
+							dark
+							dense
+						>
+							<template slot='append'>
+								<q-icon name='fas fa-search' />
+							</template>
+						</q-input>
+						<q-icon name='fas fa-envelope' onClick={() => this.sendMessage()}>
+							<q-tooltip
+								anchor='center left'
+								self='center right'
+								transition-show='scale'
+								transition-hide='scale'
+								offset={[10, 10]}
+								content-style={{
+									backgroundColor: 'rgba(97, 97, 97, 0.9)',
+									padding: '2px 5px',
+								}}
+							>
+								Enviar Mensagem
+							</q-tooltip>
+						</q-icon>
+					</q-toolbar>
+					<div class={`content ${isNotEmpty ? '' : 'empty'}`}>
 						{isNotEmpty ? (
-							<fragment>
+							<q-list dense dark>
 								{this.filterItems().map((message) => {
 									return (
-										<div
-											class='message'
-											onClick={() =>
-												this.openMessage(message.name, message.number)
-											}
-										>
-											<v-avatar
-												style={{
-													background: this.getMessageColor(
-														message.name.toString().substring(0, 2)
-													),
-												}}
-												size='30'
-											>
-												{isNaN(message.name) ? (
-													<span>
-														{message.name.substring(0, 2).toUpperCase()}
-													</span>
-												) : (
-													<q-icon name='fas fa-user' />
-												)}
-											</v-avatar>
-											<div class='information'>
-												<div class='name'>{message.name}</div>
-												<div class='last-message'>{message.message}</div>
-												<div class='time'>{convertTime(message.time)}</div>
-											</div>
+										<div class='message'>
+											<q-icon name='fas fa-user-circle' />
+											<span class='name'>{message.name}</span>
+											<span class='text'>{message.message}</span>
+											<q-badge
+												color='deep-purple-8'
+												label={convertTime(message.time)}
+											/>
 										</div>
 									);
 								})}
-							</fragment>
+							</q-list>
 						) : (
 							<fragment>
 								<q-icon name='fas fa-sad-tear' />

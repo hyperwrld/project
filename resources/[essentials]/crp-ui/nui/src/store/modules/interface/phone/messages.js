@@ -1,14 +1,14 @@
 import store from './../../../index.js';
 
 const state = () => ({
-	lastMessages: [],
+	lastMessages: [{}, {}],
 	messages: [],
 });
 
 const getters = {
-	getLastMessages: (state) => {
+	getData: (state) => {
 		const currentNumber = store.getters['phone/getNumber'],
-			contacts = store.getters['contacts/getContacts'];
+			contacts = store.getters['contacts/getData'];
 
 		let messages = [];
 

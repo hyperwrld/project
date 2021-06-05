@@ -1,12 +1,25 @@
 import store from './../../../index.js';
 
 const state = () => ({
-	history: [],
+	history: [
+		{
+			name: 'Tiago Guerreiro',
+			state: true,
+			number: 967301022,
+			time: 1620941446,
+		},
+		{
+			name: 'Joao Guerreiro',
+			state: false,
+			number: 967301022,
+			time: 1620941000,
+		},
+	],
 });
 
 const getters = {
-	getHistory: (state) => {
-		const contacts = store.getters['contacts/getContacts'];
+	getData: (state) => {
+		const contacts = store.getters['contacts/getData'];
 
 		for (let i = 0; i < state.history.length; i++) {
 			let contact = contacts.find(

@@ -1,6 +1,13 @@
 const state = () => ({
 	list: [],
-	group: {},
+	group: {
+		members: [
+			{ name: 'Tiago Guerreiro', isLeader: true },
+			{ name: 'Andre Esteves', isReady: true },
+			{ name: 'Joao Carvalho', isLeader: false },
+			{ name: 'Luis Severino', isReady: true },
+		],
+	},
 });
 
 const getters = {

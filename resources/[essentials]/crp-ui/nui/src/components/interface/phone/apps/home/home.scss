@@ -1,46 +1,74 @@
-html,
-body {
-	.home {
-		font-family: 'Quantico', sans-serif;
+.home {
+	display: grid;
+	grid-template-rows: 1fr auto;
+	padding: 10px;
 
-		display: flex;
-		flex-flow: wrap;
-		align-content: flex-start;
-		padding: 10px;
+	.apps {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		height: min-content;
+		column-gap: 5px;
+		row-gap: 15px;
 
-		.app {
-			display: flex;
-			justify-content: center;
-			align-items: center;
+		.container {
+			display: grid;
+			gap: 5px;
 
-			width: 20%;
-			height: 9%;
-			color: white;
+			.app {
+				margin: auto;
+				height: 35px;
+				width: 35px;
 
-			border-radius: 10px;
-			margin: 2.5%;
-			box-shadow: 0px 0px 2.5px 0px rgba(0, 0, 0, 0.75);
-		}
+				&:hover {
+					transform: scale(1.1);
+				}
+			}
 
-		* {
-			outline: none;
-			border: none;
+			span {
+				text-align: center;
+				font-size: 0.5rem;
+				color: white;
+			}
 		}
 	}
 
-	.tooltip {
-		position: absolute;
-		width: auto;
+	.essentials {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
 
-		padding: 1px 4.5px;
-		font-size: 0.65rem;
-		line-height: normal;
+		.app {
+			margin: auto;
 
-		border-radius: 4px;
-		background: rgba(97, 97, 97, 0.9);
-		color: #ffffff;
+			&.history {
+				background: rgb(0, 213, 120);
+			}
 
-		opacity: 1;
-		pointer-events: none;
+			&.messages {
+				background: rgb(1, 158, 255);
+			}
+
+			&.twitter {
+				background: rgb(29 161 242);
+			}
+		}
+	}
+
+	.app {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		width: 40px;
+		height: 40px;
+
+		color: white;
+
+		border-radius: 15px;
+		// box-shadow: 0px 0px 2.5px 0px rgba(0, 0, 0, 0.75);
+	}
+
+	* {
+		outline: none;
+		border: none;
 	}
 }

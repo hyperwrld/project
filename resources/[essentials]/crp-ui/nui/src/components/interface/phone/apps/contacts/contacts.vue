@@ -1,79 +1,77 @@
 <script>
 	import { mapGetters } from 'vuex';
-	import { fragment } from './../../../../../utils/lib.js';
+	import { fragment, convertTime } from './../../../../../utils/lib.js';
+	import { copyToClipboard } from 'quasar';
+
+	import dialogs from './../../modules/dialogs/dialogs.js';
 
 	export default {
 		name: 'contacts',
+		computed: {
+			...mapGetters('contacts', {
+				data: 'getData',
+			}),
+		},
 		data() {
 			return {
 				searchInput: '',
 			};
-		},
-		computed: {
-			...mapGetters('contacts', {
-				contacts: 'getContacts',
-			}),
 		},
 		methods: {
 			filterItems: function() {
 				const search = this.searchInput.toLowerCase().trim();
 
 				if (!search) {
-					return this.contacts;
+					return this.data;
 				}
 
 				if (isNaN(this.searchInput)) {
-					return this.contacts.filter(
+					return this.data.filter(
 						(c) => c.name.toLowerCase().indexOf(search) > -1
 					);
-				} else {
-					return this.contacts.filter(
-						(c) =>
-							c.name
-								.toString()
-								.toLowerCase()
-								.indexOf(search) > -1
-					);
-				}
-			},
-			getContactColor: function(string) {
-				var hash = 0;
-
-				for (var i = 0; i < string.length; i++) {
-					hash = string.charCodeAt(i) + ((hash << 5) - hash);
 				}
 
-				return 'hsl(' + (hash % 360) + ', 30%, 70%)';
+				return this.data.filter(
+					(c) =>
+						c.name
+							.toString()
+							.toLowerCase()
+							.indexOf(search) > -1
+				);
 			},
 			addContact: function() {
 				dialogs
 					.createDialog({
-						attach: '.list',
+						attach: '.contacts',
 						title: 'Adicionar contato',
 						choices: [
 							{
 								key: 'name',
 								type: 'text',
-								min: 1,
 								max: 20,
-								placeholder: 'Nome',
-								errorText: 'Escolha um nome com o máximo de 20 caracteres.',
+								label: 'Nome',
+								rules: [
+									(val) => (val && val.length > 0) || 'Campo obrigatório',
+								],
 							},
 							{
 								key: 'number',
 								type: 'number',
-								min: 9,
-								max: 9,
-								placeholder: 'Número',
-								errorText: 'Insira um número com 9 números.',
+								label: 'Número',
+								rules: [
+									(val) => (val && val.length > 0) || 'Campo obrigatório',
+									(val) =>
+										(val && val.length <= 9) ||
+										'Insere um número com 9 caracteres',
+								],
 							},
 						],
-						sendText: 'Adicionar',
+						buttonLabel: 'Adicionar',
 						nuiType: 'addContact',
 					})
 					.then((response) => {
 						if (response) {
-							this.contacts.push({
+							this.data.push({
 								id: response.data.id,
 								name: response.choiceData.name,
 								number: Number(response.choiceData.number),
@@ -84,16 +82,20 @@
 			sendMessage: function(contactNumber) {
 				dialogs
 					.createDialog({
-						attach: '.list',
+						attach: '.contacts',
 						title: 'Enviar Mensagem',
 						choices: [
 							{
 								key: 'message',
-								placeholder: 'Mensagem',
-								errorText: 'Insira uma mensagem para mandar a um número.',
+								type: 'textarea',
+								max: 255,
+								label: 'Mensagem',
+								rules: [
+									(val) => (val && val.length > 0) || 'Campo obrigatório',
+								],
 							},
 						],
-						sendText: 'Enviar',
+						buttonLabel: 'Enviar',
 						nuiType: 'sendMessage',
 						data: { number: contactNumber },
 					})
@@ -109,26 +111,30 @@
 			editContact: function(contactId, contactName, contactNumber) {
 				dialogs
 					.createDialog({
-						attach: '.list',
+						attach: '.contacts',
 						title: 'Editar contato',
 						choices: [
 							{
 								key: 'name',
 								type: 'text',
 								value: contactName,
-								min: 1,
 								max: 20,
-								placeholder: 'Nome',
-								errorText: 'Escolha um nome com o máximo de 20 caracteres.',
+								label: 'Nome',
+								rules: [
+									(val) => (val && val.length > 0) || 'Campo obrigatório',
+								],
 							},
 							{
 								key: 'number',
 								type: 'number',
 								value: contactNumber,
-								min: 9,
-								max: 9,
-								placeholder: 'Número',
-								errorText: 'Insira um número com 9 números.',
+								label: 'Número',
+								rules: [
+									(val) => (val && val.length > 0) || 'Campo obrigatório',
+									(val) =>
+										(val && val.length <= 9) ||
+										'Insere um número com 9 caracteres',
+								],
 							},
 						],
 						sendText: 'Editar',
@@ -137,9 +143,7 @@
 					})
 					.then((response) => {
 						if (response) {
-							let found = this.contacts.find(
-								(element) => element.id == contactId
-							);
+							let found = this.data.find((element) => element.id == contactId);
 
 							(found.name = response.choiceData.name),
 								(found.number = Number(response.choiceData.number));
@@ -149,21 +153,24 @@
 			deleteContact: function(contactId) {
 				dialogs
 					.createDialog({
-						attach: '.list',
-						title: 'Remover contato',
-						sendText: 'Remover',
+						attach: '.contacts',
+						title: 'Apagar contato',
+						sendText: 'Apagar',
 						nuiType: 'deleteContact',
 						data: { id: contactId },
 					})
 					.then((response) => {
 						if (response) {
-							let foundIndex = this.contacts.findIndex(
+							let foundIndex = this.data.findIndex(
 								(element) => element.id == contactId
 							);
 
-							this.contacts.splice(foundIndex, 1);
+							this.data.splice(foundIndex, 1);
 						}
 					});
+			},
+			copyNumber: function(contactNumber) {
+				copyToClipboard(contactNumber);
 			},
 		},
 		render() {
@@ -171,46 +178,81 @@
 
 			return (
 				<div class='contacts'>
-					<div class='top'>
-						<div class='search-wrapper'>
-							<input
-								type='text'
-								v-model={this.searchInput}
-								placeholder='Procurar...'
-							/>
-							<q-icon name='fas fa-search' />
-						</div>
-						<q-icon name='fas fa-user-plus' onClick={this.addContact} />
-					</div>
-					<div class={`list ${isNotEmpty ? '' : 'empty'}`}>
+					<q-toolbar>
+						<q-input
+							v-model={this.searchInput}
+							debounce='500'
+							filled
+							placeholder='Procurar...'
+							dark
+							dense
+						>
+							<template slot='append'>
+								<q-icon name='fas fa-search' />
+							</template>
+						</q-input>
+						<q-icon name='fas fa-user-plus' onClick={() => this.addContact()}>
+							<q-tooltip
+								anchor='center left'
+								self='center right'
+								transition-show='scale'
+								transition-hide='scale'
+								offset={[10, 10]}
+								content-style={{
+									backgroundColor: 'rgba(97, 97, 97, 0.9)',
+									padding: '2px 5px',
+								}}
+							>
+								Adicionar contato
+							</q-tooltip>
+						</q-icon>
+					</q-toolbar>
+					<div class={`content ${isNotEmpty ? '' : 'empty'}`}>
 						{isNotEmpty ? (
-							<v-expansion-panels flat accordion>
+							<q-list dense dark>
 								{this.filterItems().map((contact) => {
 									return (
-										<v-expansion-panel>
-											<v-expansion-panel-header>
-												<v-avatar
-													style={{
-														background: this.getContactColor(
-															contact.name.substring(0, 2)
-														),
-													}}
-													size='30'
-												>
-													<span>
-														{contact.name.substring(0, 2).toUpperCase()}
-													</span>
-												</v-avatar>
-												<span>{contact.name}</span>
-											</v-expansion-panel-header>
-											<v-expansion-panel-content>
-												<span>{'Telemóvel: ' + contact.number}</span>
-												<div class='buttons'>
-													<q-icon name='fas fa-phone-alt' />
+										<q-expansion-item
+											icon='fas fa-user-circle'
+											label={contact.name}
+											group='contacts'
+											dark
+										>
+											<q-card dark>
+												<q-card-actions align='around'>
+													<q-icon name='fas fa-phone-alt'>
+														<q-tooltip
+															anchor='bottom middle'
+															self='top middle'
+															transition-show='scale'
+															transition-hide='scale'
+															offset={[10, 10]}
+															content-style={{
+																backgroundColor: 'rgba(97, 97, 97, 0.9)',
+																padding: '2px 5px',
+															}}
+														>
+															Telefonar
+														</q-tooltip>
+													</q-icon>
 													<q-icon
 														name='fas fa-comment-alt'
 														onClick={() => this.sendMessage(contact.number)}
-													/>
+													>
+														<q-tooltip
+															anchor='bottom middle'
+															self='top middle'
+															transition-show='scale'
+															transition-hide='scale'
+															offset={[10, 10]}
+															content-style={{
+																backgroundColor: 'rgba(97, 97, 97, 0.9)',
+																padding: '2px 5px',
+															}}
+														>
+															Mandar mensagem
+														</q-tooltip>
+													</q-icon>
 													<q-icon
 														name='fas fa-user-edit'
 														onClick={() =>
@@ -220,17 +262,63 @@
 																contact.number
 															)
 														}
-													/>
+													>
+														<q-tooltip
+															anchor='bottom middle'
+															self='top middle'
+															transition-show='scale'
+															transition-hide='scale'
+															offset={[10, 10]}
+															content-style={{
+																backgroundColor: 'rgba(97, 97, 97, 0.9)',
+																padding: '2px 5px',
+															}}
+														>
+															Editar contato
+														</q-tooltip>
+													</q-icon>
 													<q-icon
 														name='fas fa-trash'
 														onClick={() => this.deleteContact(contact.id)}
-													/>
-												</div>
-											</v-expansion-panel-content>
-										</v-expansion-panel>
+													>
+														<q-tooltip
+															anchor='bottom middle'
+															self='top middle'
+															transition-show='scale'
+															transition-hide='scale'
+															offset={[10, 10]}
+															content-style={{
+																backgroundColor: 'rgba(97, 97, 97, 0.9)',
+																padding: '2px 5px',
+															}}
+														>
+															Apagar contato
+														</q-tooltip>
+													</q-icon>
+													<q-icon
+														name='fas fa-clipboard'
+														onClick={() => this.copyNumber(contact.number)}
+													>
+														<q-tooltip
+															anchor='bottom middle'
+															self='top middle'
+															transition-show='scale'
+															transition-hide='scale'
+															offset={[10, 10]}
+															content-style={{
+																backgroundColor: 'rgba(97, 97, 97, 0.9)',
+																padding: '2px 5px',
+															}}
+														>
+															Copiar número
+														</q-tooltip>
+													</q-icon>
+												</q-card-actions>
+											</q-card>
+										</q-expansion-item>
 									);
 								})}
-							</v-expansion-panels>
+							</q-list>
 						) : (
 							<fragment>
 								<q-icon name='fas fa-sad-tear' />

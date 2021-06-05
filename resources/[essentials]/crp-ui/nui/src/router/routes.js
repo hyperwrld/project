@@ -12,7 +12,7 @@ const routes = [
 			import('./../components/interface/skincreator/skincreator.vue'),
 		children: [
 			{
-				path: '',
+				path: 'ped',
 				name: 'ped',
 				component: () =>
 					import('./../components/interface/skincreator/modules/ped.vue'),
@@ -99,14 +99,6 @@ const routes = [
 					import('./../components/interface/phone/apps/messages/messages.vue'),
 			},
 			{
-				path: 'message',
-				name: 'message',
-				component: () =>
-					import(
-						'./../components/interface/phone/apps/messages/message/message.vue'
-					),
-			},
-			{
 				path: 'contacts',
 				name: 'contacts',
 				component: () =>
@@ -130,12 +122,17 @@ const routes = [
 				component: () =>
 					import('./../components/interface/phone/apps/jobs/jobs.vue'),
 			},
+			{
+				path: '*',
+				component: () =>
+					import('./../components/interface/phone/apps/default/default.vue'),
+			},
 		],
 	},
 	{
 		path: '/banking',
 		name: 'banking',
-		component: () => import('./../components/menus/banking/banking.vue'),
+		component: () => import('./../components/interface/banking/banking.vue'),
 	},
 	// {
 	// 	path: '/',
