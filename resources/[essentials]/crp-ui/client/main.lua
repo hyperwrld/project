@@ -102,7 +102,7 @@ end)
 
 AddEventHandler('onResourceStop', function(resourceName)
 	if (GetCurrentResourceName() ~= resourceName) then
-	  	return
+		return
 	end
 
 	isAppOpen = false

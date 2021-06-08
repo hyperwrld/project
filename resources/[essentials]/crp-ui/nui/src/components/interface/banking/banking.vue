@@ -11,7 +11,6 @@
 			return {
 				currentAccount: 0,
 				isLoading: false,
-				isUsingMenu: false,
 			};
 		},
 		computed: {
@@ -20,12 +19,8 @@
 			}),
 		},
 		methods: {
-			depositMoney: function(accountId) {
-				if (this.isLoading || this.isUsingMenu) return;
-
-				this.isUsingMenu = true;
-
-				console.log(accountId);
+			depositMoney: function(index, accountId) {
+				const canUpdate = index == this.currentAccount;
 
 				this.$q
 					.dialog({
@@ -44,21 +39,24 @@
 										(val && Number(val) > 0) || 'Insere um número positivo',
 								],
 								label: 'Dinheiro',
+								icon: 'fas fa-euro-sign',
 							},
 							{
-								key: 'comment',
+								key: 'description',
 								type: 'textarea',
 								max: 255,
 								rules: [
 									(val) => (val && val.length > 0) || 'Campo obrigatório',
 								],
-								label: 'Comentário',
+								label: 'Descrição',
+								icon: 'fas fa-money-check-edit-alt',
 							},
 						],
 						buttonLabel: 'Depositar',
 						nuiType: 'depositMoney',
 						additionalData: {
 							accountId: accountId,
+							canUpdate: canUpdate,
 						},
 					})
 					.onOk((data) => {
@@ -67,18 +65,126 @@
 						);
 
 						this.$set(account, 'money', account.money + Number(data.money));
-						console.log(data, account);
-
-						// this.$set(this.data.accounts[index], 'money', {});
-						// this.$set(this.charactersData, this.currentItem, {});
-						// this.$set(this.charactersData, this.currentItem, {});
-					})
-					.onDismiss(() => {
-						this.isUsingMenu = false;
+						if (canUpdate) this.data.transactions.unshift(data.transaction);
 					});
+			},
+			withdrawMoney: function(index, accountId) {
+				const canUpdate = index == this.currentAccount;
 
-				// (val && Number(val) < 0) ||
-				// 'Insere um número positivo.',
+				this.$q
+					.dialog({
+						component: dialogs,
+						parent: this,
+						title: 'Retirar dinheiro',
+						choices: [
+							{
+								key: 'money',
+								type: 'number',
+								min: 1,
+								max: 10,
+								rules: [
+									(val) => (val && val.length > 0) || 'Campo obrigatório',
+									(val) =>
+										(val && Number(val) > 0) || 'Insere um número positivo',
+								],
+								label: 'Dinheiro',
+								icon: 'fas fa-euro-sign',
+							},
+							{
+								key: 'description',
+								type: 'textarea',
+								max: 255,
+								rules: [
+									(val) => (val && val.length > 0) || 'Campo obrigatório',
+								],
+								label: 'Descrição',
+								icon: 'fas fa-money-check-edit-alt',
+							},
+						],
+						buttonLabel: 'Retirar',
+						nuiType: 'withdrawMoney',
+						additionalData: {
+							accountId: accountId,
+							canUpdate: canUpdate,
+						},
+					})
+					.onOk((data) => {
+						let account = this.data.accounts.find(
+							(element) => element.id == accountId
+						);
+
+						this.$set(account, 'money', account.money - Number(data.money));
+						if (canUpdate) this.data.transactions.unshift(data.transaction);
+					});
+			},
+			transferMoney: function(index, accountId) {
+				const canUpdate = index == this.currentAccount;
+
+				this.$q
+					.dialog({
+						component: dialogs,
+						parent: this,
+						title: 'Transferir dinheiro',
+						choices: [
+							{
+								key: 'money',
+								type: 'number',
+								min: 1,
+								max: 10,
+								rules: [
+									(val) => (val && val.length > 0) || 'Campo obrigatório',
+									(val) =>
+										(val && Number(val) > 0) || 'Insere um número positivo',
+								],
+								label: 'Dinheiro',
+								icon: 'fas fa-euro-sign',
+							},
+							{
+								key: 'nib',
+								type: 'number',
+								min: 1,
+								max: 10,
+								rules: [
+									(val) => (val && val.length > 0) || 'Campo obrigatório',
+									(val) =>
+										(val && Number(val) > 0) || 'Insere um número positivo',
+								],
+								label: 'Nº de Identificação Bancária',
+								icon: 'fas fa-credit-card-front',
+							},
+							{
+								key: 'description',
+								type: 'textarea',
+								max: 255,
+								rules: [
+									(val) => (val && val.length > 0) || 'Campo obrigatório',
+								],
+								label: 'Descrição',
+								icon: 'fas fa-money-check-edit-alt',
+							},
+						],
+						buttonLabel: 'Transferir',
+						nuiType: 'transferMoney',
+						additionalData: {
+							accountId: accountId,
+							canUpdate: canUpdate,
+						},
+					})
+					.onOk((data) => {
+						let account = this.data.accounts.find(
+							(element) => element.id == accountId
+						);
+
+						this.$set(account, 'money', account.money - Number(data.money));
+						if (canUpdate) this.data.transactions.unshift(data.transaction);
+
+						let receiver = this.data.accounts.find(
+							(element) => element.id == data.receiverId
+						);
+
+						if (receiver)
+							this.$set(receiver, 'money', account.money + Number(data.money));
+					});
 			},
 		},
 		render() {
@@ -118,7 +224,7 @@
 													label='Depositar'
 													size='11px'
 													padding='0 5px'
-													onClick={() => this.depositMoney(account.id)}
+													onClick={() => this.depositMoney(index, account.id)}
 												/>
 												<q-btn
 													dark
@@ -127,6 +233,7 @@
 													label='Retirar'
 													size='11px'
 													padding='0 5px'
+													onClick={() => this.withdrawMoney(index, account.id)}
 												/>
 												<q-btn
 													dark
@@ -135,6 +242,7 @@
 													label='Transferir'
 													size='11px'
 													padding='0 5px'
+													onClick={() => this.transferMoney(index, account.id)}
 												/>
 											</div>
 										</div>
@@ -145,6 +253,7 @@
 						<div class='content'>
 							<div class='transactions'>
 								{this.data.transactions.map((transaction) => {
+									console.log(transaction);
 									let transactionState =
 										transaction.receiver_id ==
 										this.data.accounts[this.currentAccount].id;
@@ -177,8 +286,8 @@
 												</div>
 											</div>
 											<div class='footer'>
-												<span>Mensagem: </span>
-												<span>{transaction.comment}</span>
+												<span>Descrição: </span>
+												<span>{transaction.description}</span>
 											</div>
 										</div>
 									);

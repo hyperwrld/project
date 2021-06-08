@@ -100,6 +100,7 @@
 															map-options
 															stack-label
 															options-dense
+															no-error-icon
 															label='Sexo'
 														/>
 													) : (
@@ -113,6 +114,7 @@
 															filled
 															stack-label
 															lazy-rules
+															no-error-icon
 															rules={[
 																(val) =>
 																	(val && val.length > 0) ||

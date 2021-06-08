@@ -53,15 +53,15 @@
 						if (data.state) {
 							this.$emit('ok', Object.assign(sendData, data));
 							this.hide();
-						} else {
-							this.$q.notify({
-								type: 'negative',
-								timeout: 2500,
-								message: data.message
-									? data.message
-									: 'Ocorreu um erro, se este erro persistir contacte um administrador.',
-							});
 						}
+
+						this.$q.notify({
+							type: data.state ? 'positive' : 'negative',
+							timeout: 2500,
+							message: data.message
+								? data.message
+								: 'Ocorreu um erro, se este erro persistir contacte um administrador.',
+						});
 
 						this.isLoading = false;
 					}, 1000);
@@ -83,6 +83,7 @@
 								{this.data && this.data.length > 0 && (
 									<div class='column'>
 										{this.data.map((choice) => {
+											console.log(choice.icon);
 											return (
 												<fragment>
 													{choice.type == 'select' ? (
@@ -111,14 +112,18 @@
 															dense
 															square
 															filled
-															stack-label
 															lazy-rules
 															autogrow
+															no-error-icon
 															rules={choice.rules}
 															maxlength={choice.max}
 															max='2000-01-01'
 															label={choice.label}
-														/>
+														>
+															<template slot='prepend'>
+																<q-icon name={choice.icon} size='15px' />
+															</template>
+														</q-input>
 													)}
 												</fragment>
 											);
@@ -173,7 +178,7 @@
 			.column {
 				display: grid;
 				gap: 15px;
-				width: 205px;
+				width: 250px;
 			}
 		}
 
@@ -182,6 +187,16 @@
 			input::-webkit-inner-spin-button {
 				-webkit-appearance: none;
 				margin: 0;
+			}
+
+			.q-field__control {
+				display: grid;
+				grid-template-columns: auto 1fr;
+				gap: 10px;
+			}
+
+			.q-field__prepend {
+				padding: 0;
 			}
 		}
 	}
