@@ -1,36 +1,36 @@
-local keybinds = {}
+local canExecute = false
 
-function RegisterKeybind(name, description, key, func, data)
-	RegisterCommand(name, function(source, args)
-        func(data)
-    end, false)
+AddEventHandler('crp-binds:canExecute', function(state)
+	canExecute = state
+end)
 
-    RegisterKeyMapping(name, description, 'keyboard', key)
-	TriggerEvent('chat:removeSuggestion', '/' .. name)
+function RegisterKeybind(name, category, description, key, downCommand, upCommand)
+	if not name or not category or not description then
+		return Debug("A parameter wasn't provied in the creating of this bind.")
+	end
+
+	local text = ('[%s] %s'):format(category, description)
+	local stringDown = ('+cmd_%s'):format(downCommand)
+
+	RegisterCommand(stringDown, function()
+		if not canExecute then return end
+
+		ExecuteCommand(downCommand)
+	end)
+
+	TriggerEvent('chat:removeSuggestion', stringDown)
+
+	local stringUp = ('-cmd_%s'):format(upCommand)
+
+	RegisterCommand(stringUp, function()
+		if not canExecute then return end
+
+		ExecuteCommand(upCommand)
+	end)
+
+	TriggerEvent('chat:removeSuggestion', stringUp)
+
+	RegisterKeyMapping(stringDown, text, 'keyboard', key)
 end
 
 exports('RegisterKeybind', RegisterKeybind)
-
-function RegisterHoldKeybind(name, description, key, func, delay)
-	RegisterCommand('+' .. name, function(source, args)
-		if not keybinds[name] then
-			func(true)
-		end
-    end, false)
-
-	RegisterCommand('-' .. name, function(source, args)
-        keybinds[name] = true
-
-		func(false)
-
-		Citizen.Wait(delay)
-
-		keybinds[name] = false
-    end, false)
-
-	RegisterKeyMapping('+' .. name, description, 'keyboard', key)
-	TriggerEvent('chat:removeSuggestion', '/+' .. name)
-	TriggerEvent('chat:removeSuggestion', '/-' .. name)
-end
-
-exports('RegisterHoldKeybind', RegisterHoldKeybind)
