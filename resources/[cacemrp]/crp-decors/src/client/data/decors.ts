@@ -10,7 +10,7 @@ export enum PedDecors {
     isInTrunk = GenerateNumber(),
     isInBeatMode = GenerateNumber(),
     isInsideVanillaUnicorn = GenerateNumber(),
-    isNPC = GenerateNumber(),
+    isNpc = GenerateNumber(),
     isJobEmployer = GenerateNumber(),
     isSittingOnChair = GenerateNumber(),
     isPoleDancing = GenerateNumber(),
