@@ -264,8 +264,6 @@ async function canChangeRole(
 
     if (!result || result.length == 0) return [false, 'Oops, aconteceu alguma coisa.'];
 
-    console.log(result);
-
     if (!result[0].manage) return [false, 'Não tem permissão para realizar esta operação.'];
 
     const characterPoints = calculatePoints(result[0]);
@@ -285,9 +283,6 @@ async function canChangeRole(
     const roleResult = await DB.Execute(roleQuery, roleId, businessId);
 
     if (!roleResult || roleResult.length == 0) return [false, 'Oops, aconteceu alguma coisa.'];
-
-    console.log(roleResult);
-    console.log(characterPoints, calculatePoints(roleResult[0]));
 
     if (!result[0].owner && characterPoints <= calculatePoints(roleResult[0]))
         return [false, 'Não tem permissão para realizar esta operação.'];
