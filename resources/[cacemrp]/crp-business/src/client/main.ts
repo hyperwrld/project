@@ -1,13 +1,43 @@
 import { RPCManager } from './managers/rpc-manager';
 import { UIManager } from './managers/ui-manager';
 
-const exp = (<any>global).exports,
-    UI = new UIManager(),
-    RPC = new RPCManager();
+enum Businesses {
+    DPLS = 'police',
+}
 
-onNet('crp-business:updateBusinesses', (businesses: []): void => {
+const exp = (<any>global).exports;
+
+const UI = new UIManager();
+const RPC = new RPCManager();
+
+let business = [];
+let updatedAt = 0;
+
+onNet('crp-business:updateBusinesses', (businesses: any): void => {
+    business = [];
+    updatedAt = GetGameTimer();
+
+    for (const data of businesses) business.push(Businesses[data.name]);
+
     exp['crp-ui'].setAppData('businesses', businesses);
 });
+
+async function updateBusinesses() {
+    const businesses = await RPC.Trigger('fetchBusinesses');
+
+    business = [];
+    updatedAt = GetGameTimer();
+
+    for (const data of businesses) business.push(Businesses[data.name]);
+}
+
+async function isEmployedAt(businessName: string) {
+    if (GetGameTimer() - updatedAt > 15 * 60000) await updateBusinesses();
+
+    return business.includes(businessName);
+}
+
+exp('isEmployedAt', isEmployedAt);
 
 UI.RegisterUICallback('fetchBusiness', async function (businessId: number, cb: any) {
     const [success, employees, permissions] = await RPC.Trigger('fetchBusiness', businessId);
