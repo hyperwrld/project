@@ -13,7 +13,7 @@ export class Blip {
 
     public async addBlip(): Promise<void> {
         this.blipHandle = AddBlipForCoord(this.coords.x, this.coords.y, this.coords.z);
-        this.setSettings;
+        this.setSettings();
     }
 
     public async deleteBlip(): Promise<void> {

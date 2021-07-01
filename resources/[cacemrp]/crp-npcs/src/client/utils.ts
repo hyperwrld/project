@@ -43,7 +43,7 @@ export default class Utils {
     }
 
     public static SetDecors(entity: number, type: string, decors: unknown): void {
-        exp['crp-decors'].setDecor(entity, type, decors);
+        exp['crp-decors'].setDecors(entity, type, decors);
     }
 
     public static GetRandomNumber(min: number, max: number): number {

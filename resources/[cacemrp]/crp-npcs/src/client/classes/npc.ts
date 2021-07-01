@@ -66,9 +66,7 @@ export class NPC {
             Utils.SetDecor(NpcPed, 'PedDecors', 'isNpc', true);
             DecorSetInt(this.entity, 'NpcId', GetHashKey(this.id));
 
-            if (this.settings) {
-                this.setSettings();
-            }
+            if (this.settings) this.setSettings();
             if (this.appearance) this.setAppearance();
             if (this.decors) this.setDecors();
             if (this.animation) this.setAnimation();
@@ -97,7 +95,7 @@ export class NPC {
         this.isDisabled = state;
     }
 
-    private setSettings() {
+    private setSettings(): void {
         for (const setting of this.settings) {
             const state = setting['active'];
 
@@ -138,7 +136,7 @@ export class NPC {
         }
     }
 
-    private setAppearance() {
+    private setAppearance(): void {
         for (const component of this.appearance) {
             const [
                 first,
@@ -197,7 +195,7 @@ export class NPC {
         Utils.SetDecors(this.entity, 'PedDecors', this.decors);
     }
 
-    private setAnimation() {
+    private setAnimation(): void {
         switch (this.animation) {
             case 'phone': {
                 Utils.LoadDictionary('cellphone@');
@@ -301,8 +299,7 @@ export class NPC {
         }
     }
 
-    private setScenario() {
-        console.log(this.entity, this.scenario);
+    private setScenario(): void {
         TaskStartScenarioInPlace(this.entity, this.scenario, 0, true);
     }
 

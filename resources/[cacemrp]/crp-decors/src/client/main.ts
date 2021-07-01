@@ -37,7 +37,7 @@ exp('setDecors', (entity: number, type: string, decors: any) => {
 
     if (decorValue && DoesEntityExist(entity)) {
         for (const name in decors) {
-            const currentDecor = flagTypes[type][decors[name]];
+            const currentDecor = flagTypes[type][name];
 
             if (currentDecor)
                 decorValue =
