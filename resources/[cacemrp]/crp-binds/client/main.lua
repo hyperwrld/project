@@ -4,12 +4,12 @@ AddEventHandler('crp-binds:canExecute', function(state)
 	canExecute = state
 end)
 
-function RegisterKeybind(name, category, description, key, downCommand, upCommand)
-	if not name or not category or not description then
+function RegisterKeybind(category, description, key, downCommand, upCommand)
+	if not category or not description then
 		return Debug("A parameter wasn't provied in the creating of this bind.")
 	end
 
-	local text = ('[%s] %s'):format(category, description)
+	local text = ('[%s] %s~'):format(category, description)
 	local stringDown = ('+cmd_%s'):format(downCommand)
 
 	RegisterCommand(stringDown, function()
@@ -20,7 +20,7 @@ function RegisterKeybind(name, category, description, key, downCommand, upComman
 
 	TriggerEvent('chat:removeSuggestion', stringDown)
 
-	local stringUp = ('-cmd_%s'):format(upCommand)
+	local stringUp = ('-cmd_%s'):format(downCommand)
 
 	RegisterCommand(stringUp, function()
 		if not canExecute then return end
