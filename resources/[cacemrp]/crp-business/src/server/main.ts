@@ -20,6 +20,10 @@ on('crp-base:characterLoaded', async (source: number) => {
     emitNet('crp-business:updateBusinesses', source, await fetchBusinesses(source));
 });
 
+RPC.Register('fetchBusinesses', (source: number) => {
+    return fetchBusinesses(source);
+});
+
 async function fetchBusinesses(source: number): Promise<[]> {
     const character = exp['crp-base'].getCharacter(source);
     const characterId = character.getCharacterId();

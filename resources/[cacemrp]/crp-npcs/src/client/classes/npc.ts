@@ -137,7 +137,7 @@ export class NPC {
     }
 
     private setAppearance(): void {
-        for (const component of this.appearance) {
+        for (const name in this.appearance) {
             const [
                 first,
                 second,
@@ -149,9 +149,9 @@ export class NPC {
                 eighth,
                 ninth,
                 tenth,
-            ] = component.params;
+            ] = this.appearance[name].params;
 
-            switch (component.mode) {
+            switch (this.appearance[name].mode) {
                 case 'component':
                     SetPedComponentVariation(this.entity, first, second, third, fourth);
                     break;
@@ -293,6 +293,23 @@ export class NPC {
                     false,
                 );
                 SetPedComponentVariation(this.entity, 0, 0, 2, 2);
+                break;
+            case 'Cop3':
+                Utils.LoadDictionary('amb@code_human_police_investigate@idle_a');
+
+                TaskPlayAnim(
+                    this.entity,
+                    'amb@code_human_police_investigate@idle_a',
+                    'idle_b',
+                    2.0,
+                    2.0,
+                    -1,
+                    1,
+                    0,
+                    false,
+                    false,
+                    false,
+                );
                 break;
             default:
                 break;
