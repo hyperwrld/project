@@ -21,6 +21,12 @@ if apiHost == "invalid" or apiToken == "invalid" then
     logError('API Host or Token ConVars not found. Do not start this resource if not using txAdmin.')
     return
 end
+if GetCurrentResourceName() ~= "monitor" then
+    logError('This resource should not be installed separately, it already comes with fxserver.')
+    return
+end
+--Erasing the token convar
+-- SetConvar("txAdmin-apiToken", "removed") //FIXME:
 
 
 -- Setup threads and commands
@@ -93,10 +99,18 @@ end
 
 -- HTTP request handler
 function handleHttp(req, res)
+    res.writeHead(200, {["Content-Type"]="application/json"})
+
     if req.path == '/stats.json' then
         return res.send(hbReturnData)
+    elseif req.path == '/players.json' then
+        if txHttpPlayerlistHandler ~= nil then
+            return txHttpPlayerlistHandler(req, res)
+        else
+            return res.send(json.encode({error = 'handler not found'}))
+        end
     else
-        return res.send('')
+        return res.send(json.encode({error = 'route not found'}))
     end
 end
 
@@ -200,6 +214,7 @@ function txaDropIdentifiers(_, args)
 end
 
 -- Fire server event
+-- FIXME: check source to make sure its from the console
 function txaEvent(source, args)
     if args[1] ~= nil and args[2] ~= nil then
         local eventName = unDeQuote(args[1])
@@ -212,6 +227,7 @@ function txaEvent(source, args)
 end
 
 -- Broadcast admin message to all players
+-- TODO: deprecate txaBroadcast, carefull to also show it on the Server Log
 function txaBroadcast(source, args)
     if args[1] ~= nil and args[2] ~= nil then
         args[1] = unDeQuote(args[1])
@@ -298,23 +314,31 @@ end
 
 -- Player connecting handler
 function handleConnections(name, skr, d)
-    if  GetConvar("txAdmin-checkPlayerJoin", "invalid") == "true" then
+    local player = source
+    if GetConvar("txAdmin-checkPlayerJoin", "invalid") == "true" then
         d.defer()
+        Wait(0)
+
+        --Preparing vars and making sure we do have indentifiers
         local url = "http://"..apiHost.."/intercom/checkPlayerJoin"
         local exData = {
             txAdminToken = apiToken,
-            identifiers  = GetPlayerIdentifiers(source),
+            identifiers = GetPlayerIdentifiers(player),
             name = name
         }
+        if #exData.identifiers <= 1 then
+            d.done("[txAdmin] You do not have at least 1 valid identifier. If you own this server, make sure sv_lan is disabled in your server.cfg")
+            return
+        end
 
         --Attempt to validate the user
         CreateThread(function()
             local attempts = 0
             local isDone = false;
-            --Do 5 attempts
-            while isDone == false and attempts < 5 do
+            --Do 10 attempts
+            while isDone == false and attempts < 10 do
                 attempts = attempts + 1
-                d.update("[txAdmin] Checking banlist/whitelist... ("..attempts.."/5)")
+                d.update("[txAdmin] Checking banlist/whitelist... ("..attempts.."/10)")
                 PerformHttpRequest(url, function(httpCode, data, resultHeaders)
                     local resp = tostring(data)
                     if httpCode ~= 200 then
