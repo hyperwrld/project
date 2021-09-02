@@ -155,7 +155,7 @@ function stopPeeking(): void {
     exp['crp-ui'].closeApp('interact');
 }
 
-function getCurrentPeekEntries() {
+function getCurrentPeekEntries(): [] {
     const context = Utils.GetEntityContext(currentTarget);
 
     const listId = (listCount += 1);
@@ -252,47 +252,30 @@ function updatePeekEntries(entries: any): void {
 function isActive(entries: any): boolean {
     if (!entries) return;
 
-    for (const activeState in entries) {
-        if (activeState) return true;
+    for (const entryId in entries) {
+        if (entries[entryId]) return true;
     }
 
     return false;
 }
 
-function startTrackerThread(trackerId: number, entries: any, tracked: any, context: any) {
-    const entity = currentTarget,
-        playerPed = PlayerPedId();
+function startTrackerThread(trackerId: number, entries: any, tracked: any, context: any): void {
+    const entity = currentTarget;
+    const playerPed = PlayerPedId();
 
-    const bones = {},
-        normal = [],
-        zones = {};
+    const normals = {};
+    const bones = {};
+    const zones = {};
 
     let updateRequired = true;
 
     for (const optionId in tracked) {
-        const distance = tracked[optionId].distance;
+        const data = tracked[optionId].distance;
 
-        let isVisible = false,
-            callbacks = normal;
+        let isVisible = false;
 
-        if (distance && distance.boneId) {
-            const bone = distance.boneId;
-            const boneIndex =
-                typeof bone == 'string'
-                    ? GetEntityBoneIndexByName(entity, bone)
-                    : GetPedBoneIndex(entity, bone);
-
-            if (!bones[boneIndex]) bones[boneIndex] = {};
-
-            callbacks = bones[boneIndex];
-        } else if (distance && distance.zone) {
-            if (!zones[distance.zone]) zones[distance.zone] = {};
-
-            callbacks = zones[distance.zone];
-        }
-
-        callbacks[callbacks.length] = function (playerDistance: number) {
-            const isInRange = !distance || playerDistance <= distance.radius;
+        const checkIfIsEnabled = function (playerDistance: number) {
+            const isInRange = !data || playerDistance <= data.radius;
             const isEnabled =
                 isInRange &&
                 (!tracked[optionId].isEnabled || tracked[optionId].isEnabled(entity, context));
@@ -303,6 +286,20 @@ function startTrackerThread(trackerId: number, entries: any, tracked: any, conte
                 (isVisible = false), (updateRequired = true), (entries[optionId] = false);
             }
         };
+
+        if (data && data.boneId) {
+            const bone = data.boneId;
+            const boneIndex =
+                typeof bone == 'string'
+                    ? GetEntityBoneIndexByName(entity, bone)
+                    : GetPedBoneIndex(entity, bone);
+
+            if (!bones[boneIndex]) bones[boneIndex] = checkIfIsEnabled;
+        } else if (data && data.zone) {
+            if (!zones[data.zone]) zones[data.zone] = checkIfIsEnabled;
+        } else {
+            normals[optionId] = checkIfIsEnabled;
+        }
     }
 
     const trackerTick = setTick(async () => {
@@ -318,15 +315,15 @@ function startTrackerThread(trackerId: number, entries: any, tracked: any, conte
 
                 _coords = new Vector3(_coords[0], _coords[1], _coords[2]);
 
-                for (const callback of bones[boneIndex]) callback(coords.distance(_coords));
+                bones[boneIndex](coords.distance(_coords));
             }
 
-            if (normal.length > 0) {
+            for (const optionId in normals) {
                 let _coords: any = GetEntityCoords(entity, false);
 
                 _coords = new Vector3(_coords[0], _coords[1], _coords[2]);
 
-                for (const callback of normal) callback(coords.distance(_coords));
+                normals[optionId](coords.distance(_coords));
             }
         }
 
@@ -335,11 +332,12 @@ function startTrackerThread(trackerId: number, entries: any, tracked: any, conte
             const zoneCoords = new Vector3(zone.vectors.x, zone.vectors.y, zone.vectors.z);
             const distance = !zone ? 1000.0 : coords.distance(zoneCoords);
 
-            for (const callback of zones[zoneId]) callback(distance);
+            zones[zoneId](distance);
         }
 
         if (updateRequired) {
             updateRequired = false;
+
             updatePeekEntries(entries);
         }
 
@@ -366,18 +364,6 @@ UI.RegisterUICallback('selectedOption', async (data: any, cb: any) => {
 
     cb({ state: true });
 });
-
-// RegisterUICallback('startEvent', function(data, cb)
-// 	if data then
-// 		TriggerEvent(data.eventName, table.unpack(data.paramaters))
-// 	end
-
-// 	Citizen.Wait(100)
-
-// 	exports['crp-ui']:closeApp('target')
-
-// 	cb({ state = true })
-// end)
 
 RegisterEntries(npcs);
 RegisterEntries(objects);
