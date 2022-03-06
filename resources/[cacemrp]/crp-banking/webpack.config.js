@@ -1,14 +1,12 @@
 const webpack = require('webpack');
 const path = require('path');
 const RemovePlugin = require('remove-files-webpack-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const buildPath = path.resolve(__dirname, 'dist');
 
 const server = {
     entry: {
         main: './src/server/main.ts',
-        ola: './src/server/ola.ts',
     },
     module: {
         rules: [
@@ -29,9 +27,6 @@ const server = {
                 include: [path.resolve(buildPath, 'server')],
             },
         }),
-        // new CopyWebpackPlugin({
-        //     patterns: [{ from: 'src/static/server', to: '' }],
-        // }),
     ],
     optimization: {
         minimize: true,
@@ -66,12 +61,6 @@ const client = {
                 include: [path.resolve(buildPath, 'client')],
             },
         }),
-        // new CopyWebpackPlugin({
-        //     patterns: [
-        //         { from: 'src/static/client', to: '' },
-        //         { from: 'src/static/shared', to: '../shared' },
-        //     ],
-        // }),
     ],
     optimization: {
         minimize: true,

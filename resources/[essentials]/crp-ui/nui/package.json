@@ -4,24 +4,22 @@
 	"author": "Tiago Guerreiro <41821953+orakah@users.noreply.github.com>",
 	"private": true,
 	"scripts": {
-		"lint": "eslint --ext .js,.vue ./",
 		"dev": "quasar dev",
-		"build": "quasar build",
-		"build:pwa": "quasar build -m pwa",
-		"postinstall": "npx patch-package"
+		"build": "quasar build"
 	},
 	"dependencies": {
 		"@fortawesome/fontawesome-pro": "^5.15.3",
-		"@quasar/extras": "^1.0.0",
+		"@quasar/cli": "^1.2.1",
+		"@quasar/extras": "^1.10.6",
 		"@vue/cli-plugin-babel": "^4.5.13",
 		"core-js": "^3.6.5",
 		"moment": "^2.29.1",
-		"quasar": "^1.0.0",
+		"quasar": "^1.15.20",
 		"vue-easy-dnd": "^1.10.2",
 		"vuex": "^3.6.2"
 	},
 	"devDependencies": {
-		"@quasar/app": "^2.0.0",
+		"@quasar/app": "^2.2.10",
 		"babel-eslint": "^10.0.1",
 		"eslint": "^7.21.0",
 		"eslint-config-prettier": "^8.1.0",

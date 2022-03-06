@@ -6,7 +6,7 @@ const files = require.context('.', true, /\.js$/),
 	modules = {};
 
 files.keys().forEach((fileName) => {
-	if (fileName === './index.js') {
+	if (fileName === './index.js' || fileName.includes('data.js')) {
 		return;
 	}
 

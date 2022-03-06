@@ -1,7 +1,13 @@
+import { RPCManager } from './managers/rpc-manager';
+import { UIManager } from './managers/ui-manager';
+
 import { Vector3 } from 'fivem-js';
 
 const exp = (<any>global).exports,
     banks = [];
+
+const UI = new UIManager();
+const RPC = new RPCManager();
 
 let isInsideZone = false;
 
@@ -114,58 +120,65 @@ function ListenForInput(bankId: number) {
 }
 
 on('crp-banking:openBank', async (type: number) => {
-    // @ts-ignore
-    const [success, characterId, accounts, transactions] = await RPC.Trigger('fetchBank');
+    const [
+        success,
+        characterId,
+        firstName,
+        lastName,
+        money,
+        accounts,
+        transactions,
+    ] = await RPC.Trigger('fetchBank');
 
     if (success) {
         exp['crp-ui'].openApp('banking', {
             type: type,
             characterId: characterId,
+            firstName: firstName,
+            lastName: lastName,
+            money: money,
             accounts: accounts,
             transactions: transactions,
         });
     }
 });
 
-// @ts-ignore
-RegisterUICallback('depositMoney', async function (data: any, cb: any) {
-    // @ts-ignore
+UI.RegisterUICallback('fetchTransactions', async function (accountId: any, cb: any) {
+    const transactions = await RPC.Trigger('fetchTransactions', accountId);
+
+    cb({ state: true, transactions: transactions });
+});
+
+UI.RegisterUICallback('depositMoney', async function (data: any, cb: any) {
     const [success, message, transaction] = await RPC.Trigger(
         'depositMoney',
         data.accountId,
         data.money,
         data.description,
-        data.canUpdate,
     );
 
     cb({ state: success, message: message, transaction: transaction });
 });
 
-// @ts-ignore
-RegisterUICallback('withdrawMoney', async function (data: any, cb: any) {
-    // @ts-ignore
+UI.RegisterUICallback('withdrawMoney', async function (data: any, cb: any) {
     const [success, message, transaction] = await RPC.Trigger(
         'withdrawMoney',
         data.accountId,
         data.money,
         data.description,
-        data.canUpdate,
     );
 
     cb({ state: success, message: message, transaction: transaction });
 });
 
-// @ts-ignore
-RegisterUICallback('transferMoney', async function (data: any, cb: any) {
-    // @ts-ignore
-    const [success, message, receiverId, transaction] = await RPC.Trigger(
+UI.RegisterUICallback('transferMoney', async function (data: any, cb: any) {
+    const [success, message, transaction] = await RPC.Trigger(
         'transferMoney',
         data.accountId,
         data.money,
-        data.nib,
+        data.iban,
         data.description,
-        data.canUpdate,
     );
 
-    cb({ state: success, message: message, receiverId: receiverId, transaction: transaction });
+    cb({ state: success, message: message, transaction: transaction });
 });

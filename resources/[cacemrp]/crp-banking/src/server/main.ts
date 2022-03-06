@@ -1,14 +1,14 @@
 import { UuidTool } from 'uuid-tool';
 
+import { DBManager } from './managers/db-manager';
+import { RPCManager } from './managers/rpc-manager';
+
+const RPC = new RPCManager(),
+    DB = new DBManager();
 const exp = (<any>global).exports;
 
 onNet('crp-base:createdCharacter', (characterId: number) => {
-    createAccount(1, characterId, 'Conta Pessoal', 5000);
-});
-
-// @ts-ignore
-RPC.Register('fetchBank', function (source: number) {
-    return fetchBank(source);
+    createAccount(1, characterId, 'Conta Default', 5000);
 });
 
 async function createAccount(
@@ -17,7 +17,7 @@ async function createAccount(
     accountName: string,
     startingMoney: number,
 ): Promise<boolean> {
-    const query = 'INSERT INTO accounts (type, owner, name, money) VALUES (?, ?, ?, ?);'; // @ts-ignore
+    const query = 'INSERT INTO accounts (type, owner, name, money) VALUES (?, ?, ?, ?);';
     const result = await DB.Execute(query, accountType, characterId, accountName, startingMoney);
 
     if (!result.changedRows) {
@@ -27,35 +27,67 @@ async function createAccount(
     return true;
 }
 
+RPC.Register('fetchBank', function (source: number) {
+    return fetchBank(source);
+});
+
 async function fetchBank(source: number) {
     const character = exp['crp-base'].getCharacter(source);
     const characterId = character.getCharacterId();
 
     const query = `
-        SELECT
+        SELECT DISTINCT
             accounts.id,
             accounts.owner,
             type.name AS type,
             CONCAT(characters.firstname, ' ', characters.lastname) AS owner_name,
             accounts.name,
-            accounts.money
+            accounts.money,
+            holders.permissions,
+            positions.withdraw
         FROM accounts
-            INNER JOIN accounts_type type
+            JOIN accounts_type type
                 ON accounts.type = type.id
             JOIN characters
                 ON accounts.owner = characters.id
-                AND accounts.owner = ?
+            LEFT JOIN accounts_holders holders
+                ON accounts.id = holders.account
+            LEFT JOIN businesses
+                ON accounts.id = businesses.bank_account
+            LEFT JOIN business_positions positions
+                ON businesses.id = positions.business
+            LEFT JOIN business_employees employees
+                ON positions.id = employees.role
+                AND employees.business = businesses.id
+        WHERE holders.holder = ?
+            OR accounts.owner = ?
+            OR (employees.employee = ?
+            AND (positions.deposit = TRUE
+            OR positions.withdraw = TRUE))
         GROUP BY accounts.id
         ORDER BY FIELD(accounts.owner, ?) DESC;
-    `; // @ts-ignore
-    const result = await DB.Execute(query, characterId, characterId, characterId);
+    `;
+
+    const result = await DB.Execute(query, characterId, characterId, characterId, characterId);
 
     if (!result || result.length == 0) {
         return [false];
     }
 
-    return [true, characterId, result, await fetchTransactions(result[0].id)];
+    return [
+        true,
+        characterId,
+        character.firstname,
+        character.lastname,
+        await exp['crp-inventory'].getMoney(source),
+        result,
+        await fetchTransactions(result[0].id),
+    ];
 }
+
+RPC.Register('fetchTransactions', function (_source: number, accountId: number) {
+    return fetchTransactions(accountId);
+});
 
 async function fetchTransactions(accountId: number) {
     const query = `
@@ -72,17 +104,17 @@ async function fetchTransactions(accountId: number) {
 			transactions.money,
 			transactions.description
 		FROM transactions
-			INNER JOIN accounts
+			LEFT JOIN accounts
 				ON transactions.account = accounts.id
-			INNER JOIN accounts receiver
+            LEFT JOIN accounts receiver
 				ON transactions.receiver = receiver.id
 			INNER JOIN characters
 				ON transactions.sender = characters.id
 			INNER JOIN transactions_type type
 				ON transactions.type = type.id
 		WHERE transactions.account = ?
-		OR transactions.receiver = ? ORDER BY transactions.time DESC;
-    `; // @ts-ignore
+		OR transactions.receiver = ? ORDER BY transactions.time ASC;
+    `;
     const result = await DB.Execute(query, accountId, accountId);
 
     if (!result || result.length == 0) {
@@ -92,24 +124,16 @@ async function fetchTransactions(accountId: number) {
     return result;
 }
 
-// @ts-ignore
 RPC.Register('depositMoney', function (
     source: number,
     accountId: number,
     money: number,
     description: string,
-    canUpdate: boolean,
 ) {
-    return depositMoney(source, accountId, Number(money), description, canUpdate);
+    return depositMoney(source, accountId, Number(money), description);
 });
 
-async function depositMoney(
-    source: number,
-    accountId: number,
-    money: number,
-    description: string,
-    canUpdate: boolean,
-) {
+async function depositMoney(source: number, accountId: number, money: number, description: string) {
     const character = exp['crp-base'].getCharacter(source);
     const characterId = character.getCharacterId(),
         hasMoney = exp['crp-inventory'].useItem(source, 'CRP_DINHEIRO', money);
@@ -121,9 +145,9 @@ async function depositMoney(
 
     const uuid = UuidTool.newUuid();
     const query = [
-        `INSERT INTO transactions (id, account, sender, receiver, money, type, time, description) VALUES (UuidToBin(@uuid), @accountId, @characterId, @accountId, @money, 2, UNIX_TIMESTAMP(), @description);`,
-        `UPDATE accounts SET money = money + @money WHERE id = @accountId;`,
-    ]; // @ts-ignore
+        'INSERT INTO transactions (id, account, sender, receiver, money, type, time, description) VALUES (UuidToBin(@uuid), NULL, @characterId, @accountId, @money, 2, UNIX_TIMESTAMP(), @description);',
+        'UPDATE accounts SET money = money + @money WHERE id = @accountId;',
+    ];
     const result = await DB.Transaction(query, {
         uuid: uuid,
         accountId: accountId,
@@ -134,22 +158,16 @@ async function depositMoney(
 
     if (!result) return [false];
 
-    return [
-        result,
-        'Depósito efetuado com sucesso.',
-        canUpdate ? await fetchTransaction(uuid) : null,
-    ];
+    return [true, 'Depósito efetuado com sucesso.', await fetchTransaction(uuid)];
 }
 
-// @ts-ignore
 RPC.Register('withdrawMoney', function (
     source: number,
     accountId: number,
     money: number,
     description: string,
-    canUpdate: boolean,
 ) {
-    return withdrawMoney(source, accountId, Number(money), description, canUpdate);
+    return withdrawMoney(source, accountId, Number(money), description);
 });
 
 async function withdrawMoney(
@@ -157,7 +175,6 @@ async function withdrawMoney(
     accountId: number,
     money: number,
     description: string,
-    canUpdate: boolean,
 ) {
     const character = exp['crp-base'].getCharacter(source);
     const characterId = character.getCharacterId(),
@@ -166,45 +183,38 @@ async function withdrawMoney(
     if (!hasPermission(accountId, characterId))
         return [false, 'Não tem permissão para realizar esta operação.'];
 
-    let query = `UPDATE accounts SET money = money - ? WHERE id = ? AND money >= ?;`; // @ts-ignore
+    let query = `UPDATE accounts SET money = money - ? WHERE id = ? AND money >= ?;`;
     let result = await DB.Execute(query, money, accountId, money);
 
     if (!result || result.changedRows <= 0) return [false, 'Não tens dinheiro suficiente!'];
 
     query = `
 		INSERT INTO transactions (id, account, sender, receiver, money, type, time, description)
-		VALUES (UuidToBin(?), ?, ?, ?, ?, 1, UNIX_TIMESTAMP(), ?);
-	`; // @ts-ignore
-    result = await DB.Execute(query, uuid, accountId, characterId, accountId, money, description);
+		VALUES (UuidToBin(?), ?, ?, NULL, ?, 1, UNIX_TIMESTAMP(), ?);
+	`;
+    result = await DB.Execute(query, uuid, accountId, characterId, money, description);
 
     if (!result || result.affectedRows <= 0) return [false];
 
-    return [
-        result,
-        'Levantamento efetuado com sucesso.',
-        canUpdate ? await fetchTransaction(uuid) : null,
-    ];
+    return [true, 'Levantamento efetuado com sucesso.', await fetchTransaction(uuid)];
 }
 
-// @ts-ignore
 RPC.Register('transferMoney', function (
     source: number,
     accountId: number,
     money: number,
-    nib: number,
+    iban: number,
     description: string,
-    canUpdate: boolean,
 ) {
-    return transferMoney(source, accountId, Number(money), Number(nib), description, canUpdate);
+    return transferMoney(source, accountId, Number(money), Number(iban), description);
 });
 
 async function transferMoney(
     source: number,
     accountId: number,
     money: number,
-    nib: number,
+    iban: number,
     description: string,
-    canUpdate: boolean,
 ) {
     const character = exp['crp-base'].getCharacter(source);
     const characterId = character.getCharacterId();
@@ -212,14 +222,14 @@ async function transferMoney(
     if (!hasPermission(accountId, characterId))
         return [false, 'Não tem permissão para realizar esta operação.'];
 
-    const [success, data] = await isAccountValid(nib);
+    const [success, receiverId] = await isAccountValid(iban);
 
-    if (!success) return [false, data];
+    if (!success) return [false, receiverId];
 
-    if (data == accountId)
+    if (receiverId == accountId)
         return [false, 'Não podes transferir dinheiro para a mesma conta bancária.'];
 
-    const query = `UPDATE accounts SET money = money - ? WHERE id = ? AND money > ?`; // @ts-ignore
+    const query = `UPDATE accounts SET money = money - ? WHERE id = ? AND money > ?`;
     let result = await DB.Execute(query, money, accountId, money);
 
     if (!result || result.changedRows <= 0)
@@ -229,11 +239,11 @@ async function transferMoney(
     const querys = [
         `INSERT INTO transactions (id, account, sender, receiver, money, type, time, description) VALUES (UuidToBin(@uuid), @accountId, @characterId, @receiverId, @money, 3, UNIX_TIMESTAMP(), @description);`,
         `UPDATE accounts SET money = money + @money WHERE id = @receiverId;`,
-    ]; // @ts-ignore
+    ];
     result = await DB.Transaction(querys, {
         uuid: uuid,
         accountId: accountId,
-        receiverId: data,
+        receiverId: receiverId,
         characterId: characterId,
         money: money,
         description: description,
@@ -241,12 +251,7 @@ async function transferMoney(
 
     if (!result) return [false];
 
-    return [
-        result,
-        'Transferência efetuada com sucesso.',
-        data,
-        canUpdate ? await fetchTransaction(uuid) : null,
-    ];
+    return [true, 'Transferência efetuada com sucesso.', await fetchTransaction(uuid)];
 }
 
 async function fetchTransaction(uuid: string) {
@@ -264,16 +269,16 @@ async function fetchTransaction(uuid: string) {
 			transactions.money,
 			transactions.description
 		FROM transactions
-			INNER JOIN accounts
+			LEFT JOIN accounts
 				ON transactions.account = accounts.id
-			INNER JOIN accounts receiver
+            LEFT JOIN accounts receiver
 				ON transactions.receiver = receiver.id
 			INNER JOIN characters
 				ON transactions.sender = characters.id
 			INNER JOIN transactions_type type
 				ON transactions.type = type.id
 		WHERE transactions.id = UuidToBin(?);
-    `; // @ts-ignore
+    `;
     const result = await DB.Execute(query, uuid);
 
     return result[0];
@@ -282,18 +287,18 @@ async function fetchTransaction(uuid: string) {
 async function hasPermission(accountId: number, characterId: number) {
     const query = `
 		SELECT EXISTS(SELECT * FROM accounts WHERE accounts.owner = ? AND accounts.id = ? GROUP BY accounts.id LIMIT 1) AS hasPermission;
-	`; // @ts-ignore
+	`;
     const result = await DB.Execute(query, characterId, accountId);
 
     return result[0].hasPermission;
 }
 
-async function isAccountValid(nib: number) {
-    const isPersonal = nib < 6371708 ? true : false;
-    let data = nib;
+async function isAccountValid(iban: number) {
+    const isPersonal = iban < 6371708 ? true : false;
+    let data = iban;
 
     if (isPersonal) {
-        const character = exp['crp-base'].getCharacter(nib);
+        const character = exp['crp-base'].getCharacter(iban);
 
         if (!character) return [false, 'A conta que você inseriu não existe.'];
 
@@ -302,11 +307,11 @@ async function isAccountValid(nib: number) {
 
     const query = isPersonal
         ? `SELECT id FROM accounts WHERE accounts.owner = ? AND accounts.type = 1`
-        : `SELECT EXISTS (SELECT * FROM accounts WHERE accounts.id = ? LIMIT 1) AS isAccountValid;`; // @ts-ignore
+        : `SELECT EXISTS (SELECT * FROM accounts WHERE accounts.id = ? LIMIT 1) AS isAccountValid;`;
     const result = await DB.Execute(query, data);
 
     if (!result || (isPersonal && result.length == 0) || (!isPersonal && !result[0].isAccountValid))
         return [false, 'A conta que você inseriu não existe.'];
 
-    return [true, isPersonal ? result[0].id : nib];
+    return [true, isPersonal ? result[0].id : iban];
 }
