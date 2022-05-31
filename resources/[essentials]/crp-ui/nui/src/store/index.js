@@ -1,12 +1,12 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-
 import camelCase from 'lodash/camelCase';
 
-const files = require.context('.', true, /\.js$/), modules = {};
+const files = require.context('.', true, /\.js$/),
+	modules = {};
 
-files.keys().forEach(fileName => {
-	if (fileName === './index.js') {
+files.keys().forEach((fileName) => {
+	if (fileName === './index.js' || fileName.includes('data.js')) {
 		return;
 	}
 

@@ -1,0 +1,204 @@
+.dialog {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+
+	width: 100%;
+	padding: 0 12px;
+
+	.q-form {
+		display: grid;
+		grid-template-rows: auto 1fr auto;
+		gap: 10px;
+
+		background: #313131;
+		border-radius: 2px;
+
+		min-height: 150px;
+		max-height: 250px;
+		padding: 5px 10px;
+
+		animation-duration: 1s;
+		text-transform: uppercase;
+		color: white;
+
+		&.loading {
+			grid-template-rows: 1fr;
+		}
+
+		.text-h5 {
+			font-weight: bold;
+			font-size: 1.1rem !important;
+		}
+
+		.choices {
+			display: grid;
+			gap: 5px;
+
+			overflow: auto;
+			padding: 0 5px;
+
+			&::-webkit-scrollbar {
+				width: 4px;
+				background-color: rgba(160, 163, 161, 0.2);
+			}
+
+			&::-webkit-scrollbar-thumb {
+				background: rgba(160, 163, 161, 0.7);
+				border-radius: 1px;
+				margin-top: 2px;
+				margin-bottom: 2px;
+			}
+
+			&::-webkit-scrollbar-thumb:hover {
+				background: rgba(160, 163, 161, 0.7);
+			}
+
+			&::v-deep {
+				input {
+					text-transform: none !important;
+				}
+
+				input::-webkit-outer-spin-button,
+				input::-webkit-inner-spin-button {
+					-webkit-appearance: none;
+					margin: 0;
+				}
+			}
+		}
+
+		.loader {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+
+			opacity: 0;
+			transition: 0.5s opacity ease-in-out;
+
+			&::before {
+				font-family: 'Font Awesome 5 Free';
+				font-weight: 900;
+				content: '\f00c';
+
+				font-size: 20px;
+				color: white;
+
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+
+				opacity: 0;
+				transition: opacity 1s ease-in-out;
+			}
+
+			&::after {
+				font-family: 'Font Awesome 5 Free';
+				font-weight: 900;
+				content: '\f00d';
+
+				font-size: 20px;
+				color: white;
+
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+
+				opacity: 0;
+				transition: opacity 1s ease-in-out;
+			}
+
+			&.loading {
+				opacity: 1;
+
+				svg {
+					animation: rotator 1.4s linear infinite;
+
+					circle {
+						animation: dash 1.4s ease-in-out infinite;
+					}
+				}
+			}
+
+			&.failure {
+				opacity: 1;
+
+				&::after {
+					opacity: 1;
+				}
+
+				svg > circle {
+					fill: rgb(217, 83, 79);
+					stroke-width: 0;
+				}
+			}
+
+			&.done {
+				opacity: 1;
+
+				&::before {
+					opacity: 1;
+				}
+
+				svg > circle {
+					fill: rgb(92, 184, 92);
+					stroke-width: 0;
+				}
+			}
+
+			svg > circle {
+				stroke: #0060ce;
+				stroke-dasharray: 124;
+				stroke-dashoffset: 0;
+
+				transform-origin: center;
+				fill: transparent;
+
+				transition: fill 1s ease-in-out, stroke-width 0.5s ease-in-out;
+			}
+		}
+	}
+
+	.actions {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 10px;
+
+		&::v-deep .q-btn__wrapper {
+			padding: 4px 8px;
+		}
+	}
+
+	textarea {
+		resize: none;
+	}
+
+	@keyframes rotator {
+		0% {
+			transform: rotate(0);
+		}
+
+		100% {
+			transform: rotate(270deg);
+		}
+	}
+
+	@keyframes dash {
+		0% {
+			stroke-dashoffset: 124;
+		}
+
+		50% {
+			stroke-dashoffset: 30;
+			transform: rotate(135deg);
+		}
+
+		100% {
+			stroke-dashoffset: 124;
+			transform: rotate(450deg);
+		}
+	}
+}

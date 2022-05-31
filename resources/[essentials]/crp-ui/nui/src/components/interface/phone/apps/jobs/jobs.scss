@@ -1,0 +1,132 @@
+.jobs {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	.content {
+		display: grid;
+		grid-template-rows: 1fr auto;
+		padding: 24px;
+
+		.job {
+			background: #512da8;
+			border-radius: 5px;
+			margin-bottom: 5px;
+			overflow: hidden;
+
+			display: grid;
+			grid-template-columns: 1fr auto;
+			gap: 5px;
+			color: white;
+			padding: 5px 15px;
+			height: 36px;
+
+			font-size: 0.9rem;
+			line-height: normal;
+			font-weight: bold;
+
+			text-overflow: ellipsis;
+			text-transform: uppercase;
+
+			justify-content: center;
+			align-items: center;
+
+			.fa-sign-in-alt {
+				font-size: 1.25rem;
+				color: rgba(255, 255, 255, 0.7);
+
+				&:hover {
+					color: ivory;
+				}
+			}
+		}
+
+		// &::v-deep .q-item__section:last-child {
+		// 	display: none;
+		// }
+
+		.group {
+			display: grid;
+			grid-template-rows: auto 1fr auto;
+			gap: 10px;
+
+			.loader {
+				display: grid;
+				grid-template-rows: 1fr auto;
+
+				svg {
+					margin: auto;
+					color: #512da8;
+				}
+
+				span {
+					font-size: 0.7rem;
+					text-align: center;
+				}
+			}
+
+			.title {
+				padding: 5px 10px;
+				border-radius: 5px;
+				background: #181818;
+
+				font-weight: bold;
+				text-align: center;
+			}
+
+			.q-item {
+				height: 42px;
+				min-height: unset;
+
+				padding: 5px 10px;
+				border-radius: 5px;
+				margin-bottom: 5px;
+
+				display: grid;
+				grid-template-columns: auto 1fr auto;
+				gap: 15px;
+
+				background: #181818;
+
+				&::v-deep .q-item__section--avatar {
+					min-width: unset;
+				}
+
+				&::v-deep .q-item__section {
+					padding: 0;
+				}
+
+				.q-badge {
+					right: 0;
+				}
+			}
+
+			.actions {
+				display: grid;
+				grid-template-rows: repeat(2, 1fr);
+				gap: 5px;
+			}
+		}
+
+		&.empty {
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+
+			color: white;
+
+			font-size: 0.8rem;
+			font-weight: 400;
+			line-height: 1.3rem;
+			letter-spacing: 0.03333em;
+			text-align: center;
+
+			i {
+				font-size: 7.5rem;
+				margin-bottom: 15px;
+			}
+		}
+	}
+}

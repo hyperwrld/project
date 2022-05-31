@@ -96,6 +96,9 @@ option:disabled {
 .attentionText {
     /* background-color: #a7d4ff !important; */
 }
+.permsCheckbox:checked+label {
+    font-weight: bold;
+}
 
 
 /* Theme dependant */
@@ -212,6 +215,12 @@ mark {background-color: #ffeaa7;}
 #modPlayer > .modal-dialog {
     max-width: 620px;
 }
+
+#modPlayerTitle {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 #modPlayer .nav-link > i {
     padding-right: 0.75rem;
 }

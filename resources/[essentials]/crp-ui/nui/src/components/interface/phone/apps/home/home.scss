@@ -1,0 +1,74 @@
+.home {
+	display: grid;
+	grid-template-rows: 1fr auto;
+	padding: 10px;
+
+	.apps {
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		height: min-content;
+		column-gap: 5px;
+		row-gap: 15px;
+
+		.container {
+			display: grid;
+			gap: 5px;
+
+			.app {
+				margin: auto;
+				height: 35px;
+				width: 35px;
+
+				&:hover {
+					transform: scale(1.1);
+				}
+			}
+
+			span {
+				text-align: center;
+				font-size: 0.5rem;
+				color: white;
+			}
+		}
+	}
+
+	.essentials {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+
+		.app {
+			margin: auto;
+
+			&.history {
+				background: rgb(0, 213, 120);
+			}
+
+			&.messages {
+				background: rgb(1, 158, 255);
+			}
+
+			&.twitter {
+				background: rgb(29 161 242);
+			}
+		}
+	}
+
+	.app {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		width: 40px;
+		height: 40px;
+
+		color: white;
+
+		border-radius: 15px;
+		// box-shadow: 0px 0px 2.5px 0px rgba(0, 0, 0, 0.75);
+	}
+
+	* {
+		outline: none;
+		border: none;
+	}
+}

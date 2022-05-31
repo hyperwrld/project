@@ -4,29 +4,29 @@ export const ped = [
 		title: 'Skin Masculino',
 		value: 1,
 		minValue: 1,
-		maxValue: 0
+		maxValue: 0,
 	},
 	{
 		id: 0,
 		title: 'Skin Feminina',
 		value: 1,
 		minValue: 1,
-		maxValue: 0
+		maxValue: 0,
 	},
 	{
 		id: 1,
 		title: 'Cara',
 		value: 0,
 		minValue: 0,
-		maxValue: 0
+		maxValue: 0,
 	},
 	{
 		id: 2,
 		title: 'Texturas',
 		value: 0,
 		minValue: 0,
-		maxValue: 0
-	}
+		maxValue: 0,
+	},
 ];
 
 export const headBlend = [
@@ -35,64 +35,64 @@ export const headBlend = [
 		title: 'Traço 1',
 		value: 0,
 		minValue: 0,
-		maxValue: 46
+		maxValue: 46,
 	},
 	{
 		id: 1,
 		title: 'Traço 2',
 		value: 0,
 		minValue: 0,
-		maxValue: 46
+		maxValue: 46,
 	},
 	{
 		id: 2,
 		title: 'Traço 3',
 		value: 0,
 		minValue: 0,
-		maxValue: 46
+		maxValue: 46,
 	},
 	{
 		id: 3,
 		title: 'Pele 1',
 		value: 0,
 		minValue: 0,
-		maxValue: 46
+		maxValue: 46,
 	},
 	{
 		id: 4,
 		title: 'Pele 2',
 		value: 0,
 		minValue: 0,
-		maxValue: 46
+		maxValue: 46,
 	},
 	{
 		id: 5,
 		title: 'Pele 3',
 		value: 0,
 		minValue: 0,
-		maxValue: 46
+		maxValue: 46,
 	},
 	{
 		id: 6,
 		title: 'Mistura de Traços',
 		value: 0.5,
 		minValue: 0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
 	{
 		id: 7,
 		title: 'Mistura de Pele',
 		value: 0.5,
 		minValue: 0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
 	{
 		id: 8,
 		title: 'Mistura Geral',
 		value: 0.5,
 		minValue: 0,
-		maxValue: 1.0
-	}
+		maxValue: 1.0,
+	},
 ];
 
 export const faceFeatures = [
@@ -101,141 +101,141 @@ export const faceFeatures = [
 		title: 'Largura do nariz',
 		value: 0,
 		minValue: -1.0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
 	{
 		id: 1,
 		title: 'Altura da ponta do nariz',
 		value: 0,
 		minValue: -1.0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
 	{
 		id: 2,
 		title: 'Comprimento da ponta do nariz',
 		value: 0,
 		minValue: -1.0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
 	{
 		id: 3,
 		title: 'Altura  do osso do nariz',
 		value: 0,
 		minValue: -1.0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
 	{
 		id: 4,
 		title: 'Redução da ponta do nariz',
 		value: 0,
 		minValue: -1.0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
 	{
 		id: 5,
 		title: 'Curvatura do osso do nariz',
 		value: 0,
 		minValue: -1.0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
 	{
 		id: 6,
 		title: 'Altura da sobrancelha',
 		value: 0,
 		minValue: -1.0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
 	{
 		id: 7,
 		title: 'Profundidade da sobrancelha',
 		value: 0,
 		minValue: -1.0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
 	{
 		id: 8,
 		title: 'Altura do osso da bochecha',
 		value: 0,
 		minValue: -1.0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
 	{
 		id: 9,
 		title: 'Largura do osso da bochecha',
 		value: 0,
 		minValue: -1.0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
 	{
 		id: 10,
 		title: 'Largura da bochecha',
 		value: 0,
 		minValue: -1.0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
 	{
 		id: 11,
 		title: 'Abertura do olho',
 		value: 0,
 		minValue: -1.0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
 	{
 		id: 12,
 		title: 'Grossura dos lábios',
 		value: 0,
 		minValue: -1.0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
 	{
 		id: 13,
 		title: 'Largura do maxilar',
 		value: 0,
 		minValue: -1.0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
 	{
 		id: 14,
 		title: 'Comprimento do maxilar',
 		value: 0,
 		minValue: -1.0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
 	{
 		id: 15,
 		title: 'Altura do queixo',
 		value: 0,
 		minValue: -1.0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
 	{
 		id: 16,
 		title: 'Comprimento do queixo',
 		value: 0,
 		minValue: -1.0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
 	{
 		id: 17,
 		title: 'Largura do queixo',
 		value: 0,
 		minValue: -1.0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
 	{
 		id: 18,
 		title: 'Fissura do queixo',
 		value: 0,
 		minValue: -1.0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
 	{
 		id: 19,
 		title: 'Grossura do pescoço',
 		value: 0,
 		minValue: -1.0,
-		maxValue: 1.0
-	}
+		maxValue: 1.0,
+	},
 ];
 
 export const headOverlays = [
@@ -244,85 +244,85 @@ export const headOverlays = [
 		title: 'Manchas',
 		value: 0,
 		minValue: 0,
-		maxValue: 23
+		maxValue: 23,
 	},
 	{
 		id: 0,
 		title: 'Opacidade',
 		value: 0.5,
 		minValue: 0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
 	{
 		id: 3,
 		title: 'Envelhecimento',
 		value: 0,
 		minValue: 0,
-		maxValue: 14
+		maxValue: 14,
 	},
 	{
 		id: 3,
 		title: 'Opacidade',
 		value: 0.5,
 		minValue: 0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
-    {
+	{
 		id: 6,
 		title: 'Tez da pele',
 		value: 0,
 		minValue: 0,
-		maxValue: 11
+		maxValue: 11,
 	},
 	{
 		id: 6,
 		title: 'Opacidade',
 		value: 0.5,
 		minValue: 0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
-    {
+	{
 		id: 7,
 		title: 'Danos do sol',
 		value: 0,
 		minValue: 0,
-		maxValue: 10
+		maxValue: 10,
 	},
 	{
 		id: 7,
 		title: 'Opacidade',
 		value: 0.5,
 		minValue: 0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
-    {
+	{
 		id: 9,
 		title: 'Sinais e sardas',
 		value: 0,
 		minValue: 0,
-		maxValue: 17
+		maxValue: 17,
 	},
 	{
 		id: 9,
 		title: 'Opacidade',
 		value: 0.5,
 		minValue: 0,
-		maxValue: 1.0
+		maxValue: 1.0,
 	},
-    {
+	{
 		id: 11,
 		title: 'Manchas corporais',
 		value: 0,
 		minValue: 0,
-		maxValue: 11
+		maxValue: 11,
 	},
 	{
 		id: 11,
 		title: 'Opacidade',
 		value: 0.5,
 		minValue: 0,
-		maxValue: 1.0
-	}
+		maxValue: 1.0,
+	},
 ];
 
 export const bodyFeatures = [
@@ -339,30 +339,30 @@ export const bodyFeatures = [
 				title: 'Texturas',
 				value: 0,
 				minValue: 0,
-				maxValue: 0
+				maxValue: 0,
 			},
 			{
 				id: 0,
 				title: 'Cor Primária',
 				name: 'h1-color',
 				value: -1,
-				items: []
+				items: [],
 			},
 			{
 				id: 0,
 				title: 'Cor Secundária',
 				name: 'h2-color',
 				value: -1,
-				items: []
-			}
-		]
+				items: [],
+			},
+		],
 	},
 	{
 		id: -1,
 		title: 'Cor dos olhos',
 		value: 0,
 		minValue: 0,
-		maxValue: 31
+		maxValue: 31,
 	},
 	{
 		id: 1,
@@ -378,16 +378,16 @@ export const bodyFeatures = [
 				title: 'Opacidade',
 				value: 0.5,
 				minValue: 0,
-				maxValue: 1.0
+				maxValue: 1.0,
 			},
 			{
 				id: 1,
 				title: 'Cor',
 				name: 'f-color',
 				value: -1,
-				items: []
-			}
-		]
+				items: [],
+			},
+		],
 	},
 	{
 		id: 2,
@@ -403,16 +403,16 @@ export const bodyFeatures = [
 				title: 'Opacidade',
 				value: 0.5,
 				minValue: 0,
-				maxValue: 1.0
+				maxValue: 1.0,
 			},
 			{
 				id: 2,
 				title: 'Cor',
 				name: 'e-color',
 				value: -1,
-				items: []
-			}
-		]
+				items: [],
+			},
+		],
 	},
 	{
 		id: 4,
@@ -428,23 +428,23 @@ export const bodyFeatures = [
 				title: 'Opacidade',
 				value: 0.5,
 				minValue: 0,
-				maxValue: 1.0
+				maxValue: 1.0,
 			},
 			{
 				id: 4,
 				title: 'Cor Primária',
 				name: 'm1-color',
 				value: -1,
-				items: []
+				items: [],
 			},
 			{
 				id: 4,
 				title: 'Cor Secundária',
 				name: 'm2-color',
 				value: -1,
-				items: []
-			}
-		]
+				items: [],
+			},
+		],
 	},
 	{
 		id: 5,
@@ -460,16 +460,16 @@ export const bodyFeatures = [
 				title: 'Opacidade',
 				value: 0.5,
 				minValue: 0,
-				maxValue: 1.0
+				maxValue: 1.0,
 			},
 			{
 				id: 5,
 				title: 'Cor',
 				name: 'b-color',
 				value: -1,
-				items: []
-			}
-		]
+				items: [],
+			},
+		],
 	},
 	{
 		id: 8,
@@ -485,16 +485,16 @@ export const bodyFeatures = [
 				title: 'Opacidade',
 				value: 0.5,
 				minValue: 0,
-				maxValue: 1.0
+				maxValue: 1.0,
 			},
 			{
 				id: 8,
 				title: 'Cor',
 				name: 'l-color',
 				value: -1,
-				items: []
-			}
-		]
+				items: [],
+			},
+		],
 	},
 	{
 		id: 10,
@@ -510,17 +510,17 @@ export const bodyFeatures = [
 				title: 'Opacidade',
 				value: 0.5,
 				minValue: 0,
-				maxValue: 1.0
+				maxValue: 1.0,
 			},
 			{
 				id: 10,
 				title: 'Cor',
 				name: 'c-color',
 				value: -1,
-				items: []
-			}
-		]
-	}
+				items: [],
+			},
+		],
+	},
 ];
 
 export const clothing = [
@@ -537,9 +537,9 @@ export const clothing = [
 				title: 'Texturas',
 				value: 0,
 				minValue: 0,
-				maxValue: 0
-			}
-		]
+				maxValue: 0,
+			},
+		],
 	},
 	{
 		id: 11,
@@ -554,9 +554,9 @@ export const clothing = [
 				title: 'Texturas',
 				value: 0,
 				minValue: 0,
-				maxValue: 0
-			}
-		]
+				maxValue: 0,
+			},
+		],
 	},
 	{
 		id: 8,
@@ -571,9 +571,9 @@ export const clothing = [
 				title: 'Texturas',
 				value: 0,
 				minValue: 0,
-				maxValue: 0
-			}
-		]
+				maxValue: 0,
+			},
+		],
 	},
 	{
 		id: 3,
@@ -588,9 +588,9 @@ export const clothing = [
 				title: 'Texturas',
 				value: 0,
 				minValue: 0,
-				maxValue: 0
-			}
-		]
+				maxValue: 0,
+			},
+		],
 	},
 	{
 		id: 4,
@@ -605,9 +605,9 @@ export const clothing = [
 				title: 'Texturas',
 				value: 0,
 				minValue: 0,
-				maxValue: 0
-			}
-		]
+				maxValue: 0,
+			},
+		],
 	},
 	{
 		id: 6,
@@ -622,9 +622,9 @@ export const clothing = [
 				title: 'Texturas',
 				value: 0,
 				minValue: 0,
-				maxValue: 0
-			}
-		]
+				maxValue: 0,
+			},
+		],
 	},
 	{
 		id: 10,
@@ -639,10 +639,10 @@ export const clothing = [
 				title: 'Texturas',
 				value: 0,
 				minValue: 0,
-				maxValue: 0
-			}
-		]
-	}
+				maxValue: 0,
+			},
+		],
+	},
 ];
 
 export const accessories = [
@@ -659,9 +659,9 @@ export const accessories = [
 				title: 'Texturas',
 				value: 0,
 				minValue: 0,
-				maxValue: 0
-			}
-		]
+				maxValue: 0,
+			},
+		],
 	},
 	{
 		id: 1,
@@ -678,9 +678,9 @@ export const accessories = [
 				title: 'Texturas',
 				value: 0,
 				minValue: 0,
-				maxValue: 0
-			}
-		]
+				maxValue: 0,
+			},
+		],
 	},
 	{
 		id: 2,
@@ -697,9 +697,9 @@ export const accessories = [
 				title: 'Texturas',
 				value: 0,
 				minValue: 0,
-				maxValue: 0
-			}
-		]
+				maxValue: 0,
+			},
+		],
 	},
 	{
 		id: 7,
@@ -714,9 +714,9 @@ export const accessories = [
 				title: 'Texturas',
 				value: 0,
 				minValue: 0,
-				maxValue: 0
-			}
-		]
+				maxValue: 0,
+			},
+		],
 	},
 	{
 		id: 6,
@@ -733,9 +733,9 @@ export const accessories = [
 				title: 'Texturas',
 				value: 0,
 				minValue: 0,
-				maxValue: 0
-			}
-		]
+				maxValue: 0,
+			},
+		],
 	},
 	{
 		id: 7,
@@ -752,9 +752,9 @@ export const accessories = [
 				title: 'Texturas',
 				value: 0,
 				minValue: 0,
-				maxValue: 0
-			}
-		]
+				maxValue: 0,
+			},
+		],
 	},
 	{
 		id: 9,
@@ -769,9 +769,9 @@ export const accessories = [
 				title: 'Texturas',
 				value: 0,
 				minValue: 0,
-				maxValue: 0
-			}
-		]
+				maxValue: 0,
+			},
+		],
 	},
 	{
 		id: 5,
@@ -786,10 +786,10 @@ export const accessories = [
 				title: 'Texturas',
 				value: 0,
 				minValue: 0,
-				maxValue: 0
-			}
-		]
-	}
+				maxValue: 0,
+			},
+		],
+	},
 ];
 
 export const camera = [
@@ -798,7 +798,7 @@ export const camera = [
 		title: 'Altura',
 		value: 0,
 		minValue: -0.8,
-		maxValue: 0.8
+		maxValue: 0.8,
 	},
 	{
 		id: 1,
@@ -806,7 +806,7 @@ export const camera = [
 		value: 90,
 		step: 1,
 		minValue: 10,
-		maxValue: 100
+		maxValue: 100,
 	},
 	{
 		id: 2,
@@ -814,22 +814,23 @@ export const camera = [
 		value: 180,
 		step: 1,
 		minValue: 0,
-		maxValue: 360
-	}
+		maxValue: 360,
+	},
 ];
 
 export const getMenuCategories = (type) => {
 	const skinCategories = [
-		{ title: 'Ped',  name: 'ped'               }, // 0
-		{ title: 'Pais', name: 'headBlend'         }, // 1
-		{ title: 'Cara', name: 'faceFeatures'      }, // 2
-		{ title: 'Pele', name: 'headOverlays'      }, // 3
-		{ title: 'Corpo', name: 'bodyFeatures'     }, // 4
-		{ title: 'Roupa', name: 'clothing'         }, // 5
-		{ title: 'Acessórios', name: 'accessories' }  // 6
+		{ title: 'Ped', name: 'ped' }, // 0
+		{ title: 'Pais', name: 'headBlend' }, // 1
+		{ title: 'Cara', name: 'faceFeatures' }, // 2
+		{ title: 'Pele', name: 'headOverlays' }, // 3
+		{ title: 'Corpo', name: 'bodyFeatures' }, // 4
+		{ title: 'Roupa', name: 'clothing' }, // 5
+		{ title: 'Acessórios', name: 'accessories' }, // 6
 	];
 
-	let data, menus = [];
+	let data,
+		menus = [];
 
 	// type: 1 (all), 2 (clothing), 3 (hairshop), 4 (tattoos)
 
@@ -850,4 +851,4 @@ export const getMenuCategories = (type) => {
 	}
 
 	return menus;
-}
+};

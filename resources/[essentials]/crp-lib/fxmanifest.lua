@@ -7,20 +7,15 @@ client_scripts {
 	'@polyzone/client/BoxZone.lua',
 	'@polyzone/client/CircleZone.lua',
 	'@polyzone/client/ComboZone.lua',
-	'client/*.*'
+	'dist/client/*.*'
 }
 
 shared_scripts {
-	'shared/util.lua'
+	'dist/shared/util.lua'
 }
 
-server_scripts {
-	'server/database.lua',
-	'server/rpc.lua',
-	'server/polyzone.lua',
-	'server/sound.lua'
-}
+server_script 'dist/server/*.*'
 
 files {
-	'shared/array.lua'
+	'dist/shared/array.lua'
 }

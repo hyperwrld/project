@@ -5,7 +5,7 @@ function CRP.DB.FetchCharacters(source)
 
     if not identifier or identifier == '' then return false end
 
-	local query = [[SELECT id, firstname, lastname, gender, dateofbirth, job, bank, skin FROM characters WHERE identifier = ?;]]
+	local query = [[SELECT id, firstname, lastname, gender, dateofbirth, job, bank, skin FROM characters WHERE identifier = ? AND deleted = FALSE;]]
 
     return Citizen.Await(DB:Execute(query, identifier))
 end
@@ -57,10 +57,7 @@ function CRP.DB.CreateCharacter(source, data)
 
 	TriggerEvent('crp-base:createdCharacter', result.insertId)
 
-	return true, {
-		id = result.insertId,
-		money = 500, bank = 5000
-	}
+	return true, result.insertId
 end
 
 RPC:register('createCharacter', CRP.DB.CreateCharacter)
@@ -71,7 +68,7 @@ function CRP.DB.DeleteCharacter(source, data)
     if not identifier or identifier == '' then return false end
     if not data.characterId or type(data.characterId) ~= 'number' then return false end
 
-    local query = [[DELETE FROM characters WHERE identifier = ? AND id = ?;]]
+    local query = [[UPDATE characters SET deleted = TRUE WHERE identifier = ? AND id = ?;]]
     local result = Citizen.Await(DB:Execute(query, identifier, data.characterId))
 
     if not result.changedRows then
@@ -123,7 +120,7 @@ function CRP.DB:SaveCharacterData(source, characterId, bank, job, grade, positio
 end
 
 function CRP.DB.GetCharactersTotal(identifier)
-    local query = [[SELECT COUNT(1) AS count FROM characters WHERE identifier = ?;]]
+    local query = [[SELECT COUNT(1) AS count FROM characters WHERE identifier = ? AND deleted = FALSE;]]
 	local result = Citizen.Await(DB:Execute(query, identifier))
 
 	return result[1].count

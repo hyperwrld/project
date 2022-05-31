@@ -1,0 +1,62 @@
+.item-container {
+	position: absolute;
+
+	width: 100%;
+	height: 100%;
+
+	display: grid;
+	grid-template-rows: 84% 14.5% 1.5%;
+
+	&.empty {
+		grid-template-rows: 85.5% 14.5%;
+	}
+
+	.info {
+		position: absolute;
+		top: 0px;
+		right: 2px;
+		font-size: 0.6rem;
+		color: white;
+	}
+
+	.image {
+		width: 85%;
+		height: 100%;
+		margin: 0 auto;
+
+		img {
+			width: 100%;
+			height: 100%;
+		}
+	}
+
+	.durability {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		height: 100%;
+		width: 100%;
+
+		font-size: 0.35rem;
+		color: white;
+		background-color: green;
+	}
+
+	.name {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+
+		height: 100%;
+		width: 100%;
+
+		font-size: 0.7rem;
+		color: white;
+		background-color: rgba(0, 0, 0, 0.6);
+
+		span {
+			color: green;
+		}
+	}
+}

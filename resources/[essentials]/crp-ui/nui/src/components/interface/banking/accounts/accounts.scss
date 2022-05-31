@@ -1,0 +1,68 @@
+.accounts {
+	padding: 20px;
+	background: #2c3036;
+	border-radius: 4px;
+
+	.category {
+		display: grid;
+		grid-template-rows: auto 1fr;
+		max-height: 22.7vh;
+		gap: 5px;
+
+		&:first-child {
+			margin-bottom: 2.5vh;
+		}
+
+		.title {
+			font-weight: bold;
+			font-size: 0.8vw;
+			color: grey;
+		}
+
+		.list {
+			display: flex;
+			flex-direction: column;
+			gap: 0.6vh;
+
+			padding-bottom: 0.1vh;
+			overflow-x: hidden;
+			overflow-y: auto;
+
+			&::-webkit-scrollbar {
+				width: 5px;
+			}
+
+			&::-webkit-scrollbar-track {
+				background: #212529;
+				border-radius: 4px;
+			}
+
+			&::-webkit-scrollbar-thumb {
+				background: #42464a;
+				border-radius: 4px;
+			}
+		}
+
+		.account {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			padding: 0.2vh 0.45vw;
+			margin-right: 10px;
+			height: 4vh;
+			border-radius: 4px;
+			background: #42464a;
+			color: gray;
+			font-size: 0.6vw;
+
+			&.selected {
+				border: 1px solid dimgrey;
+			}
+
+			.name {
+				font-size: 0.7vw;
+				color: lightgrey;
+			}
+		}
+	}
+}

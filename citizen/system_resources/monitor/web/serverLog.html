@@ -5,11 +5,16 @@
     .pre-log-content{
         height: calc(100vh - 270px); /* -251px */
         margin-bottom: 0;
+        font-size: 100%;
+    }
+    .nui-height{
+        height: calc(100vh - 170px);
     }
 
     .event-source{
-        font-weight: 700 !important;
+        font-weight: 900 !important;
         text-decoration: none !important;
+        cursor: pointer;
     }
 
     /* Experimental */
@@ -26,7 +31,7 @@
 </div>
 <div class="card border-primary">
     <div class="card-body">
-        <pre id="console" class="thin-scroll pre-log-content">{{it.log|safe}}</pre>
+        <pre id="console" class="thin-scroll pre-log-content {{[(it.isWebInterface), '', 'nui-height']|ternary}}">{{it.log|safe}}</pre>
     </div>
 </div>
 
@@ -42,12 +47,11 @@
 
     setInterval(getNewData, 5000);
 
-    var currOffset = '{{it.offset}}';
+    let currOffset = '{{it.offset}}';
     function getNewData(){
-        $.ajax({
+        txAdminAPI({
             type: "GET",
-            url: `/serverLog?offset=${currOffset}`,
-            timeout: timeoutMedium,
+            url: `serverLog/${currOffset}`,
             success: function (data) {
                 //FIXME: temporary before database
                 //NOTE: /\ that was a lie :)
@@ -55,8 +59,8 @@
                 if(typeof data.log !== 'undefined' && data.log !== false && data.log.length){
                     const consoleElement = document.getElementById("console");
                     let _tempContent = consoleElement.innerHTML + data.log;
-                    _tempContent = (_tempContent.length > bufferTrimSize)
-                        ? _tempContent.slice(-0.5 * bufferTrimSize)
+                    _tempContent = (_tempContent.length > BUFFER_TRIM_SIZE)
+                        ? _tempContent.slice(-0.5 * BUFFER_TRIM_SIZE)
                         : _tempContent;
                     consoleElement.innerHTML = _tempContent.substr(_tempContent.indexOf("\n"));
                     scrollToBottom();

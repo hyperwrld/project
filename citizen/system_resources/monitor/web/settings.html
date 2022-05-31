@@ -119,7 +119,7 @@
                                     The folder that <strong>contains</strong> the <code>resources</code> and
                                     <code>cache</code> folders, usually it's where you put your <code>server.cfg</code>. <br>
                                     {{@if(it.isZapHosting)}}
-                                        <span class="font-weight-bold">Zap-Hosting warning: this path must start with <code>{{it.txDataPath}}</code>.</span>
+                                        <span class="font-weight-bold">ZAP-Hosting warning: this path must start with <code>{{it.txDataPath}}</code>.</span>
                                     {{/if}}
                                 </span>
                             </div>
@@ -144,7 +144,10 @@
                             </label>
                             <div class="col-sm-9">
                                 <input type="text" class="form-control" id="frmFXServer-commandLine" value="{{it.fxserver.commandLine|undef}}"
-                                    placeholder="+exec private.cfg" {{it.readOnly|isDisabled}}>
+                                    placeholder="+set sv_enforceGameBuild 2189" {{it.readOnly|isDisabled}}>
+                                <span class="form-text text-primary">
+                                    To enable the Beta In-game, add <code>+setr txEnableMenuBeta true</code> above.
+                                </span>
                                 <span class="form-text text-muted">
                                     Additional command-line arguments to pass to the FXServer instance. <br>
                                     For example, you can add <code>+set</code> and <code>+exec</code> commands. <br>
@@ -452,14 +455,15 @@
     </div>
 </div>
 
-{{@if(it.adminIsMaster)}}
-    <div class="row justify-content-md-center">
-        <div class="col-md-7 mw-col8">
-            <div class="card border-danger">
-                <div class="card-header text-center">
-                    <h5 class="d-inline">Master Actions</h5>
-                </div>
-                <div class="card-body">
+<!-- Master actions -->
+<div class="row justify-content-md-center">
+    <div class="col-md-7 mw-col8">
+        <div class="card border-danger">
+            <div class="card-header text-center">
+                <h5 class="d-inline">Master Actions</h5>
+            </div>
+            <div class="card-body">
+                {{@if(it.isWebInterface && it.adminIsMaster)}}
                     <!-- Backup Database -->
                     <div class="row text-center pt-2">
                         <div class="col-lg-9 text-lg-left mb-2">
@@ -468,7 +472,7 @@
                             You should do this every once in a while.
                         </div>
                         <div class="col-lg-3 text-lg-right">
-                            <a class="btn btn-sm btn-outline-danger" target="_blank" href="/masterActions/backupDatabase">Backup Database</a>
+                            <a class="btn btn-sm btn-outline-danger" target="_blank" href="masterActions/backupDatabase">Backup Database</a>
                         </div>
                     </div>
                     <hr class="m-1">
@@ -481,7 +485,7 @@
                             Supported systems: EasyAdmin, BanSQL, vMenu, vRP, el_bwh.
                         </div>
                         <div class="col-lg-3 text-lg-right">
-                            <a class="btn btn-sm btn-outline-danger" href="/masterActions/importBans">Import Bans</a>
+                            <a class="btn btn-sm btn-outline-danger" href="masterActions/importBans">Import Bans</a>
                         </div>
                     </div>
                     <hr class="m-1">
@@ -500,12 +504,24 @@
                         </div>
                     </div>
                     <!-- <hr class="m-1"> -->
-
-                </div>
+                {{#else}}
+                    <div class="row justify-content-center text-center d-block">
+                        <h3 class="mt-3 text-secondary">Master Actions Disabled</h3>
+                        <p class="text-muted">
+                            {{@if(it.adminIsMaster)}}
+                                Please use the web panel in your browser if you would like to backup your database, 
+                                import bans, or reset FXServer settings.
+                            {{#else}}
+                                Only the admin master can perform actions like backup the database, import bans, or
+                                reset FXServer settings.
+                            {{/if}}
+                        </p>
+                    </div>
+                {{/if}}
             </div>
         </div>
     </div>
-{{/if}}
+</div>
 
 {{@include("footer", it)/}}
 
@@ -526,12 +542,11 @@
         if(!window.confirm(`Are you sure you want to Reset FXServer Settings?`)){
             return;
         }
-        var notify = $.notify({ message: '<p class="text-center">Executing...</p>' }, {});
-
-        $.ajax({
+        const notify = $.notify({ message: '<p class="text-center">Executing...</p>' }, {});
+        
+        txAdminAPI({
             type: "POST",
             url: `/masterActions/${action}`,
-            timeout: timeoutMedium,
             data: {},
             dataType: 'json',
             success: function (data) {
@@ -561,15 +576,13 @@
             verbose: $('#frmGlobal-verbose').is(':checked')
         }
         if (!data.serverName.length) {
-            var notify = $.notify({ message: 'The fields with "*" are required.' }, { type: 'warning' });
-            return;
+            return $.notify({ message: 'The fields with "*" are required.' }, { type: 'warning' });
         }
-        var notify = $.notify({ message: '<p class="text-center">Saving...</p>' }, {});
+        const notify = $.notify({ message: '<p class="text-center">Saving...</p>' }, {});
 
-        $.ajax({
+        txAdminAPI({
             type: "POST",
             url: '/settings/save/global',
-            timeout: timeoutMedium,
             data: data,
             dataType: 'json',
             success: function (data) {
@@ -597,15 +610,13 @@
             quiet: $('#frmFXServer-quiet').is(':checked')
         }
         if (!data.serverDataPath.length || !data.cfgPath.length) {
-            var notify = $.notify({ message: 'The fields with "*" are required.' }, { type: 'warning' });
-            return;
+            return $.notify({ message: 'The fields with "*" are required.' }, { type: 'warning' });
         }
-        var notify = $.notify({ message: '<p class="text-center">Saving...</p>' }, {});
+        const notify = $.notify({ message: '<p class="text-center">Saving...</p>' }, {});
 
-        $.ajax({
+        txAdminAPI({
             type: "POST",
             url: '/settings/save/fxserver',
-            timeout: timeoutMedium,
             data: data,
             dataType: 'json',
             success: function (data) {
@@ -632,15 +643,13 @@
             wipePendingWLOnStart: $('#frmPlayerManager-wipePendingWLOnStart').is(':checked'),
         }
         if (!data.minSessionTime.length || !data.whitelistRejectionMessage.length) {
-            var notify = $.notify({ message: 'The fields with "*" are required.' }, { type: 'warning' });
-            return;
+            return $.notify({ message: 'The fields with "*" are required.' }, { type: 'warning' });
         }
-        var notify = $.notify({ message: '<p class="text-center">Saving...</p>' }, {});
+        const notify = $.notify({ message: '<p class="text-center">Saving...</p>' }, {});
 
-        $.ajax({
+        txAdminAPI({
             type: "POST",
             url: '/settings/save/playerController',
-            timeout: timeoutMedium,
             data: data,
             dataType: 'json',
             success: function (data) {
@@ -664,12 +673,11 @@
             restarterScheduleWarnings: $('#frmMonitor-restarterScheduleWarnings').val().trim(),
             disableChatWarnings: ($('#frmMonitor-chatMessages').is(':checked') === true),
         }
-        var notify = $.notify({ message: '<p class="text-center">Saving...</p>' }, {});
+        const notify = $.notify({ message: '<p class="text-center">Saving...</p>' }, {});
 
-        $.ajax({
+        txAdminAPI({
             type: "POST",
             url: '/settings/save/monitor',
-            timeout: timeoutMedium,
             data: data,
             dataType: 'json',
             success: function (data) {
@@ -696,15 +704,13 @@
             statusMessage: $('#frmDiscord-statusMessage').val().trim()
         };
         if (data.enabled && (!data.token.length || !data.prefix.length || !data.statusMessage.length)) {
-            var notify = $.notify({ message: 'The fields with "*" are required when the bot is enabled.' }, { type: 'warning' });
-            return;
+            return $.notify({ message: 'The fields with "*" are required when the bot is enabled.' }, { type: 'warning' });
         }
-        var notify = $.notify({ message: '<p class="text-center">Saving...</p>' }, {});
+        const notify = $.notify({ message: '<p class="text-center">Saving...</p>' }, {});
 
-        $.ajax({
+        txAdminAPI({
             type: "POST",
             url: '/settings/save/discord',
-            timeout: timeoutMedium,
             data: data,
             dataType: 'json',
             success: function (data) {

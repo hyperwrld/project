@@ -1,0 +1,195 @@
+.phone {
+	// font-family: 'Quantico', sans-serif;
+
+	position: absolute;
+	height: 504px;
+	width: 240px;
+
+	right: 20px;
+	bottom: 20px;
+
+	background: black;
+	border-radius: 28px;
+	padding: 7px 7px;
+	animation-duration: 1.5s;
+
+	&.compactMode {
+		bottom: -400px;
+	}
+
+	.inner {
+		position: absolute;
+		width: 100%;
+		height: calc(100% - 4px);
+
+		top: 2px;
+		left: 0px;
+
+		border-radius: 28px;
+		border-top: 2px solid #9fa0a2;
+		border-bottom: 2px solid #9fa0a2;
+
+		background: black;
+		z-index: 1;
+		-webkit-box-shadow: inset 0 0 6px 0 rgba(255, 255, 255, 0.5);
+		box-shadow: inset 0 0 6px 0 rgba(255, 255, 255, 0.5);
+	}
+
+	.overflow {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+
+		top: 0;
+		left: 0;
+
+		border-radius: 28px;
+		overflow: hidden;
+
+		.shadow {
+			position: absolute;
+			height: 101%;
+			width: calc(100% - 20px);
+
+			top: -0.5%;
+			left: 10px;
+
+			border-radius: 38px;
+			z-index: 5;
+			pointer-events: none;
+
+			-webkit-box-shadow: inset 0 0 60px 0 white,
+				inset 0 0 30px 0 rgba(255, 255, 255, 0.5), 0 0 20px 0 white,
+				0 0 20px 0 rgba(255, 255, 255, 0.5);
+			box-shadow: inset 0 0 60px 0 rgba(255, 255, 255, 0.6),
+				inset 0 0 30px 0 rgba(255, 255, 255, 0.3),
+				0 0 20px 0 rgba(255, 255, 255, 0.6), 0 0 20px 0 rgba(255, 255, 255, 0.3);
+		}
+	}
+
+	.screen {
+		position: relative;
+		width: 100%;
+		height: 100%;
+
+		overflow: hidden;
+		border-radius: 22px;
+		z-index: 33;
+		background-color: black;
+
+		.content {
+			position: relative;
+			width: 100%;
+			height: 100%;
+
+			display: grid;
+			grid-template-rows: 4.5% 88.5% 6%;
+			gap: 0.5%;
+
+			overflow: hidden;
+			border-radius: 22px;
+			// opacity: 0;
+
+			transition: 0.5s opacity;
+			background-color: #ff3cac;
+			background-image: url('https://4.bp.blogspot.com/-AqlJ9uWhed0/Xc4FcpIE2nI/AAAAAAAAJdw/LmwOWLWbVg0q2l82ufISLDTdiGFdCK4-wCLcBGAsYHQ/d/A%2Bbeautiful%2Bphone%2Bwallpaper%2B4%2Bart%2Bby%2BMattia%2BLau.png');
+			// background-image: linear-gradient(
+			// 	225deg,
+			// 	#ff3cac 0%,
+			// 	#784ba0 50%,
+			// 	#2b86c5 100%
+			// );
+			background-repeat: round;
+
+			&:hover {
+				opacity: 1;
+			}
+
+			&.onApp {
+				background: #212121;
+			}
+
+			.header {
+				display: grid;
+				grid-template-columns: 1fr auto 1fr;
+				gap: 20px;
+
+				height: 100%;
+				padding: 0 10%;
+
+				color: white;
+				filter: drop-shadow(0px 0px 1px black);
+
+				font-size: 0.6rem;
+				font-weight: 400;
+				line-height: 1.2rem;
+
+				.camera {
+					height: 10px;
+					width: 10px;
+					margin: auto;
+
+					background: #212b36;
+					z-index: 55;
+					border-radius: 100%;
+				}
+
+				.left,
+				.right {
+					display: grid;
+					grid-auto-columns: auto;
+					grid-template-columns: repeat(2, 1fr);
+					gap: 10px;
+
+					height: 100%;
+					width: min-content;
+					align-items: center;
+
+					&.right {
+						margin-left: auto;
+					}
+				}
+			}
+
+			.app-screen {
+				position: relative;
+
+				&.component-fade-enter-active,
+				&.component-fade-leave-active {
+					transition: opacity 0.3s ease;
+				}
+
+				&.component-fade-enter,
+				&.component-fade-leave-to {
+					opacity: 0;
+				}
+			}
+
+			.footer {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				padding: 0 15%;
+				color: white;
+				gap: 5px;
+
+				z-index: 999;
+
+				&.onApp {
+					background: #181818;
+					-webkit-box-shadow: 0px 0px 5px 2px #000000;
+					box-shadow: 0px 0px 5px 2px #000000;
+				}
+
+				i {
+					filter: drop-shadow(0px 0px 1px black);
+					margin: auto;
+					font-size: 0.75rem;
+
+					&.main {
+						font-size: 1rem;
+					}
+				}
+			}
+		}
+	}
+}

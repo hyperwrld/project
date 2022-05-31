@@ -1,58 +1,40 @@
 {
 	"name": "crp-ui",
-	"version": "0.1.0",
+	"version": "1.0.0",
+	"author": "Tiago Guerreiro <41821953+orakah@users.noreply.github.com>",
 	"private": true,
 	"scripts": {
-		"serve": "vue-cli-service serve",
-		"build": "vue-cli-service build"
+		"dev": "quasar dev",
+		"build": "quasar build"
 	},
 	"dependencies": {
-		"@fortawesome/fontawesome-svg-core": "^1.2.31",
-		"@fortawesome/free-brands-svg-icons": "^5.15.2",
-		"@fortawesome/free-regular-svg-icons": "^5.15.2",
-		"@fortawesome/free-solid-svg-icons": "^5.15.0",
-		"@fortawesome/vue-fontawesome": "^2.0.0",
+		"@fortawesome/fontawesome-pro": "^5.15.3",
+		"@quasar/cli": "^1.2.1",
+		"@quasar/extras": "^1.10.6",
+		"@vue/cli-plugin-babel": "^4.5.13",
 		"core-js": "^3.6.5",
 		"moment": "^2.29.1",
-		"vue": "^2.6.11",
+		"quasar": "^1.15.20",
 		"vue-easy-dnd": "^1.10.2",
-		"vue-router": "^3.2.0",
-		"vuetify": "^2.4.0",
-		"vuex": "^3.4.0"
+		"vuex": "^3.6.2"
 	},
 	"devDependencies": {
-		"@vue/cli-plugin-babel": "~4.5.0",
-		"@vue/cli-plugin-eslint": "~4.5.0",
-		"@vue/cli-plugin-router": "^4.5.11",
-		"@vue/cli-plugin-vuex": "^4.5.11",
-		"@vue/cli-service": "~4.5.0",
-		"babel-eslint": "^10.1.0",
-		"eslint": "^6.7.2",
-		"eslint-plugin-vue": "^6.2.2",
-		"sass": "^1.32.6",
-		"sass-loader": "^10.0.0",
-		"vue-cli-plugin-fontawesome": "~0.3.1",
-		"vue-cli-plugin-vuetify": "~2.1.0",
-		"vue-template-compiler": "^2.6.11",
-		"vuetify-loader": "^1.5.0"
-	},
-	"eslintConfig": {
-		"root": true,
-		"env": {
-			"node": true
-		},
-		"extends": [
-			"plugin:vue/essential",
-			"eslint:recommended"
-		],
-		"parserOptions": {
-			"parser": "babel-eslint"
-		},
-		"rules": {}
+		"@quasar/app": "^2.2.10",
+		"babel-eslint": "^10.0.1",
+		"eslint": "^7.21.0",
+		"eslint-config-prettier": "^8.1.0",
+		"eslint-plugin-vue": "^7.7.0",
+		"eslint-webpack-plugin": "^2.4.0",
+		"patch-package": "^6.4.7"
 	},
 	"browserslist": [
-		"> 1%",
-		"last 2 versions",
-		"not dead"
-	]
+		"last 10 Chrome versions",
+		"last 10 Firefox versions",
+		"last 4 Edge versions"
+	],
+	"engines": {
+		"node": ">= 10.18.1",
+		"npm": ">= 6.13.4",
+		"yarn": ">= 1.21.1"
+	}
 }

@@ -1,0 +1,94 @@
+.q-card {
+	background: #42464a;
+	grid-area: b;
+	overflow: hidden;
+	box-shadow: none;
+
+	.q-tabs {
+		background: #2c3036;
+
+		&::v-deep i {
+			font-size: 0.85vw !important;
+		}
+
+		&::v-deep .q-tab {
+			min-height: 3vh;
+		}
+
+		&::v-deep .q-tab__label {
+			font-size: 0.58vw !important;
+		}
+	}
+
+	.q-panel-parent {
+		background: transparent;
+		padding: 10px 20px;
+
+		.q-tab-panel {
+			padding: 0;
+
+			.q-form {
+				display: grid;
+				grid-template-areas: 'a b' 'c b';
+				grid-template-rows: 1fr 0.25fr;
+				column-gap: 50px;
+				row-gap: 20px;
+				overflow: hidden;
+
+				&.transfer {
+					grid-template-areas: 'c a b' 'd d b' !important;
+					grid-template-columns: 0.5fr 0.5fr 1fr;
+
+					.iban {
+						grid-area: c;
+					}
+
+					button {
+						grid-area: d !important;
+					}
+				}
+
+				.quantity {
+					grid-area: a;
+				}
+
+				.description {
+					grid-area: b;
+				}
+
+				&::v-deep
+					.q-field--standout.q-field--dark.q-field--highlighted
+					.q-field__control {
+					background: rgba(255, 255, 255, 0.07);
+					box-shadow: none;
+
+					input,
+					textarea {
+						color: white;
+					}
+				}
+
+				&::v-deep input::-webkit-outer-spin-button,
+				&::v-deep input::-webkit-inner-spin-button {
+					-webkit-appearance: none;
+					margin: 0;
+				}
+
+				button {
+					width: 150px;
+					grid-area: c;
+					margin: 0 auto;
+					font-size: 0.55vw;
+				}
+
+				&::v-deep textarea {
+					resize: none;
+
+					&::-webkit-scrollbar {
+						background: transparent;
+					}
+				}
+			}
+		}
+	}
+}

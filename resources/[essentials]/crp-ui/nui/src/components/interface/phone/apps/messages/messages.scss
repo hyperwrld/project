@@ -1,0 +1,102 @@
+.messages {
+	display: grid;
+	grid-template-rows: auto 1fr;
+
+	.q-toolbar {
+		gap: 20px;
+
+		&::v-deep .q-field__control,
+		&::v-deep .q-field__marginal {
+			height: 30px;
+
+			&.q-field__marginal {
+				font-size: 14px;
+			}
+		}
+
+		.fa-envelope {
+			font-size: 16px;
+			color: rgba(255, 255, 255, 0.7);
+
+			&:hover {
+				color: ivory;
+			}
+		}
+	}
+
+	.content {
+		padding: 0 12px;
+
+		.message {
+			display: grid;
+			grid-template-columns: auto 1fr auto;
+			grid-template-areas:
+				'icon name time'
+				'icon text text';
+
+			column-gap: 10px;
+			justify-content: center;
+			align-items: center;
+
+			height: 48px;
+			padding: 8px 16px;
+			background: #181818;
+
+			border-radius: 5px;
+			margin-bottom: 5px;
+			overflow: hidden;
+
+			i {
+				font-size: 18px;
+				grid-area: icon;
+			}
+
+			.name {
+				font-size: 12px;
+				line-height: 1.2em;
+				text-overflow: ellipsis;
+				grid-area: name;
+			}
+
+			.text {
+				grid-area: text;
+				font-size: 10px;
+				color: rgba(255, 255, 255, 0.8);
+
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
+			.q-badge {
+				grid-area: time;
+				padding: 1px 3px;
+				border-radius: 3px;
+
+				font-size: 8px;
+				color: rgba(255, 255, 255, 0.6);
+			}
+		}
+
+		&.empty {
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+
+			color: white;
+
+			font-size: 0.8rem;
+			font-weight: 400;
+			line-height: 1.3rem;
+			letter-spacing: 0.03333em;
+			text-align: center;
+
+			i {
+				font-size: 7.5rem;
+				margin-bottom: 15px;
+			}
+		}
+	}
+}

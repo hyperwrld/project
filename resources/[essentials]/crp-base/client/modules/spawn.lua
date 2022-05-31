@@ -92,10 +92,6 @@ function CRP.Spawn:SpawnCharacter(data)
 		characterSkin = json.decode(data.skin)
 	end
 
-	if not characterSkin then
-		TriggerEvent('crp-skincreator:openShop', 1)
-	end
-
 	exports['crp-weather']:toggleDesync(false)
 
 	DoScreenFadeOut(1000)
@@ -106,6 +102,12 @@ function CRP.Spawn:SpawnCharacter(data)
 	RenderScriptCams(false, false, 2000, true, true)
 
 	Citizen.Wait(1000)
+
+	if not characterSkin then
+		TriggerEvent('crp-skincreator:openShop', 1)
+
+		DoScreenFadeIn(1000)
+	end
 
 	if data.position then
 		local coords = json.decode(data.position)

@@ -1,0 +1,44 @@
+.notifications {
+	position: absolute;
+	display: flex;
+	width: 30%;
+	right: 10%;
+
+	flex-flow: row;
+	flex-wrap: wrap;
+
+	.fade-enter-active {
+		animation: fadeIn 1s;
+	}
+
+	.fade-leave-active {
+		animation: fadeOut 1s;
+	}
+
+	.fade-enter,
+	.fade-leave-to {
+		opacity: 0;
+	}
+
+	.notification {
+		padding: 5px;
+		width: fit-content;
+		border-radius: 5px;
+		margin: 5px;
+		font-size: 12px;
+		font-weight: bold;
+		color: white;
+
+		&.success {
+			background: rgba(114, 204, 114, 1) !important;
+		}
+
+		&.inform {
+			background-color: rgba(249, 176, 21, 1) !important;
+		}
+
+		&.error {
+			background: rgba(224, 50, 50, 1) !important;
+		}
+	}
+}
